@@ -1,466 +1,434 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
-  BarChart3, 
   TrendingUp, 
   TrendingDown, 
   DollarSign, 
   Package, 
+  Users, 
   Calendar,
-  Filter,
-  Download,
-  Share,
-  RefreshCw,
+  BarChart3,
+  PieChart,
+  Activity,
+  Target,
   AlertTriangle,
   CheckCircle,
   Clock,
-  Target,
-  Zap,
-  Users,
-  Home,
-  ShoppingCart
+  Star
 } from 'lucide-react';
-import toast from 'react-hot-toast';
 
-// Mock chart component (in production, use Chart.js, Recharts, or similar)
-const MockChart = ({ type, data, title, color = '#3b82f6' }) => {
-  const getChartDisplay = () => {
-    switch (type) {
-      case 'line':
-        return (
-          <div className="h-40 flex items-end justify-between px-2">
-            {data.map((value, index) => (
-              <div key={index} className="flex flex-col items-center">
-                <div 
-                  className="w-2 rounded-t"
-                  style={{ 
-                    height: `${(value / Math.max(...data)) * 100}%`,
-                    backgroundColor: color,
-                    minHeight: '4px'
-                  }}
-                />
-                <span className="text-xs text-gray-500 mt-1">{index + 1}</span>
-              </div>
-            ))}
-          </div>
-        );
-      case 'bar':
-        return (
-          <div className="h-40 flex items-end justify-between px-2 space-x-1">
-            {data.map((value, index) => (
-              <div key={index} className="flex flex-col items-center flex-1">
-                <div 
-                  className="w-full rounded-t max-w-8"
-                  style={{ 
-                    height: `${(value / Math.max(...data)) * 100}%`,
-                    backgroundColor: color,
-                    minHeight: '4px'
-                  }}
-                />
-                <span className="text-xs text-gray-500 mt-1">{index + 1}</span>
-              </div>
-            ))}
-          </div>
-        );
-      case 'pie':
-        const total = data.reduce((sum, val) => sum + val, 0);
-        let currentAngle = 0;
-        return (
-          <div className="h-40 flex items-center justify-center">
-            <div className="relative w-32 h-32">
-              <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
-                {data.map((value, index) => {
-                  const percentage = (value / total) * 100;
-                  const strokeDasharray = `${percentage} ${100 - percentage}`;
-                  const strokeDashoffset = -currentAngle;
-                  currentAngle += percentage;
-                  
-                  return (
-                    <circle
-                      key={index}
-                      cx="18"
-                      cy="18"
-                      r="16"
-                      fill="transparent"
-                      stroke={`hsl(${index * 60}, 70%, 50%)`}
-                      strokeWidth="4"
-                      strokeDasharray={strokeDasharray}
-                      strokeDashoffset={strokeDashoffset}
-                      className="transition-all duration-300"
-                    />
-                  );
-                })}
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-xs font-medium text-gray-700">{total}</span>
-              </div>
-            </div>
-          </div>
-        );
-      default:
-        return (
-          <div className="h-40 flex items-center justify-center text-gray-400">
-            <BarChart3 size={32} />
-          </div>
-        );
+export default function AdvancedAnalytics() {
+  const [timeRange, setTimeRange] = useState('30d'); // 7d, 30d, 90d, 1y
+  const [selectedMetric, setSelectedMetric] = useState('overview');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Mock analytics data
+  const analyticsData = {
+    overview: {
+      totalItems: 156,
+      totalValue: 15420.50,
+      activeUsers: 4,
+      alerts: 3,
+      recentActivity: 12
+    },
+    inventory: {
+      categories: [
+        { name: 'Electronics', count: 23, value: 8900.00, trend: 'up' },
+        { name: 'Kitchen', count: 34, value: 2100.00, trend: 'stable' },
+        { name: 'Bathroom', count: 18, value: 450.00, trend: 'down' },
+        { name: 'Bedroom', count: 28, value: 1200.00, trend: 'up' },
+        { name: 'Living Room', count: 22, value: 1800.00, trend: 'stable' },
+        { name: 'Garage', count: 15, value: 800.00, trend: 'up' },
+        { name: 'Office', count: 16, value: 370.50, trend: 'stable' }
+      ],
+      trends: {
+        monthly: [120, 135, 142, 138, 145, 156],
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+      }
+    },
+    spending: {
+      monthly: [1200, 1350, 980, 2100, 1650, 1800],
+      categories: [
+        { name: 'Electronics', amount: 8900.00, percentage: 58 },
+        { name: 'Kitchen', amount: 2100.00, percentage: 14 },
+        { name: 'Furniture', amount: 1800.00, percentage: 12 },
+        { name: 'Clothing', amount: 1200.00, percentage: 8 },
+        { name: 'Other', amount: 1420.50, percentage: 8 }
+      ],
+      savings: 3200.00,
+      budgetUtilization: 78
+    },
+    performance: {
+      responseTime: 0.8,
+      uptime: 99.9,
+      userSatisfaction: 4.8,
+      featureUsage: {
+        inventory: 95,
+        spending: 87,
+        collaboration: 78,
+        recipes: 65,
+        automation: 45
+      }
     }
   };
 
-  return (
-    <div className="bg-white rounded-lg shadow-md p-4 border">
-      <h3 className="text-lg font-medium text-gray-900 mb-4">{title}</h3>
-      {getChartDisplay()}
-    </div>
-  );
-};
-
-// Analytics Dashboard
-const AdvancedAnalytics = () => {
-  const [timeRange, setTimeRange] = useState('30d'); // '7d', '30d', '90d', '1y'
-  const [selectedMetrics, setSelectedMetrics] = useState(['spending', 'inventory', 'activity']);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Mock data generation
-  const generateMockData = (days) => {
-    return Array.from({ length: days }, (_, i) => Math.floor(Math.random() * 100) + 20);
+  const getTrendIcon = (trend) => {
+    switch (trend) {
+      case 'up':
+        return <TrendingUp className="w-4 h-4 text-green-600" />;
+      case 'down':
+        return <TrendingDown className="w-4 h-4 text-red-600" />;
+      default:
+        return <TrendingUp className="w-4 h-4 text-gray-400" />;
+    }
   };
 
-  const analyticsData = useMemo(() => {
-    const days = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : timeRange === '90d' ? 90 : 365;
-    
-    return {
-      spending: {
-        data: generateMockData(days),
-        total: 2847.32,
-        change: 12.5,
-        trend: 'up'
-      },
-      inventory: {
-        data: generateMockData(days),
-        total: 156,
-        change: -3.2,
-        trend: 'down'
-      },
-      activity: {
-        data: generateMockData(days),
-        total: 1249,
-        change: 8.7,
-        trend: 'up'
-      },
-      categories: {
-        data: [45, 32, 28, 19, 15],
-        labels: ['Food', 'Household', 'Electronics', 'Clothing', 'Other']
-      },
-      users: {
-        data: [67, 33],
-        labels: ['Active', 'Inactive']
-      }
-    };
-  }, [timeRange]);
-
-  const handleRefresh = async () => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+  const getTrendColor = (trend) => {
+    switch (trend) {
+      case 'up':
+        return 'text-green-600';
+      case 'down':
+        return 'text-red-600';
+      default:
+        return 'text-gray-600';
+    }
   };
 
-  const handleExport = () => {
-    // Simulate export functionality
-    toast.success('Analytics data exported successfully!');
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount);
+  };
+
+  const formatPercentage = (value) => {
+    return `${value}%`;
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Advanced Analytics</h1>
-            <p className="text-gray-600 mt-2">Comprehensive insights into your home management data</p>
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={handleRefresh}
-              disabled={isLoading}
-              className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-md"
-            >
-              <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
-              <span>Refresh</span>
-            </button>
-            
-            <button
-              onClick={handleExport}
-              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            >
-              <Download size={16} />
-              <span>Export</span>
-            </button>
+        <div className="mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Advanced Analytics</h1>
+              <p className="text-gray-600 mt-2">Comprehensive insights into your household management</p>
+            </div>
+            <div className="flex items-center space-x-4">
+              <select
+                value={timeRange}
+                onChange={(e) => setTimeRange(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="7d">Last 7 days</option>
+                <option value="30d">Last 30 days</option>
+                <option value="90d">Last 90 days</option>
+                <option value="1y">Last year</option>
+              </select>
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                Export Report
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Controls */}
-        <div className="bg-white rounded-lg shadow-md p-4 border mb-6">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Calendar size={16} className="text-gray-500" />
-                <span className="text-sm font-medium text-gray-700">Time Range:</span>
-                <select
-                  value={timeRange}
-                  onChange={(e) => setTimeRange(e.target.value)}
-                  className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        {/* Navigation Tabs */}
+        <div className="mb-6">
+          <nav className="flex space-x-8 border-b border-gray-200">
+            {[
+              { id: 'overview', name: 'Overview', icon: BarChart3 },
+              { id: 'inventory', name: 'Inventory', icon: Package },
+              { id: 'spending', name: 'Spending', icon: DollarSign },
+              { id: 'performance', name: 'Performance', icon: Activity }
+            ].map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setSelectedMetric(tab.id)}
+                  className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                    selectedMetric === tab.id
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
                 >
-                  <option value="7d">Last 7 days</option>
-                  <option value="30d">Last 30 days</option>
-                  <option value="90d">Last 90 days</option>
-                  <option value="1y">Last year</option>
-                </select>
+                  <Icon className="w-5 h-5" />
+                  <span>{tab.name}</span>
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* Overview Dashboard */}
+        {selectedMetric === 'overview' && (
+          <div className="space-y-6">
+            {/* Key Metrics Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex items-center">
+                  <div className="p-2 bg-blue-100 rounded-lg">
+                    <Package className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Total Items</p>
+                    <p className="text-2xl font-bold text-gray-900">{analyticsData.overview.totalItems}</p>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center text-sm">
+                  <TrendingUp className="w-4 h-4 text-green-600 mr-1" />
+                  <span className="text-green-600">+12%</span>
+                  <span className="text-gray-500 ml-1">from last month</span>
+                </div>
               </div>
-              
-              <div className="flex items-center space-x-2">
-                <Filter size={16} className="text-gray-500" />
-                <span className="text-sm font-medium text-gray-700">Metrics:</span>
-                <div className="flex space-x-2">
-                  {['spending', 'inventory', 'activity'].map(metric => (
-                    <label key={metric} className="flex items-center space-x-1">
-                      <input
-                        type="checkbox"
-                        checked={selectedMetrics.includes(metric)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedMetrics([...selectedMetrics, metric]);
-                          } else {
-                            setSelectedMetrics(selectedMetrics.filter(m => m !== metric));
-                          }
-                        }}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-600 capitalize">{metric}</span>
-                    </label>
+
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex items-center">
+                  <div className="p-2 bg-green-100 rounded-lg">
+                    <DollarSign className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Total Value</p>
+                    <p className="text-2xl font-bold text-gray-900">{formatCurrency(analyticsData.overview.totalValue)}</p>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center text-sm">
+                  <TrendingUp className="w-4 h-4 text-green-600 mr-1" />
+                  <span className="text-green-600">+8.5%</span>
+                  <span className="text-gray-500 ml-1">from last month</span>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex items-center">
+                  <div className="p-2 bg-purple-100 rounded-lg">
+                    <Users className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Active Users</p>
+                    <p className="text-2xl font-bold text-gray-900">{analyticsData.overview.activeUsers}</p>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center text-sm">
+                  <TrendingUp className="w-4 h-4 text-green-600 mr-1" />
+                  <span className="text-green-600">+25%</span>
+                  <span className="text-gray-500 ml-1">from last month</span>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex items-center">
+                  <div className="p-2 bg-yellow-100 rounded-lg">
+                    <AlertTriangle className="w-6 h-6 text-yellow-600" />
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Active Alerts</p>
+                    <p className="text-2xl font-bold text-gray-900">{analyticsData.overview.alerts}</p>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center text-sm">
+                  <TrendingDown className="w-4 h-4 text-red-600 mr-1" />
+                  <span className="text-red-600">-2</span>
+                  <span className="text-gray-500 ml-1">from last week</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Recent Activity */}
+            <div className="bg-white rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900">Recent Activity</h3>
+              </div>
+              <div className="p-6">
+                <div className="space-y-4">
+                  {[
+                    { action: 'Item added', item: 'Coffee Maker', user: 'John', time: '2 hours ago', type: 'add' },
+                    { action: 'Expense logged', item: 'Grocery shopping', user: 'Sarah', time: '4 hours ago', type: 'expense' },
+                    { action: 'Recipe created', item: 'Pasta Carbonara', user: 'Mike', time: '1 day ago', type: 'recipe' },
+                    { action: 'Alert resolved', item: 'Low inventory alert', user: 'System', time: '2 days ago', type: 'alert' }
+                  ].map((activity, index) => (
+                    <div key={index} className="flex items-center space-x-4">
+                      <div className={`w-2 h-2 rounded-full ${
+                        activity.type === 'add' ? 'bg-green-500' :
+                        activity.type === 'expense' ? 'bg-blue-500' :
+                        activity.type === 'recipe' ? 'bg-purple-500' : 'bg-yellow-500'
+                      }`} />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">
+                          {activity.action}: <span className="text-gray-600">{activity.item}</span>
+                        </p>
+                        <p className="text-xs text-gray-500">by {activity.user} • {activity.time}</p>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white rounded-lg shadow-md p-6 border">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Spending</p>
-                <p className="text-2xl font-bold text-gray-900">${analyticsData.spending.total.toLocaleString()}</p>
-              </div>
-              <div className="p-3 bg-green-100 rounded-lg">
-                <DollarSign className="text-green-600" size={24} />
-              </div>
-            </div>
-            <div className="mt-4 flex items-center">
-              {analyticsData.spending.trend === 'up' ? (
-                <TrendingUp className="text-green-500" size={16} />
-              ) : (
-                <TrendingDown className="text-red-500" size={16} />
-              )}
-              <span className={`text-sm font-medium ml-2 ${
-                analyticsData.spending.trend === 'up' ? 'text-green-600' : 'text-red-600'
-              }`}>
-                {Math.abs(analyticsData.spending.change)}% vs last period
-              </span>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-md p-6 border">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Inventory Items</p>
-                <p className="text-2xl font-bold text-gray-900">{analyticsData.inventory.total}</p>
-              </div>
-              <div className="p-3 bg-blue-100 rounded-lg">
-                <Package className="text-blue-600" size={24} />
-              </div>
-            </div>
-            <div className="mt-4 flex items-center">
-              {analyticsData.inventory.trend === 'up' ? (
-                <TrendingUp className="text-green-500" size={16} />
-              ) : (
-                <TrendingDown className="text-red-500" size={16} />
-              )}
-              <span className={`text-sm font-medium ml-2 ${
-                analyticsData.inventory.trend === 'up' ? 'text-green-600' : 'text-red-600'
-              }`}>
-                {Math.abs(analyticsData.inventory.change)}% vs last period
-              </span>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-md p-6 border">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">User Activity</p>
-                <p className="text-2xl font-bold text-gray-900">{analyticsData.activity.total}</p>
-              </div>
-              <div className="p-3 bg-purple-100 rounded-lg">
-                <Users className="text-purple-600" size={24} />
-              </div>
-            </div>
-            <div className="mt-4 flex items-center">
-              {analyticsData.activity.trend === 'up' ? (
-                <TrendingUp className="text-green-500" size={16} />
-              ) : (
-                <TrendingDown className="text-red-500" size={16} />
-              )}
-              <span className={`text-sm font-medium ml-2 ${
-                analyticsData.activity.trend === 'up' ? 'text-green-600' : 'text-red-600'
-              }`}>
-                {Math.abs(analyticsData.activity.change)}% vs last period
-              </span>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-md p-6 border">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Efficiency Score</p>
-                <p className="text-2xl font-bold text-gray-900">87%</p>
-              </div>
-              <div className="p-3 bg-orange-100 rounded-lg">
-                <Target className="text-orange-600" size={24} />
-              </div>
-            </div>
-            <div className="mt-4 flex items-center">
-              <CheckCircle className="text-green-500" size={16} />
-              <span className="text-sm font-medium text-green-600 ml-2">
-                +5% vs last period
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          {selectedMetrics.includes('spending') && (
-            <MockChart
-              type="line"
-              data={analyticsData.spending.data}
-              title="Spending Trends"
-              color="#10b981"
-            />
-          )}
-          
-          {selectedMetrics.includes('inventory') && (
-            <MockChart
-              type="bar"
-              data={analyticsData.inventory.data}
-              title="Inventory Changes"
-              color="#3b82f6"
-            />
-          )}
-          
-          {selectedMetrics.includes('activity') && (
-            <MockChart
-              type="line"
-              data={analyticsData.activity.data}
-              title="User Activity"
-              color="#8b5cf6"
-            />
-          )}
-          
-          <MockChart
-            type="pie"
-            data={analyticsData.categories.data}
-            title="Category Distribution"
-          />
-        </div>
-
-        {/* Detailed Analytics */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Insights */}
-          <div className="bg-white rounded-lg shadow-md p-6 border">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Smart Insights</h3>
-            <div className="space-y-4">
-              <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg">
-                <CheckCircle className="text-blue-600 mt-0.5" size={16} />
-                <div>
-                  <p className="text-sm font-medium text-blue-900">Spending Optimization</p>
-                  <p className="text-xs text-blue-700">
-                    You've saved 15% on groceries this month by shopping at different stores.
-                  </p>
+        {/* Inventory Analytics */}
+        {selectedMetric === 'inventory' && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Category Distribution */}
+              <div className="bg-white rounded-lg shadow p-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Category Distribution</h3>
+                <div className="space-y-3">
+                  {analyticsData.inventory.categories.map((category, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        {getTrendIcon(category.trend)}
+                        <span className="font-medium text-gray-900">{category.name}</span>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-medium text-gray-900">{category.count} items</p>
+                        <p className="text-xs text-gray-500">{formatCurrency(category.value)}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              
-              <div className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg">
-                <AlertTriangle className="text-yellow-600 mt-0.5" size={16} />
-                <div>
-                  <p className="text-sm font-medium text-yellow-900">Expiration Alert</p>
-                  <p className="text-xs text-yellow-700">
-                    5 items in your inventory will expire within the next week.
-                  </p>
+
+              {/* Growth Trends */}
+              <div className="bg-white rounded-lg shadow p-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Growth Trends</h3>
+                <div className="h-64 flex items-end justify-between space-x-2">
+                  {analyticsData.inventory.trends.monthly.map((value, index) => (
+                    <div key={index} className="flex-1 flex flex-col items-center">
+                      <div 
+                        className="w-full bg-blue-500 rounded-t"
+                        style={{ height: `${(value / 156) * 200}px` }}
+                      />
+                      <span className="text-xs text-gray-500 mt-2">{analyticsData.inventory.trends.labels[index]}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-center text-sm text-gray-600 mt-4">Monthly item count growth</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Spending Analytics */}
+        {selectedMetric === 'spending' && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Spending by Category */}
+              <div className="bg-white rounded-lg shadow p-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Spending by Category</h3>
+                <div className="space-y-3">
+                  {analyticsData.spending.categories.map((category, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <span className="font-medium text-gray-900">{category.name}</span>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-24 bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-blue-600 h-2 rounded-full"
+                            style={{ width: `${category.percentage}%` }}
+                          />
+                        </div>
+                        <span className="text-sm font-medium text-gray-900">{formatCurrency(category.amount)}</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              
-              <div className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg">
-                <TrendingUp className="text-green-600 mt-0.5" size={16} />
-                <div>
-                  <p className="text-sm font-medium text-green-900">Budget Performance</p>
-                  <p className="text-xs text-green-700">
-                    You're 12% under budget for this month. Great job!
-                  </p>
+
+              {/* Monthly Spending */}
+              <div className="bg-white rounded-lg shadow p-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Monthly Spending</h3>
+                <div className="h-64 flex items-end justify-between space-x-2">
+                  {analyticsData.spending.monthly.map((amount, index) => (
+                    <div key={index} className="flex-1 flex flex-col items-center">
+                      <div 
+                        className="w-full bg-green-500 rounded-t"
+                        style={{ height: `${(amount / 2100) * 200}px` }}
+                      />
+                      <span className="text-xs text-gray-500 mt-2">{analyticsData.inventory.trends.labels[index]}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-center text-sm text-gray-600 mt-4">Monthly spending trends</p>
+              </div>
+            </div>
+
+            {/* Savings and Budget */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-white rounded-lg shadow p-6 text-center">
+                <div className="p-3 bg-green-100 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                  <Target className="w-8 h-8 text-green-600" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900">Total Savings</h3>
+                <p className="text-3xl font-bold text-green-600">{formatCurrency(analyticsData.spending.savings)}</p>
+              </div>
+
+              <div className="bg-white rounded-lg shadow p-6 text-center">
+                <div className="p-3 bg-blue-100 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                  <CheckCircle className="w-8 h-8 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900">Budget Utilization</h3>
+                <p className="text-3xl font-bold text-blue-600">{formatPercentage(analyticsData.spending.budgetUtilization)}</p>
+              </div>
+
+              <div className="bg-white rounded-lg shadow p-6 text-center">
+                <div className="p-3 bg-purple-100 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                  <Star className="w-8 h-8 text-purple-600" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900">Efficiency Score</h3>
+                <p className="text-3xl font-bold text-purple-600">8.7/10</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Performance Analytics */}
+        {selectedMetric === 'performance' && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* System Performance */}
+              <div className="bg-white rounded-lg shadow p-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">System Performance</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">Response Time</span>
+                    <span className="font-medium text-gray-900">{analyticsData.performance.responseTime}s</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">Uptime</span>
+                    <span className="font-medium text-gray-900">{analyticsData.performance.uptime}%</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">User Satisfaction</span>
+                    <span className="font-medium text-gray-900">{analyticsData.performance.userSatisfaction}/5</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Feature Usage */}
+              <div className="bg-white rounded-lg shadow p-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Feature Usage</h3>
+                <div className="space-y-3">
+                  {Object.entries(analyticsData.performance.featureUsage).map(([feature, usage]) => (
+                    <div key={feature} className="flex items-center justify-between">
+                      <span className="font-medium text-gray-900 capitalize">{feature}</span>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-24 bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-purple-600 h-2 rounded-full"
+                            style={{ width: `${usage}%` }}
+                          />
+                        </div>
+                        <span className="text-sm font-medium text-gray-900">{usage}%</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Recommendations */}
-          <div className="bg-white rounded-lg shadow-md p-6 border">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">AI Recommendations</h3>
-            <div className="space-y-4">
-              <div className="flex items-start space-x-3 p-3 border rounded-lg">
-                <Zap className="text-purple-600 mt-0.5" size={16} />
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Smart Shopping</p>
-                  <p className="text-xs text-gray-600">
-                    Based on your consumption patterns, consider buying milk in bulk to save 8%.
-                  </p>
-                  <button className="text-xs text-purple-600 hover:text-purple-700 mt-1">
-                    Apply suggestion →
-                  </button>
-                </div>
-              </div>
-              
-              <div className="flex items-start space-x-3 p-3 border rounded-lg">
-                <Home className="text-blue-600 mt-0.5" size={16} />
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Storage Optimization</p>
-                  <p className="text-xs text-gray-600">
-                    Reorganize your pantry to reduce food waste by 20% based on usage patterns.
-                  </p>
-                  <button className="text-xs text-blue-600 hover:text-blue-700 mt-1">
-                    View guide →
-                  </button>
-                </div>
-              </div>
-              
-              <div className="flex items-start space-x-3 p-3 border rounded-lg">
-                <ShoppingCart className="text-green-600 mt-0.5" size={16} />
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Meal Planning</p>
-                  <p className="text-xs text-gray-600">
-                    Plan meals 3 days in advance to reduce grocery spending by 15%.
-                  </p>
-                  <button className="text-xs text-green-600 hover:text-green-700 mt-1">
-                    Start planning →
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
-};
-
-export default AdvancedAnalytics;
+}

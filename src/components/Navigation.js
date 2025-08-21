@@ -10,6 +10,7 @@ import {
   Utensils, 
   Zap, 
   Activity, 
+  BarChart3,
   Info,
   LogOut,
   User,
@@ -74,6 +75,12 @@ export default function Navigation() {
       href: '/data-alerts',
       icon: Activity,
       description: 'Analytics, monitoring, and alerts'
+    },
+    {
+      name: 'Advanced Analytics',
+      href: '/analytics',
+      icon: BarChart3,
+      description: 'Comprehensive data insights and reporting'
     },
     {
       name: 'About',

@@ -18,6 +18,7 @@ import {
   MapPin
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import BarcodeScanner from './BarcodeScanner';
 
 // Mock inventory data
 const mockCategories = [
@@ -942,25 +943,41 @@ export default function InventoryManagement() {
         </div>
       )}
 
-      {/* Barcode Scanner Modal */}
+      {/* Enhanced Barcode Scanner Modal */}
       {showBarcodeScanner && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div className="mt-3 text-center">
-              <Barcode className="mx-auto text-blue-600" size={48} />
-              <h3 className="text-lg font-medium text-gray-900 mt-4">Barcode Scanner</h3>
-              <p className="text-gray-600 mt-2">Point camera at barcode to scan</p>
-              <div className="mt-6">
-                <button
-                  onClick={() => setShowBarcodeScanner(false)}
-                  className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
-                >
-                  Close Scanner
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <BarcodeScanner
+          isOpen={showBarcodeScanner}
+          onClose={() => setShowBarcodeScanner(false)}
+          onScan={(scannedCode) => {
+            // Handle scanned barcode/QR code
+            console.log('Scanned code:', scannedCode);
+            
+            // Auto-fill item form with scanned data
+            if (scannedCode) {
+              // You can integrate with external APIs here to get product details
+              const newItem = {
+                id: Date.now().toString(),
+                name: `Scanned Item (${scannedCode})`,
+                category: 'Electronics', // Default category
+                quantity: 1,
+                location: 'To be determined',
+                purchaseDate: new Date().toISOString().split('T')[0],
+                expiryDate: null,
+                price: 0,
+                barcode: scannedCode,
+                notes: `Auto-imported via ${scannedCode.includes('http') ? 'QR Code' : 'Barcode'} scanner`,
+                status: 'active',
+                warranty: null,
+                supplier: 'Unknown',
+                tags: ['scanned', 'imported']
+              };
+              
+              setItems(prev => [newItem, ...prev]);
+              setShowBarcodeScanner(false);
+              toast.success(`Item scanned and added: ${scannedCode}`);
+            }
+          }}
+        />
       )}
 
       {/* Back to Home Link */}
