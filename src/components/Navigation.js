@@ -1,0 +1,273 @@
+import React, { useState } from 'react';
+import { 
+  Menu, 
+  X, 
+  Home, 
+  Package, 
+  DollarSign, 
+  Users, 
+  ShoppingCart, 
+  Utensils, 
+  Zap, 
+  Activity, 
+  Info,
+  LogOut,
+  User,
+  Settings
+} from 'lucide-react';
+
+export default function Navigation() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  // Mock user data for now (we'll add real auth later)
+  const user = null; // No user logged in initially
+  const logout = () => {
+    // Mock logout
+    console.log('Logout clicked');
+  };
+
+  const navigationItems = [
+    {
+      name: 'Home',
+      href: '/',
+      icon: Home,
+      description: 'Dashboard and overview'
+    },
+    {
+      name: 'Inventory Management',
+      href: '/inventory',
+      icon: Package,
+      description: 'Track household items and supplies'
+    },
+    {
+      name: 'Spending & Budgeting',
+      href: '/spending',
+      icon: DollarSign,
+      description: 'Monitor expenses and manage budgets'
+    },
+    {
+      name: 'Collaboration',
+      href: '/collaboration',
+      icon: Users,
+      description: 'Manage household members and roles'
+    },
+    {
+      name: 'Shopping Lists',
+      href: '/shopping-lists',
+      icon: ShoppingCart,
+      description: 'Create and manage shopping lists'
+    },
+    {
+      name: 'Recipe Management',
+      href: '/recipes',
+      icon: Utensils,
+      description: 'Store recipes and plan meals'
+    },
+    {
+      name: 'Integrations & Automation',
+      href: '/integrations',
+      icon: Zap,
+      description: 'Smart home integration and automation'
+    },
+    {
+      name: 'Data & Alerts',
+      href: '/data-alerts',
+      icon: Activity,
+      description: 'Analytics, monitoring, and alerts'
+    },
+    {
+      name: 'About',
+      href: '/about',
+      icon: Info,
+      description: 'Features, roadmap, and information'
+    }
+  ];
+
+  const userMenuItems = [
+    {
+      name: 'Profile',
+      href: '/profile',
+      icon: User,
+      description: 'View and edit your profile'
+    },
+    {
+      name: 'Settings',
+      href: '/settings',
+      icon: Settings,
+      description: 'Application preferences'
+    }
+  ];
+
+  const handleNavigation = (href) => {
+    window.location.href = href;
+    setIsMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setIsMenuOpen(false);
+  };
+
+  return (
+    <>
+      {/* Hamburger Menu Button */}
+      <button
+        onClick={() => setIsMenuOpen(true)}
+        className="fixed top-4 left-4 z-50 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        aria-label="Open menu"
+      >
+        <Menu size={24} />
+      </button>
+
+      {/* Menu Overlay */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
+          <div className="fixed left-0 top-0 h-full w-80 bg-white shadow-xl">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <Home className="text-white" size={24} />
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold text-gray-900">Home Hub</h1>
+                  <p className="text-sm text-gray-500">Navigation</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+                aria-label="Close menu"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            {/* User Info */}
+            {user ? (
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                    <User className="text-blue-600" size={20} />
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">{user.name}</p>
+                    <p className="text-sm text-gray-500">{user.email}</p>
+                    <p className="text-xs text-blue-600 font-medium capitalize">
+                      {user.role}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="p-6 border-b border-gray-200">
+                <div className="text-center">
+                  <p className="text-sm text-gray-600 mb-3">Not signed in</p>
+                  <div className="space-x-2">
+                    <button
+                      onClick={() => {
+                        window.location.href = '/login';
+                        setIsMenuOpen(false);
+                      }}
+                      className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    >
+                      Login
+                    </button>
+                    <button
+                      onClick={() => {
+                        window.location.href = '/register';
+                        setIsMenuOpen(false);
+                      }}
+                      className="px-3 py-1 text-sm border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+                    >
+                      Register
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Main Navigation */}
+            <div className="flex-1 overflow-y-auto py-4">
+              <div className="px-4">
+                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                  Main Features
+                </h2>
+                <nav className="space-y-1">
+                  {navigationItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <button
+                        key={item.name}
+                        onClick={() => handleNavigation(item.href)}
+                        className="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors group"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <Icon className="text-gray-400 group-hover:text-blue-600" size={20} />
+                          <div className="flex-1">
+                            <p className="font-medium text-gray-900 group-hover:text-blue-600">
+                              {item.name}
+                            </p>
+                            <p className="text-sm text-gray-500 group-hover:text-gray-700">
+                              {item.description}
+                            </p>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </nav>
+              </div>
+
+              {/* User Menu */}
+              {user && (
+                <div className="px-4 mt-6">
+                  <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                    User Menu
+                  </h2>
+                  <nav className="space-y-1">
+                    {userMenuItems.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <button
+                          key={item.name}
+                          onClick={() => handleNavigation(item.href)}
+                          className="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition-colors group"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <Icon className="text-gray-400 group-hover:text-blue-600" size={20} />
+                            <div className="flex-1">
+                              <p className="font-medium text-gray-900 group-hover:text-blue-600">
+                                {item.name}
+                              </p>
+                              <p className="text-sm text-gray-500 group-hover:text-gray-700">
+                                {item.description}
+                              </p>
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </nav>
+                </div>
+              )}
+            </div>
+
+            {/* Logout Button */}
+            {user && (
+              <div className="p-4 border-t border-gray-200">
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  <LogOut size={20} />
+                  <span>Logout</span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
+} 
