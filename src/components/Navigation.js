@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Menu, 
   X, 
@@ -16,21 +17,17 @@ import {
   User,
   Settings
 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
-  // Mock user data for now (we'll add real auth later)
-  const user = null; // No user logged in initially
-  const logout = () => {
-    // Mock logout
-    console.log('Logout clicked');
-  };
+  const { currentUser, userProfile, logout } = useAuth();
+  const navigate = useNavigate();
 
   const navigationItems = [
     {
       name: 'Home',
-      href: '/',
+      href: '/home',
       icon: Home,
       description: 'Dashboard and overview'
     },
@@ -90,6 +87,8 @@ export default function Navigation() {
     }
   ];
 
+
+
   const userMenuItems = [
     {
       name: 'Profile',
@@ -106,13 +105,18 @@ export default function Navigation() {
   ];
 
   const handleNavigation = (href) => {
-    window.location.href = href;
+    navigate(href);
     setIsMenuOpen(false);
   };
 
-  const handleLogout = () => {
-    logout();
-    setIsMenuOpen(false);
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setIsMenuOpen(false);
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   return (
@@ -129,7 +133,7 @@ export default function Navigation() {
       {/* Menu Overlay */}
       {isMenuOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
-          <div className="fixed left-0 top-0 h-full w-80 bg-white shadow-xl">
+          <div className="fixed left-0 top-0 h-full w-80 bg-white shadow-xl flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <div className="flex items-center space-x-3">
@@ -151,17 +155,27 @@ export default function Navigation() {
             </div>
 
             {/* User Info */}
-            {user ? (
+            {currentUser ? (
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                    <User className="text-blue-600" size={20} />
+                    {userProfile?.photoURL ? (
+                      <img
+                        src={userProfile.photoURL}
+                        alt="Profile"
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                    ) : (
+                      <User className="text-blue-600" size={20} />
+                    )}
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">{user.name}</p>
-                    <p className="text-sm text-gray-500">{user.email}</p>
+                    <p className="font-medium text-gray-900">
+                      {userProfile?.displayName || currentUser.displayName || 'User'}
+                    </p>
+                    <p className="text-sm text-gray-500">{currentUser.email}</p>
                     <p className="text-xs text-blue-600 font-medium capitalize">
-                      {user.role}
+                      {userProfile?.role || 'user'}
                     </p>
                   </div>
                 </div>
@@ -173,7 +187,7 @@ export default function Navigation() {
                   <div className="space-x-2">
                     <button
                       onClick={() => {
-                        window.location.href = '/login';
+                        navigate('/login');
                         setIsMenuOpen(false);
                       }}
                       className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
@@ -182,12 +196,12 @@ export default function Navigation() {
                     </button>
                     <button
                       onClick={() => {
-                        window.location.href = '/register';
+                        navigate('/signup');
                         setIsMenuOpen(false);
                       }}
                       className="px-3 py-1 text-sm border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
                     >
-                      Register
+                      Sign Up
                     </button>
                   </div>
                 </div>
@@ -195,7 +209,7 @@ export default function Navigation() {
             )}
 
             {/* Main Navigation */}
-            <div className="flex-1 overflow-y-auto py-4">
+            <div className="flex-1 overflow-y-auto py-4 max-h-[60vh]">
               <div className="px-4">
                 <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
                   Main Features
@@ -227,7 +241,7 @@ export default function Navigation() {
               </div>
 
               {/* User Menu */}
-              {user && (
+              {currentUser && (
                 <div className="px-4 mt-6">
                   <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
                     User Menu
@@ -261,7 +275,7 @@ export default function Navigation() {
             </div>
 
             {/* Logout Button */}
-            {user && (
+            {currentUser && (
               <div className="p-4 border-t border-gray-200">
                 <button
                   onClick={handleLogout}
