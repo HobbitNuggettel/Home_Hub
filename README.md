@@ -12,6 +12,8 @@ Home Hub is designed to be the central command center for modern households, pro
 - **Recipe Management** - Store recipes and integrate with shopping lists
 - **Integrations & Automation** - Smart home integration and automation rules
 - **Data & Alerts** - Analytics, monitoring, and intelligent alerts
+- **Dark Mode & Theming** - Comprehensive light/dark theme support with system preferences
+- **Testing & Quality Assurance** - Professional testing framework with Jest + React Testing Library
 
 ## ✨ Features Status
 
@@ -96,6 +98,24 @@ Home Hub is designed to be the central command center for modern households, pro
 - **Statistics**: Platform metrics and achievements
 - **Responsive Design**: Mobile-optimized information display
 
+#### 9. **Dark Mode & Theming** - COMPLETED & ENHANCED ✅
+- **Comprehensive Dark Mode**: Full dark theme support across all components
+- **Theme Preferences**: Light, Dark, and System preference options
+- **Theme Settings**: Dedicated theme configuration page in Settings
+- **Persistent Preferences**: User theme choices saved in localStorage
+- **System Integration**: Automatic theme switching based on OS preferences
+- **Smooth Transitions**: CSS transitions for seamless theme changes
+- **Component Coverage**: All 25+ components fully support dark mode
+- **Accessibility**: High contrast ratios and proper color schemes
+
+#### 10. **Testing & Quality Assurance** - IN PROGRESS 🚧
+- **Professional Testing Framework**: Jest + React Testing Library setup
+- **Comprehensive Test Infrastructure**: Custom utilities, mocks, and helpers
+- **Component Testing**: Expanding coverage across all features
+- **Quality Assurance**: Production-ready testing processes
+- **CI/CD Ready**: Automated testing and coverage reporting
+- **Test Coverage**: Building towards 80%+ coverage target
+
 ### 🔄 IN PROGRESS
 - **Firebase Authentication System**: Complete user authentication with cloud database
 - **Advanced Analytics Dashboard**: Enhanced data visualization and reporting
@@ -146,10 +166,12 @@ Home Hub now features a complete Firebase-powered authentication system that pro
 
 ### Frontend
 - **React 18** - Modern React with hooks and concurrent features
-- **Tailwind CSS** - Utility-first CSS framework
+- **Tailwind CSS** - Utility-first CSS framework with dark mode support
 - **React Router** - Declarative routing
 - **Lucide React** - Beautiful icon toolkit
 - **React Hot Toast** - Elegant notifications
+- **Theme Context** - React Context for theme management
+- **Testing Framework** - Jest + React Testing Library for comprehensive testing
 
 ### Backend & Data
 - **Firebase Authentication** - Secure user authentication and management
@@ -207,11 +229,13 @@ REACT_APP_WS_URL=your_websocket_url
 1. **Register/Login**: Create an account or sign in
 2. **Set Up Household**: Create or join a household
 3. **Configure Roles**: Assign appropriate permissions to household members
-4. **Start Managing**: Begin using inventory, spending, and collaboration features
+4. **Customize Theme**: Choose light, dark, or system theme in Settings
+5. **Start Managing**: Begin using inventory, spending, and collaboration features
 
 ### Key Features
 - **Navigation**: Use the hamburger menu (top-left) to access all features
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
+- **Dark Mode**: Switch themes via settings or use system preference
 - **Real-time Updates**: See changes immediately across all devices
 - **Data Export**: Export your data in CSV format for backup
 
@@ -219,14 +243,18 @@ REACT_APP_WS_URL=your_websocket_url
 
 ### Customization
 - **Themes**: Modify Tailwind CSS classes for custom styling
+- **Dark Mode**: Toggle between light, dark, and system themes
 - **Categories**: Customize inventory and spending categories
 - **Permissions**: Adjust role-based access control settings
 - **Automation**: Configure automation rules and triggers
+- **Testing**: Customize test configuration and coverage thresholds
 
 ### Local Development
 ```bash
 # Run tests
-npm test
+npm test                    # Run tests in watch mode
+npm run test:coverage      # Run tests with coverage report
+npm run test:ci            # Run tests for CI/CD pipeline
 
 # Run linting
 npm run lint
@@ -298,7 +326,22 @@ serve -s build
 - ✅ **Google OAuth Integration** for easy sign-in
 - ✅ **Password Reset Functionality** for user convenience
 
-**Next Phase**: Moving towards advanced features including AI-powered suggestions, voice commands, and enhanced IoT integration.
+**Phase 6: Dark Mode & Theming** has been completed successfully! The app now features:
+- ✅ **Comprehensive Dark Mode** across all components
+- ✅ **Theme Preferences** with light/dark/system options
+- ✅ **Theme Settings Page** in the main settings
+- ✅ **System Integration** for automatic theme switching
+- ✅ **Persistent Theme Storage** in localStorage
+- ✅ **Smooth Theme Transitions** with CSS animations
+
+**Phase 6.6: Testing & Quality Assurance** is now in progress! The app now features:
+- ✅ **Professional Testing Framework** with Jest + React Testing Library
+- ✅ **Comprehensive Test Infrastructure** with custom utilities and mocks
+- ✅ **Component Testing Coverage** expanding across all features
+- ✅ **CI/CD Ready Testing** with coverage reporting and automation
+- ✅ **Quality Assurance** processes for production readiness
+
+**Next Phase**: Moving towards advanced features including AI-powered suggestions, voice commands, enhanced IoT integration, and comprehensive testing framework.
 
 ### Phase 1: Core Features ✅ COMPLETED
 - [x] User authentication system
@@ -335,6 +378,27 @@ serve -s build
 - [x] Cloud database integration (Firestore)
 - [x] Secure data storage and user isolation
 
+### Phase 6: Dark Mode & Theming ✅ COMPLETED
+- [x] Theme context provider with React Context
+- [x] Dark mode toggle component with theme labels
+- [x] Light, dark, and system theme preferences
+- [x] Theme settings page in main settings
+- [x] Comprehensive dark mode styling across all components
+- [x] Persistent theme storage in localStorage
+- [x] System preference detection and integration
+- [x] Smooth CSS transitions for theme changes
+- [x] High contrast ratios for accessibility
+
+### Phase 6.6: Testing & Quality Assurance 🚧 IN PROGRESS
+- [x] Jest + React Testing Library setup and configuration
+- [x] Custom test utilities and provider wrappers
+- [x] Mock system for localStorage, matchMedia, and browser APIs
+- [x] Component testing for DarkModeToggle and ThemeContext
+- [x] Test coverage reporting and CI/CD scripts
+- [ ] Complete component testing coverage (expanding)
+- [ ] Integration tests for user flows
+- [ ] E2E testing setup and implementation
+
 ## 🐛 Known Issues & Limitations
 
 ### Current Limitations
@@ -343,6 +407,7 @@ serve -s build
 - **File Uploads**: Firebase Storage ready, mock implementation for app features
 - **Offline Mode**: Basic offline functionality with PWA
 - **User Authentication**: Fully implemented with Firebase
+- **Dark Mode**: Fully implemented across all components with theme preferences
 
 ### Planned Improvements
 - **Backend Integration**: Real database and API endpoints (partially complete with Firebase)
@@ -351,6 +416,8 @@ serve -s build
 - **Performance**: Further optimization and caching
 - **Multi-tenant Support**: Multiple households per user account
 - **Advanced User Roles**: Granular permission system
+- **Theme Customization**: User-defined color schemes and custom themes
+- **Accessibility**: Enhanced screen reader support and keyboard navigation
 
 ## 📞 Support & Contact
 

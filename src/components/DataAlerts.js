@@ -341,26 +341,26 @@ export default function DataAlerts() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Data & Alerts</h1>
-              <p className="text-gray-600">Data visualization, alerts management, and system monitoring</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Data & Alerts</h1>
+              <p className="text-gray-600 dark:text-gray-300">Data visualization, alerts management, and system monitoring</p>
             </div>
             <div className="flex space-x-3">
               <button
                 onClick={() => exportData('alerts')}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center space-x-2"
+                className="px-4 py-2 bg-green-600 dark:bg-green-700 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600 flex items-center space-x-2"
               >
                 <Download size={20} />
                 <span>Export Alerts</span>
               </button>
               <button
                 onClick={() => setShowAddAlert(true)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+                className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center space-x-2"
               >
                 <Plus size={20} />
                 <span>Add Alert</span>
@@ -372,14 +372,14 @@ export default function DataAlerts() {
 
       {/* Navigation Tabs */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-white rounded-lg shadow-sm p-1 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-1 mb-6">
           <div className="flex space-x-1">
             <button
               onClick={() => setViewMode('overview')}
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'overview'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -392,7 +392,7 @@ export default function DataAlerts() {
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'alerts'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -405,7 +405,7 @@ export default function DataAlerts() {
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'monitoring'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -418,7 +418,7 @@ export default function DataAlerts() {
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'analytics'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -431,12 +431,12 @@ export default function DataAlerts() {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center">
-              <Bell className="text-blue-600" size={24} />
+              <Bell className="text-blue-600 dark:text-blue-400" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Alerts</p>
-                <p className="text-2xl font-bold text-gray-900">{totalAlerts}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Alerts</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalAlerts}</p>
               </div>
             </div>
           </div>

@@ -360,14 +360,14 @@ export default function IntegrationsAutomation() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Integrations & Automation</h1>
-              <p className="text-gray-600">Smart home integration, automation rules, and AI suggestions</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Integrations & Automation</h1>
+              <p className="text-gray-600 dark:text-gray-300">Smart home integration, automation rules, and AI suggestions</p>
             </div>
             <div className="flex space-x-3">
               <button
@@ -391,14 +391,14 @@ export default function IntegrationsAutomation() {
 
       {/* Navigation Tabs */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-white rounded-lg shadow-sm p-1 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-1 mb-6">
           <div className="flex space-x-1">
             <button
               onClick={() => setViewMode('devices')}
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'devices'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -411,7 +411,7 @@ export default function IntegrationsAutomation() {
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'automations'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -424,7 +424,7 @@ export default function IntegrationsAutomation() {
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'ai-suggestions'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -437,39 +437,39 @@ export default function IntegrationsAutomation() {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
             <div className="flex items-center">
               <Home className="text-blue-600" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Devices</p>
-                <p className="text-2xl font-bold text-gray-900">{totalDevices}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Total Devices</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalDevices}</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
             <div className="flex items-center">
               <CheckCircle className="text-green-600" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Online Devices</p>
-                <p className="text-2xl font-bold text-gray-900">{onlineDevices}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Online Devices</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{onlineDevices}</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
             <div className="flex items-center">
               <Zap className="text-purple-600" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Active Automations</p>
-                <p className="text-2xl font-bold text-gray-900">{activeAutomations}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Active Automations</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{activeAutomations}</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
             <div className="flex items-center">
               <Brain className="text-orange-600" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">AI Suggestions</p>
-                <p className="text-2xl font-bold text-gray-900">{aiSuggestions.length}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-300">AI Suggestions</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{aiSuggestions.length}</p>
               </div>
             </div>
           </div>
@@ -479,10 +479,10 @@ export default function IntegrationsAutomation() {
         {viewMode === 'devices' && (
           <div>
             {/* Search and Filters */}
-            <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Search Devices</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Search Devices</label>
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                     <input
@@ -490,16 +490,16 @@ export default function IntegrationsAutomation() {
                       placeholder="Search by name, brand, or room..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Device Type</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Device Type</label>
                   <select
                     value={selectedType}
                     onChange={(e) => setSelectedType(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   >
                     <option value="all">All Types</option>
                     {deviceTypes.map(type => (
@@ -508,11 +508,11 @@ export default function IntegrationsAutomation() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Room</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Room</label>
                   <select
                     value={selectedRoom}
                     onChange={(e) => setSelectedRoom(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   >
                     <option value="all">All Rooms</option>
                     {rooms.map(room => (
@@ -541,16 +541,16 @@ export default function IntegrationsAutomation() {
               {filteredDevices.map(device => {
                 const DeviceIcon = getDeviceIcon(device.type);
                 return (
-                  <div key={device.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+                  <div key={device.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
                     <div className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
                             <DeviceIcon className="text-blue-600" size={20} />
-                            <h3 className="text-lg font-medium text-gray-900">{device.name}</h3>
+                            <h3 className="text-lg font-medium text-gray-900 dark:text-white">{device.name}</h3>
                           </div>
-                          <p className="text-sm text-gray-600">{device.brand}</p>
-                          <p className="text-sm text-gray-500">{device.room}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">{device.brand}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">{device.room}</p>
                         </div>
                         <div className="flex space-x-2">
                           <button
@@ -586,7 +586,7 @@ export default function IntegrationsAutomation() {
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getDeviceStatusColor(device.status)}`}>
                           {device.status}
                         </span>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
                           Last seen: {new Date(device.lastSeen).toLocaleTimeString()}
                         </span>
                       </div>
@@ -595,12 +595,12 @@ export default function IntegrationsAutomation() {
                       {device.type === 'light' && (
                         <div className="space-y-2">
                           <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600">Brightness:</span>
-                            <span className="font-medium">{device.brightness}%</span>
+                            <span className="text-gray-600 dark:text-gray-300">Brightness:</span>
+                            <span className="font-medium text-gray-900 dark:text-white">{device.brightness}%</span>
                           </div>
                           <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600">Color:</span>
-                            <div className="w-4 h-4 rounded-full border border-gray-300" style={{ backgroundColor: device.color }}></div>
+                            <span className="text-gray-600 dark:text-gray-300">Color:</span>
+                            <div className="w-4 h-4 rounded-full border border-gray-300 dark:border-gray-600" style={{ backgroundColor: device.color }}></div>
                           </div>
                         </div>
                       )}
@@ -608,16 +608,16 @@ export default function IntegrationsAutomation() {
                       {device.type === 'thermostat' && (
                         <div className="space-y-2">
                           <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600">Current:</span>
-                            <span className="font-medium">{device.temperature}°F</span>
+                            <span className="text-gray-600 dark:text-gray-300">Current:</span>
+                            <span className="font-medium text-gray-900 dark:text-white">{device.temperature}°F</span>
                           </div>
                           <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600">Target:</span>
-                            <span className="font-medium">{device.targetTemp}°F</span>
+                            <span className="text-gray-600 dark:text-gray-300">Target:</span>
+                            <span className="font-medium text-gray-900 dark:text-white">{device.targetTemp}°F</span>
                           </div>
                           <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600">Humidity:</span>
-                            <span className="font-medium">{device.humidity}%</span>
+                            <span className="text-gray-600 dark:text-gray-300">Humidity:</span>
+                            <span className="font-medium text-gray-900 dark:text-white">{device.humidity}%</span>
                           </div>
                         </div>
                       )}
@@ -625,7 +625,7 @@ export default function IntegrationsAutomation() {
                       {device.type === 'lock' && (
                         <div className="space-y-2">
                           <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600">Status:</span>
+                            <span className="text-gray-600 dark:text-gray-300">Status:</span>
                             <span className={`font-medium ${device.locked ? 'text-red-600' : 'text-green-600'}`}>
                               {device.locked ? 'Locked' : 'Unlocked'}
                             </span>
@@ -636,13 +636,13 @@ export default function IntegrationsAutomation() {
                       {device.type === 'camera' && (
                         <div className="space-y-2">
                           <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600">Recording:</span>
+                            <span className="text-gray-600 dark:text-gray-300">Recording:</span>
                             <span className={`font-medium ${device.recording ? 'text-red-600' : 'text-green-600'}`}>
                               {device.recording ? 'On' : 'Off'}
                             </span>
                           </div>
                           <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600">Motion:</span>
+                            <span className="text-gray-600 dark:text-gray-300">Motion:</span>
                             <span className={`font-medium ${device.motion ? 'text-red-600' : 'text-green-600'}`}>
                               {device.motion ? 'Detected' : 'None'}
                             </span>
@@ -697,36 +697,36 @@ export default function IntegrationsAutomation() {
         {viewMode === 'automations' && (
           <div>
             {/* Automations List */}
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-medium text-gray-900">Automation Rules ({automations.length})</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Automation Rules ({automations.length})</h3>
               </div>
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Automation</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trigger</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Run</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Automation</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Trigger</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Last Run</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     {automations.map(automation => {
                       const TriggerIcon = getAutomationTriggerIcon(automation.trigger);
                       return (
-                        <tr key={automation.id} className="hover:bg-gray-50">
+                        <tr key={automation.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>
-                              <div className="text-sm font-medium text-gray-900">{automation.name}</div>
-                              <div className="text-sm text-gray-500">{automation.description}</div>
+                              <div className="text-sm font-medium text-gray-900 dark:text-white">{automation.name}</div>
+                              <div className="text-sm text-gray-500 dark:text-gray-400">{automation.description}</div>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center space-x-2">
                               <TriggerIcon size={16} className="text-blue-600" />
-                              <span className="text-sm text-gray-900 capitalize">
+                              <span className="text-sm text-gray-900 dark:text-white capitalize">
                                 {automation.trigger}: {automation.triggerValue}
                               </span>
                             </div>
@@ -738,7 +738,7 @@ export default function IntegrationsAutomation() {
                               {automation.status}
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                             {automation.lastTriggered 
                               ? new Date(automation.lastTriggered).toLocaleString()
                               : 'Never'
@@ -788,12 +788,12 @@ export default function IntegrationsAutomation() {
             {/* AI Suggestions */}
             <div className="space-y-6">
               {aiSuggestions.map(suggestion => (
-                <div key={suggestion.id} className="bg-white rounded-lg shadow-sm p-6">
+                <div key={suggestion.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         <Brain className="text-orange-600" size={20} />
-                        <h3 className="text-lg font-medium text-gray-900">{suggestion.title}</h3>
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-white">{suggestion.title}</h3>
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                           suggestion.impact === 'high' ? 'bg-red-100 text-red-800' :
                           suggestion.impact === 'medium' ? 'bg-yellow-100 text-yellow-800' :
@@ -802,8 +802,8 @@ export default function IntegrationsAutomation() {
                           {suggestion.impact} impact
                         </span>
                       </div>
-                      <p className="text-gray-600 mb-3">{suggestion.description}</p>
-                      <div className="flex items-center space-x-6 text-sm text-gray-500">
+                      <p className="text-gray-600 dark:text-gray-300 mb-3">{suggestion.description}</p>
+                      <div className="flex items-center space-x-6 text-sm text-gray-500 dark:text-gray-400">
                         <span>Savings: {suggestion.savings}</span>
                         <span>Implementation: {suggestion.implementation}</span>
                         <span>Status: {suggestion.status}</span>
@@ -836,9 +836,9 @@ export default function IntegrationsAutomation() {
       {/* Add/Edit Device Modal */}
       {(showAddDevice || editingDevice) && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
             <div className="mt-3">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
                 {editingDevice ? 'Edit Device' : 'Add New Device'}
               </h3>
               <form onSubmit={(e) => {
@@ -859,22 +859,22 @@ export default function IntegrationsAutomation() {
               }}>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Device Name</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Device Name</label>
                     <input
                       type="text"
                       name="name"
                       defaultValue={editingDevice?.name || ''}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Device Type</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Device Type</label>
                     <select
                       name="type"
                       defaultValue={editingDevice?.type || 'light'}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     >
                       {deviceTypes.map(type => (
                         <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>
@@ -882,12 +882,12 @@ export default function IntegrationsAutomation() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Brand</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Brand</label>
                     <select
                       name="brand"
                       defaultValue={editingDevice?.brand || 'Philips Hue'}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     >
                       {brands.map(brand => (
                         <option key={brand} value={brand}>{brand}</option>
@@ -895,12 +895,12 @@ export default function IntegrationsAutomation() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Room</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Room</label>
                     <select
                       name="room"
                       defaultValue={editingDevice?.room || 'Living Room'}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     >
                       {rooms.map(room => (
                         <option key={room} value={room}>{room}</option>
@@ -935,9 +935,9 @@ export default function IntegrationsAutomation() {
       {/* Add/Edit Automation Modal */}
       {(showAddAutomation || editingAutomation) && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-[500px] shadow-lg rounded-md bg-white">
+          <div className="relative top-20 mx-auto p-5 border w-[500px] shadow-lg rounded-md bg-white dark:bg-gray-800">
             <div className="mt-3">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
                 {editingAutomation ? 'Edit Automation' : 'Create New Automation'}
               </h3>
               <form onSubmit={(e) => {
@@ -958,32 +958,32 @@ export default function IntegrationsAutomation() {
               }}>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Automation Name</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Automation Name</label>
                     <input
                       type="text"
                       name="name"
                       defaultValue={editingAutomation?.name || ''}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
                     <textarea
                       name="description"
                       defaultValue={editingAutomation?.description || ''}
                       rows="2"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Trigger Type</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Trigger Type</label>
                       <select
                         name="trigger"
                         defaultValue={editingAutomation?.trigger || 'schedule'}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         <option value="schedule">Schedule</option>
                         <option value="location">Location</option>
@@ -992,14 +992,14 @@ export default function IntegrationsAutomation() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Trigger Value</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Trigger Value</label>
                       <input
                         type="text"
                         name="triggerValue"
                         defaultValue={editingAutomation?.triggerValue || ''}
                         placeholder="07:00, away, etc."
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
                   </div>
@@ -1030,7 +1030,7 @@ export default function IntegrationsAutomation() {
 
       {/* Back to Home Link */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <a href="/" className="text-blue-600 hover:text-blue-800 underline">← Back to Home</a>
+        <a href="/" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline">← Back to Home</a>
       </div>
     </div>
   );
