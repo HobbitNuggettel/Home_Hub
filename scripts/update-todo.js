@@ -33,6 +33,16 @@ const TASK_IDS = {
   'notification-system': 'Notification System',
   'data-analytics': 'Data Analytics',
   
+  // README Planned Features
+  'barcode-scanning': 'Barcode Scanning',
+  'advanced-ai': 'Advanced AI Features',
+  'voice-commands': 'Voice Commands',
+  'iot-integration': 'IoT Integration',
+  'financial-planning': 'Financial Planning',
+  'family-calendar': 'Family Calendar',
+  'user-roles': 'User Roles & Permissions',
+  'multi-tenant': 'Multi-tenant Support',
+  
   // Phase 6.4: User Experience & Accessibility
   'accessibility': 'Fix accessibility issues',
   'responsive-design': 'Mobile-first responsive design',
@@ -46,7 +56,15 @@ const TASK_IDS = {
   // Phase 6.6: Testing & Quality Assurance
   'testing-framework': 'Add comprehensive testing',
   'code-quality-tools': 'Add development tools',
-  'documentation': 'Improve documentation'
+  'documentation': 'Improve documentation',
+  
+  // README Planned Improvements
+  'backend-integration': 'Backend Integration',
+  'realtime-updates': 'Real-time Updates',
+  'advanced-offline': 'Advanced Offline',
+  'performance-optimization': 'Performance Optimization',
+  'multi-tenant-support': 'Multi-tenant Support',
+  'advanced-user-roles': 'Advanced User Roles'
 };
 
 function showHelp() {
