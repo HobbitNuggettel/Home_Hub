@@ -2,9 +2,13 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Navigation from './components/Navigation';
 import Home from './components/Home';
+import Dashboard from './components/Dashboard';
+import Settings from './components/Settings';
+import NotificationCenter from './components/NotificationCenter';
 import AdvancedAnalytics from './components/AdvancedAnalytics';
 import InventoryManagement from './components/InventoryManagement';
 import SpendingTracker from './components/SpendingTracker';
@@ -22,10 +26,11 @@ import LandingPage from './components/LandingPage';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="App">
-          <Routes>
+    <ErrorBoundary>
+      <AuthProvider>
+        <Router>
+          <div className="App">
+            <Routes>
             {/* Public Routes */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
@@ -38,6 +43,30 @@ function App() {
                 <>
                   <Navigation />
                   <Home />
+                </>
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <>
+                  <Navigation />
+                  <Dashboard />
+                </>
+              </ProtectedRoute>
+            } />
+            <Route path="/settings" element={
+              <ProtectedRoute>
+                <>
+                  <Navigation />
+                  <Settings />
+                </>
+              </ProtectedRoute>
+            } />
+            <Route path="/notifications" element={
+              <ProtectedRoute>
+                <>
+                  <Navigation />
+                  <NotificationCenter />
                 </>
               </ProtectedRoute>
             } />
@@ -150,7 +179,8 @@ function App() {
           />
         </div>
       </Router>
-    </AuthProvider>
+        </AuthProvider>
+      </ErrorBoundary>
   );
 }
 
