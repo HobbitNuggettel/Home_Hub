@@ -326,7 +326,29 @@ This document tracks all identified issues, improvements, and new features for t
 1. **✅ Phase 6.6 NEARLY COMPLETE** - 95% testing coverage achieved (129/138 tests passing)
 2. **✅ Phase 6.7 NEARLY COMPLETE** - AI integration 90% complete (routes & navigation done)
 3. **Final: Complete AI Services Integration** - Connect remaining AI services to components
-4. **Future: Phase 7** - Mobile applications and advanced integrations
+4. **Component Refactoring** - Break down large components (900+ lines) into manageable pieces
+5. **Firebase Data Migration** - Complete localStorage to Firestore migration
+6. **Future: Phase 7** - Mobile applications and advanced integrations
+
+## 🔧 **Remaining Development Tasks**
+
+### **Week 1: AI Services Integration**
+- [ ] Connect AIExpenseService to SpendingTracker for auto-categorization
+- [ ] Integrate AIInventoryService with InventoryManagement for smart suggestions
+- [ ] Add AIRecipeService to RecipeManagement for meal planning
+- [ ] Complete AdvancedAIService integration with voice commands
+
+### **Week 1-2: Firebase Data Migration**
+- [ ] Create FirebaseExpenseService for real-time expense sync
+- [ ] Implement FirebaseInventoryService for cloud inventory storage
+- [ ] Add FirebaseRecipeService for recipe cloud storage
+- [ ] Enable real-time collaboration with Firestore
+
+### **Week 2: Component Refactoring**
+- [ ] Break down SpendingTracker (1000+ lines) into smaller components
+- [ ] Refactor IntegrationsAutomation (1000+ lines) into focused modules
+- [ ] Split DataAlerts (1000+ lines) into manageable pieces
+- [ ] Optimize InventoryManagement (900+ lines) with better structure
 
 ---
 
