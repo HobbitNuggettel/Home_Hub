@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { 
   Plus, 
   Search, 
@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import BarcodeScanner from './BarcodeScanner';
+import { useInventory } from '../hooks/useInventory';
 
 // Mock inventory data
 const mockCategories = [
@@ -76,90 +77,84 @@ const mockItems = [
   }
 ];
 
-export default function InventoryManagement() {
-  const [items, setItems] = useState(mockItems);
-  const [categories] = useState(mockCategories);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [showMultiAddForm, setShowMultiAddForm] = useState(false);
-  const [editingItem, setEditingItem] = useState(null);
-  const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
-  const [viewMode, setViewMode] = useState('table'); // 'table' or 'grid'
-  const [selectedItems, setSelectedItems] = useState([]);
-
-  // Filter items based on search and category
-  const filteredItems = items.filter(item => {
-    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.notes.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+function InventoryManagement() {
+  const {
+    items,
+    categories,
+    searchTerm,
+    selectedCategory,
+    showAddForm,
+    showMultiAddForm,
+    editingItem,
+    showBarcodeScanner,
+    viewMode,
+    selectedItems,
+    filteredItems,
+    statistics,
+    actions
+  } = useInventory(mockItems, mockCategories);
 
   // Add new item
-  const addItem = (itemData) => {
+  const addItem = useCallback((itemData) => {
     const newItem = {
-      id: Date.now().toString(),
       ...itemData,
       status: 'active',
       tags: itemData.tags ? itemData.tags.split(',').map(tag => tag.trim()) : []
     };
-    setItems([...items, newItem]);
-    setShowAddForm(false);
+    actions.addItem(newItem);
+    actions.setShowAddForm(false);
     toast.success('Item added successfully!');
-  };
+  }, [actions]);
 
   // Add multiple items
-  const addMultipleItems = (itemsData) => {
+  const addMultipleItems = useCallback((itemsData) => {
     const newItems = itemsData.map((itemData, index) => ({
-      id: (Date.now() + index).toString(),
       ...itemData,
       status: 'active',
       tags: itemData.tags ? itemData.tags.split(',').map(tag => tag.trim()) : []
     }));
-    setItems([...items, ...newItems]);
-    setShowMultiAddForm(false);
+    newItems.forEach(item => actions.addItem(item));
+    actions.setShowMultiAddForm(false);
     toast.success(`${newItems.length} items added successfully!`);
-  };
+  }, [actions]);
 
   // Update existing item
-  const updateItem = (id, updates) => {
-    setItems(items.map(item => 
-      item.id === id ? { 
+  const updateItem = useCallback((id, updates) => {
+    const item = items.find(item => item.id === id);
+    if (item) {
+      const updatedItem = { 
         ...item, 
         ...updates,
         tags: updates.tags ? updates.tags.split(',').map(tag => tag.trim()) : item.tags
-      } : item
-    ));
-    setEditingItem(null);
+      };
+      actions.updateItem(updatedItem);
+    }
+    actions.setEditingItem(null);
     toast.success('Item updated successfully!');
-  };
+  }, [items, actions]);
 
   // Delete item
-  const deleteItem = (id) => {
+  const deleteItem = useCallback((id) => {
     if (window.confirm('Are you sure you want to delete this item?')) {
-      setItems(items.filter(item => item.id !== id));
+      actions.deleteItem(id);
       toast.success('Item deleted successfully!');
     }
-  };
+  }, [actions]);
 
   // Delete multiple items
-  const deleteMultipleItems = () => {
+  const deleteMultipleItems = useCallback(() => {
     if (selectedItems.length === 0) {
       toast.error('No items selected');
       return;
     }
     if (window.confirm(`Are you sure you want to delete ${selectedItems.length} items?`)) {
-      setItems(items.filter(item => !selectedItems.includes(item.id)));
-      setSelectedItems([]);
+      actions.deleteMultiple(selectedItems);
       toast.success(`${selectedItems.length} items deleted successfully!`);
     }
-  };
+  }, [selectedItems, actions]);
 
   // Export inventory to CSV
-  const exportToCSV = () => {
+  const exportToCSV = useCallback(() => {
     const csvContent = [
       ['Name', 'Category', 'Quantity', 'Location', 'Price', 'Purchase Date', 'Expiry Date', 'Notes', 'Tags'],
       ...items.map(item => [
@@ -183,10 +178,10 @@ export default function InventoryManagement() {
     a.click();
     window.URL.revokeObjectURL(url);
     toast.success('Inventory exported to CSV!');
-  };
+  }, [items]);
 
   // Import inventory from CSV (simulated)
-  const importFromCSV = () => {
+  const importFromCSV = useCallback(() => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.csv';
@@ -198,25 +193,21 @@ export default function InventoryManagement() {
       }
     };
     input.click();
-  };
+  }, []);
 
   // Toggle item selection
-  const toggleItemSelection = (itemId) => {
-    setSelectedItems(prev => 
-      prev.includes(itemId) 
-        ? prev.filter(id => id !== itemId)
-        : [...prev, itemId]
-    );
-  };
+  const toggleItemSelection = useCallback((itemId) => {
+    actions.toggleItemSelection(itemId);
+  }, [actions]);
 
   // Select all items
-  const selectAllItems = () => {
+  const selectAllItems = useCallback(() => {
     if (selectedItems.length === filteredItems.length) {
-      setSelectedItems([]);
+      actions.deselectAll();
     } else {
-      setSelectedItems(filteredItems.map(item => item.id));
+      actions.selectAll();
     }
-  };
+  }, [selectedItems.length, filteredItems.length, actions]);
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
@@ -230,21 +221,21 @@ export default function InventoryManagement() {
             </div>
             <div className="flex space-x-3">
               <button
-                onClick={() => setShowBarcodeScanner(true)}
+                onClick={() => actions.setShowBarcodeScanner(true)}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
               >
                 <Barcode size={20} />
                 <span>Scan Barcode</span>
               </button>
               <button
-                onClick={() => setShowMultiAddForm(true)}
+                onClick={() => actions.setShowMultiAddForm(true)}
                 className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 flex items-center space-x-2"
               >
                 <Users size={20} />
                 <span>Multi Add</span>
               </button>
               <button
-                onClick={() => setShowAddForm(true)}
+                onClick={() => actions.setShowAddForm(true)}
                 className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center space-x-2"
               >
                 <Plus size={20} />
@@ -267,7 +258,7 @@ export default function InventoryManagement() {
                   type="text"
                   placeholder="Search by name, location, notes, or tags..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => actions.setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -276,7 +267,7 @@ export default function InventoryManagement() {
               <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
               <select
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={(e) => actions.setSelectedCategory(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">All Categories</option>
@@ -289,7 +280,7 @@ export default function InventoryManagement() {
               <label className="block text-sm font-medium text-gray-700 mb-2">View Mode</label>
               <div className="flex border border-gray-300 rounded-lg">
                 <button
-                  onClick={() => setViewMode('table')}
+                  onClick={() => actions.setViewMode('table')}
                   className={`flex-1 px-3 py-2 text-sm font-medium rounded-l-lg ${
                     viewMode === 'table' 
                       ? 'bg-blue-600 text-white' 
@@ -299,7 +290,7 @@ export default function InventoryManagement() {
                   Table
                 </button>
                 <button
-                  onClick={() => setViewMode('grid')}
+                  onClick={() => actions.setViewMode('grid')}
                   className={`flex-1 px-3 py-2 text-sm font-medium rounded-r-lg ${
                     viewMode === 'grid' 
                       ? 'bg-blue-600 text-white' 
@@ -313,8 +304,7 @@ export default function InventoryManagement() {
             <div className="flex items-end space-x-2">
               <button
                 onClick={() => {
-                  setSearchTerm('');
-                  setSelectedCategory('all');
+                  actions.resetFilters();
                 }}
                 className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
               >
@@ -343,7 +333,7 @@ export default function InventoryManagement() {
                   <span>Delete Selected</span>
                 </button>
                 <button
-                  onClick={() => setSelectedItems([])}
+                  onClick={() => actions.deselectAll()}
                   className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
                 >
                   Clear Selection
@@ -507,7 +497,7 @@ export default function InventoryManagement() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">
                           <button
-                            onClick={() => setEditingItem(item)}
+                            onClick={() => actions.setEditingItem(item)}
                             className="text-blue-600 hover:text-blue-900"
                             title="Edit Item"
                           >
@@ -543,7 +533,7 @@ export default function InventoryManagement() {
                     />
                     <div className="flex space-x-2">
                       <button
-                        onClick={() => setEditingItem(item)}
+                        onClick={() => actions.setEditingItem(item)}
                         className="text-blue-600 hover:text-blue-900"
                         title="Edit Item"
                       >
@@ -759,8 +749,8 @@ export default function InventoryManagement() {
                   <button
                     type="button"
                     onClick={() => {
-                      setShowAddForm(false);
-                      setEditingItem(null);
+                                      actions.setShowAddForm(false);
+                actions.setEditingItem(null);
                     }}
                     className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
                   >
@@ -931,7 +921,7 @@ export default function InventoryManagement() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setShowMultiAddForm(false)}
+                    onClick={() => actions.setShowMultiAddForm(false)}
                     className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
                   >
                     Cancel
@@ -947,7 +937,7 @@ export default function InventoryManagement() {
       {showBarcodeScanner && (
         <BarcodeScanner
           isOpen={showBarcodeScanner}
-          onClose={() => setShowBarcodeScanner(false)}
+                          onClose={() => actions.setShowBarcodeScanner(false)}
           onScan={(scannedCode) => {
             // Handle scanned barcode/QR code
             console.log('Scanned code:', scannedCode);
@@ -972,8 +962,8 @@ export default function InventoryManagement() {
                 tags: ['scanned', 'imported']
               };
               
-              setItems(prev => [newItem, ...prev]);
-              setShowBarcodeScanner(false);
+              actions.addItem(newItem);
+              actions.setShowBarcodeScanner(false);
               toast.success(`Item scanned and added: ${scannedCode}`);
             }
           }}
@@ -982,8 +972,10 @@ export default function InventoryManagement() {
 
       {/* Back to Home Link */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <a href="/" className="text-blue-600 hover:text-blue-800 underline">← Back to Home</a>
+        <a href="/home" className="text-blue-600 hover:text-blue-800 underline">← Back to Home</a>
       </div>
     </div>
   );
 }
+
+export default React.memo(InventoryManagement);

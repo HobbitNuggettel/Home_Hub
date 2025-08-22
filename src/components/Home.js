@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Package, 
   DollarSign, 
@@ -12,6 +13,8 @@ import {
 } from 'lucide-react';
 
 export default function Home() {
+  const navigate = useNavigate();
+  
   const features = [
     {
       icon: Package,
@@ -72,7 +75,7 @@ export default function Home() {
   ];
 
   const handleNavigation = (href) => {
-    window.location.href = href;
+    navigate(href);
   };
 
   return (
