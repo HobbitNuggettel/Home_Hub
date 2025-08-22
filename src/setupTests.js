@@ -4,11 +4,11 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
-// Mock window.matchMedia for theme testing
+// Mock window.matchMedia for theme testing - must be set up before any imports
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: jest.fn().mockImplementation(query => ({
-    matches: false,
+    matches: query.includes('dark') ? false : true, // Default to light mode
     media: query,
     onchange: null,
     addListener: jest.fn(), // deprecated
@@ -21,7 +21,10 @@ Object.defineProperty(window, 'matchMedia', {
 
 // Mock localStorage for theme persistence testing
 const localStorageMock = {
-  getItem: jest.fn(),
+  getItem: jest.fn((key) => {
+    if (key === 'themeMode') return 'light'; // Default to light mode
+    return null;
+  }),
   setItem: jest.fn(),
   removeItem: jest.fn(),
   clear: jest.fn(),

@@ -15,7 +15,9 @@ import {
   Info,
   LogOut,
   User,
-  Settings
+  Settings,
+  Brain,
+  Lightbulb
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import DarkModeToggle from './DarkModeToggle';
@@ -85,6 +87,18 @@ export default function Navigation() {
       href: '/about',
       icon: Info,
       description: 'Features, roadmap, and information'
+    },
+    {
+      name: 'AI Assistant',
+      href: '/ai-assistant',
+      icon: Brain,
+      description: 'Voice commands and intelligent assistance'
+    },
+    {
+      name: 'Smart Suggestions',
+      href: '/ai-suggestions',
+      icon: Lightbulb,
+      description: 'AI-powered insights and recommendations'
     }
   ];
 

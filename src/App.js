@@ -20,6 +20,8 @@ import RecipeManagement from './components/RecipeManagement';
 import IntegrationsAutomation from './components/IntegrationsAutomation';
 import DataAlerts from './components/DataAlerts';
 import About from './components/About';
+import AIAssistant from './components/AIAssistant';
+import AISmartSuggestions from './components/AISmartSuggestions';
 import Login from './components/auth/Login';
 import SignUp from './components/auth/SignUp';
 import ForgotPassword from './components/auth/ForgotPassword';
@@ -145,6 +147,22 @@ function App() {
                 <>
                   <Navigation />
                   <About />
+                </>
+              </ProtectedRoute>
+            } />
+            <Route path="/ai-assistant" element={
+              <ProtectedRoute>
+                <>
+                  <Navigation />
+                  <AIAssistant />
+                </>
+              </ProtectedRoute>
+            } />
+            <Route path="/ai-suggestions" element={
+              <ProtectedRoute>
+                <>
+                  <Navigation />
+                  <AISmartSuggestions />
                 </>
               </ProtectedRoute>
             } />

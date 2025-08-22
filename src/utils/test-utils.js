@@ -6,6 +6,60 @@ import { ThemeProvider } from '../contexts/ThemeContext';
 // Mock AuthContext to avoid Firebase dependencies in tests
 const MockAuthProvider = ({ children }) => children;
 
+// Mock useInventory hook
+export const mockUseInventory = {
+  items: [],
+  categories: [],
+  selectedItems: [],
+  filteredItems: [],
+  viewMode: 'table',
+  statistics: {
+    totalItems: 0,
+    totalValue: 0,
+    lowStockItems: 0,
+    categories: {}
+  },
+  actions: {
+    addItem: jest.fn(),
+    updateItem: jest.fn(),
+    deleteItem: jest.fn(),
+    bulkDelete: jest.fn(),
+    searchItems: jest.fn(),
+    filterByCategory: jest.fn(),
+    exportCSV: jest.fn(),
+    importCSV: jest.fn(),
+    setViewMode: jest.fn(),
+    selectItem: jest.fn(),
+    selectAll: jest.fn(),
+    clearSelection: jest.fn(),
+    setShowAddForm: jest.fn(),
+    setShowMultiAddForm: jest.fn(),
+    setEditingItem: jest.fn(),
+    setShowDeleteConfirm: jest.fn(),
+    setShowImportForm: jest.fn(),
+    setShowExportForm: jest.fn(),
+    setSearchTerm: jest.fn(),
+    setSelectedCategory: jest.fn(),
+    setSortBy: jest.fn(),
+    setSortOrder: jest.fn()
+  },
+  loading: false,
+  error: null,
+  showAddForm: false,
+  showMultiAddForm: false,
+  editingItem: null,
+  showDeleteConfirm: false,
+  showImportForm: false,
+  showExportForm: false,
+  searchTerm: '',
+  selectedCategory: '',
+  sortBy: 'name',
+  sortOrder: 'asc'
+};
+
+// Mock the useInventory hook function
+export const useInventory = jest.fn(() => mockUseInventory);
+
 // Custom render function that includes all necessary providers
 const AllTheProviders = ({ children }) => {
   return (
@@ -98,8 +152,32 @@ export const simulateLocalStorageChange = (key, value) => {
   const event = new StorageEvent('storage', {
     key,
     newValue: value,
-    oldValue: localStorage.getItem(key),
-    storageArea: localStorage,
+    oldValue: null,
+    url: window.location.href
   });
   window.dispatchEvent(event);
+};
+
+// Helper function to reset all mocks
+export const resetAllMocks = () => {
+  jest.clearAllMocks();
+  useInventory.mockClear();
+  Object.values(mockUseInventory.actions).forEach(action => action.mockClear());
+};
+
+// Helper function to set mock data
+export const setMockInventoryData = (items = [], categories = []) => {
+  mockUseInventory.items = items;
+  mockUseInventory.categories = categories;
+  mockUseInventory.filteredItems = items;
+  mockUseInventory.selectedItems = [];
+  mockUseInventory.statistics = {
+    totalItems: items.length,
+    totalValue: items.reduce((sum, item) => sum + (item.value || 0), 0),
+    lowStockItems: items.filter(item => (item.quantity || 0) <= 2).length,
+    categories: categories.reduce((acc, cat) => {
+      acc[cat] = items.filter(item => item.category === cat).length;
+      return acc;
+    }, {})
+  };
 };
