@@ -216,19 +216,19 @@ export default function ShoppingLists() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Shopping Lists</h1>
-              <p className="text-gray-600">Create and manage shopping lists with budget planning</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Shopping Lists</h1>
+              <p className="text-gray-600 dark:text-gray-300">Create and manage shopping lists with budget planning</p>
             </div>
             <div className="flex space-x-3">
               <button
                 onClick={() => setShowCreateList(true)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+                className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center space-x-2"
               >
                 <Plus size={20} />
                 <span>Create List</span>
@@ -240,14 +240,14 @@ export default function ShoppingLists() {
 
       {/* Navigation Tabs */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-white rounded-lg shadow-sm p-1 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-1 mb-6">
           <div className="flex space-x-1">
             <button
               onClick={() => setViewMode('lists')}
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'lists'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -260,7 +260,7 @@ export default function ShoppingLists() {
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'budget'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -273,7 +273,7 @@ export default function ShoppingLists() {
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'analytics'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -286,30 +286,30 @@ export default function ShoppingLists() {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center">
-              <List className="text-blue-600" size={24} />
+              <List className="text-blue-600 dark:text-blue-400" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Lists</p>
-                <p className="text-2xl font-bold text-gray-900">{shoppingLists.length}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Lists</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{shoppingLists.length}</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center">
-              <DollarSign className="text-green-600" size={24} />
+              <DollarSign className="text-green-600 dark:text-green-400" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Budget</p>
-                <p className="text-2xl font-bold text-gray-900">${totalBudget.toFixed(2)}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Budget</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">${totalBudget.toFixed(2)}</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center">
-              <ShoppingCart className="text-purple-600" size={24} />
+              <ShoppingCart className="text-purple-600 dark:text-purple-400" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Items</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Items</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {shoppingLists.reduce((sum, list) => sum + list.items.length, 0)}
                 </p>
               </div>

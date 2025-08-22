@@ -210,14 +210,14 @@ function InventoryManagement() {
   }, [selectedItems.length, filteredItems.length, actions]);
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Inventory Management</h1>
-              <p className="text-gray-600">Track household items, categories, and barcode scanning</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Inventory Management</h1>
+              <p className="text-gray-600 dark:text-gray-300">Track household items, categories, and barcode scanning</p>
             </div>
             <div className="flex space-x-3">
               <button
@@ -248,27 +248,27 @@ function InventoryManagement() {
 
       {/* Search and Filters */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Search Items</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Search Items</label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
                 <input
                   type="text"
                   placeholder="Search by name, location, notes, or tags..."
                   value={searchTerm}
                   onChange={(e) => actions.setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
               <select
                 value={selectedCategory}
                 onChange={(e) => actions.setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
                 <option value="all">All Categories</option>
                 {categories.map(category => (
@@ -277,14 +277,14 @@ function InventoryManagement() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">View Mode</label>
-              <div className="flex border border-gray-300 rounded-lg">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">View Mode</label>
+              <div className="flex border border-gray-300 dark:border-gray-600 rounded-lg">
                 <button
                   onClick={() => actions.setViewMode('table')}
                   className={`flex-1 px-3 py-2 text-sm font-medium rounded-l-lg ${
                     viewMode === 'table' 
                       ? 'bg-blue-600 text-white' 
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
+                    : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'
                   }`}
                 >
                   Table
@@ -294,7 +294,7 @@ function InventoryManagement() {
                   className={`flex-1 px-3 py-2 text-sm font-medium rounded-r-lg ${
                     viewMode === 'grid' 
                       ? 'bg-blue-600 text-white' 
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
+                    : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'
                   }`}
                 >
                   Grid
@@ -306,7 +306,7 @@ function InventoryManagement() {
                 onClick={() => {
                   actions.resetFilters();
                 }}
-                className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+                className="flex-1 px-4 py-2 bg-gray-600 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
               >
                 Clear Filters
               </button>
@@ -349,20 +349,20 @@ function InventoryManagement() {
             <div className="flex space-x-3">
               <button
                 onClick={importFromCSV}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+                className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center space-x-2"
               >
                 <Upload size={16} />
                 <span>Import CSV</span>
               </button>
               <button
                 onClick={exportToCSV}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center space-x-2"
+                className="px-4 py-2 bg-green-600 dark:bg-green-700 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600 flex items-center space-x-2"
               >
                 <Download size={16} />
                 <span>Export CSV</span>
               </button>
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
               Total: {items.length} items | Filtered: {filteredItems.length} items
             </div>
           </div>
@@ -370,41 +370,41 @@ function InventoryManagement() {
 
         {/* Inventory Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center">
-              <Package className="text-blue-600" size={24} />
+              <Package className="text-blue-600 dark:text-blue-400" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Items</p>
-                <p className="text-2xl font-bold text-gray-900">{items.length}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Items</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{items.length}</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center">
-              <ShoppingCart className="text-green-600" size={24} />
+              <ShoppingCart className="text-green-600 dark:text-green-400" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Categories</p>
-                <p className="text-2xl font-bold text-gray-900">{categories.length}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Categories</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{categories.length}</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center">
-              <AlertTriangle className="text-orange-600" size={24} />
+              <AlertTriangle className="text-orange-600 dark:text-orange-400" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Low Stock</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Low Stock</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {items.filter(item => item.quantity <= 1).length}
                 </p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center">
-              <Eye className="text-purple-600" size={24} />
+              <Eye className="text-purple-600 dark:text-purple-400" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Value</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Value</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   ${items.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}
                 </p>
               </div>
@@ -415,55 +415,55 @@ function InventoryManagement() {
         {/* Items Display */}
         {viewMode === 'table' ? (
           /* Table View */
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-medium text-gray-900">Inventory Items ({filteredItems.length})</h3>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Inventory Items ({filteredItems.length})</h3>
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
                     checked={selectedItems.length === filteredItems.length && filteredItems.length > 0}
                     onChange={selectAllItems}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-400 focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-600">Select All</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Select All</span>
                 </div>
               </div>
             </div>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      <input type="checkbox" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      <input type="checkbox" className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-400 focus:ring-blue-500" />
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Item</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Category</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Quantity</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Location</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Price</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                   {filteredItems.map(item => (
-                    <tr key={item.id} className="hover:bg-gray-50">
+                                        <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <input
                           type="checkbox"
                           checked={selectedItems.includes(item.id)}
                           onChange={() => toggleItemSelection(item.id)}
-                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                              className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-400 focus:ring-blue-500"
                         />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{item.name}</div>
-                          <div className="text-sm text-gray-500">{item.notes}</div>
+                                              <div className="text-sm font-medium text-gray-900 dark:text-white">{item.name}</div>
+                                              <div className="text-sm text-gray-500 dark:text-gray-400">{item.notes}</div>
                           <div className="flex flex-wrap gap-1 mt-1">
                             {item.tags.map(tag => (
-                              <span key={tag} className="inline-flex px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">
+                              <span key={tag} className="inline-flex px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full">
                                 {tag}
                               </span>
                             ))}
@@ -471,25 +471,25 @@ function InventoryManagement() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
                           {item.category}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                         {item.quantity}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                         <div className="flex items-center space-x-1">
-                          <MapPin size={14} className="text-gray-400" />
+                                              <MapPin size={14} className="text-gray-400 dark:text-gray-500" />
                           <span>{item.location}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                         ${item.price}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          item.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                                              item.status === 'active' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
                         }`}>
                           {item.status}
                         </span>
@@ -498,14 +498,14 @@ function InventoryManagement() {
                         <div className="flex space-x-2">
                           <button
                             onClick={() => actions.setEditingItem(item)}
-                            className="text-blue-600 hover:text-blue-900"
+                                                className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
                             title="Edit Item"
                           >
                             <Edit size={16} />
                           </button>
                           <button
                             onClick={() => deleteItem(item.id)}
-                            className="text-red-600 hover:text-red-900"
+                                                className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300"
                             title="Delete Item"
                           >
                             <Trash2 size={16} />
@@ -522,58 +522,58 @@ function InventoryManagement() {
           /* Grid View */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredItems.map(item => (
-              <div key={item.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+              <div key={item.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <div className="p-4">
                   <div className="flex items-start justify-between mb-3">
                     <input
                       type="checkbox"
                       checked={selectedItems.includes(item.id)}
                       onChange={() => toggleItemSelection(item.id)}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-400 focus:ring-blue-500"
                     />
                     <div className="flex space-x-2">
                       <button
                         onClick={() => actions.setEditingItem(item)}
-                        className="text-blue-600 hover:text-blue-900"
+                        className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
                         title="Edit Item"
                       >
                         <Edit size={16} />
                       </button>
                       <button
                         onClick={() => deleteItem(item.id)}
-                        className="text-red-600 hover:text-red-900"
+                        className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300"
                         title="Delete Item"
                       >
                         <Trash2 size={16} />
                       </button>
                     </div>
                   </div>
-                  <h3 className="font-medium text-gray-900 mb-2">{item.name}</h3>
-                  <p className="text-sm text-gray-600 mb-3">{item.notes}</p>
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">{item.name}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{item.notes}</p>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">Category:</span>
-                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">Category:</span>
+                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
                         {item.category}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">Quantity:</span>
-                      <span className="text-sm font-medium text-gray-900">{item.quantity}</span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">Quantity:</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">{item.quantity}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">Location:</span>
-                      <span className="text-sm text-gray-900">{item.location}</span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">Location:</span>
+                      <span className="text-sm text-gray-900 dark:text-white">{item.location}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">Price:</span>
-                      <span className="text-sm font-medium text-gray-900">${item.price}</span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">Price:</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">${item.price}</span>
                     </div>
                   </div>
-                  <div className="mt-3 pt-3 border-t border-gray-200">
+                  <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                     <div className="flex flex-wrap gap-1">
                       {item.tags.map(tag => (
-                        <span key={tag} className="inline-flex px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">
+                        <span key={tag} className="inline-flex px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full">
                           {tag}
                         </span>
                       ))}
@@ -589,9 +589,9 @@ function InventoryManagement() {
       {/* Add/Edit Item Modal */}
       {(showAddForm || editingItem) && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div className="relative top-20 mx-auto p-5 border border-gray-200 dark:border-gray-700 w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
             <div className="mt-3">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
                 {editingItem ? 'Edit Item' : 'Add New Item'}
               </h3>
               <form onSubmit={(e) => {

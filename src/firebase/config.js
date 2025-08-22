@@ -7,8 +7,8 @@ import { getStorage } from "firebase/storage";
 
 // Firebase Configuration
 // For production, create a .env.local file with your Firebase credentials
-// See .env.local.example for the required environment variables
-// The fallback values below are for development only
+// See FIREBASE_SETUP.md for detailed setup instructions
+// The fallback values below are for development only - REPLACE WITH YOUR OWN PROJECT!
 
 // Your web app's Firebase configuration
 const firebaseConfig = {

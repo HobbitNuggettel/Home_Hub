@@ -287,14 +287,14 @@ export default function SpendingTracker() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Spending & Budgeting</h1>
-              <p className="text-gray-600">Track expenses, manage budgets, and analyze spending patterns</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Spending & Budgeting</h1>
+              <p className="text-gray-600 dark:text-gray-300">Track expenses, manage budgets, and analyze spending patterns</p>
             </div>
             <div className="flex space-x-3">
               <button
@@ -318,14 +318,14 @@ export default function SpendingTracker() {
 
       {/* Navigation Tabs */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-white rounded-lg shadow-sm p-1 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-1 mb-6">
           <div className="flex space-x-1">
             <button
               onClick={() => setViewMode('expenses')}
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'expenses'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -338,7 +338,7 @@ export default function SpendingTracker() {
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'budgets'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -351,7 +351,7 @@ export default function SpendingTracker() {
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'analytics'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -364,21 +364,21 @@ export default function SpendingTracker() {
         
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center">
-              <DollarSign className="text-red-600" size={24} />
+              <DollarSign className="text-red-600 dark:text-red-400" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Spent</p>
-                <p className="text-2xl font-bold text-gray-900">${totalSpent.toFixed(2)}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Spent</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">${totalSpent.toFixed(2)}</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center">
-              <Target className="text-blue-600" size={24} />
+              <Target className="text-blue-600 dark:text-blue-400" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Budget</p>
-                <p className="text-2xl font-bold text-gray-900">${totalBudget.toFixed(2)}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Budget</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">${totalBudget.toFixed(2)}</p>
               </div>
             </div>
           </div>

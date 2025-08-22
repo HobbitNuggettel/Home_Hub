@@ -304,17 +304,17 @@ const AISmartSuggestions = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
-            <div className="p-3 bg-purple-100 rounded-lg">
-              <Brain className="text-purple-600" size={32} />
+            <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
+              <Brain className="text-purple-600 dark:text-purple-400" size={32} />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">AI Smart Suggestions</h1>
-              <p className="text-gray-600 mt-1">Personalized recommendations to optimize your home management</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">AI Smart Suggestions</h1>
+              <p className="text-gray-600 dark:text-gray-300 mt-1">Personalized recommendations to optimize your home management</p>
             </div>
           </div>
           
@@ -322,7 +322,7 @@ const AISmartSuggestions = () => {
             <button
               onClick={loadSuggestions}
               disabled={loading}
-              className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-md"
+              className="flex items-center space-x-2 px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
             >
               <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
               <span>Refresh</span>
@@ -331,11 +331,11 @@ const AISmartSuggestions = () => {
         </div>
 
         {/* Filters and Controls */}
-        <div className="bg-white rounded-lg shadow-md p-4 border mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 mb-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <span className="text-sm font-medium text-gray-700">Categories:</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Categories:</span>
                 <div className="flex flex-wrap gap-2">
                   {Object.values(SUGGESTION_CATEGORIES).map(category => (
                     <label key={category} className="flex items-center space-x-1">
@@ -379,22 +379,22 @@ const AISmartSuggestions = () => {
 
         {/* AI Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white rounded-lg shadow-md p-4 border">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4">
             <div className="flex items-center space-x-3">
-              <Brain className="text-purple-600" size={20} />
+              <Brain className="text-purple-600 dark:text-purple-400" size={20} />
               <div>
-                <p className="text-sm text-gray-600">AI Confidence</p>
-                <p className="text-lg font-bold text-gray-900">87%</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">AI Confidence</p>
+                <p className="text-lg font-bold text-gray-900 dark:text-white">87%</p>
               </div>
             </div>
           </div>
           
-          <div className="bg-white rounded-lg shadow-md p-4 border">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4">
             <div className="flex items-center space-x-3">
-              <DollarSign className="text-green-600" size={20} />
+              <DollarSign className="text-green-600 dark:text-green-400" size={20} />
               <div>
-                <p className="text-sm text-gray-600">Potential Savings</p>
-                <p className="text-lg font-bold text-gray-900">$142</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Potential Savings</p>
+                <p className="text-lg font-bold text-gray-900 dark:text-white">$142</p>
               </div>
             </div>
           </div>

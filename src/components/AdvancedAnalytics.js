@@ -105,27 +105,27 @@ export default function AdvancedAnalytics() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Advanced Analytics</h1>
-              <p className="text-gray-600 mt-2">Comprehensive insights into your household management</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Advanced Analytics</h1>
+              <p className="text-gray-600 dark:text-gray-300 mt-2">Comprehensive insights into your household management</p>
             </div>
             <div className="flex items-center space-x-4">
               <select
                 value={timeRange}
                 onChange={(e) => setTimeRange(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
                 <option value="7d">Last 7 days</option>
                 <option value="30d">Last 30 days</option>
                 <option value="90d">Last 90 days</option>
                 <option value="1y">Last year</option>
               </select>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <button className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors">
                 Export Report
               </button>
             </div>
@@ -134,7 +134,7 @@ export default function AdvancedAnalytics() {
 
         {/* Navigation Tabs */}
         <div className="mb-6">
-          <nav className="flex space-x-8 border-b border-gray-200">
+          <nav className="flex space-x-8 border-b border-gray-200 dark:border-gray-700">
             {[
               { id: 'overview', name: 'Overview', icon: BarChart3 },
               { id: 'inventory', name: 'Inventory', icon: Package },
@@ -148,8 +148,8 @@ export default function AdvancedAnalytics() {
                   onClick={() => setSelectedMetric(tab.id)}
                   className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                     selectedMetric === tab.id
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -165,79 +165,79 @@ export default function AdvancedAnalytics() {
           <div className="space-y-6">
             {/* Key Metrics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white rounded-lg shadow p-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
                 <div className="flex items-center">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Package className="w-6 h-6 text-blue-600" />
+                  <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                    <Package className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Total Items</p>
-                    <p className="text-2xl font-bold text-gray-900">{analyticsData.overview.totalItems}</p>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Items</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{analyticsData.overview.totalItems}</p>
                   </div>
                 </div>
                 <div className="mt-4 flex items-center text-sm">
-                  <TrendingUp className="w-4 h-4 text-green-600 mr-1" />
-                  <span className="text-green-600">+12%</span>
-                  <span className="text-gray-500 ml-1">from last month</span>
+                  <TrendingUp className="w-4 h-4 text-green-600 dark:text-green-400 mr-1" />
+                  <span className="text-green-600 dark:text-green-400">+12%</span>
+                  <span className="text-gray-500 dark:text-gray-400 ml-1">from last month</span>
                 </div>
               </div>
 
-              <div className="bg-white rounded-lg shadow p-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
                 <div className="flex items-center">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <DollarSign className="w-6 h-6 text-green-600" />
+                  <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
+                    <DollarSign className="w-6 h-6 text-green-600 dark:text-green-400" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Total Value</p>
-                    <p className="text-2xl font-bold text-gray-900">{formatCurrency(analyticsData.overview.totalValue)}</p>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Value</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatCurrency(analyticsData.overview.totalValue)}</p>
                   </div>
                 </div>
                 <div className="mt-4 flex items-center text-sm">
-                  <TrendingUp className="w-4 h-4 text-green-600 mr-1" />
-                  <span className="text-green-600">+8.5%</span>
-                  <span className="text-gray-500 ml-1">from last month</span>
+                  <TrendingUp className="w-4 h-4 text-green-600 dark:text-green-400 mr-1" />
+                  <span className="text-green-600 dark:text-green-400">+8.5%</span>
+                  <span className="text-gray-500 dark:text-gray-400 ml-1">from last month</span>
                 </div>
               </div>
 
-              <div className="bg-white rounded-lg shadow p-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
                 <div className="flex items-center">
-                  <div className="p-2 bg-purple-100 rounded-lg">
-                    <Users className="w-6 h-6 text-purple-600" />
+                  <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
+                    <Users className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Active Users</p>
-                    <p className="text-2xl font-bold text-gray-900">{analyticsData.overview.activeUsers}</p>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Users</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{analyticsData.overview.activeUsers}</p>
                   </div>
                 </div>
                 <div className="mt-4 flex items-center text-sm">
-                  <TrendingUp className="w-4 h-4 text-green-600 mr-1" />
-                  <span className="text-green-600">+25%</span>
-                  <span className="text-gray-500 ml-1">from last month</span>
+                  <TrendingUp className="w-4 h-4 text-green-600 dark:text-green-400 mr-1" />
+                  <span className="text-green-600 dark:text-green-400">+25%</span>
+                  <span className="text-gray-500 dark:text-gray-400 ml-1">from last month</span>
                 </div>
               </div>
 
-              <div className="bg-white rounded-lg shadow p-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
                 <div className="flex items-center">
-                  <div className="p-2 bg-yellow-100 rounded-lg">
-                    <AlertTriangle className="w-6 h-6 text-yellow-600" />
+                  <div className="p-2 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
+                    <AlertTriangle className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Active Alerts</p>
-                    <p className="text-2xl font-bold text-gray-900">{analyticsData.overview.alerts}</p>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Alerts</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{analyticsData.overview.alerts}</p>
                   </div>
                 </div>
                 <div className="mt-4 flex items-center text-sm">
-                  <TrendingDown className="w-4 h-4 text-red-600 mr-1" />
-                  <span className="text-red-600">-2</span>
-                  <span className="text-gray-500 ml-1">from last week</span>
+                  <TrendingDown className="w-4 h-4 text-red-600 dark:text-red-400 mr-1" />
+                  <span className="text-red-600 dark:text-red-400">-2</span>
+                  <span className="text-gray-500 dark:text-gray-400 ml-1">from last week</span>
                 </div>
               </div>
             </div>
 
             {/* Recent Activity */}
-            <div className="bg-white rounded-lg shadow">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-medium text-gray-900">Recent Activity</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Recent Activity</h3>
               </div>
               <div className="p-6">
                 <div className="space-y-4">
@@ -254,10 +254,10 @@ export default function AdvancedAnalytics() {
                         activity.type === 'recipe' ? 'bg-purple-500' : 'bg-yellow-500'
                       }`} />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">
-                          {activity.action}: <span className="text-gray-600">{activity.item}</span>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                          {activity.action}: <span className="text-gray-600 dark:text-gray-400">{activity.item}</span>
                         </p>
-                        <p className="text-xs text-gray-500">by {activity.user} • {activity.time}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">by {activity.user} • {activity.time}</p>
                       </div>
                     </div>
                   ))}
@@ -272,8 +272,8 @@ export default function AdvancedAnalytics() {
           <div className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Category Distribution */}
-              <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Category Distribution</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Category Distribution</h3>
                 <div className="space-y-3">
                   {analyticsData.inventory.categories.map((category, index) => (
                     <div key={index} className="flex items-center justify-between">

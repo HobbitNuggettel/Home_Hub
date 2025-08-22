@@ -26,10 +26,10 @@ const AuthPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600 dark:text-gray-300">Loading...</p>
         </div>
       </div>
     );
@@ -37,11 +37,11 @@ const AuthPage = () => {
 
   if (isAuthenticated && user) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">Account & Security</h1>
-            <p className="text-gray-600 mt-2">Manage your Home Hub account and security settings</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Account & Security</h1>
+            <p className="text-gray-600 dark:text-gray-300 mt-2">Manage your Home Hub account and security settings</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -56,18 +56,18 @@ const AuthPage = () => {
               <PWAFeatures />
               
               {/* Quick Actions */}
-              <div className="bg-white rounded-lg shadow-md p-4 border">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 border border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Quick Actions</h3>
                 <div className="space-y-3">
-                  <button className="w-full flex items-center space-x-3 p-3 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-md">
+                  <button className="w-full flex items-center space-x-3 p-3 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md">
                     <Shield className="text-blue-500" size={16} />
                     <span>Security Settings</span>
                   </button>
-                  <button className="w-full flex items-center space-x-3 p-3 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-md">
+                  <button className="w-full flex items-center space-x-3 p-3 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md">
                     <Users className="text-green-500" size={16} />
                     <span>Household Management</span>
                   </button>
-                  <button className="w-full flex items-center space-x-3 p-3 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-md">
+                  <button className="w-full flex items-center space-x-3 p-3 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md">
                     <Database className="text-purple-500" size={16} />
                     <span>Data Export</span>
                   </button>
@@ -81,20 +81,20 @@ const AuthPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Authentication Forms */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-md p-8">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
               {/* Tab Navigation */}
-              <div className="flex space-x-1 mb-8 bg-gray-100 rounded-lg p-1">
+              <div className="flex space-x-1 mb-8 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
                 <button
                   onClick={() => setActiveTab('auth')}
                   className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                     activeTab === 'auth'
-                      ? 'bg-white text-gray-900 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                   }`}
                 >
                   <div className="flex items-center justify-center space-x-2">
@@ -106,8 +106,8 @@ const AuthPage = () => {
                   onClick={() => setActiveTab('features')}
                   className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                     activeTab === 'features'
-                      ? 'bg-white text-gray-900 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                   }`}
                 >
                   <div className="flex items-center justify-center space-x-2">
