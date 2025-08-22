@@ -1,17 +1,19 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
-// Your Firebase configuration
-// You'll need to replace these with your actual Firebase project credentials
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "your-sender-id",
-  appId: "your-app-id"
+  apiKey: "AIzaSyB2qX3RI3a87OoyQvpHoiDf5DGrWcZyCJg",
+  authDomain: "home-hub-app-18bcf.firebaseapp.com",
+  projectId: "home-hub-app-18bcf",
+  storageBucket: "home-hub-app-18bcf.firebasestorage.app",
+  messagingSenderId: "871477395581",
+  appId: "1:871477395581:web:5eb3c4b3a255a0c0d83114",
+  measurementId: "G-P88FF15LBT"
 };
 
 // Initialize Firebase
@@ -21,11 +23,6 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
-
-// Google Auth Provider
-export const googleProvider = new GoogleAuthProvider();
-
-// Auth functions
-export const signInWithGoogle = () => signInWithPopup(auth, googleProvider);
+export const analytics = getAnalytics(app);
 
 export default app; 
