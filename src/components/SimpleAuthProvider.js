@@ -294,16 +294,16 @@ export const LoginForm = ({ onSwitchToRegister }) => {
   return (
     <div className="max-w-md w-full mx-auto">
       <div className="text-center mb-8">
-        <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-          <User className="text-blue-600" size={32} />
+        <div className="mx-auto w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-4">
+          <User className="text-blue-600 dark:text-blue-400" size={32} />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900">Welcome Back</h2>
-        <p className="text-gray-600 mt-2">Sign in to your Home Hub account</p>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome Back</h2>
+        <p className="text-gray-600 dark:text-gray-300 mt-2">Sign in to your Home Hub account</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Email Address
           </label>
           <div className="relative">
@@ -317,7 +317,7 @@ export const LoginForm = ({ onSwitchToRegister }) => {
                   message: 'Invalid email address'
                 }
               })}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               placeholder="Enter your email"
             />
           </div>
@@ -327,7 +327,7 @@ export const LoginForm = ({ onSwitchToRegister }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Password
           </label>
           <div className="relative">
@@ -335,13 +335,13 @@ export const LoginForm = ({ onSwitchToRegister }) => {
             <input
               type={showPassword ? 'text' : 'password'}
               {...register('password', { required: 'Password is required' })}
-              className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               placeholder="Enter your password"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
@@ -361,11 +361,11 @@ export const LoginForm = ({ onSwitchToRegister }) => {
       </form>
 
       <div className="mt-6 text-center">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-300">
           Don't have an account?{' '}
           <button
             onClick={onSwitchToRegister}
-            className="text-blue-600 hover:text-blue-500 font-medium"
+            className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-medium"
           >
             Sign up
           </button>
@@ -398,22 +398,22 @@ export const RegisterForm = ({ onSwitchToLogin }) => {
   return (
     <div className="max-w-md w-full mx-auto">
       <div className="text-center mb-8">
-        <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-          <User className="text-blue-600" size={32} />
+        <div className="mx-auto w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-4">
+          <User className="text-blue-600 dark:text-blue-400" size={32} />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900">Create Account</h2>
-        <p className="text-gray-600 mt-2">Join Home Hub today</p>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Create Account</h2>
+        <p className="text-gray-600 dark:text-gray-300 mt-2">Join Home Hub today</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Full Name
           </label>
           <input
             type="text"
             {...register('name', { required: 'Full name is required' })}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             placeholder="Enter your full name"
           />
           {errors.name && (
@@ -422,7 +422,7 @@ export const RegisterForm = ({ onSwitchToLogin }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Email Address
           </label>
           <div className="relative">
@@ -436,7 +436,7 @@ export const RegisterForm = ({ onSwitchToLogin }) => {
                   message: 'Invalid email address'
                 }
               })}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               placeholder="Enter your email"
             />
           </div>
@@ -446,7 +446,7 @@ export const RegisterForm = ({ onSwitchToLogin }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Password
           </label>
           <div className="relative">
@@ -460,13 +460,13 @@ export const RegisterForm = ({ onSwitchToLogin }) => {
                   message: 'Password must be at least 8 characters'
                 }
               })}
-              className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               placeholder="Create a password"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
@@ -477,7 +477,7 @@ export const RegisterForm = ({ onSwitchToLogin }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Confirm Password
           </label>
           <input
@@ -486,7 +486,7 @@ export const RegisterForm = ({ onSwitchToLogin }) => {
               required: 'Please confirm your password',
               validate: value => value === watch('password') || 'Passwords do not match'
             })}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             placeholder="Confirm your password"
           />
           {errors.confirmPassword && (
@@ -504,11 +504,11 @@ export const RegisterForm = ({ onSwitchToLogin }) => {
       </form>
 
       <div className="mt-6 text-center">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-300">
           Already have an account?{' '}
           <button
             onClick={onSwitchToLogin}
-            className="text-blue-600 hover:text-blue-500 font-medium"
+            className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-medium"
           >
             Sign in
           </button>
@@ -560,12 +560,12 @@ export const UserProfile = () => {
     console.log('UserProfile: No user data, returning null');
     return (
       <div className="max-w-4xl mx-auto p-6">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
           <div className="p-6 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Profile Page</h2>
-            <p className="text-gray-600 mb-4">No user data available</p>
-            <p className="text-sm text-gray-500">User state: {JSON.stringify({ user, isAuthenticated: useAuth().isAuthenticated })}</p>
-            <a href="/login" className="text-blue-600 hover:text-blue-800 underline">Go to Login</a>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Profile Page</h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">No user data available</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">User state: {JSON.stringify({ user, isAuthenticated: useAuth().isAuthenticated })}</p>
+            <a href="/login" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline">Go to Login</a>
           </div>
         </div>
       </div>
@@ -574,7 +574,7 @@ export const UserProfile = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-8 text-white">
           <div className="flex items-center space-x-4">
             <div className="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
@@ -593,7 +593,7 @@ export const UserProfile = () => {
 
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Profile Information</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Profile Information</h2>
             <button
               onClick={() => setIsEditing(!isEditing)}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"

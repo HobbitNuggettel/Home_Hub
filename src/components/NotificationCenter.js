@@ -242,18 +242,18 @@ export default function NotificationCenter() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Bell className="w-6 h-6 text-blue-600" />
+              <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                <Bell className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Notifications</h1>
-                <p className="text-gray-600">Stay updated with your home management alerts</p>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Notifications</h1>
+                <p className="text-gray-600 dark:text-gray-300">Stay updated with your home management alerts</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -278,25 +278,25 @@ export default function NotificationCenter() {
       </div>
 
       {/* Stats Bar */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">
               <div className="text-center">
-                <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
-                <p className="text-sm text-gray-500">Total</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Total</p>
               </div>
               <div className="text-center">
                 <p className="text-2xl font-bold text-red-600">{stats.unread}</p>
-                <p className="text-sm text-gray-500">Unread</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Unread</p>
               </div>
               <div className="text-center">
                 <p className="text-2xl font-bold text-yellow-600">{stats.highPriority}</p>
-                <p className="text-sm text-gray-500">High Priority</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">High Priority</p>
               </div>
               <div className="text-center">
                 <p className="text-2xl font-bold text-blue-600">{stats.today}</p>
-                <p className="text-sm text-gray-500">Today</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Today</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -320,7 +320,7 @@ export default function NotificationCenter() {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-8 overflow-x-auto">
             {tabs.map((tab) => (
@@ -330,12 +330,12 @@ export default function NotificationCenter() {
                 className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
                   activeTab === tab.id
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
                 {tab.label}
                 {tab.count > 0 && (
-                  <span className="ml-2 bg-gray-100 text-gray-600 py-1 px-2 rounded-full text-xs">
+                  <span className="ml-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 py-1 px-2 rounded-full text-xs">
                     {tab.count}
                   </span>
                 )}
@@ -347,7 +347,7 @@ export default function NotificationCenter() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Filters and Search */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -356,14 +356,14 @@ export default function NotificationCenter() {
                 placeholder="Search notifications..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
             </div>
             <div>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
                 {categories.map(category => (
                   <option key={category.id} value={category.id}>{category.label}</option>
@@ -372,7 +372,7 @@ export default function NotificationCenter() {
             </div>
             <div className="flex items-center space-x-2">
               <Filter className="w-5 h-5 text-gray-400" />
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-500 dark:text-gray-400">
                 {filteredNotifications.length} of {notifications.length} notifications
               </span>
             </div>
@@ -380,17 +380,17 @@ export default function NotificationCenter() {
         </div>
 
         {/* Notifications List */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
           {isLoading ? (
             <div className="p-12 text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading notifications...</p>
+              <p className="text-gray-600 dark:text-gray-300">Loading notifications...</p>
             </div>
           ) : filteredNotifications.length === 0 ? (
             <div className="p-12 text-center">
-              <Bell className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No notifications</h3>
-              <p className="text-gray-500">
+              <Bell className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No notifications</h3>
+              <p className="text-gray-500 dark:text-gray-400">
                 {searchTerm || selectedCategory !== 'all' 
                   ? 'No notifications match your current filters.'
                   : 'You\'re all caught up! Check back later for new updates.'
@@ -398,14 +398,14 @@ export default function NotificationCenter() {
               </p>
             </div>
           ) : (
-            <div className="divide-y divide-gray-200">
+            <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredNotifications.map((notification) => {
                 const Icon = notification.icon;
                 return (
                   <div
                     key={notification.id}
-                    className={`p-6 hover:bg-gray-50 transition-colors ${
-                      !notification.read ? 'bg-blue-50' : ''
+                    className={`p-6 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
+                      !notification.read ? 'bg-blue-50 dark:bg-blue-900/20' : ''
                     }`}
                   >
                     <div className="flex items-start space-x-4">
@@ -419,7 +419,7 @@ export default function NotificationCenter() {
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center space-x-3 mb-2">
-                              <h3 className="text-sm font-medium text-gray-900">
+                              <h3 className="text-sm font-medium text-gray-900 dark:text-white">
                                 {notification.title}
                               </h3>
                               <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getPriorityColor(notification.priority)}`}>
@@ -429,10 +429,10 @@ export default function NotificationCenter() {
                                 {notification.category}
                               </span>
                             </div>
-                            <p className="text-sm text-gray-600 mb-2">
+                            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
                               {notification.message}
                             </p>
-                            <div className="flex items-center text-xs text-gray-500">
+                            <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                               <Clock className="w-3 h-3 mr-1" />
                               {getTimeAgo(notification.timestamp)}
                             </div>
@@ -471,30 +471,30 @@ export default function NotificationCenter() {
       {/* Notification Settings Modal */}
       {showSettings && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
             <div className="mt-3">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Notification Settings</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Notification Settings</h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Push Notifications</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">Push Notifications</span>
                   <button className="relative inline-flex h-6 w-11 items-center rounded-full bg-blue-600">
                     <span className="inline-block h-4 w-4 transform rounded-full bg-white translate-x-6" />
                   </button>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Email Notifications</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">Email Notifications</span>
                   <button className="relative inline-flex h-6 w-11 items-center rounded-full bg-blue-600">
                     <span className="inline-block h-4 w-4 transform rounded-full bg-white translate-x-6" />
                   </button>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Inventory Alerts</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">Inventory Alerts</span>
                   <button className="relative inline-flex h-6 w-11 items-center rounded-full bg-blue-600">
                     <span className="inline-block h-4 w-4 transform rounded-full bg-white translate-x-6" />
                   </button>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Spending Alerts</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">Spending Alerts</span>
                   <button className="relative inline-flex h-6 w-11 items-center rounded-full bg-blue-600">
                     <span className="inline-block h-4 w-4 transform rounded-full bg-white translate-x-6" />
                   </button>

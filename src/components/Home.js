@@ -79,13 +79,13 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to Home Hub</h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Welcome to Home Hub</h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               Your comprehensive home management platform. Track inventory, manage finances, 
               collaborate with family, and automate your household tasks.
             </p>
@@ -96,8 +96,8 @@ export default function Home() {
       {/* Features Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">All Features</h2>
-          <p className="text-lg text-gray-600">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">All Features</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
             Everything you need to manage your home efficiently
           </p>
         </div>
@@ -109,14 +109,16 @@ export default function Home() {
               <button
                 key={index}
                 onClick={() => handleNavigation(feature.href)}
-                className={`w-full p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 text-left ${feature.color}`}
+                className={`w-full p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 text-left bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600`}
               >
                 <div className="flex items-start justify-between mb-4">
-                  <Icon size={32} />
-                  <ArrowRight size={20} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className={`p-3 rounded-lg ${feature.color} dark:bg-gray-700`}>
+                    <Icon size={24} className="dark:text-gray-300" />
+                  </div>
+                  <ArrowRight size={20} className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 dark:text-gray-500" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{feature.description}</p>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{feature.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{feature.description}</p>
               </button>
             );
           })}
@@ -124,31 +126,31 @@ export default function Home() {
       </div>
 
       {/* Quick Stats */}
-      <div className="bg-white py-16">
+      <div className="bg-white dark:bg-gray-800 py-16 border-t border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Platform Overview</h2>
-            <p className="text-lg text-gray-600">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Platform Overview</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300">
               Numbers that reflect our commitment to excellence
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="text-4xl font-bold text-blue-600 mb-2">8</div>
-              <p className="text-gray-600">Core Features</p>
+              <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">8</div>
+              <p className="text-gray-600 dark:text-gray-300">Core Features</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-green-600 mb-2">100%</div>
-              <p className="text-gray-600">Feature Complete</p>
+              <div className="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">100%</div>
+              <p className="text-gray-600 dark:text-gray-300">Feature Complete</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-purple-600 mb-2">3</div>
-              <p className="text-gray-600">Development Phases</p>
+              <div className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">3</div>
+              <p className="text-gray-600 dark:text-gray-300">Development Phases</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-orange-600 mb-2">∞</div>
-              <p className="text-gray-600">Possibilities</p>
+              <div className="text-4xl font-bold text-orange-600 dark:text-orange-400 mb-2">∞</div>
+              <p className="text-gray-600 dark:text-gray-300">Possibilities</p>
             </div>
           </div>
         </div>
@@ -156,7 +158,7 @@ export default function Home() {
 
       {/* Call to Action */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="bg-blue-600 rounded-lg p-8 text-center text-white">
+        <div className="bg-blue-600 dark:bg-blue-700 rounded-lg p-8 text-center text-white">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="text-xl mb-6 opacity-90">
             Explore any feature above to begin managing your home more efficiently

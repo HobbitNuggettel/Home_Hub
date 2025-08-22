@@ -2,7 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
+import KeyboardNavigation from './components/KeyboardNavigation';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Navigation from './components/Navigation';
 import Home from './components/Home';
@@ -23,16 +25,20 @@ import SignUp from './components/auth/SignUp';
 import ForgotPassword from './components/auth/ForgotPassword';
 import UserProfile from './components/auth/UserProfile';
 import LandingPage from './components/LandingPage';
+import ThemeTest from './components/ThemeTest';
 
 function App() {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <Router>
+      <ThemeProvider>
+        <AuthProvider>
+          <KeyboardNavigation>
+            <Router>
           <div className="App">
             <Routes>
             {/* Public Routes */}
             <Route path="/" element={<LandingPage />} />
+                  <Route path="/theme-test" element={<ThemeTest />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -178,8 +184,10 @@ function App() {
             }}
           />
         </div>
-      </Router>
+            </Router>
+          </KeyboardNavigation>
         </AuthProvider>
+      </ThemeProvider>
       </ErrorBoundary>
   );
 }

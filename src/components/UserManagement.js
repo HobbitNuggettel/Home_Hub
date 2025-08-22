@@ -495,33 +495,33 @@ const UserManagement = () => {
   console.log('Rendering UserManagement with:', { households, currentUser, invitations });
   
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-8">
-              <h1 className="text-2xl font-bold text-gray-900">Home Hub</h1>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Home Hub</h1>
               <nav className="flex space-x-1">
-                <a href="/inventory" className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100">
+                <a href="/inventory" className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                   Inventory
                 </a>
-                <a href="/spending" className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100">
+                <a href="/spending" className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                   Spending
                 </a>
-                <a href="/collaboration" className="px-3 py-2 rounded-md text-sm font-medium bg-blue-100 text-blue-700">
+                <a href="/collaboration" className="px-3 py-2 rounded-md text-sm font-medium bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">
                   Collaboration
                 </a>
-                <a href="/data-alerts" className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100">
+                <a href="/data-alerts" className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                   Data & Alerts
                 </a>
-                <a href="/shopping-lists" className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100">
+                <a href="/shopping-lists" className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                   Shopping Lists
                 </a>
-                <a href="/recipes" className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100">
+                <a href="/recipes" className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                   Recipes
                 </a>
-                <a href="/integrations" className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100">
+                <a href="/integrations" className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                   Integrations
                 </a>
               </nav>
@@ -559,8 +559,8 @@ const UserManagement = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Debug Info */}
-        <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-sm text-yellow-800">
+        <div className="mb-4 p-4 bg-yellow-50 dark:bg-yellow-900 border border-yellow-200 dark:border-yellow-700 rounded-lg">
+          <p className="text-sm text-yellow-800 dark:text-yellow-200">
             <strong>Debug Info:</strong> Loading: {isLoading ? 'Yes' : 'No'} | 
             Current User: {currentUser?.name || 'None'} | 
             Households: {households.length} | Invitations: {invitations.length}
@@ -568,22 +568,22 @@ const UserManagement = () => {
         </div>
         
         {/* Current User Info */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-6 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                <Users className="text-blue-600" size={24} />
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                <Users className="text-blue-600 dark:text-blue-400" size={24} />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-900">{currentUser?.name}</h2>
-                <p className="text-gray-600">{currentUser?.email}</p>
-                <p className="text-sm text-gray-500">Role: {currentUser?.role}</p>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{currentUser?.name}</h2>
+                <p className="text-gray-600 dark:text-gray-300">{currentUser?.email}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Role: {currentUser?.role}</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-600">Member of</p>
-              <p className="text-2xl font-bold text-blue-600">{households.length}</p>
-              <p className="text-sm text-gray-600">households</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Member of</p>
+              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{households.length}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">households</p>
             </div>
           </div>
         </div>

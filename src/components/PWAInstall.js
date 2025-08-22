@@ -95,23 +95,23 @@ const PWAInstall = () => {
 
   return (
     <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 z-50">
-      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4">
         <div className="flex items-start space-x-3">
           <div className="flex-shrink-0">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <Download className="text-blue-600" size={20} />
+            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+              <Download className="text-blue-600 dark:text-blue-400" size={20} />
             </div>
           </div>
           
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium text-gray-900 mb-1">
+            <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1">
               Install Home Hub
             </h3>
-            <p className="text-sm text-gray-600 mb-3">
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
               Add Home Hub to your home screen for quick access and offline functionality.
             </p>
             
-            <div className="flex items-center space-x-2 text-xs text-gray-500 mb-3">
+            <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400 mb-3">
               <Smartphone size={14} />
               <span>Works on mobile & desktop</span>
             </div>
@@ -125,7 +125,7 @@ const PWAInstall = () => {
               </button>
               <button
                 onClick={dismissPrompt}
-                className="px-3 py-2 text-gray-500 text-sm font-medium rounded-md hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                className="px-3 py-2 text-gray-500 dark:text-gray-400 text-sm font-medium rounded-md hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
               >
                 Not Now
               </button>
@@ -134,7 +134,7 @@ const PWAInstall = () => {
           
           <button
             onClick={dismissPrompt}
-            className="flex-shrink-0 text-gray-400 hover:text-gray-600"
+            className="flex-shrink-0 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
           >
             <X size={16} />
           </button>
@@ -181,12 +181,12 @@ export const PWAStatus = () => {
   }, []);
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 border">
-      <h3 className="text-lg font-medium text-gray-900 mb-4">PWA Status</h3>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 border border-gray-200 dark:border-gray-700">
+      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">PWA Status</h3>
       
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-600">Installation Status</span>
+          <span className="text-sm text-gray-600 dark:text-gray-300">Installation Status</span>
           <div className="flex items-center space-x-2">
             {isInstalled ? (
               <>
@@ -203,7 +203,7 @@ export const PWAStatus = () => {
         </div>
         
         <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-600">Service Worker</span>
+          <span className="text-sm text-gray-600 dark:text-gray-300">Service Worker</span>
           <div className="flex items-center space-x-2">
             {hasServiceWorker ? (
               <>
@@ -220,7 +220,7 @@ export const PWAStatus = () => {
         </div>
         
         <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-600">Connection Status</span>
+          <span className="text-sm text-gray-600 dark:text-gray-300">Connection Status</span>
           <div className="flex items-center space-x-2">
             {isOnline ? (
               <>
@@ -238,8 +238,8 @@ export const PWAStatus = () => {
       </div>
       
       {!isInstalled && (
-        <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-          <p className="text-sm text-blue-700">
+        <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+          <p className="text-sm text-blue-700 dark:text-blue-300">
             💡 <strong>Tip:</strong> Install Home Hub as a PWA for the best experience! 
             Look for the install prompt or use your browser's menu.
           </p>
@@ -247,8 +247,8 @@ export const PWAStatus = () => {
       )}
       
       {isInstalled && (
-        <div className="mt-4 p-3 bg-green-50 rounded-lg">
-          <p className="text-sm text-green-700">
+        <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+          <p className="text-sm text-green-700 dark:text-green-300">
             🎉 <strong>Great!</strong> Home Hub is installed as a PWA. 
             You can now use it offline and access it from your home screen.
           </p>
@@ -288,17 +288,17 @@ export const PWAFeatures = () => {
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 border">
-      <h3 className="text-lg font-medium text-gray-900 mb-4">PWA Features</h3>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 border border-gray-200 dark:border-gray-700">
+      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">PWA Features</h3>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {features.map((feature, index) => {
           const IconComponent = feature.icon;
           const colorClasses = {
-            blue: 'bg-blue-100 text-blue-600',
-            green: 'bg-green-100 text-green-600',
-            purple: 'bg-purple-100 text-purple-600',
-            orange: 'bg-orange-100 text-orange-600'
+            blue: 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400',
+            green: 'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400',
+            purple: 'bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-400',
+            orange: 'bg-orange-100 dark:bg-orange-900 text-orange-600 dark:text-orange-400'
           };
           
           return (
@@ -307,16 +307,16 @@ export const PWAFeatures = () => {
                 <IconComponent size={16} />
               </div>
               <div>
-                <h4 className="text-sm font-medium text-gray-900">{feature.title}</h4>
-                <p className="text-xs text-gray-600">{feature.description}</p>
+                <h4 className="text-sm font-medium text-gray-900 dark:text-white">{feature.title}</h4>
+                <p className="text-xs text-gray-600 dark:text-gray-300">{feature.description}</p>
               </div>
             </div>
           );
         })}
       </div>
       
-      <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-        <p className="text-xs text-gray-600">
+      <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <p className="text-xs text-gray-600 dark:text-gray-300">
           <strong>Note:</strong> PWA features work best in modern browsers. 
           For the full experience, use Chrome, Edge, Firefox, or Safari.
         </p>
