@@ -273,19 +273,19 @@ export default function RecipeManagement() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Recipe Management</h1>
-              <p className="text-gray-600">Store recipes, plan meals, and integrate with shopping lists</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Recipe Management</h1>
+              <p className="text-gray-600 dark:text-gray-300">Store recipes, plan meals, and integrate with shopping lists</p>
             </div>
             <div className="flex space-x-3">
               <button
                 onClick={() => setShowCreateRecipe(true)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+                className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center space-x-2"
               >
                 <Plus size={20} />
                 <span>Add Recipe</span>
@@ -297,14 +297,14 @@ export default function RecipeManagement() {
 
       {/* Navigation Tabs */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-white rounded-lg shadow-sm p-1 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-1 mb-6">
           <div className="flex space-x-1">
             <button
               onClick={() => setViewMode('recipes')}
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'recipes'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -317,10 +317,10 @@ export default function RecipeManagement() {
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'meal-planning'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
-              <div className="flex items-center justify-center space-x2">
+              <div className="flex items-center justify-center space-x-2">
                 <Calendar size={16} />
                 <span>Meal Planning</span>
               </div>
@@ -330,7 +330,7 @@ export default function RecipeManagement() {
               className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                 viewMode === 'shopping'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <div className="flex items-center justify-center space-x-2">
@@ -343,43 +343,43 @@ export default function RecipeManagement() {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center">
-              <BookOpen className="text-blue-600" size={24} />
+              <BookOpen className="text-blue-600 dark:text-blue-400" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Recipes</p>
-                <p className="text-2xl font-bold text-gray-900">{recipes.length}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Recipes</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{recipes.length}</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center">
-              <Heart className="text-red-600" size={24} />
+              <Heart className="text-red-600 dark:text-red-400" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Favorites</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Favorites</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {recipes.filter(recipe => recipe.favorite).length}
                 </p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center">
-              <Clock className="text-green-600" size={24} />
+              <Clock className="text-green-600 dark:text-green-400" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Avg Prep Time</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Avg Prep Time</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {Math.round(recipes.reduce((sum, recipe) => sum + recipe.prepTime, 0) / recipes.length)}m
                 </p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center">
-              <Star className="text-yellow-600" size={24} />
+              <Star className="text-yellow-600 dark:text-yellow-400" size={24} />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Avg Rating</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Avg Rating</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {recipes.length > 0 ? (recipes.reduce((sum, recipe) => sum + recipe.rating, 0) / recipes.length).toFixed(1) : '0.0'}
                 </p>
               </div>

@@ -108,16 +108,16 @@ export default function About() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
             <div className="mx-auto w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center mb-6">
               <Home className="text-white" size={48} />
             </div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Home Hub</h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Home Hub</h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               A comprehensive home management platform that brings together inventory tracking, 
               spending management, collaboration tools, and smart automation in one unified interface.
             </p>
@@ -142,8 +142,8 @@ export default function About() {
       {/* Mission Statement */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Mission</h2>
-          <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Our Mission</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed">
             Home Hub was created to simplify home management by providing a centralized platform 
             where families can track their belongings, manage finances, collaborate on household tasks, 
             and automate daily routines. We believe that a well-organized home leads to a more 
@@ -155,8 +155,8 @@ export default function About() {
       {/* Features Overview */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Features Overview</h2>
-          <p className="text-lg text-gray-600">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Features Overview</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
             Everything you need to manage your home efficiently
           </p>
         </div>
@@ -165,10 +165,10 @@ export default function About() {
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <div key={index} className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+              <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Icon className="text-blue-600" size={24} />
+                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                    <Icon className="text-blue-600 dark:text-blue-400" size={24} />
                   </div>
                   <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                     feature.status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
@@ -176,8 +176,8 @@ export default function About() {
                     {feature.status}
                   </span>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{feature.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">{feature.description}</p>
               </div>
             );
           })}
@@ -185,11 +185,11 @@ export default function About() {
       </div>
 
       {/* Technology Stack */}
-      <div className="bg-white py-16">
+      <div className="bg-white dark:bg-gray-800 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Technology Stack</h2>
-            <p className="text-lg text-gray-600">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Technology Stack</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300">
               Built with modern, reliable technologies
             </p>
           </div>
@@ -197,11 +197,11 @@ export default function About() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {technologies.map((tech, index) => (
               <div key={index} className="text-center p-4">
-                <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <Code className="text-gray-600" size={32} />
+                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <Code className="text-gray-600 dark:text-gray-400" size={32} />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1">{tech.name}</h3>
-                <p className="text-sm text-gray-600">{tech.description}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{tech.name}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">{tech.description}</p>
               </div>
             ))}
           </div>
@@ -211,17 +211,17 @@ export default function About() {
       {/* Development Roadmap */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Development Roadmap</h2>
-          <p className="text-lg text-gray-600">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Development Roadmap</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
             Our journey to building the ultimate home management platform
           </p>
         </div>
         
         <div className="space-y-8">
           {roadmap.map((phase, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-sm p-6">
+            <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-gray-900">{phase.phase}</h3>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{phase.phase}</h3>
                 <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                   phase.status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
                 }`}>
@@ -230,7 +230,7 @@ export default function About() {
               </div>
               <ul className="space-y-2">
                 {phase.items.map((item, itemIndex) => (
-                  <li key={itemIndex} className="flex items-center text-gray-600">
+                  <li key={itemIndex} className="flex items-center text-gray-600 dark:text-gray-300">
                     <div className={`w-2 h-2 rounded-full mr-3 ${
                       phase.status === 'Completed' ? 'bg-green-500' : 'bg-blue-500'
                     }`}></div>
@@ -244,72 +244,72 @@ export default function About() {
       </div>
 
       {/* Key Benefits */}
-      <div className="bg-gray-100 py-16">
+      <div className="bg-gray-100 dark:bg-gray-800 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Home Hub?</h2>
-            <p className="text-lg text-gray-600">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Why Choose Home Hub?</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300">
               Discover the advantages of our comprehensive approach
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Target className="text-blue-600" size={32} />
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Target className="text-blue-600 dark:text-blue-400" size={32} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Centralized Management</h3>
-              <p className="text-gray-600">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Centralized Management</h3>
+              <p className="text-gray-600 dark:text-gray-300">
                 All your home management needs in one place - no more switching between apps
               </p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="text-green-600" size={32} />
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="text-green-600 dark:text-green-400" size={32} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Family Collaboration</h3>
-              <p className="text-gray-600">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Family Collaboration</h3>
+              <p className="text-gray-600 dark:text-gray-300">
                 Work together with household members through role-based access and permissions
               </p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Brain className="text-purple-600" size={32} />
+              <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Brain className="text-purple-600 dark:text-purple-400" size={32} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Smart Automation</h3>
-              <p className="text-gray-600">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Smart Automation</h3>
+              <p className="text-gray-600 dark:text-gray-300">
                 AI-powered suggestions and automation rules to optimize your home management
               </p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="text-yellow-600" size={32} />
+              <div className="w-16 h-16 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="text-yellow-600 dark:text-yellow-400" size={32} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Data Insights</h3>
-              <p className="text-gray-600">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Data Insights</h3>
+              <p className="text-gray-600 dark:text-gray-300">
                 Comprehensive analytics and reporting to make informed decisions
               </p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="text-red-600" size={32} />
+              <div className="w-16 h-16 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="text-red-600 dark:text-red-400" size={32} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Privacy First</h3>
-              <p className="text-gray-600">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Privacy First</h3>
+              <p className="text-gray-600 dark:text-gray-300">
                 Your data stays on your device with optional cloud backup
               </p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Smartphone className="text-indigo-600" size={32} />
+              <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Smartphone className="text-indigo-600 dark:text-indigo-400" size={32} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Cross-Platform</h3>
-              <p className="text-gray-600">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Cross-Platform</h3>
+              <p className="text-gray-600 dark:text-gray-300">
                 Access from any device with responsive design and PWA support
               </p>
             </div>
@@ -320,8 +320,8 @@ export default function About() {
       {/* Statistics */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Platform Statistics</h2>
-          <p className="text-lg text-gray-600">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Platform Statistics</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
             Numbers that reflect our commitment to excellence
           </p>
         </div>
@@ -329,40 +329,40 @@ export default function About() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="text-center">
             <div className="text-4xl font-bold text-blue-600 mb-2">7</div>
-            <p className="text-gray-600">Core Features</p>
+            <p className="text-gray-600 dark:text-gray-300">Core Features</p>
           </div>
           <div className="text-center">
             <div className="text-4xl font-bold text-green-600 mb-2">3</div>
-            <p className="text-gray-600">Development Phases</p>
+            <p className="text-gray-600 dark:text-gray-300">Development Phases</p>
           </div>
           <div className="text-center">
             <div className="text-4xl font-bold text-purple-600 mb-2">8</div>
-            <p className="text-gray-600">Technologies Used</p>
+            <p className="text-gray-600 dark:text-gray-300">Technologies Used</p>
           </div>
           <div className="text-center">
             <div className="text-4xl font-bold text-orange-600 mb-2">100%</div>
-            <p className="text-gray-600">Open Source</p>
+            <p className="text-gray-600 dark:text-gray-300">Open Source</p>
           </div>
         </div>
       </div>
 
       {/* Contact & Links */}
-      <div className="bg-white py-16">
+      <div className="bg-white dark:bg-gray-800 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Get Involved</h2>
-            <p className="text-lg text-gray-600">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Get Involved</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300">
               Join our community and contribute to the future of home management
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Github className="text-blue-600" size={32} />
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Github className="text-blue-600 dark:text-blue-400" size={32} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Open Source</h3>
-              <p className="text-gray-600 mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Open Source</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
                 Contribute to the project on GitHub
               </p>
               <a 
@@ -377,11 +377,11 @@ export default function About() {
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="text-green-600" size={32} />
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Mail className="text-green-600 dark:text-green-400" size={32} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Contact Us</h3>
-              <p className="text-gray-600 mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Contact Us</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
                 Have questions or suggestions?
               </p>
               <a 
@@ -394,11 +394,11 @@ export default function About() {
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Heart className="text-purple-600" size={32} />
+              <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Heart className="text-purple-600 dark:text-purple-400" size={32} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Support Us</h3>
-              <p className="text-gray-600 mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Support Us</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
                 Help us continue improving Home Hub
               </p>
               <button className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
@@ -434,7 +434,7 @@ export default function About() {
 
       {/* Back to Home Link */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <a href="/" className="text-blue-600 hover:text-blue-800 underline">← Back to Home</a>
+        <a href="/" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline">← Back to Home</a>
       </div>
     </div>
   );
