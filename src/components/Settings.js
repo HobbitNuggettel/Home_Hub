@@ -15,12 +15,17 @@ import {
   Settings as SettingsIcon
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useDevTools } from '../contexts/DevToolsContext';
 import toast from 'react-hot-toast';
 import ThemeSettings from './ThemeSettings';
 
 export default function Settings() {
   const { currentUser, userProfile, updateUserProfile } = useAuth();
+  const { isDevMode, toggleDevMode, showDevTools, toggleDevTools } = useDevTools();
   const [activeTab, setActiveTab] = useState('profile');
+
+  // Debug logging
+  console.log('🔧 Settings DevTools state:', { isDevMode, showDevTools });
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -218,7 +223,8 @@ export default function Settings() {
     { id: 'theme', label: 'Theme', icon: SettingsIcon },
     { id: 'notifications', label: 'Notifications', icon: Bell },
     { id: 'privacy', label: 'Privacy & Security', icon: Shield },
-    { id: 'data', label: 'Data Management', icon: Download }
+    { id: 'data', label: 'Data Management', icon: Download },
+    { id: 'devtools', label: 'Developer Tools', icon: SettingsIcon }
   ];
 
   return (
@@ -632,8 +638,8 @@ export default function Settings() {
 
             {/* Data Management */}
             {activeTab === 'data' && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-6">Data Management</h2>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Data Management</h2>
                 
                 <div className="space-y-6">
                   {/* Export Data */}
@@ -699,6 +705,132 @@ export default function Settings() {
                           <Trash2 className="w-4 h-4" />
                           <span>Delete Account</span>
                         </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Developer Tools */}
+            {activeTab === 'devtools' && (
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Developer Tools</h2>
+
+                <div className="space-y-6">
+                  {/* Dev Mode Toggle */}
+                  <div className="p-6 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div className="flex items-start space-x-4">
+                      <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
+                        <SettingsIcon className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-white">Developer Mode</h3>
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                          Enable advanced debugging tools and development features. Only enable if you're a developer or need to troubleshoot issues.
+                        </p>
+                        <div className="flex items-center space-x-4">
+                          <button
+                            onClick={toggleDevMode}
+                            className={`px-4 py-2 rounded-lg transition-colors flex items-center space-x-2 ${isDevMode
+                              ? 'bg-red-600 hover:bg-red-700 text-white'
+                              : 'bg-purple-600 hover:bg-purple-700 text-white'
+                              }`}
+                          >
+                            <SettingsIcon className="w-4 h-4" />
+                            <span>{isDevMode ? 'Disable Dev Mode' : 'Enable Dev Mode'}</span>
+                          </button>
+                          {isDevMode && (
+                            <button
+                              onClick={toggleDevTools}
+                              className={`px-4 py-2 rounded-lg transition-colors flex items-center space-x-2 ${showDevTools
+                                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                                : 'bg-green-600 hover:bg-blue-700 text-white'
+                                }`}
+                            >
+                              <SettingsIcon className="w-4 h-4" />
+                              <span>{showDevTools ? 'Hide Dev Tools' : 'Show Dev Tools'}</span>
+                            </button>
+                          )}
+                          <span className="text-sm text-gray-500 dark:text-gray-400">
+                            {isDevMode ? 'Dev mode is active' : 'Click to enable debugging tools'}
+                          </span>
+                        </div>
+
+                        {/* Debug Info */}
+                        <div className="mt-4 p-3 bg-gray-100 dark:bg-gray-700 rounded border text-xs">
+                          <p><strong>Debug Info:</strong></p>
+                          <p>isDevMode: {isDevMode ? '✅ true' : '❌ false'}</p>
+                          <p>showDevTools: {showDevTools ? '✅ true' : '❌ false'}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Debug Tools */}
+                  <div className="p-6 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div className="flex items-start space-x-4">
+                      <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                        <SettingsIcon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-white">Debug Tools</h3>
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                          Access debugging tools, performance metrics, and development utilities.
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded border">
+                            <h4 className="font-medium text-gray-900 dark:text-white mb-2">State Debug</h4>
+                            <p className="text-sm text-gray-600 dark:text-gray-300">Monitor component state changes</p>
+                          </div>
+                          <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded border">
+                            <h4 className="font-medium text-gray-900 dark:text-white mb-2">Performance Metrics</h4>
+                            <p className="text-sm text-gray-600 dark:text-gray-300">Track memory usage and render times</p>
+                          </div>
+                          <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded border">
+                            <h4 className="font-medium text-gray-900 dark:text-white mb-2">Network Logs</h4>
+                            <p className="text-sm text-gray-600 dark:text-gray-300">Monitor API calls and responses</p>
+                          </div>
+                          <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded border">
+                            <h4 className="font-medium text-gray-900 dark:text-white mb-2">Instance Tracking</h4>
+                            <p className="text-sm text-gray-600 dark:text-gray-300">Prevent component duplication</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Quick Actions */}
+                  <div className="p-6 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div className="flex items-start space-x-4">
+                      <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                        <SettingsIcon className="w-6 h-6 text-green-600 dark:text-green-400" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-white">Quick Actions</h3>
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                          Useful development shortcuts and utilities.
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          <button
+                            onClick={() => window.location.reload()}
+                            className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+                          >
+                            Reload Page
+                          </button>
+                          <button
+                            onClick={() => localStorage.clear()}
+                            className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+                          >
+                            Clear Storage
+                          </button>
+                          <button
+                            onClick={() => console.clear()}
+                            className="px-3 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm"
+                          >
+                            Clear Console
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>

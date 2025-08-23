@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { 
   Mic, 
   Camera, 
@@ -21,6 +21,7 @@ import AIExpenseService from '../services/AIExpenseService';
 import AIInventoryService from '../services/AIInventoryService';
 import AIRecipeService from '../services/AIRecipeService';
 import { VoiceAI, VisionAI, AdvancedAIService } from '../services/AdvancedAIService';
+import { useDevTools } from '../contexts/DevToolsContext';
 
 export default function AIAssistant({ 
   inventory = [], 
@@ -29,6 +30,7 @@ export default function AIAssistant({
   budgets = [],
   onUpdateData 
 }) {
+  const { isDevMode } = useDevTools();
   const [isOpen, setIsOpen] = useState(false);
   const [activeMode, setActiveMode] = useState('chat'); // 'chat', 'voice', 'camera'
   const [isListening, setIsListening] = useState(false);
@@ -36,9 +38,11 @@ export default function AIAssistant({
   const [chatHistory, setChatHistory] = useState([]);
   const [inputText, setInputText] = useState('');
   const [aiInsights, setAiInsights] = useState(null);
+  const [testCount, setTestCount] = useState(0);
   
   const recognitionRef = useRef(null);
   const fileInputRef = useRef(null);
+  const instanceId = useRef(`ai-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
 
   useEffect(() => {
     // Initialize AI services
@@ -55,7 +59,7 @@ export default function AIAssistant({
     };
     
     initAI();
-  }, [inventory, expenses, recipes]);
+  }, []); // ✅ FIXED: Empty dependency array - runs only once
 
   const generateComprehensiveInsights = async () => {
     setIsProcessing(true);
@@ -365,6 +369,22 @@ export default function AIAssistant({
     );
   };
 
+  // Debug functions for floating debug panel
+  const toggleModal = () => {
+    setIsOpen(!isOpen);
+    console.log(`[${instanceId.current}] Modal toggled: ${!isOpen}`);
+  };
+
+  const forceClose = () => {
+    setIsOpen(false);
+    console.log(`[${instanceId.current}] Modal forced closed`);
+  };
+
+  const testStateUpdate = () => {
+    setTestCount(prev => prev + 1);
+    console.log(`[${instanceId.current}] Test count updated: ${testCount + 1}`);
+  };
+
   if (!isOpen) {
     return (
       <button
@@ -539,6 +559,74 @@ export default function AIAssistant({
           </div>
         )}
       </div>
+
+      {/* Floating Debug Panel */}
+      {isDevMode && (
+        <div className="fixed top-4 right-4 bg-black text-white rounded-lg shadow-lg border border-gray-600 p-3 z-50 max-w-xs">
+          <div className="text-xs space-y-2">
+            <div className="font-bold text-green-400">Debug Panel</div>
+            <div>isOpen: {isOpen ? 'TRUE' : 'FALSE'}</div>
+            <div>testCount: {testCount}</div>
+
+            <div className="space-y-1">
+              <button
+                onClick={toggleModal}
+                className="block w-full bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs"
+              >
+                Toggle Modal
+              </button>
+              <button
+                onClick={() => setIsOpen(true)}
+                className="block w-full bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs"
+              >
+                Force Open
+              </button>
+              <button
+                onClick={forceClose}
+                className="block w-full bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs"
+              >
+                Force Close
+              </button>
+              <button
+                onClick={testStateUpdate}
+                className="block w-full bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1 rounded text-xs"
+              >
+                Test State
+              </button>
+              <button
+                onClick={() => {
+                  console.log(`[${instanceId.current}] Force refresh triggered`);
+                  setTestCount(0);
+                  setIsOpen(false);
+                  setChatHistory([]);
+                  setInputText('');
+                  toast.success('AI Assistant reset');
+                }}
+                className="block w-full bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs"
+              >
+                Reset All
+              </button>
+              <button
+                onClick={async () => {
+                  try {
+                    console.log('🧪 Testing Hybrid AI Services...');
+                    const { default: HybridAIService } = await import('../services/HybridAIService');
+                    const result = await HybridAIService.testAllServices();
+                    console.log('✅ API Test Result:', result);
+                    toast.success(`API Test Complete!\nHuggingFace: ${result.huggingface?.success ? '✅' : '❌'}\nGemini: ${result.gemini?.success ? '✅' : '❌'}`);
+                  } catch (error) {
+                    console.error('❌ API Test Error:', error);
+                    toast.error('API Test Failed: ' + error.message);
+                  }
+                }}
+                className="block w-full bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs"
+              >
+                🧪 Test API
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

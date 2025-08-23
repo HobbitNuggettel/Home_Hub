@@ -22,7 +22,7 @@ import {
   BarChart3,
   ChevronDown
 } from 'lucide-react';
-import { useAuth } from './AuthSystem';
+import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
 // AI Suggestion Categories

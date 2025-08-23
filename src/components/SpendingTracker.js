@@ -20,9 +20,13 @@ import {
   Trash2,
   Download,
   Upload,
-  Settings
+  Settings,
+  Brain,
+  Lightbulb,
+  Zap
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import AIExpenseService from '../services/AIExpenseService';
 
 // Mock spending data
 const mockExpenses = [
@@ -147,6 +151,13 @@ export default function SpendingTracker() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedPeriod, setSelectedPeriod] = useState('month');
   const [viewMode, setViewMode] = useState('expenses'); // 'expenses', 'budgets', 'analytics'
+  
+  // AI Features State
+  const [aiInsights, setAiInsights] = useState([]);
+  const [aiSuggestions, setAiSuggestions] = useState([]);
+  const [aiPredictions, setAiPredictions] = useState([]);
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
+  const [showAIPanel, setShowAIPanel] = useState(false);
 
   // Filter expenses based on search and category
   const filteredExpenses = expenses.filter(expense => {
@@ -178,16 +189,40 @@ export default function SpendingTracker() {
   const currentPeriodExpenses = getCurrentPeriodExpenses();
   const currentPeriodTotal = currentPeriodExpenses.reduce((sum, expense) => sum + expense.amount, 0);
 
-  // Add new expense
-  const addExpense = (expenseData) => {
+  // Add new expense with AI categorization
+  const addExpense = async (expenseData) => {
+    // Get AI prediction for category
+    const aiPrediction = AIExpenseService.categorizeExpense(
+      expenseData.description,
+      expenseData.amount,
+      expenseData.merchant || '',
+      expenses // Historical data for learning
+    );
+    
     const newExpense = {
       id: Date.now().toString(),
       ...expenseData,
-      tags: expenseData.tags ? expenseData.tags.split(',').map(tag => tag.trim()) : []
+      category: expenseData.category || aiPrediction.category, // Use AI suggestion if no category provided
+      tags: expenseData.tags ? expenseData.tags.split(',').map(tag => tag.trim()) : [],
+      aiRecommended: aiPrediction.confidence > 0.7,
+      aiConfidence: aiPrediction.confidence,
+      aiReasoning: aiPrediction.reasoning
     };
+    
     setExpenses([...expenses, newExpense]);
     setShowAddExpense(false);
-    toast.success('Expense added successfully!');
+    
+    // Show AI categorization feedback
+    if (aiPrediction.confidence > 0.8) {
+      toast.success(`✅ Auto-categorized as ${aiPrediction.category} (${(aiPrediction.confidence * 100).toFixed(1)}% confidence)`);
+    } else if (aiPrediction.confidence > 0.6) {
+      toast.success(`🤖 Suggested category: ${aiPrediction.category}. You can change this if needed.`);
+    } else {
+      toast.success('Expense added successfully!');
+    }
+    
+    // Refresh AI insights
+    loadAIInsights();
   };
 
   // Add new budget
@@ -285,6 +320,150 @@ export default function SpendingTracker() {
     };
     return colors[category] || colors['Other'];
   };
+
+  // Load AI insights and suggestions
+  const loadAIInsights = async () => {
+    setIsLoadingAI(true);
+    try {
+      const [insights, suggestions, predictions] = await Promise.all([
+        AIExpenseService.generateSpendingInsights(expenses),
+        AIExpenseService.generateShoppingSuggestions(expenses),
+        AIExpenseService.predictUpcomingExpenses(expenses)
+      ]);
+      
+      setAiInsights(insights);
+      setAiSuggestions(suggestions);
+      setAiPredictions(predictions);
+    } catch (error) {
+      console.error('Error loading AI insights:', error);
+      toast.error('Failed to load AI insights');
+    } finally {
+      setIsLoadingAI(false);
+    }
+  };
+
+  // Load AI insights on component mount and when expenses change
+  useEffect(() => {
+    if (expenses.length > 0) {
+      loadAIInsights();
+    }
+  }, [expenses]);
+
+  // AI Insights Panel Component
+  const AIInsightsPanel = () => (
+    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4 mb-6">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200 flex items-center gap-2">
+          <Brain className="w-5 h-5" />
+          AI Insights & Smart Suggestions
+        </h3>
+        <button
+          onClick={() => setShowAIPanel(!showAIPanel)}
+          className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200"
+        >
+          {showAIPanel ? 'Hide' : 'Show'} Details
+        </button>
+      </div>
+      
+      {isLoadingAI ? (
+        <div className="text-center py-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="text-blue-600 dark:text-blue-400 mt-2">Analyzing your spending patterns...</p>
+        </div>
+      ) : (
+        <>
+          {/* Quick AI Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                {aiInsights.length}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Smart Insights</div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                {aiSuggestions.length}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Savings Tips</div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                {aiPredictions.length}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Upcoming Expenses</div>
+            </div>
+          </div>
+
+          {showAIPanel && (
+            <div className="space-y-4">
+              {/* AI Insights */}
+              {aiInsights.length > 0 && (
+                <div>
+                  <h4 className="font-medium text-blue-700 dark:text-blue-300 mb-2 flex items-center gap-2">
+                    <Lightbulb className="w-4 h-4" />
+                    Smart Insights
+                  </h4>
+                  <div className="space-y-2">
+                    {aiInsights.slice(0, 3).map((insight, index) => (
+                      <div key={index} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-blue-400">
+                        <div className="font-medium text-gray-800 dark:text-gray-200">{insight.title}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">{insight.description}</div>
+                        <div className="text-xs text-blue-600 dark:text-blue-400 mt-1">{insight.action}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* AI Suggestions */}
+              {aiSuggestions.length > 0 && (
+                <div>
+                  <h4 className="font-medium text-green-700 dark:text-green-300 mb-2 flex items-center gap-2">
+                    <Zap className="w-4 h-4" />
+                    Smart Savings Suggestions
+                  </h4>
+                  <div className="space-y-2">
+                    {aiSuggestions.slice(0, 2).map((suggestion, index) => (
+                      <div key={index} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-green-400">
+                        <div className="font-medium text-gray-800 dark:text-gray-200">{suggestion.title}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">{suggestion.description}</div>
+                        <div className="text-xs text-green-600 dark:text-green-400 mt-1">
+                          Potential savings: ${suggestion.potentialSavings.toFixed(2)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* AI Predictions */}
+              {aiPredictions.length > 0 && (
+                <div>
+                  <h4 className="font-medium text-purple-700 dark:text-purple-300 mb-2 flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4" />
+                    Upcoming Expense Predictions
+                  </h4>
+                  <div className="space-y-2">
+                    {aiPredictions.slice(0, 3).map((prediction, index) => (
+                      <div key={index} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-purple-400">
+                        <div className="font-medium text-gray-800 dark:text-gray-200">{prediction.description}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          Estimated: ${prediction.estimatedAmount.toFixed(2)} around {new Date(prediction.estimatedDate).toLocaleDateString()}
+                        </div>
+                        <div className="text-xs text-purple-600 dark:text-purple-400 mt-1">
+                          Confidence: {(prediction.confidence * 100).toFixed(1)}%
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
