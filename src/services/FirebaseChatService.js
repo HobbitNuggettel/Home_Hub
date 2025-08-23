@@ -420,3 +420,4 @@ class FirebaseChatService {
 }
 
 export default new FirebaseChatService();
+

@@ -44,7 +44,11 @@ export default function Login() {
       toast.success('Welcome back! 🎉');
       navigate('/home');
     } catch (error) {
-      console.error('Login error:', error);
+      // Log error only in development mode
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Login error:', error);
+      }
+
       let errorMessage = 'Failed to login. Please try again.';
       
       switch (error.code) {
@@ -78,7 +82,10 @@ export default function Login() {
       toast.success('Welcome! 🎉');
       navigate('/home');
     } catch (error) {
-      console.error('Google sign-in error:', error);
+      // Log error only in development mode
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Google sign-in error:', error);
+      }
       toast.error('Failed to sign in with Google. Please try again.');
     } finally {
       setLoading(false);

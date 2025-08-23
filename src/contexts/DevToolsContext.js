@@ -24,7 +24,6 @@ export const DevToolsProvider = ({ children }) => {
   // Load dev mode from localStorage
   useEffect(() => {
     const savedDevMode = localStorage.getItem('homeHub_devMode');
-    console.log('🔧 DevToolsContext: Loading from localStorage:', savedDevMode);
     if (savedDevMode === 'true') {
       setIsDevMode(true);
     }
@@ -32,12 +31,10 @@ export const DevToolsProvider = ({ children }) => {
 
   // Save dev mode to localStorage
   useEffect(() => {
-    console.log('🔧 DevToolsContext: Saving to localStorage:', isDevMode);
     localStorage.setItem('homeHub_devMode', isDevMode.toString());
   }, [isDevMode]);
 
   const toggleDevMode = () => {
-    console.log('🔄 toggleDevMode called, current:', isDevMode, '-> new:', !isDevMode);
     setIsDevMode(!isDevMode);
     if (!isDevMode) {
       setShowDevTools(false);
@@ -45,7 +42,6 @@ export const DevToolsProvider = ({ children }) => {
   };
 
   const toggleDevTools = () => {
-    console.log('🔄 toggleDevTools called, isDevMode:', isDevMode, 'current showDevTools:', showDevTools);
     if (isDevMode) {
       setShowDevTools(!showDevTools);
     }

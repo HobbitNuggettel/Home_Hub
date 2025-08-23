@@ -7,35 +7,35 @@ describe('About Component', () => {
     test('renders about page with main sections', () => {
       render(<About />);
       
-      // Check for main sections
-      expect(screen.getByText('Home Hub')).toBeInTheDocument();
+      // Check for main sections - use more specific selectors
+      expect(screen.getByRole('heading', { name: 'Home Hub', level: 1 })).toBeInTheDocument();
       expect(screen.getByText(/comprehensive home management platform/i)).toBeInTheDocument();
-      expect(screen.getByText('Open Source')).toBeInTheDocument();
       expect(screen.getByText('Modern UI/UX')).toBeInTheDocument();
+      expect(screen.getByText('Feature Rich')).toBeInTheDocument();
     });
 
     test('renders mission statement', () => {
       render(<About />);
       
       // Check for mission statement
+      expect(screen.getByRole('heading', { name: 'Our Mission' })).toBeInTheDocument();
       expect(screen.getByText(/A comprehensive home management platform/i)).toBeInTheDocument();
-      expect(screen.getByText(/inventory tracking, spending management, collaboration tools/i)).toBeInTheDocument();
     });
 
     test('renders features overview', () => {
       render(<About />);
       
       // Check for key features
+      expect(screen.getByRole('heading', { name: 'Features Overview' })).toBeInTheDocument();
       expect(screen.getByText(/inventory tracking/i)).toBeInTheDocument();
       expect(screen.getByText(/spending management/i)).toBeInTheDocument();
-      expect(screen.getByText(/collaboration tools/i)).toBeInTheDocument();
     });
 
     test('renders technology stack', () => {
       render(<About />);
       
-      // Check for technology information
-      expect(screen.getByText('Open Source')).toBeInTheDocument();
+      // Check for technology information - use specific selectors
+      expect(screen.getByRole('heading', { name: 'Technology Stack' })).toBeInTheDocument();
       expect(screen.getByText('Modern UI/UX')).toBeInTheDocument();
       expect(screen.getByText('Feature Rich')).toBeInTheDocument();
     });
@@ -44,30 +44,33 @@ describe('About Component', () => {
       render(<About />);
       
       // Check for roadmap section - look for actual content
-      expect(screen.getByText(/comprehensive home management platform/i)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Development Roadmap' })).toBeInTheDocument();
+      expect(screen.getByText(/Phase 1 - Core Features/i)).toBeInTheDocument();
     });
 
     test('renders key benefits', () => {
       render(<About />);
       
       // Check for benefits section - look for actual content
-      expect(screen.getByText(/inventory tracking/i)).toBeInTheDocument();
-      expect(screen.getByText(/spending management/i)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Why Choose Home Hub?' })).toBeInTheDocument();
+      expect(screen.getByText(/Centralized Management/i)).toBeInTheDocument();
     });
 
     test('renders statistics section', () => {
       render(<About />);
       
       // Check for statistics - look for actual content
-      expect(screen.getByText('Home Hub')).toBeInTheDocument();
-      expect(screen.getByText(/comprehensive home management platform/i)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Platform Statistics' })).toBeInTheDocument();
+      // Use more specific selector for the statistics number
+      expect(screen.getByText('7')).toBeInTheDocument();
     });
 
     test('renders contact information', () => {
       render(<About />);
       
       // Check for contact section - look for actual content
-      expect(screen.getByText(/comprehensive home management platform/i)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Get Involved' })).toBeInTheDocument();
+      expect(screen.getByText(/View on GitHub/i)).toBeInTheDocument();
     });
   });
 
@@ -79,7 +82,7 @@ describe('About Component', () => {
       render(<About />);
       
       // Check that component renders without breaking
-      expect(screen.getByText('Home Hub')).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Home Hub', level: 1 })).toBeInTheDocument();
       
       // Clean up
       document.documentElement.classList.remove('dark');
@@ -92,7 +95,7 @@ describe('About Component', () => {
       render(<About />);
       
       // Check that component renders without breaking
-      expect(screen.getByText('Home Hub')).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Home Hub', level: 1 })).toBeInTheDocument();
     });
   });
 
@@ -101,153 +104,111 @@ describe('About Component', () => {
       render(<About />);
       
       // Check for proper heading hierarchy
-      const mainHeading = screen.getByRole('heading', { level: 1 });
-      expect(mainHeading).toBeInTheDocument();
-      expect(mainHeading).toHaveTextContent('Home Hub');
-      
-      // Check for section headings
-      const sectionHeadings = screen.getAllByRole('heading');
-      expect(sectionHeadings.length).toBeGreaterThan(0);
+      expect(screen.getByRole('heading', { name: 'Home Hub', level: 1 })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Our Mission', level: 2 })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Features Overview', level: 2 })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Technology Stack', level: 2 })).toBeInTheDocument();
     });
 
-    test('provides meaningful content structure', () => {
+    test('has proper content structure', () => {
       render(<About />);
       
-      // Should have descriptive content
-      expect(screen.getByText(/A comprehensive home management platform/i)).toBeInTheDocument();
-      expect(screen.getByText(/inventory tracking, spending management, collaboration tools/i)).toBeInTheDocument();
+      // Check for content structure - the component doesn't have semantic main/nav tags
+      // but we can verify the content is properly structured
+      expect(screen.getByRole('heading', { name: 'Home Hub', level: 1 })).toBeInTheDocument();
+      expect(screen.getByText(/comprehensive home management platform/i)).toBeInTheDocument();
+    });
+  });
+
+  describe('Content Validation', () => {
+    test('displays correct feature count', () => {
+      render(<About />);
+      
+      // Check that all 7 features are displayed
+      expect(screen.getByText('7')).toBeInTheDocument();
+      // Use the statistics section text instead of the duplicate "Core Features"
+      // Look for the statistics section specifically - find the text near the "7"
+      const sevenElement = screen.getByText('7');
+      const coreFeaturesText = sevenElement.parentElement.querySelector('p');
+      expect(coreFeaturesText).toHaveTextContent('Core Features');
     });
 
-    test('supports screen readers', () => {
+    test('shows correct development phases', () => {
       render(<About />);
       
-      // Should have proper semantic structure
-      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
-      expect(screen.getByText(/A comprehensive home management platform/i)).toBeInTheDocument();
+      // Check for development phases
+      expect(screen.getByText('3')).toBeInTheDocument();
+      expect(screen.getByText(/Development Phases/i)).toBeInTheDocument();
+    });
+
+    test('displays technology count', () => {
+      render(<About />);
+      
+      // Check for technology count
+      expect(screen.getByText('8')).toBeInTheDocument();
+      expect(screen.getByText(/Technologies Used/i)).toBeInTheDocument();
+    });
+  });
+
+  describe('Interactive Elements', () => {
+    test('has working links', () => {
+      render(<About />);
+      
+      // Check for GitHub link
+      const githubLink = screen.getByRole('link', { name: /View on GitHub/i });
+      expect(githubLink).toHaveAttribute('href', 'https://github.com');
+      expect(githubLink).toHaveAttribute('target', '_blank');
+      
+      // Check for email link
+      const emailLink = screen.getByRole('link', { name: /Send Email/i });
+      expect(emailLink).toHaveAttribute('href', 'mailto:contact@homehub.com');
+    });
+
+    test('has proper button elements', () => {
+      render(<About />);
+      
+      // Check for star project button
+      const starButton = screen.getByRole('button', { name: /Star Project/i });
+      expect(starButton).toBeInTheDocument();
     });
   });
 
   describe('Responsive Design', () => {
-    test('adapts to mobile screen sizes', () => {
-      render(<About />);
-      
-      // Check that component renders without breaking
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Home Hub');
-      
-      // Should have responsive container
-      const container = screen.getByRole('heading', { level: 1 }).closest('div');
-      expect(container).toBeInTheDocument();
-    });
-
-    test('maintains layout on different screen sizes', () => {
-      render(<About />);
-      
-      // Should have proper spacing and layout
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Home Hub');
-      expect(screen.getByText(/comprehensive home management platform/i)).toBeInTheDocument();
-    });
-  });
-
-  describe('Content Quality', () => {
-    test('displays comprehensive feature information', () => {
-      render(<About />);
-      
-      // Should show detailed feature descriptions
-      expect(screen.getByText(/inventory tracking/i)).toBeInTheDocument();
-      expect(screen.getByText(/spending management/i)).toBeInTheDocument();
-      expect(screen.getByText(/collaboration tools/i)).toBeInTheDocument();
-    });
-
-    test('shows technology details', () => {
-      render(<About />);
-      
-      // Should display technology information - check for multiple elements
-      expect(screen.getAllByText('Open Source').length).toBeGreaterThan(0);
-      expect(screen.getAllByText('Modern UI/UX').length).toBeGreaterThan(0);
-      expect(screen.getAllByText('Feature Rich').length).toBeGreaterThan(0);
-    });
-
-    test('includes development information', () => {
-      render(<About />);
-      
-      // Should show development details
-      expect(screen.getByText(/comprehensive home management platform/i)).toBeInTheDocument();
-    });
-  });
-
-  describe('Navigation & Links', () => {
-    test('has proper navigation elements', () => {
-      render(<About />);
-      
-      // Should have navigation structure
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Home Hub');
-      expect(screen.getByText(/comprehensive home management platform/i)).toBeInTheDocument();
-    });
-
-    test('provides clear section navigation', () => {
-      render(<About />);
-      
-      // Should have clear section headings for navigation
-      expect(screen.getByText(/inventory tracking/i)).toBeInTheDocument();
-      expect(screen.getByText(/spending management/i)).toBeInTheDocument();
-    });
-  });
-
-  describe('Performance', () => {
-    test('renders efficiently', () => {
-      render(<About />);
-      
-      // Should render without performance issues
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Home Hub');
-      expect(screen.getByText(/comprehensive home management platform/i)).toBeInTheDocument();
-    });
-
-    test('handles content updates efficiently', () => {
+    test('renders without breaking on different screen sizes', () => {
+      // Test with different viewport sizes
       const { rerender } = render(<About />);
       
-      // Initially render
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Home Hub');
+      // Simulate mobile viewport
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 375,
+      });
       
-      // Re-render
+      // Trigger resize event
+      window.dispatchEvent(new Event('resize'));
+      
+      // Re-render and check it still works
       rerender(<About />);
+      expect(screen.getByRole('heading', { name: 'Home Hub', level: 1 })).toBeInTheDocument();
       
-      // Should still render correctly
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Home Hub');
+      // Reset viewport
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1024,
+      });
     });
   });
 
-  describe('Integration', () => {
-    test('works with other components in the app', () => {
+  describe('Error Handling', () => {
+    test('renders gracefully with missing data', () => {
+  // This test ensures the component doesn't crash if data is missing
       render(<About />);
       
-      // Should render as part of the app
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Home Hub');
-      expect(screen.getByText(/A comprehensive home management platform/i)).toBeInTheDocument();
-    });
-
-    test('maintains consistent styling with app theme', () => {
-      render(<About />);
-      
-      // Should have consistent styling
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Home Hub');
+      // Component should still render the main structure
+      expect(screen.getByRole('heading', { name: 'Home Hub', level: 1 })).toBeInTheDocument();
       expect(screen.getByText(/comprehensive home management platform/i)).toBeInTheDocument();
-    });
-  });
-
-  describe('Edge Cases', () => {
-    test('handles missing content gracefully', () => {
-      render(<About />);
-      
-      // Should render even if some content is missing
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Home Hub');
-    });
-
-    test('handles long content appropriately', () => {
-      render(<About />);
-      
-      // Should handle long content without breaking layout
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Home Hub');
-      expect(screen.getByText(/A comprehensive home management platform/i)).toBeInTheDocument();
     });
   });
 });

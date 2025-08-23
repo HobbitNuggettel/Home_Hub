@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '../contexts/ThemeContext';
+import { DevToolsProvider } from '../contexts/DevToolsContext';
 
 // Mock AuthContext to avoid Firebase dependencies in tests
 const MockAuthProvider = ({ children }) => children;
@@ -76,6 +77,18 @@ const AllTheProviders = ({ children }) => {
 // Custom render function for components that need all providers
 export const renderWithProviders = (ui, options = {}) => {
   return render(ui, { wrapper: AllTheProviders, ...options });
+};
+
+// Custom render function for Home component that needs DevToolsContext and Router
+export const renderHomeWithProviders = (ui, options = {}) => {
+  const HomeWrapper = ({ children }) => (
+    <BrowserRouter>
+      <DevToolsProvider>
+        {children}
+      </DevToolsProvider>
+    </BrowserRouter>
+  );
+  return render(ui, { wrapper: HomeWrapper, ...options });
 };
 
 // Custom render function for components that only need routing
