@@ -1,5 +1,5 @@
 // Service Worker for Home Hub PWA
-const CACHE_NAME = 'home-hub-v1.0.0';
+const CACHE_NAME = 'home-hub-v1.3.0';
 const STATIC_CACHE = 'home-hub-static-v1.0.0';
 const DYNAMIC_CACHE = 'home-hub-dynamic-v1.0.0';
 
@@ -11,8 +11,7 @@ const STATIC_FILES = [
   '/static/css/main.css',
   '/manifest.json',
   '/favicon.ico',
-  '/logo192.png',
-  '/logo512.png'
+  '/logo.svg'
 ];
 
 // API endpoints to cache

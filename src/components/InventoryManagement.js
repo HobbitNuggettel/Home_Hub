@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { 
   Plus, 
   Search, 
@@ -15,11 +15,18 @@ import {
   FileText,
   Users,
   Calendar,
-  MapPin
+  MapPin,
+  Brain,
+  Lightbulb,
+  Zap,
+  TrendingUp,
+  Clock,
+  Target
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import BarcodeScanner from './BarcodeScanner';
 import { useInventory } from '../hooks/useInventory';
+import AIInventoryService from '../services/AIInventoryService';
 
 // Mock inventory data
 const mockCategories = [
@@ -74,6 +81,119 @@ const mockItems = [
     warranty: null,
     supplier: 'Walmart',
     tags: ['hygiene', 'bathroom', 'consumable']
+  },
+  // Enhanced mock data matching AI Assistant responses
+  {
+    id: '4',
+    name: 'Milk',
+    category: 'Food',
+    quantity: 1,
+    location: 'Refrigerator',
+    purchaseDate: '2024-01-20',
+    expiryDate: '2024-01-22',
+    price: 3.99,
+    barcode: '7891234567890',
+    notes: '2% milk - running low',
+    status: 'low',
+    warranty: null,
+    supplier: 'Walmart',
+    tags: ['dairy', 'refrigerated', 'essential']
+  },
+  {
+    id: '5',
+    name: 'Bread',
+    category: 'Food',
+    quantity: 1,
+    location: 'Kitchen Counter',
+    purchaseDate: '2024-01-19',
+    expiryDate: '2024-01-22',
+    price: 2.49,
+    barcode: '3210987654321',
+    notes: 'Whole wheat bread - last loaf',
+    status: 'low',
+    warranty: null,
+    supplier: 'Target',
+    tags: ['bakery', 'essential', 'breakfast']
+  },
+  {
+    id: '6',
+    name: 'Eggs',
+    category: 'Food',
+    quantity: 4,
+    location: 'Refrigerator',
+    purchaseDate: '2024-01-18',
+    expiryDate: '2024-01-23',
+    price: 4.99,
+    barcode: '6543210987654',
+    notes: 'Free range eggs - 4 remaining',
+    status: 'low',
+    warranty: null,
+    supplier: 'Whole Foods',
+    tags: ['dairy', 'protein', 'essential']
+  },
+  {
+    id: '7',
+    name: 'Spaghettini',
+    category: 'Food',
+    quantity: 3,
+    location: 'Pantry',
+    purchaseDate: '2024-01-01',
+    expiryDate: '2025-12-31',
+    price: 2.99,
+    barcode: '1357924680135',
+    notes: 'Thin spaghetti - 3 boxes available',
+    status: 'active',
+    warranty: null,
+    supplier: 'Walmart',
+    tags: ['pasta', 'pantry', 'cooking']
+  },
+  {
+    id: '8',
+    name: 'Canned Tomatoes',
+    category: 'Food',
+    quantity: 8,
+    location: 'Pantry',
+    purchaseDate: '2024-01-01',
+    expiryDate: '2026-12-31',
+    price: 1.49,
+    barcode: '2468135790246',
+    notes: 'Crushed tomatoes - 8 cans',
+    status: 'active',
+    warranty: null,
+    supplier: 'Target',
+    tags: ['canned', 'pantry', 'cooking']
+  },
+  {
+    id: '9',
+    name: 'Olive Oil',
+    category: 'Food',
+    quantity: 2,
+    location: 'Pantry',
+    purchaseDate: '2024-01-01',
+    expiryDate: '2026-12-31',
+    price: 8.99,
+    barcode: '3692581470369',
+    notes: 'Extra virgin olive oil - 2 bottles',
+    status: 'active',
+    warranty: null,
+    supplier: 'Whole Foods',
+    tags: ['oil', 'pantry', 'cooking']
+  },
+  {
+    id: '10',
+    name: 'Garlic',
+    category: 'Food',
+    quantity: 2,
+    location: 'Kitchen Counter',
+    purchaseDate: '2024-01-15',
+    expiryDate: '2024-01-29',
+    price: 1.99,
+    barcode: '1472583690147',
+    notes: 'Fresh garlic heads - 2 remaining',
+    status: 'active',
+    warranty: null,
+    supplier: 'Local Market',
+    tags: ['vegetable', 'fresh', 'cooking']
   }
 ];
 
@@ -93,6 +213,41 @@ function InventoryManagement() {
     statistics,
     actions
   } = useInventory(mockItems, mockCategories);
+
+  // AI Features State
+  const [aiPredictions, setAiPredictions] = useState([]);
+  const [aiSuggestions, setAiSuggestions] = useState([]);
+  const [aiAlerts, setAiAlerts] = useState([]);
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
+  const [showAIPanel, setShowAIPanel] = useState(false);
+
+  // Load AI insights and predictions
+  const loadAIInsights = useCallback(async () => {
+    if (items.length === 0) return;
+
+    setIsLoadingAI(true);
+    try {
+      const [predictions, suggestions, alerts] = await Promise.all([
+        AIInventoryService.predictInventoryNeeds(items),
+        AIInventoryService.generateOrganizationSuggestions(items),
+        AIInventoryService.generateInventoryAlerts(items)
+      ]);
+
+      setAiPredictions(predictions);
+      setAiSuggestions(suggestions);
+      setAiAlerts(alerts);
+    } catch (error) {
+      console.error('Error loading AI insights:', error);
+      toast.error('Failed to load AI insights');
+    } finally {
+      setIsLoadingAI(false);
+    }
+  }, [items]);
+
+  // Load AI insights on component mount and when items change
+  useEffect(() => {
+    loadAIInsights();
+  }, [loadAIInsights]);
 
   // Add new item
   const addItem = useCallback((itemData) => {
@@ -209,6 +364,134 @@ function InventoryManagement() {
     }
   }, [selectedItems.length, filteredItems.length, actions]);
 
+  // AI Insights Panel Component
+  const AIInsightsPanel = () => (
+    <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-700 rounded-lg p-4 mb-6">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-green-800 dark:text-green-200 flex items-center gap-2">
+          <Brain className="w-5 h-5" />
+          AI Inventory Insights & Smart Predictions
+        </h3>
+        <button
+          onClick={() => setShowAIPanel(!showAIPanel)}
+          className="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200"
+        >
+          {showAIPanel ? 'Hide' : 'Show'} Details
+        </button>
+      </div>
+
+      {isLoadingAI ? (
+        <div className="text-center py-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
+          <p className="text-green-600 dark:text-green-400 mt-2">Analyzing your inventory patterns...</p>
+        </div>
+      ) : (
+        <>
+          {/* Quick AI Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+                {aiPredictions.filter(p => p.urgency === 'critical').length}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Critical Items</div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+                {aiPredictions.filter(p => p.urgency === 'high').length}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Low Stock</div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                {aiSuggestions.length}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Smart Tips</div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                {aiAlerts.length}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Active Alerts</div>
+            </div>
+          </div>
+
+          {showAIPanel && (
+            <div className="space-y-4">
+              {/* Critical Inventory Alerts */}
+              {aiAlerts.length > 0 && (
+                <div>
+                  <h4 className="font-medium text-red-700 dark:text-red-300 mb-2 flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4" />
+                    Critical Alerts
+                  </h4>
+                  <div className="space-y-2">
+                    {aiAlerts.slice(0, 3).map((alert, index) => (
+                      <div key={index} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-red-400">
+                        <div className="font-medium text-gray-800 dark:text-gray-200">{alert.title}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          {alert.count} items need attention
+                        </div>
+                        <div className="text-xs text-red-600 dark:text-red-400 mt-1">{alert.action}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* AI Predictions */}
+              {aiPredictions.length > 0 && (
+                <div>
+                  <h4 className="font-medium text-orange-700 dark:text-orange-300 mb-2 flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4" />
+                    Smart Reorder Predictions
+                  </h4>
+                  <div className="space-y-2">
+                    {aiPredictions.slice(0, 3).map((prediction, index) => (
+                      <div key={index} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-orange-400">
+                        <div className="font-medium text-gray-800 dark:text-gray-200">{prediction.itemName}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          {prediction.daysRemaining} days remaining • Suggested: {prediction.suggestedReorderQuantity} units
+                        </div>
+                        <div className="text-xs text-orange-600 dark:text-orange-400 mt-1">
+                          Confidence: {(prediction.confidence * 100).toFixed(1)}% • {prediction.reasoning}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* AI Organization Suggestions */}
+              {aiSuggestions.length > 0 && (
+                <div>
+                  <h4 className="font-medium text-blue-700 dark:text-blue-300 mb-2 flex items-center gap-2">
+                    <Lightbulb className="w-4 h-4" />
+                    Smart Organization Tips
+                  </h4>
+                  <div className="space-y-2">
+                    {aiSuggestions.slice(0, 2).map((suggestion, index) => (
+                      <div key={index} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-blue-400">
+                        <div className="font-medium text-gray-800 dark:text-gray-200">{suggestion.title}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          {suggestion.description || suggestion.action}
+                        </div>
+                        {suggestion.items && (
+                          <div className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                            Items: {suggestion.items.map(i => i.name).join(', ')}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       {/* Header */}
@@ -217,7 +500,7 @@ function InventoryManagement() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Inventory Management</h1>
-              <p className="text-gray-600 dark:text-gray-300">Track household items, categories, and barcode scanning</p>
+              <p className="text-gray-600 dark:text-gray-300">Track household items, categories, and barcode scanning with AI insights</p>
             </div>
             <div className="flex space-x-3">
               <button
@@ -244,6 +527,11 @@ function InventoryManagement() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* AI Insights Panel */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <AIInsightsPanel />
       </div>
 
       {/* Search and Filters */}

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from './AuthSystem';
+import React, { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import { LoginForm, RegisterForm, UserProfile } from './AuthSystem';
 import { PWAStatus, PWAFeatures } from './PWAInstall';
 import { 
@@ -17,12 +17,6 @@ const AuthPage = () => {
   const { isAuthenticated, user, isLoading } = useAuth();
   const [authMode, setAuthMode] = useState('login'); // 'login', 'register', 'profile'
   const [activeTab, setActiveTab] = useState('auth');
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      setAuthMode('profile');
-    }
-  }, [isAuthenticated]);
 
   if (isLoading) {
     return (

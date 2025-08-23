@@ -1,0 +1,21 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Home Hub Logo -->
+  <rect width="192" height="192" rx="24" fill="#3B82F6"/>
+  
+  <!-- House Icon -->
+  <path d="M96 40L40 80V160H152V80L96 40Z" fill="white" stroke="#1E40AF" stroke-width="4"/>
+  
+  <!-- Door -->
+  <rect x="80" y="120" width="32" height="40" fill="#1E40AF"/>
+  
+  <!-- Windows -->
+  <rect x="60" y="100" width="20" height="20" fill="white" stroke="#1E40AF" stroke-width="2"/>
+  <rect x="112" y="100" width="20" height="20" fill="white" stroke="#1E40AF" stroke-width="2"/>
+  
+  <!-- AI Brain Icon -->
+  <circle cx="96" cy="60" r="16" fill="#8B5CF6"/>
+  <path d="M96 52C92.6863 52 90 54.6863 90 58C90 61.3137 92.6863 64 96 64C99.3137 64 102 61.3137 102 58C102 54.6863 99.3137 52 96 52ZM96 62C94.8954 62 94 61.1046 94 60C94 58.8954 94.8954 58 96 58C97.1046 58 98 58.8954 98 60C98 61.1046 97.1046 62 96 62Z" fill="white"/>
+  
+  <!-- Text -->
+  <text x="96" y="180" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">HOME HUB</text>
+</svg>

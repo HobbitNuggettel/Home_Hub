@@ -89,12 +89,6 @@ export default function Navigation() {
       description: 'Features, roadmap, and information'
     },
     {
-      name: 'AI Assistant',
-      href: '/ai-assistant',
-      icon: Brain,
-      description: 'Voice commands and intelligent assistance'
-    },
-    {
       name: 'Smart Suggestions',
       href: '/ai-suggestions',
       icon: Lightbulb,

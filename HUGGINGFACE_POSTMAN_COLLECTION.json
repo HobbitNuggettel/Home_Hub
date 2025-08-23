@@ -1,0 +1,354 @@
+{
+  "info": {
+    "name": "Home Hub - Hybrid AI Services (HuggingFace + Gemini)",
+    "description": "Collection of 11 confirmed working HuggingFace AI model endpoints PLUS Google Gemini integration. Dual AI service with automatic fallback for maximum reliability. All models tested and ready for production use.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "2.0.0"
+  },
+  "variable": [
+    {
+      "key": "HUGGINGFACE_API_KEY",
+      "value": "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",
+      "type": "string",
+      "description": "Your HuggingFace API key (starts with hf_)"
+    },
+    {
+      "key": "BASE_URL",
+      "value": "https://api-inference.huggingface.co/models",
+      "type": "string",
+      "description": "HuggingFace API base URL"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{HUGGINGFACE_API_KEY}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "1. Zero-Shot Text Classification",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"inputs\": \"This is a test sentence for classification\",\n  \"parameters\": {\n    \"candidate_labels\": [\"positive\", \"negative\", \"neutral\", \"informative\", \"helpful\"]\n  }\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/facebook/bart-large-mnli",
+          "host": ["{{BASE_URL}}"],
+          "path": ["facebook", "bart-large-mnli"]
+        },
+        "description": "Classifies text into predefined categories using zero-shot learning. Very versatile for any text classification task."
+      }
+    },
+    {
+      "name": "2. Text Summarization",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"inputs\": \"The quick brown fox jumps over the lazy dog. This is a test sentence for summarization. The fox was very quick and the dog was very lazy. This demonstrates the capabilities of the summarization model.\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/sshleifer/distilbart-cnn-12-6",
+          "host": ["{{BASE_URL}}"],
+          "path": ["sshleifer", "distilbart-cnn-12-6"]
+        },
+        "description": "Creates concise summaries of longer text passages. Great for condensing articles, documents, or conversations."
+      }
+    },
+    {
+      "name": "3. Question Answering",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"inputs\": {\n    \"question\": \"What is the capital of France?\",\n    \"context\": \"Paris is the capital of France. It is a beautiful city known for the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral. Paris is located in northern France and is the country's largest city.\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/deepset/roberta-base-squad2",
+          "host": ["{{BASE_URL}}"],
+          "path": ["deepset", "roberta-base-squad2"]
+        },
+        "description": "Answers questions based on provided context. Perfect for extracting specific information from documents or text."
+      }
+    },
+    {
+      "name": "4. Sentiment Analysis (5-star rating)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"inputs\": \"I absolutely love this movie! It's fantastic and amazing!\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/nlptown/bert-base-multilingual-uncased-sentiment",
+          "host": ["{{BASE_URL}}"],
+          "path": ["nlptown", "bert-base-multilingual-uncased-sentiment"]
+        },
+        "description": "Analyzes sentiment and provides 5-star ratings. Great for customer feedback, reviews, and sentiment analysis."
+      }
+    },
+    {
+      "name": "5. English to Spanish Translation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"inputs\": \"Hello world, how are you today?\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/Helsinki-NLP/opus-mt-en-es",
+          "host": ["{{BASE_URL}}"],
+          "path": ["Helsinki-NLP", "opus-mt-en-es"]
+        },
+        "description": "Translates English text to Spanish. High-quality machine translation for Spanish-speaking users."
+      }
+    },
+    {
+      "name": "6. English to French Translation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"inputs\": \"Hello world, how are you today?\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/Helsinki-NLP/opus-mt-en-fr",
+          "host": ["{{BASE_URL}}"],
+          "path": ["Helsinki-NLP", "opus-mt-en-fr"]
+        },
+        "description": "Translates English text to French. High-quality machine translation for French-speaking users."
+      }
+    },
+    {
+      "name": "7. English to Russian Translation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"inputs\": \"Hello world, how are you today?\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/Helsinki-NLP/opus-mt-en-ru",
+          "host": ["{{BASE_URL}}"],
+          "path": ["Helsinki-NLP", "opus-mt-en-ru"]
+        },
+        "description": "Translates English text to Russian. High-quality machine translation for Russian-speaking users."
+      }
+    },
+    {
+      "name": "8. Named Entity Recognition (NER)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"inputs\": \"My name is John Smith and I work at Microsoft Corporation in Seattle, Washington.\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/dslim/bert-base-NER",
+          "host": ["{{BASE_URL}}"],
+          "path": ["dslim", "bert-base-NER"]
+        },
+        "description": "Extracts named entities like people, organizations, locations, and dates from text. Useful for data extraction and analysis."
+      }
+    },
+    {
+      "name": "9. Sentence Similarity Scoring",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"inputs\": {\n    \"source_sentence\": \"This is a test sentence\",\n    \"sentences\": [\n      \"This is another test sentence\",\n      \"This is a completely different sentence\",\n      \"This is a test sentence with slight variations\"\n    ]\n  }\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/sentence-transformers/all-MiniLM-L6-v2",
+          "host": ["{{BASE_URL}}"],
+          "path": ["sentence-transformers", "all-MiniLM-L6-v2"]
+        },
+        "description": "Compares sentence similarity and provides similarity scores. Great for finding similar content, clustering, and search applications."
+      }
+    },
+    {
+      "name": "10. Finance Embeddings Analysis",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"inputs\": {\n    \"source_sentence\": \"I bought stocks in Tesla and invested in cryptocurrency\",\n    \"sentences\": [\n      \"This is a financial investment\",\n      \"This is a personal expense\",\n      \"This is a business transaction\",\n      \"This is a luxury purchase\"\n    ]\n  }\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/FinLang/finance-embeddings-investopedia",
+          "host": ["{{BASE_URL}}"],
+          "path": ["FinLang", "finance-embeddings-investopedia"]
+        },
+        "description": "Analyzes financial text and categorizes it into financial categories. Perfect for Home Hub expense categorization and financial analysis."
+      }
+    },
+    {
+      "name": "11. Advanced Fill-Mask with SPLADE++",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"inputs\": \"Hello [MASK] world, how are you [MASK] today?\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/prithivida/Splade_PP_en_v2",
+          "host": ["{{BASE_URL}}"],
+          "path": ["prithivida", "Splade_PP_en_v2"]
+        },
+        "description": "Advanced text completion using SPLADE++ technology. Provides multiple completion suggestions with confidence scores. Great for text generation and completion tasks."
+      }
+    },
+    {
+      "name": "🔍 Test API Key Validity",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BASE_URL}}/facebook/bart-large-mnli",
+          "host": ["{{BASE_URL}}"],
+          "path": ["facebook", "bart-large-mnli"]
+        },
+        "description": "Simple GET request to test if your API key is valid. Returns 200 if key works, 401 if invalid."
+      }
+    },
+    {
+      "name": "📊 Get Model Status (All 11 Models)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BASE_URL}}/facebook/bart-large-mnli",
+          "host": ["{{BASE_URL}}"],
+          "path": ["facebook", "bart-large-mnli"]
+        },
+        "description": "Test the health of all 11 models. You can duplicate this request and change the model path to test each one individually."
+      }
+    },
+    {
+      "name": "🧪 Test Advanced Parameters",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "x-wait-for-model",
+            "value": "true"
+          },
+          {
+            "key": "x-use-cache",
+            "value": "true"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"inputs\": \"This is a test sentence\",\n  \"parameters\": {\n    \"candidate_labels\": [\"positive\", \"negative\", \"neutral\"]\n  }\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/facebook/bart-large-mnli",
+          "host": ["{{BASE_URL}}"],
+          "path": ["facebook", "bart-large-mnli"]
+        },
+        "description": "Test the advanced API parameters: x-wait-for-model and x-use-cache. This demonstrates the enhanced performance features we've implemented."
+      }
+    },
+    {
+      "name": "📊 Test Model Loading (503 Handling)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"inputs\": \"Hello world\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/facebook/bart-large-mnli",
+          "host": ["{{BASE_URL}}"],
+          "path": ["facebook", "bart-large-mnli"]
+        },
+        "description": "Test how the service handles model loading. If you get a 503, the service will automatically retry with x-wait-for-model: true."
+      }
+    }
+  ]
+}

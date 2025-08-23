@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Plus, 
   Search, 
@@ -20,9 +20,15 @@ import {
   Clock3,
   Thermometer,
   Scale,
-  BookOpen
+  BookOpen,
+  Brain,
+  Lightbulb,
+  Zap,
+  TrendingUp,
+  Target
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import AIRecipeService from '../services/AIRecipeService';
 
 // Mock recipes data
 const mockRecipes = [
@@ -134,6 +140,21 @@ export default function RecipeManagement() {
   const [selectedCuisine, setSelectedCuisine] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [mealPlan, setMealPlan] = useState({});
+
+  // AI Features State
+  const [aiRecommendations, setAiRecommendations] = useState([]);
+  const [aiMealPlan, setAiMealPlan] = useState(null);
+  const [aiShoppingList, setAiShoppingList] = useState([]);
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
+  const [showAIPanel, setShowAIPanel] = useState(false);
+  const [familyPreferences, setFamilyPreferences] = useState({
+    vegetarian: false,
+    vegan: false,
+    glutenFree: false,
+    maxCookTime: 60,
+    maxDifficulty: 'medium',
+    preferredCuisines: []
+  });
 
   // Filter recipes based on search and filters
   const filteredRecipes = recipes.filter(recipe => {
@@ -272,6 +293,198 @@ export default function RecipeManagement() {
     toast.success('Recipe exported to CSV!');
   };
 
+  // Load AI insights and recommendations
+  const loadAIInsights = useCallback(async () => {
+    if (recipes.length === 0) return;
+
+    setIsLoadingAI(true);
+    try {
+      const [recommendations, mealPlan] = await Promise.all([
+        AIRecipeService.generateSmartRecipeRecommendations([], recipes), // Empty inventory for now
+        AIRecipeService.generateMealPlan([], recipes, familyPreferences, 7)
+      ]);
+
+      setAiRecommendations(recommendations);
+      setAiMealPlan(mealPlan);
+      setAiShoppingList(mealPlan.shoppingList || []);
+    } catch (error) {
+      console.error('Error loading AI insights:', error);
+      toast.error('Failed to load AI insights');
+    } finally {
+      setIsLoadingAI(false);
+    }
+  }, [recipes, familyPreferences]);
+
+  // Load AI insights on component mount and when recipes change
+  useEffect(() => {
+    loadAIInsights();
+  }, [loadAIInsights]);
+
+  // Generate new AI meal plan
+  const generateNewMealPlan = async () => {
+    setIsLoadingAI(true);
+    try {
+      const newMealPlan = await AIRecipeService.generateMealPlan([], recipes, familyPreferences, 7);
+      setAiMealPlan(newMealPlan);
+      setAiShoppingList(newMealPlan.shoppingList || []);
+      toast.success('New AI meal plan generated!');
+    } catch (error) {
+      console.error('Error generating meal plan:', error);
+      toast.error('Failed to generate meal plan');
+    } finally {
+      setIsLoadingAI(false);
+    }
+  };
+
+  // AI Insights Panel Component
+  const AIInsightsPanel = () => (
+    <div className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border border-orange-200 dark:border-orange-700 rounded-lg p-4 mb-6">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-orange-800 dark:text-orange-200 flex items-center gap-2">
+          <Brain className="w-5 h-5" />
+          AI Recipe Insights & Smart Meal Planning
+        </h3>
+        <button
+          onClick={() => setShowAIPanel(!showAIPanel)}
+          className="text-orange-600 dark:text-orange-400 hover:text-orange-800 dark:hover:text-orange-200"
+        >
+          {showAIPanel ? 'Hide' : 'Show'} Details
+        </button>
+      </div>
+
+      {isLoadingAI ? (
+        <div className="text-center py-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto"></div>
+          <p className="text-orange-600 dark:text-orange-400 mt-2">Analyzing your recipes and preferences...</p>
+        </div>
+      ) : (
+        <>
+          {/* Quick AI Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+                {aiRecommendations.filter(r => r.priority === 'high').length}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">High Priority</div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+                {aiRecommendations.filter(r => r.type === 'waste_reduction').length}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Waste Reduction</div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                {aiMealPlan?.days?.length || 0}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Planned Days</div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                {aiShoppingList.length}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Shopping Items</div>
+            </div>
+          </div>
+
+          {/* Generate New Meal Plan Button */}
+          <div className="text-center mb-4">
+            <button
+              onClick={generateNewMealPlan}
+              disabled={isLoadingAI}
+              className="bg-orange-600 hover:bg-orange-700 disabled:bg-orange-400 text-white px-6 py-2 rounded-lg flex items-center gap-2 mx-auto transition-colors"
+            >
+              <ChefHat className="w-4 h-4" />
+              {isLoadingAI ? 'Generating...' : 'Generate New AI Meal Plan'}
+            </button>
+          </div>
+
+          {showAIPanel && (
+            <div className="space-y-4">
+              {/* AI Recipe Recommendations */}
+              {aiRecommendations.length > 0 && (
+                <div>
+                  <h4 className="font-medium text-red-700 dark:text-red-300 mb-2 flex items-center gap-2">
+                    <Lightbulb className="w-4 h-4" />
+                    Smart Recipe Recommendations
+                  </h4>
+                  <div className="space-y-2">
+                    {aiRecommendations.slice(0, 3).map((recommendation, index) => (
+                      <div key={index} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-red-400">
+                        <div className="font-medium text-gray-800 dark:text-gray-200">{recommendation.recipeName}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">{recommendation.reasoning}</div>
+                        {recommendation.type === 'waste_reduction' && (
+                          <div className="text-xs text-red-600 dark:text-red-400 mt-1">
+                            Save ${recommendation.estimatedSavings?.toFixed(2) || '0'} by using expiring ingredients
+                          </div>
+                        )}
+                        {recommendation.type === 'budget_friendly' && (
+                          <div className="text-xs text-green-600 dark:text-green-400 mt-1">
+                            Estimated cost: ${recommendation.estimatedCost?.toFixed(2) || '0'}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* AI Meal Plan Preview */}
+              {aiMealPlan && (
+                <div>
+                  <h4 className="font-medium text-orange-700 dark:text-orange-300 mb-2 flex items-center gap-2">
+                    <Calendar className="w-4 h-4" />
+                    7-Day AI Meal Plan Preview
+                  </h4>
+                  <div className="space-y-2">
+                    {aiMealPlan.days.slice(0, 3).map((day, index) => (
+                      <div key={index} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-orange-400">
+                        <div className="font-medium text-gray-800 dark:text-gray-200">
+                          {new Date(day.date).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          {day.meals.length} meals planned • {day.totalCalories} calories • ${day.totalCost?.toFixed(2) || '0'}
+                        </div>
+                        <div className="text-xs text-orange-600 dark:text-orange-400 mt-1">
+                          {day.meals.map(meal => meal.recipe?.name).filter(Boolean).join(', ')}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* AI Shopping List */}
+              {aiShoppingList.length > 0 && (
+                <div>
+                  <h4 className="font-medium text-green-700 dark:text-green-300 mb-2 flex items-center gap-2">
+                    <ShoppingCart className="w-4 h-4" />
+                    Smart Shopping List
+                  </h4>
+                  <div className="space-y-2">
+                    {aiShoppingList.slice(0, 5).map((item, index) => (
+                      <div key={index} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-green-400">
+                        <div className="font-medium text-gray-800 dark:text-gray-200">{item.name}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          {item.quantity} {item.category} • ${item.estimatedCost?.toFixed(2) || '0'}
+                        </div>
+                        {item.usedInRecipes && (
+                          <div className="text-xs text-green-600 dark:text-green-400 mt-1">
+                            Used in: {item.usedInRecipes.slice(0, 2).join(', ')}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       {/* Header */}
@@ -280,19 +493,24 @@ export default function RecipeManagement() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Recipe Management</h1>
-              <p className="text-gray-600 dark:text-gray-300">Store recipes, plan meals, and integrate with shopping lists</p>
+              <p className="text-gray-600 dark:text-gray-300">Create, organize, and plan meals with AI-powered recommendations</p>
             </div>
             <div className="flex space-x-3">
               <button
                 onClick={() => setShowCreateRecipe(true)}
-                className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center space-x-2"
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
               >
-                <Plus size={20} />
-                <span>Add Recipe</span>
+                <Plus className="w-4 h-4" />
+                <span>Create Recipe</span>
               </button>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* AI Insights Panel */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <AIInsightsPanel />
       </div>
 
       {/* Navigation Tabs */}

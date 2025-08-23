@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { DevToolsProvider } from './contexts/DevToolsContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import KeyboardNavigation from './components/KeyboardNavigation';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -22,6 +23,7 @@ import DataAlerts from './components/DataAlerts';
 import About from './components/About';
 import AIAssistant from './components/AIAssistant';
 import AISmartSuggestions from './components/AISmartSuggestions';
+import DevTools from './components/DevTools';
 import Login from './components/auth/Login';
 import SignUp from './components/auth/SignUp';
 import ForgotPassword from './components/auth/ForgotPassword';
@@ -34,9 +36,10 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider>
         <AuthProvider>
-          <KeyboardNavigation>
-            <Router>
-          <div className="App">
+          <DevToolsProvider>
+            <KeyboardNavigation>
+              <Router>
+                <div className="App">
             <Routes>
             {/* Public Routes */}
             <Route path="/" element={<LandingPage />} />
@@ -150,14 +153,6 @@ function App() {
                 </>
               </ProtectedRoute>
             } />
-            <Route path="/ai-assistant" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <AIAssistant />
-                </>
-              </ProtectedRoute>
-            } />
             <Route path="/ai-suggestions" element={
               <ProtectedRoute>
                 <>
@@ -201,9 +196,16 @@ function App() {
               },
             }}
           />
-        </div>
+
+                  {/* Global AI Assistant - Available on all pages */}
+                  <AIAssistant />
+
+                  {/* Dev Tools - Only visible when enabled */}
+                  <DevTools />
+                </div>
             </Router>
           </KeyboardNavigation>
+          </DevToolsProvider>
         </AuthProvider>
       </ThemeProvider>
       </ErrorBoundary>

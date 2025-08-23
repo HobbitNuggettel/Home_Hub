@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDevTools } from '../contexts/DevToolsContext';
 import { 
   Package, 
   DollarSign, 
@@ -14,6 +15,7 @@ import {
 
 export default function Home() {
   const navigate = useNavigate();
+  const { isDevMode, showDevTools } = useDevTools();
   
   const features = [
     {
@@ -89,6 +91,99 @@ export default function Home() {
               Your comprehensive home management platform. Track inventory, manage finances, 
               collaborate with family, and automate your household tasks.
             </p>
+            <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl border border-blue-200 dark:border-blue-800 max-w-2xl mx-auto">
+              <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">🚀 Welcome Back!</p>
+              <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+                Your AI Assistant is ready to help! Click the brain icon (bottom-right) for instant assistance with recipes, inventory, and more.
+              </p>
+              {isDevMode && (
+                <div className="mt-3 p-2 bg-purple-100 dark:bg-purple-900/30 rounded border border-purple-300 dark:border-purple-700">
+                  <p className="text-xs text-purple-800 dark:text-purple-300">
+                    🔧 Dev Mode Active | Dev Tools: {showDevTools ? 'Visible' : 'Hidden'}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mock Data Dashboard */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">📊 Live Dashboard</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
+            Your home management overview with real-time data
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {/* Inventory Stats */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+            <div className="flex items-center">
+              <Package className="w-8 h-8 text-blue-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Items</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">47</p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">8 categories</p>
+              </div>
+            </div>
+            <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+              <p>• 3 items running low</p>
+              <p>• 2 items expiring soon</p>
+              <p>• Total value: $234.67</p>
+            </div>
+          </div>
+
+          {/* Budget Stats */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-green-500">
+            <div className="flex items-center">
+              <DollarSign className="w-8 h-8 text-green-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Monthly Budget</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">$1,200</p>
+                <p className="text-xs text-green-500">29% under budget</p>
+              </div>
+            </div>
+            <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+              <p>• Spent: $847.50</p>
+              <p>• Remaining: $352.50</p>
+              <p>• Top: Groceries (38%)</p>
+            </div>
+          </div>
+
+          {/* Recipe Stats */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-red-500">
+            <div className="flex items-center">
+              <Utensils className="w-8 h-8 text-red-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Saved Recipes</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">15</p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">5 favorites</p>
+              </div>
+            </div>
+            <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+              <p>• Chicken Tikka Masala ⭐⭐⭐⭐⭐</p>
+              <p>• Spaghetti Carbonara ⭐⭐⭐⭐⭐</p>
+              <p>• 3 new this week</p>
+            </div>
+          </div>
+
+          {/* Shopping Stats */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-orange-500">
+            <div className="flex items-center">
+              <ShoppingCart className="w-8 h-8 text-orange-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Shopping List</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">17</p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">items</p>
+              </div>
+            </div>
+            <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+              <p>• Estimated: $78.37</p>
+              <p>• 5 high priority</p>
+              <p>• 3 stores recommended</p>
+            </div>
           </div>
         </div>
       </div>
