@@ -5,66 +5,70 @@
 import '@testing-library/jest-dom';
 
 // Mock window.matchMedia for theme testing - must be set up before any imports
+const mockMatchMedia = jest.fn().mockImplementation(query => ({
+  matches: query.includes('dark') ? false : true, // Default to light mode
+  media: query,
+  onchange: null,
+  addListener: jest.fn(), // deprecated
+  removeListener: jest.fn(), // deprecated
+  addEventListener: jest.fn(),
+  removeEventListener: jest.fn(),
+  dispatchEvent: jest.fn(),
+}));
+
+// Ensure matchMedia is available globally and properly mocked
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation(query => ({
-    matches: query.includes('dark') ? false : true, // Default to light mode
-    media: query,
-    onchange: null,
-    addListener: jest.fn(), // deprecated
-    removeListener: jest.fn(), // deprecated
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
+  value: mockMatchMedia,
 });
 
-// Mock localStorage for theme persistence testing
-const localStorageMock = {
-  getItem: jest.fn((key) => {
-    if (key === 'themeMode') return 'light'; // Default to light mode
-    return null;
-  }),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
-};
-global.localStorage = localStorageMock;
-
-// Mock IntersectionObserver for lazy loading components
+// Mock IntersectionObserver for components that use it
 global.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  unobserve() {}
+  constructor() { }
+  observe() {
+    return null;
+  }
+  disconnect() {
+    return null;
+  }
+  unobserve() {
+    return null;
+  }
 };
 
-// Polyfill for TextEncoder (needed for Firebase)
+// Mock ResizeObserver for components that use it
+global.ResizeObserver = class ResizeObserver {
+  constructor() {}
+  observe() {
+    return null;
+  }
+  disconnect() {
+    return null;
+  }
+  unobserve() {
+    return null;
+  }
+};
+
+// Mock TextEncoder and TextDecoder for components that use them
 global.TextEncoder = require('util').TextEncoder;
 global.TextDecoder = require('util').TextDecoder;
 
-// Mock ResizeObserver for responsive components
-global.ResizeObserver = class ResizeObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  unobserve() {}
-};
-
-// Suppress console warnings during tests
+// Suppress console.error for known test warnings
 const originalError = console.error;
-beforeAll(() => {
-  console.error = (...args) => {
-    if (
-      typeof args[0] === 'string' &&
-      args[0].includes('Warning: ReactDOM.render is no longer supported')
-    ) {
-      return;
-    }
-    originalError.call(console, ...args);
-  };
-});
-
-afterAll(() => {
-  console.error = originalError;
-});
+console.error = (...args) => {
+  // Suppress specific known warnings that don't affect test functionality
+  if (
+    args[0]?.includes?.('Warning: ReactDOM.render is no longer supported') ||
+    args[0]?.includes?.('Warning: componentWillReceiveProps has been renamed') ||
+    args[0]?.includes?.('Warning: componentWillMount has been renamed') ||
+    args[0]?.includes?.('Warning: componentWillUpdate has been renamed') ||
+    args[0]?.includes?.('Warning: findDOMNode is deprecated') ||
+    args[0]?.includes?.('Warning: Using UNSAFE_componentWillMount') ||
+    args[0]?.includes?.('Warning: Using UNSAFE_componentWillReceiveProps') ||
+    args[0]?.includes?.('Warning: Using UNSAFE_componentWillUpdate')
+  ) {
+    return;
+  }
+  originalError.call(console, ...args);
+};

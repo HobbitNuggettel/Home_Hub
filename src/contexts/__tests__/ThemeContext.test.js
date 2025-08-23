@@ -32,6 +32,18 @@ describe('ThemeContext', () => {
   beforeEach(() => {
     // Clear localStorage before each test
     localStorage.clear();
+
+    // Mock localStorage methods
+    Object.defineProperty(window, 'localStorage', {
+      value: {
+        getItem: jest.fn(),
+        setItem: jest.fn(),
+        removeItem: jest.fn(),
+        clear: jest.fn(),
+      },
+      writable: true,
+    });
+
     // Reset matchMedia mock
     window.matchMedia = jest.fn().mockImplementation(query => ({
       matches: false,
@@ -63,7 +75,8 @@ describe('ThemeContext', () => {
     });
 
     test('loads stored theme preference from localStorage', () => {
-      localStorage.setItem('themeMode', 'dark');
+      // Use the mocked localStorage
+      window.localStorage.getItem.mockReturnValue('dark');
       
       render(
         <ThemeProvider>
@@ -75,7 +88,8 @@ describe('ThemeContext', () => {
     });
 
     test('handles invalid stored theme gracefully', () => {
-      localStorage.setItem('themeMode', 'invalid-theme');
+      // Use the mocked localStorage
+      window.localStorage.getItem.mockReturnValue('invalid-theme');
       
       render(
         <ThemeProvider>
@@ -156,7 +170,8 @@ describe('ThemeContext', () => {
 
   describe('Dark Mode Detection', () => {
     test('isDarkMode is true when theme is dark', () => {
-      localStorage.setItem('themeMode', 'dark');
+      // Use the mocked localStorage
+      window.localStorage.getItem.mockReturnValue('dark');
       
       render(
         <ThemeProvider>
@@ -168,7 +183,8 @@ describe('ThemeContext', () => {
     });
 
     test('isDarkMode is false when theme is light', () => {
-      localStorage.setItem('themeMode', 'light');
+      // Use the mocked localStorage
+      window.localStorage.getItem.mockReturnValue('light');
       
       render(
         <ThemeProvider>
@@ -409,7 +425,8 @@ describe('ThemeContext', () => {
 
   describe('Integration with DOM', () => {
     test('adds dark class to document when in dark mode', () => {
-      localStorage.setItem('themeMode', 'dark');
+      // Use the mocked localStorage
+      window.localStorage.getItem.mockReturnValue('dark');
       
       render(
         <ThemeProvider>
@@ -421,7 +438,8 @@ describe('ThemeContext', () => {
     });
 
     test('removes dark class from document when in light mode', () => {
-      localStorage.setItem('themeMode', 'light');
+      // Use the mocked localStorage
+      window.localStorage.getItem.mockReturnValue('light');
       
       render(
         <ThemeProvider>
