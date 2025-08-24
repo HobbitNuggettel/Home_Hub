@@ -1,214 +1,155 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
-import { ThemeProvider } from './contexts/ThemeContext';
 import { DevToolsProvider } from './contexts/DevToolsContext';
-import ErrorBoundary from './components/ErrorBoundary';
-import KeyboardNavigation from './components/KeyboardNavigation';
-import ProtectedRoute from './components/auth/ProtectedRoute';
-import Navigation from './components/Navigation';
-import Home from './components/Home';
-import Dashboard from './components/Dashboard';
+import { ThemeProvider } from './contexts/ThemeContext';
+import LandingPage from './components/LandingPage';
 import Settings from './components/Settings';
-import NotificationCenter from './components/NotificationCenter';
-import AdvancedAnalytics from './components/AdvancedAnalytics';
-import InventoryManagement from './components/InventoryManagement/InventoryManagement';
-import SpendingTracker from './components/SpendingTracker/SpendingTracker';
-import Collaboration from './components/Collaboration';
-import ShoppingLists from './components/ShoppingLists';
-import RecipeManagement from './components/RecipeManagement';
-import IntegrationsAutomation from './components/IntegrationsAutomation/IntegrationsAutomation';
-import DataAlerts from './components/DataAlerts';
-import About from './components/About';
-import AIAssistant from './components/AIAssistant';
-import AISmartSuggestions from './components/AISmartSuggestions';
-import DevTools from './components/DevTools';
+import Home from './components/Home';
+import Navigation from './components/Navigation';
 import Login from './components/auth/Login';
 import SignUp from './components/auth/SignUp';
-import ForgotPassword from './components/auth/ForgotPassword';
-import UserProfile from './components/auth/UserProfile';
-import LandingPage from './components/LandingPage';
-import ThemeTest from './components/ThemeTest';
+import Inventory from './components/modules/Inventory';
+import Spending from './components/modules/Spending';
+import Collaboration from './components/modules/Collaboration';
+import ShoppingLists from './components/modules/ShoppingLists';
+import Recipes from './components/modules/Recipes';
+import Integrations from './components/modules/Integrations';
+import DataAlerts from './components/modules/DataAlerts';
+import About from './components/modules/About';
+import ImageManagement from './components/modules/ImageManagement';
+import AISuggestions from './components/modules/AISuggestions';
+import Maintenance from './components/modules/Maintenance';
+import Profile from './components/Profile';
 
 function App() {
   return (
-    <ErrorBoundary>
-      <ThemeProvider>
+    <ThemeProvider>
+      <DevToolsProvider>
         <AuthProvider>
-          <DevToolsProvider>
-            <KeyboardNavigation>
-              <Router>
-                <div className="App">
-            <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<LandingPage />} />
-                  <Route path="/theme-test" element={<ThemeTest />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            
-            {/* Protected Routes */}
-            <Route path="/home" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <Home />
-                </>
-              </ProtectedRoute>
-            } />
-            <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <Dashboard />
-                </>
-              </ProtectedRoute>
-            } />
-            <Route path="/settings" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <Settings />
-                </>
-              </ProtectedRoute>
-            } />
-            <Route path="/notifications" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <NotificationCenter />
-                </>
-              </ProtectedRoute>
-            } />
-            <Route path="/analytics" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <AdvancedAnalytics />
-                </>
-              </ProtectedRoute>
-            } />
-            <Route path="/inventory" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <InventoryManagement />
-                </>
-              </ProtectedRoute>
-            } />
-            <Route path="/spending" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <SpendingTracker />
-                </>
-              </ProtectedRoute>
-            } />
-            <Route path="/collaboration" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <Collaboration />
-                </>
-              </ProtectedRoute>
-            } />
-            <Route path="/shopping-lists" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <ShoppingLists />
-                </>
-              </ProtectedRoute>
-            } />
-            <Route path="/recipes" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <RecipeManagement />
-                </>
-              </ProtectedRoute>
-            } />
-            <Route path="/integrations" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <IntegrationsAutomation />
-                </>
-              </ProtectedRoute>
-            } />
-            <Route path="/data-alerts" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <DataAlerts />
-                </>
-              </ProtectedRoute>
-            } />
-            <Route path="/about" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <About />
-                </>
-              </ProtectedRoute>
-            } />
-            <Route path="/ai-suggestions" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <AISmartSuggestions />
-                </>
-              </ProtectedRoute>
-            } />
-            <Route path="/profile" element={
-              <ProtectedRoute>
-                <>
-                  <Navigation />
-                  <UserProfile />
-                </>
-              </ProtectedRoute>
-            } />
-          </Routes>
-          
-          {/* Toast Notifications */}
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#363636',
-                color: '#fff',
-              },
-              success: {
-                duration: 3000,
-                iconTheme: {
-                  primary: '#10B981',
-                  secondary: '#fff',
-                },
-              },
-              error: {
-                duration: 4000,
-                iconTheme: {
-                  primary: '#EF4444',
-                  secondary: '#fff',
-                },
-              },
-            }}
-          />
+          <Router>
+            <div className="App">
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<SignUp />} />
 
-                  {/* Global AI Assistant - Available on all pages */}
-                  <AIAssistant />
+                {/* Protected Routes */}
+                <Route path="/home" element={
+                  <>
+                    <Navigation />
+                    <Home />
+                  </>
+                } />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/profile" element={
+                  <>
+                    <Navigation />
+                    <Profile />
+                  </>
+                } />
 
-                  {/* Dev Tools - Only visible when enabled */}
-                  <DevTools />
-                </div>
-            </Router>
-          </KeyboardNavigation>
-          </DevToolsProvider>
+                {/* Module Routes */}
+                <Route path="/inventory" element={
+                  <>
+                    <Navigation />
+                    <Inventory />
+                  </>
+                } />
+                <Route path="/spending" element={
+                  <>
+                    <Navigation />
+                    <Spending />
+                  </>
+                } />
+                <Route path="/collaboration" element={
+                  <>
+                    <Navigation />
+                    <Collaboration />
+                  </>
+                } />
+                <Route path="/shopping-lists" element={
+                  <>
+                    <Navigation />
+                    <ShoppingLists />
+                  </>
+                } />
+                <Route path="/recipes" element={
+                  <>
+                    <Navigation />
+                    <Recipes />
+                  </>
+                } />
+                <Route path="/integrations" element={
+                  <>
+                    <Navigation />
+                    <Integrations />
+                  </>
+                } />
+                <Route path="/data-alerts" element={
+                  <>
+                    <Navigation />
+                    <DataAlerts />
+                  </>
+                } />
+                <Route path="/about" element={
+                  <>
+                    <Navigation />
+                    <About />
+                  </>
+                } />
+                <Route path="/image-management" element={
+                  <>
+                    <Navigation />
+                    <ImageManagement />
+                  </>
+                } />
+                <Route path="/ai-suggestions" element={
+                  <>
+                    <Navigation />
+                    <AISuggestions />
+                  </>
+                } />
+                <Route path="/maintenance" element={
+                  <>
+                    <Navigation />
+                    <Maintenance />
+                  </>
+                } />
+                <Route path="*" element={
+                  <>
+                    <Navigation />
+                    <div className="p-8 text-center">
+                      <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">404 - Page Not Found</h1>
+                      <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+                        Oops! The page you're looking for doesn't exist.
+                      </p>
+                      <Link to="/home" className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+                        Go to Home
+                      </Link>
+                    </div>
+                  </>
+                } />
+              </Routes>
+
+              {/* Toast Notifications */}
+              <Toaster
+                position="top-right"
+                toastOptions={{
+                  duration: 4000,
+                  style: {
+                    background: '#363636',
+                    color: '#fff',
+                  },
+                }}
+              />
+            </div>
+          </Router>
         </AuthProvider>
-      </ThemeProvider>
-      </ErrorBoundary>
+      </DevToolsProvider>
+    </ThemeProvider>
   );
 }
 

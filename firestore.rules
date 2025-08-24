@@ -1,0 +1,137 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions for security rules
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isValidUser() {
+      return isAuthenticated() && 
+             request.auth.uid != null && 
+             request.auth.uid.size() > 0;
+    }
+    
+    function isHouseholdMember(householdId) {
+      return isAuthenticated() && 
+             request.auth.uid in resource.data.members;
+    }
+    
+    function isValidWrite() {
+      return request.writeFields.hasOnly(['profile', 'inventory', 'recipes', 'expenses', 'shoppingLists', 'settings', 'usage']) ||
+             request.writeFields.hasOnly(['profile.updatedAt']) ||
+             request.writeFields.hasAny(['inventory', 'recipes', 'expenses']);
+    }
+    
+    // User data - only users can access their own data
+    match /users/{userId} {
+      allow read, write: if isOwner(userId) && isValidWrite();
+      allow create: if isOwner(userId) && 
+                       request.resource.data.keys().hasAll(['profile', 'inventory', 'recipes', 'expenses', 'shoppingLists', 'households', 'settings', 'usage']);
+      
+      // Nested collections for user data
+      match /inventory/{itemId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      match /recipes/{recipeId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      match /expenses/{expenseId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      match /shoppingLists/{listId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+    
+    // Household data - shared between members
+    match /households/{householdId} {
+      allow read: if isAuthenticated() && 
+                     request.auth.uid in resource.data.members;
+      
+      allow write: if isAuthenticated() && 
+                      request.auth.uid in resource.data.members &&
+                      (request.auth.uid == resource.data.owner || 
+                       request.auth.uid in resource.data.admins);
+      
+      allow create: if isAuthenticated() && 
+                       request.resource.data.owner == request.auth.uid &&
+                       request.resource.data.members[0] == request.auth.uid;
+      
+      allow delete: if isAuthenticated() && 
+                       request.auth.uid == resource.data.owner;
+      
+      // Household inventory - shared among members
+      match /inventory/{itemId} {
+        allow read, write: if isAuthenticated() && 
+                              request.auth.uid in get(/databases/$(database)/documents/households/$(householdId)).data.members;
+      }
+      
+      // Household recipes - shared among members
+      match /recipes/{recipeId} {
+        allow read, write: if isAuthenticated() && 
+                              request.auth.uid in get(/databases/$(database)/documents/households/$(householdId)).data.members;
+      }
+      
+      // Household expenses - shared among members
+      match /expenses/{expenseId} {
+        allow read, write: if isAuthenticated() && 
+                              request.auth.uid in get(/databases/$(database)/documents/households/$(householdId)).data.members;
+      }
+      
+      // Household shopping lists - shared among members
+      match /shoppingLists/{listId} {
+        allow read, write: if isAuthenticated() && 
+                              request.auth.uid in get(/databases/$(database)/documents/households/$(householdId)).data.members;
+      }
+    }
+    
+    // AI Chat conversations - user-specific
+    match /ai_conversations/{conversationId} {
+      allow read, write: if isAuthenticated() && 
+                            resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid;
+    }
+    
+    // AI Chat messages - user-specific
+    match /ai_messages/{messageId} {
+      allow read, write: if isAuthenticated() && 
+                            resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid;
+    }
+    
+    // User sessions - for analytics and tracking
+    match /user_sessions/{sessionId} {
+      allow read, write: if isAuthenticated() && 
+                            resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid;
+    }
+    
+    // Public data (read-only for authenticated users)
+    match /public/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if false; // No public writes
+    }
+    
+    // System data (admin only - implement admin check as needed)
+    match /system/{document=**} {
+      allow read, write: if false; // Implement admin authentication
+    }
+    
+    // Default deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

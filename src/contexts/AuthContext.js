@@ -1,16 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signOut, 
-  onAuthStateChanged,
-  sendPasswordResetEmail,
-  updateProfile,
-  signInWithPopup,
   GoogleAuthProvider
 } from 'firebase/auth';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { auth, db } from '../firebase/config';
+import { firebaseAuthService } from '../firebase';
 
 const AuthContext = createContext();
 
@@ -26,23 +18,20 @@ export function AuthProvider({ children }) {
   // Sign up with email and password
   async function signup(email, password, displayName) {
     try {
-      const result = await createUserWithEmailAndPassword(auth, email, password);
+      const result = await firebaseAuthService.signUpWithEmail(email, password, displayName);
       
-      // Update profile with display name
-      await updateProfile(result.user, { displayName });
-      
-      // Create user document in Firestore
-      await setDoc(doc(db, 'users', result.user.uid), {
-        uid: result.user.uid,
-        email: result.user.email,
-        displayName: displayName,
-        createdAt: new Date().toISOString(),
-        role: 'user',
-        preferences: {
-          theme: 'light',
-          notifications: true
-        }
-      });
+      // Create user document in Firestore - temporarily disabled
+      // await firestoreService.createDocument('users', result.user.uid, {
+      //   uid: result.user.uid,
+      //   email: result.user.email,
+      //   displayName: displayName,
+      //   createdAt: new Date().toISOString(),
+      //   role: 'user',
+      //   preferences: {
+      //     theme: 'light',
+      //     notifications: true
+      //   }
+      // });
       
       return result;
     } catch (error) {
@@ -52,69 +41,75 @@ export function AuthProvider({ children }) {
 
   // Sign in with email and password
   function login(email, password) {
-    return signInWithEmailAndPassword(auth, email, password);
+    return firebaseAuthService.signInWithEmail(email, password);
   }
 
-  // Sign in with Google
+  // Sign in with Google - TEMPORARILY DISABLED
   async function signInWithGoogle() {
     try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
+      // const result = await firebaseAuthService.signInWithGoogle();
+
+      // // Check if user document exists, if not create one
+      // const userDoc = await firestoreService.getDocument('users', result.user.uid);
+      // if (!userDoc) {
+      //   await firestoreService.createDocument('users', result.user.uid, {
+      //     uid: result.user.uid,
+      //     email: result.user.email,
+      //     displayName: result.user.displayName,
+      //     photoURL: result.user.photoURL,
+      //     createdAt: new Date().toISOString(),
+      //     role: 'user',
+      //     preferences: {
+      //       theme: 'light',
+      //       notifications: true
+      //     }
+      //   });
+      // }
       
-      // Check if user document exists, if not create one
-      const userDoc = await getDoc(doc(db, 'users', result.user.uid));
-      if (!userDoc.exists()) {
-        await setDoc(doc(db, 'users', result.user.uid), {
-          uid: result.user.uid,
-          email: result.user.email,
-          displayName: result.user.displayName,
-          photoURL: result.user.photoURL,
-          createdAt: new Date().toISOString(),
-          role: 'user',
-          preferences: {
-            theme: 'light',
-            notifications: true
-          }
-        });
-      }
-      
-      return result;
+      // return result;
+      console.log('Google signin temporarily disabled');
+      throw new Error('Firebase services temporarily disabled');
     } catch (error) {
       throw error;
     }
   }
 
-  // Sign out
+  // Sign out - TEMPORARILY DISABLED
   function logout() {
-    return signOut(auth);
+    // return firebaseAuthService.signOut();
+    console.log('Logout temporarily disabled');
+    throw new Error('Firebase services temporarily disabled');
   }
 
-  // Reset password
+  // Reset password - TEMPORARILY DISABLED
   function resetPassword(email) {
-    return sendPasswordResetEmail(auth, email);
+    // return firebaseAuthService.sendPasswordResetEmail(email);
+    console.log('Password reset temporarily disabled');
+    throw new Error('Firebase services temporarily disabled');
   }
 
-  // Update user profile
+  // Update user profile - TEMPORARILY DISABLED
   async function updateUserProfile(updates) {
     try {
-      await updateProfile(auth.currentUser, updates);
+      // await firebaseAuthService.updateProfile(updates);
       
-      // Update Firestore document
-      if (auth.currentUser) {
-        await setDoc(doc(db, 'users', auth.currentUser.uid), updates, { merge: true });
-      }
+      // // Update Firestore document
+      // if (firebaseAuthService.getCurrentUser()) {
+      //   await firestoreService.updateDocument('users', firebaseAuthService.getCurrentUser().uid, updates);
+      // }
+      console.log('Profile update temporarily disabled');
+      throw new Error('Firebase services temporarily disabled');
     } catch (error) {
       throw error;
     }
   }
 
-  // Get user profile from Firestore
+  // Get user profile from Firestore - TEMPORARILY DISABLED
   async function fetchUserProfile(uid) {
     try {
-      const userDoc = await getDoc(doc(db, 'users', uid));
-      if (userDoc.exists()) {
-        return userDoc.data();
-      }
+      // const userDoc = await firestoreService.getDocument('users', uid);
+      // return userDoc;
+      console.log('Profile fetch temporarily disabled');
       return null;
     } catch (error) {
       console.error('Error fetching user profile:', error);
@@ -123,13 +118,14 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsubscribe = firebaseAuthService.onAuthStateChange(async (user) => {
       setCurrentUser(user);
       
       if (user) {
-        // Fetch user profile from Firestore
-        const profile = await fetchUserProfile(user.uid);
-        setUserProfile(profile);
+        // Fetch user profile from Firestore - temporarily disabled
+        // const profile = await fetchUserProfile(user.uid);
+        // setUserProfile(profile);
+        setUserProfile({ displayName: user.displayName, email: user.email });
       } else {
         setUserProfile(null);
       }

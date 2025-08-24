@@ -77,12 +77,6 @@ export default function Navigation() {
       description: 'Analytics, monitoring, and alerts'
     },
     {
-      name: 'Advanced Analytics',
-      href: '/analytics',
-      icon: BarChart3,
-      description: 'Comprehensive data insights and reporting'
-    },
-    {
       name: 'About',
       href: '/about',
       icon: Info,
