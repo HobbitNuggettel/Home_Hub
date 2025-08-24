@@ -14,7 +14,10 @@ import {
   TrendingUp,
   AlertCircle,
   CheckCircle,
-  Clock
+  Clock,
+  Upload,
+  Brain,
+  Wrench
 } from 'lucide-react';
 
 export default function Home() {
@@ -93,13 +96,40 @@ export default function Home() {
       stats: { alerts: 3, insights: 12, reports: 4 }
     },
     {
+      icon: Upload,
+      title: 'Image Management',
+      description: 'Smart image compression, storage, and optimization',
+      href: '/image-management',
+      color: 'bg-pink-50 text-pink-600 hover:bg-pink-100 dark:bg-pink-900/20 dark:text-pink-400',
+      gradient: 'from-pink-500 to-pink-600',
+      stats: { compression: '80%', storage: 'Cloudinary', thumbnails: 'Auto' }
+    },
+    {
+      icon: Brain,
+      title: 'AI Suggestions',
+      description: 'Intelligent recommendations and data-driven insights',
+      href: '/ai-suggestions',
+      color: 'bg-purple-50 text-purple-600 hover:bg-purple-100 dark:bg-purple-900/20 dark:text-purple-400',
+      gradient: 'from-purple-500 to-purple-600',
+      stats: { insights: 12, suggestions: 8, confidence: '92%' }
+    },
+    {
+      icon: Wrench,
+      title: 'Home Maintenance',
+      description: 'Track maintenance tasks, schedules, and service records',
+      href: '/maintenance',
+      color: 'bg-orange-50 text-orange-600 hover:bg-orange-100 dark:bg-orange-900/20 dark:text-orange-400',
+      gradient: 'from-orange-500 to-orange-600',
+      stats: { tasks: 5, overdue: 1, completed: 2 }
+    },
+    {
       icon: Info,
       title: 'About',
       description: 'Learn about features, technology stack, and roadmap',
       href: '/about',
       color: 'bg-gray-50 text-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300',
       gradient: 'from-gray-500 to-gray-600',
-      stats: { version: '2.0.0', features: 8, phases: 3 }
+      stats: { version: '2.0.0', features: 11, phases: 3 }
     }
   ];
 

@@ -372,17 +372,14 @@ export default function AIAssistant({
   // Debug functions for floating debug panel
   const toggleModal = () => {
     setIsOpen(!isOpen);
-    console.log(`[${instanceId.current}] Modal toggled: ${!isOpen}`);
   };
 
   const forceClose = () => {
     setIsOpen(false);
-    console.log(`[${instanceId.current}] Modal forced closed`);
   };
 
   const testStateUpdate = () => {
     setTestCount(prev => prev + 1);
-    console.log(`[${instanceId.current}] Test count updated: ${testCount + 1}`);
   };
 
   if (!isOpen) {
@@ -595,7 +592,6 @@ export default function AIAssistant({
               </button>
               <button
                 onClick={() => {
-                  console.log(`[${instanceId.current}] Force refresh triggered`);
                   setTestCount(0);
                   setIsOpen(false);
                   setChatHistory([]);
@@ -609,10 +605,8 @@ export default function AIAssistant({
               <button
                 onClick={async () => {
                   try {
-                    console.log('🧪 Testing Hybrid AI Services...');
                     const { default: HybridAIService } = await import('../services/HybridAIService');
                     const result = await HybridAIService.testAllServices();
-                    console.log('✅ API Test Result:', result);
                     toast.success(`API Test Complete!\nHuggingFace: ${result.huggingface?.success ? '✅' : '❌'}\nGemini: ${result.gemini?.success ? '✅' : '❌'}`);
                   } catch (error) {
                     console.error('❌ API Test Error:', error);

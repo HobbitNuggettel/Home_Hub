@@ -12,17 +12,20 @@ import {
   EyeOff,
   Check,
   AlertTriangle,
-  Settings as SettingsIcon
+  Settings as SettingsIcon,
+  Menu
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useDevTools } from '../contexts/DevToolsContext';
 import toast from 'react-hot-toast';
 import ThemeSettings from './ThemeSettings';
+import QuickImageTest from './QuickImageTest';
 
 export default function Settings() {
   const { currentUser, userProfile, updateUserProfile } = useAuth();
   const { isDevMode, toggleDevMode, showDevTools, toggleDevTools } = useDevTools();
   const [activeTab, setActiveTab] = useState('profile');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Debug logging
   console.log('🔧 Settings DevTools state:', { isDevMode, showDevTools });
@@ -224,6 +227,7 @@ export default function Settings() {
     { id: 'notifications', label: 'Notifications', icon: Bell },
     { id: 'privacy', label: 'Privacy & Security', icon: Shield },
     { id: 'data', label: 'Data Management', icon: Download },
+    { id: 'images', label: 'Image Management', icon: Upload },
     { id: 'devtools', label: 'Developer Tools', icon: SettingsIcon }
   ];
 
@@ -245,9 +249,20 @@ export default function Settings() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Mobile Menu Button */}
+        <div className="lg:hidden mb-6">
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Menu className="w-5 h-5" />
+            {isMobileMenuOpen ? 'Hide Menu' : 'Show Menu'}
+          </button>
+        </div>
+
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar Navigation */}
-          <div className="lg:w-64">
+          <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} lg:block lg:w-64`}>
             <nav className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
               <div className="space-y-2">
                 {tabs.map((tab) => {
@@ -705,6 +720,72 @@ export default function Settings() {
                           <Trash2 className="w-4 h-4" />
                           <span>Delete Account</span>
                         </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Image Management */}
+            {activeTab === 'images' && (
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Image Management & Compression</h2>
+
+                <div className="space-y-6">
+                  {/* Service Status */}
+                  <div className="p-6 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div className="flex items-start space-x-4">
+                      <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                        <Upload className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-white">Image Services Status</h3>
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                          Test your image compression and upload pipeline. All images are automatically compressed after capture for optimal storage and performance.
+                        </p>
+
+                        {/* Service Status Cards */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                          <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded border">
+                            <h4 className="font-medium text-green-800 dark:text-green-300">Compression Service</h4>
+                            <p className="text-sm text-green-600 dark:text-green-400">✅ Active</p>
+                          </div>
+                          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded border">
+                            <h4 className="font-medium text-blue-800 dark:text-blue-300">Cloudinary</h4>
+                            <p className="text-sm text-blue-600 dark:text-blue-400">✅ Configured</p>
+                          </div>
+                          <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded border">
+                            <h4 className="font-medium text-purple-800 dark:text-purple-300">Base64 Storage</h4>
+                            <p className="text-sm text-purple-600 dark:text-purple-400">✅ Available</p>
+                          </div>
+                        </div>
+
+                        {/* Features List */}
+                        <div className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                          <p>• <strong>Automatic compression</strong> after image capture</p>
+                          <p>• <strong>Smart quality optimization</strong> based on use case</p>
+                          <p>• <strong>Thumbnail generation</strong> for fast loading</p>
+                          <p>• <strong>Intelligent routing</strong> to optimal storage service</p>
+                          <p>• <strong>Privacy controls</strong> for sensitive images</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Image Test Component */}
+                  <div className="p-6 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div className="flex items-start space-x-4">
+                      <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                        <Upload className="w-6 h-6 text-green-600 dark:text-green-400" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Test Image Compression & Upload</h3>
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                          Upload an image to test the automatic compression pipeline and see real-time results.
+                        </p>
+
+                        <QuickImageTest />
                       </div>
                     </div>
                   </div>

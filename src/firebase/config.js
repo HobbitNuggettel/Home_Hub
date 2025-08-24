@@ -34,10 +34,33 @@ const requiredEnvVars = [
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
 
 if (missingVars.length > 0) {
-  throw new Error(
-    `Missing required Firebase environment variables: ${missingVars.join(', ')}\n` +
-    'Please create a .env.local file with your Firebase credentials. See FIREBASE_SETUP.md for instructions.'
+  console.warn(
+    `⚠️ Missing Firebase environment variables: ${missingVars.join(', ')}\n` +
+    '📋 Using demo configuration for development. Some features may not work.\n' +
+    '🔧 To enable full functionality, create a .env.local file with your Firebase credentials.'
   );
+
+  // Use demo configuration to prevent app crash
+  const demoConfig = {
+    apiKey: "demo-api-key",
+    authDomain: "demo-project.firebaseapp.com",
+    projectId: "demo-project",
+    storageBucket: "demo-project.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:demo-app-id",
+    measurementId: "G-DEMO123"
+  };
+
+  // Override missing values with demo values
+  missingVars.forEach(varName => {
+    const key = varName.replace('REACT_APP_FIREBASE_', '').toLowerCase();
+    if (key === 'api_key') firebaseConfig.apiKey = demoConfig.apiKey;
+    if (key === 'auth_domain') firebaseConfig.authDomain = demoConfig.authDomain;
+    if (key === 'project_id') firebaseConfig.projectId = demoConfig.projectId;
+    if (key === 'storage_bucket') firebaseConfig.storageBucket = demoConfig.storageBucket;
+    if (key === 'messaging_sender_id') firebaseConfig.messagingSenderId = demoConfig.messagingSenderId;
+    if (key === 'app_id') firebaseConfig.appId = demoConfig.appId;
+  });
 }
 
 // Initialize Firebase
@@ -47,6 +70,15 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
-export const analytics = getAnalytics(app);
+
+// Initialize analytics with error handling
+let analytics;
+try {
+  analytics = getAnalytics(app);
+} catch (error) {
+  console.warn('⚠️ Analytics initialization failed (demo mode):', error.message);
+  analytics = null;
+}
+export { analytics };
 
 export default app; 
