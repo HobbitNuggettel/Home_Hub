@@ -18,7 +18,8 @@ import {
   Upload,
   Brain,
   Wrench,
-  Wifi
+  Wifi,
+  BarChart3
 } from 'lucide-react';
 
 export default function Home() {
@@ -137,9 +138,16 @@ export default function Home() {
       title: '🚀 Real-time Demo',
       description: 'Phase 2: Experience real-time collaboration features',
       href: '/real-time-demo',
-      color: 'bg-gradient-to-r from-blue-50 to-purple-50 text-blue-600 hover:from-blue-100 hover:to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 dark:text-blue-400',
-      gradient: 'from-blue-500 to-purple-600',
-      stats: { features: 'Live', collaboration: 'Real-time', phase: '2' }
+      color: 'bg-purple-500 hover:bg-purple-600',
+      textColor: 'text-purple-500'
+    },
+    {
+      icon: BarChart3,
+      title: '📊 Advanced Analytics',
+      description: 'Phase 2: Data visualization and insights dashboard',
+      href: '/advanced-analytics',
+      color: 'bg-indigo-500 hover:bg-indigo-600',
+      textColor: 'text-indigo-500'
     }
   ];
 

@@ -101,6 +101,12 @@ export default function Navigation() {
       href: '/user-access',
       icon: Shield,
       description: 'Manage user permissions and access control'
+    },
+    {
+      name: '📊 Advanced Analytics',
+      href: '/advanced-analytics',
+      icon: BarChart3,
+      description: 'Data visualization and analytics dashboard'
     }
   ];
 
