@@ -1,432 +1,332 @@
-import React, { useState, useEffect, createContext, useContext, useCallback } from 'react';
-import { 
-  Wifi, 
-  WifiOff, 
-  Users, 
-  MessageCircle, 
-  Bell, 
-  Activity,
-  Eye,
-  Edit,
-  Save,
-  X,
-  Check,
-  AlertCircle,
-  Clock,
-  User,
-  Zap,
-  DollarSign
-} from 'lucide-react';
-// Removed useAuth dependency for demo purposes
+import React, { useState, useEffect } from 'react';
+import { useRealTime, useRealTimeSubscription } from '../contexts/RealTimeContext';
+import { Users, Wifi, WifiOff, Clock, Activity, MessageSquare } from 'lucide-react';
 
-// Create WebSocket Context
-const WebSocketContext = createContext();
+/**
+ * Real-time Collaboration Component for Home Hub Phase 2
+ * Demonstrates real-time collaboration features including live updates,
+ * collaborative editing, and presence indicators
+ */
+const RealTimeCollaboration = () => {
+  const {
+    connectionStatus,
+    isRealTimeAvailable,
+    setData,
+    pushData,
+    updateData,
+    removeData,
+    getActiveListenerCount,
+    isInitialized
+  } = useRealTime();
 
-export const useWebSocket = () => {
-  const context = useContext(WebSocketContext);
-  if (!context) {
-    throw new Error('useWebSocket must be used within a WebSocketProvider');
-  }
-  return context;
-};
+  // Check if running in mock mode
+  const isMockMode = !isRealTimeAvailable && connectionStatus === 'connected';
 
-// Mock WebSocket implementation for demo purposes
-class MockWebSocket {
-  constructor(url) {
-    this.url = url;
-    this.readyState = WebSocket.CONNECTING;
-    this.onopen = null;
-    this.onmessage = null;
-    this.onclose = null;
-    this.onerror = null;
-    
-    // Simulate connection
-    setTimeout(() => {
-      this.readyState = WebSocket.OPEN;
-      if (this.onopen) this.onopen();
-    }, 1000);
-  }
-  
-  send(data) {
-    if (this.readyState === WebSocket.OPEN) {
-      // Simulate echo for demo
-      setTimeout(() => {
-        if (this.onmessage) {
-          this.onmessage({
-            data: JSON.stringify({
-              type: 'echo',
-              data: JSON.parse(data),
-              timestamp: new Date().toISOString()
-            })
-          });
-        }
-      }, 100);
-    }
-  }
-  
-  close() {
-    this.readyState = WebSocket.CLOSED;
-    if (this.onclose) this.onclose();
-  }
-}
-
-// WebSocket Provider
-export const WebSocketProvider = ({ children }) => {
-  const [isConnected, setIsConnected] = useState(false);
-  const [onlineUsers, setOnlineUsers] = useState([]);
-  const [activities, setActivities] = useState([]);
-  const [notifications, setNotifications] = useState([]);
-  const [collaborativeEdits, setCollaborativeEdits] = useState({});
-
-  // Initialize with mock data for demo
-  useEffect(() => {
-    // Set mock data for demo
-    setActivities([
-      {
-        id: '1',
-        type: 'user_joined',
-        action: 'joined the session',
-        user: { name: 'Demo User' },
-        timestamp: new Date(Date.now() - 300000).toISOString()
-      },
-      {
-        id: '2',
-        type: 'item_added',
-        action: 'added a new inventory item',
-        details: 'Added "Sample Item" to Food',
-        user: { name: 'Demo User' },
-        timestamp: new Date(Date.now() - 600000).toISOString()
-      }
-    ]);
-    setOnlineUsers([
-      { id: '1', name: 'Demo User', role: 'owner', lastSeen: new Date().toISOString() }
-    ]);
-    setNotifications([
-      {
-        id: '1',
-        type: 'info',
-        message: 'Welcome to Home Hub! Start by adding some inventory items.',
-        timestamp: new Date().toISOString(),
-        read: false
-      }
-    ]);
-    
-    // Simulate connection
-    setIsConnected(true);
-  }, []);
-
-  // Mock functions for demo purposes
-  const handleWebSocketMessage = useCallback((message) => {
-    // This would handle real WebSocket messages in production
-    console.log('Mock WebSocket message:', message);
-  }, []);
-
-  // Mock handler functions for demo purposes
-  const handleUserPresence = (message) => {
-    console.log('Mock user presence:', message);
-  };
-
-  const handleActivityUpdate = (message) => {
-    console.log('Mock activity update:', message);
-  };
-
-  const handleNotification = (message) => {
-    console.log('Mock notification:', message);
-  };
-
-  const handleCollaborativeEdit = (message) => {
-    console.log('Mock collaborative edit:', message);
-  };
-
-  const handleDataSync = (message) => {
-    console.log('Mock data sync:', message);
-  };
-
-  // Mock send functions for demo purposes
-  const sendMessage = useCallback((message) => {
-    console.log('Mock send message:', message);
-  }, []);
-
-  // Broadcast activity
-  const broadcastActivity = useCallback((activity) => {
-    console.log('Mock broadcast activity:', activity);
-  }, []);
-
-  // Send notification
-  const sendNotification = useCallback((notification) => {
-    console.log('Mock send notification:', notification);
-  }, []);
-
-  // Broadcast collaborative edit
-  const broadcastEdit = useCallback((itemId, field, value) => {
-    console.log('Mock broadcast edit:', { itemId, field, value });
-  }, []);
-
-  // Mark notification as read
-  const markNotificationRead = useCallback((notificationId) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === notificationId ? { ...n, read: true } : n)
+  // Show loading state while initializing
+  if (!isRealTimeAvailable && connectionStatus === 'disconnected' && !isInitialized) {
+    return (
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+        <div className="animate-spin w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+        <h3 className="text-lg font-semibold text-blue-800 mb-2">
+          Initializing Real-time Collaboration...
+        </h3>
+        <p className="text-blue-700">
+          Setting up your real-time collaboration environment
+        </p>
+      </div>
     );
-  }, []);
+  }
 
-  // Clear all notifications
-  const clearAllNotifications = useCallback(() => {
-    setNotifications([]);
-  }, []);
+  if (!isRealTimeAvailable && connectionStatus !== 'connected') {
+    return (
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
+        <WifiOff className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-yellow-800 mb-2">
+          Real-time Collaboration Unavailable
+        </h3>
+        <p className="text-yellow-700">
+          Connection status: {connectionStatus}
+        </p>
+        <p className="text-sm text-yellow-600 mt-2">
+          Please check your internet connection and Firebase configuration.
+        </p>
+        <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+          <p className="text-sm text-blue-700">
+            💡 <strong>Development Tip:</strong> To enable real Firebase real-time features,
+            create a <code className="bg-blue-100 px-2 py-1 rounded">.env.local</code> file
+            with your Firebase credentials.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
-  const value = {
-    isConnected,
-    onlineUsers,
-    activities,
-    notifications,
-    collaborativeEdits,
-    sendMessage,
-    broadcastActivity,
-    sendNotification,
-    broadcastEdit,
-    markNotificationRead,
-    clearAllNotifications
-  };
+  const [collaborativeText, setCollaborativeText] = useState('');
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [activeUsers, setActiveUsers] = useState([]);
+  const [lastActivity, setLastActivity] = useState(null);
 
-  return (
-    <WebSocketContext.Provider value={value}>
-      {children}
-    </WebSocketContext.Provider>
-  );
-};
+  // Subscribe to collaborative text updates
+  const { data: textData } = useRealTimeSubscription('collaboration/text', (data) => {
+    if (data && data.content !== collaborativeText) {
+      setCollaborativeText(data.content || '');
+      setLastActivity(new Date());
+    }
+  });
 
-// Real-time Activity Feed
-export const ActivityFeed = () => {
-  const { activities, onlineUsers, isConnected } = useWebSocket();
-  const [showAll, setShowAll] = useState(false);
+  // Subscribe to messages
+  const { data: messagesData } = useRealTimeSubscription('collaboration/messages', (data) => {
+    if (data) {
+      setMessages(Object.values(data).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp));
+      setLastActivity(new Date());
+    }
+  });
 
-  const displayedActivities = showAll ? activities : activities.slice(0, 10);
+  // Subscribe to active users
+  const { data: usersData } = useRealTimeSubscription('collaboration/users', (data) => {
+    if (data) {
+      setActiveUsers(Object.values(data).filter(Boolean));
+    }
+  });
 
-  const getActivityIcon = (type) => {
-    switch (type) {
-      case 'item_added': return <Save className="text-green-500" size={16} />;
-      case 'item_updated': return <Edit className="text-blue-500" size={16} />;
-      case 'expense_added': return <DollarSign className="text-purple-500" size={16} />;
-      case 'user_joined': return <User className="text-blue-500" size={16} />;
-      default: return <Activity className="text-gray-500" size={16} />;
+  // Update collaborative text in real-time
+  const handleTextChange = async (e) => {
+    const newText = e.target.value;
+    setCollaborativeText(newText);
+
+    try {
+      await setData('collaboration/text', { content: newText });
+    } catch (error) {
+      console.error('Failed to update collaborative text:', error);
     }
   };
 
+  // Send a new message
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (!newMessage.trim()) return;
+
+    try {
+      await pushData('collaboration/messages', {
+        content: newMessage,
+        timestamp: Date.now(),
+        user: 'User-' + Math.floor(Math.random() * 1000) // Demo user ID
+      });
+      setNewMessage('');
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    }
+  };
+
+  // Update user presence
+  useEffect(() => {
+    const updatePresence = async () => {
+      try {
+        const userId = 'User-' + Math.floor(Math.random() * 1000);
+        await setData(`collaboration/users/${userId}`, {
+          id: userId,
+          lastSeen: Date.now(),
+          isActive: true
+        });
+
+        // Cleanup on unmount
+        return () => {
+          removeData(`collaboration/users/${userId}`);
+        };
+      } catch (error) {
+        console.error('Failed to update presence:', error);
+      }
+    };
+
+    if (isRealTimeAvailable) {
+      updatePresence();
+    }
+  }, [isRealTimeAvailable, setData, removeData]);
+
+  // Auto-cleanup inactive users
+  useEffect(() => {
+    const cleanupInterval = setInterval(async () => {
+      const now = Date.now();
+      const inactiveThreshold = 5 * 60 * 1000; // 5 minutes
+
+      activeUsers.forEach(async (user) => {
+        if (now - user.lastSeen > inactiveThreshold) {
+          try {
+            await removeData(`collaboration/users/${user.id}`);
+          } catch (error) {
+            console.error('Failed to cleanup inactive user:', error);
+          }
+        }
+      });
+    }, 60000); // Check every minute
+
+    return () => clearInterval(cleanupInterval);
+  }, [activeUsers, removeData]);
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 border border-gray-200 dark:border-gray-700">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white">Live Activity</h3>
-        <div className="flex items-center space-x-2">
-          {isConnected ? (
-            <div className="flex items-center space-x-2 text-green-600">
-              <Wifi size={16} />
-              <span className="text-sm">Connected</span>
+    <div className="space-y-6">
+      {/* Header with Status */}
+      <div className="bg-white rounded-lg shadow-sm border p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <Users className="w-6 h-6 text-blue-600" />
+            <h2 className="text-xl font-semibold text-gray-900">
+              Real-time Collaboration
+            </h2>
+            {isMockMode && (
+              <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
+                🎭 Mock Mode
+              </span>
+            )}
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <Wifi className={`w-4 h-4 ${connectionStatus === 'connected' ? 'text-green-500' : 'text-red-500'}`} />
+              <span className={`text-sm font-medium ${connectionStatus === 'connected' ? 'text-green-700' : 'text-red-700'
+                }`}>
+                {connectionStatus === 'connected' ? 'Connected' : 'Disconnected'}
+              </span>
             </div>
-          ) : (
-            <div className="flex items-center space-x-2 text-red-600">
-              <WifiOff size={16} />
-              <span className="text-sm">Disconnected</span>
+            <div className="flex items-center space-x-2">
+              <Activity className="w-4 h-4 text-blue-500" />
+              <span className="text-sm text-gray-600">
+                {getActiveListenerCount()} listeners
+              </span>
             </div>
+          </div>
+        </div>
+
+        {/* Mock Mode Notice */}
+        {isMockMode && (
+          <div className="mt-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+            <div className="flex items-center space-x-2">
+              <span className="text-purple-600">🎭</span>
+              <p className="text-sm text-purple-700">
+                <strong>Mock Mode Active:</strong> You're experiencing simulated real-time collaboration.
+                All features work locally for development and testing purposes.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Collaborative Text Editor */}
+      <div className="bg-white rounded-lg shadow-sm border p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+          <MessageSquare className="w-5 h-5 text-blue-600 mr-2" />
+          Collaborative Text Editor
+        </h3>
+        <textarea
+          value={collaborativeText}
+          onChange={handleTextChange}
+          placeholder="Start typing... This text will be synchronized in real-time with other users!"
+          className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none bg-white text-gray-900 placeholder-gray-500"
+        />
+        {lastActivity && (
+          <p className="text-xs text-gray-500 mt-2 flex items-center">
+            <Clock className="w-3 h-3 mr-1" />
+            Last updated: {lastActivity.toLocaleTimeString()}
+          </p>
+        )}
+      </div>
+
+      {/* Active Users */}
+      <div className="bg-white rounded-lg shadow-sm border p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+          <Users className="w-5 h-5 text-green-600 mr-2" />
+          Active Users ({activeUsers.length})
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {activeUsers.map((user) => (
+            <div key={user.id} className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg border border-green-200">
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium text-green-800">{user.id}</span>
+              <span className="text-xs text-green-600">
+                {new Date(user.lastSeen).toLocaleTimeString()}
+              </span>
+            </div>
+          ))}
+          {activeUsers.length === 0 && (
+            <p className="text-gray-500 text-sm col-span-full text-center py-4">
+              No active users at the moment
+            </p>
           )}
         </div>
       </div>
 
-      {/* Online Users */}
-      {onlineUsers.length > 0 && (
-        <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-          <div className="flex items-center space-x-2 mb-2">
-            <Users className="text-green-600" size={16} />
-            <span className="text-sm font-medium text-green-800 dark:text-green-200">
-              {onlineUsers.length} user{onlineUsers.length !== 1 ? 's' : ''} online
-            </span>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {onlineUsers.map(user => (
-              <div key={user.id} className="flex items-center space-x-2 bg-white dark:bg-gray-700 px-2 py-1 rounded-md">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-xs text-gray-700 dark:text-gray-200">{user.name}</span>
-                <span className={`text-xs px-1 rounded ${
-                  user.role === 'owner' ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200' :
-                    user.role === 'admin' ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200' :
-                      'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200'
-                }`}>
-                  {user.role}
+      {/* Real-time Chat */}
+      <div className="bg-white rounded-lg shadow-sm border p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+          <MessageSquare className="w-5 h-5 text-purple-600 mr-2" />
+          Real-time Chat
+        </h3>
+
+        {/* Messages */}
+        <div className="h-64 overflow-y-auto border border-gray-200 rounded-lg p-3 mb-4 bg-gray-50">
+          {messages.map((message, index) => (
+            <div key={index} className="mb-3 p-2 bg-white rounded border">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-sm font-medium text-blue-600">{message.user}</span>
+                <span className="text-xs text-gray-500">
+                  {new Date(message.timestamp).toLocaleTimeString()}
                 </span>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Activity List */}
-      <div className="space-y-3">
-        {displayedActivities.length === 0 ? (
-          <div className="text-center py-6 text-gray-500 dark:text-gray-400">
-            <Activity size={32} className="mx-auto mb-2 opacity-50" />
-            <p className="text-sm">No recent activity</p>
-          </div>
-        ) : (
-          displayedActivities.map(activity => (
-            <div key={activity.id} className="flex items-start space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md">
-              <div className="flex-shrink-0 mt-1">
-                {getActivityIcon(activity.type)}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-900 dark:text-white">
-                  <span className="font-medium">{activity.user?.name}</span> {activity.action}
-                </p>
-                {activity.details && (
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{activity.details}</p>
-                )}
-                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                  {new Date(activity.timestamp).toLocaleTimeString()}
-                </p>
-              </div>
+              <p className="text-sm text-gray-800">{message.content}</p>
             </div>
-          ))
-        )}
+          ))}
+          {messages.length === 0 && (
+            <p className="text-gray-500 text-sm text-center py-8">
+              No messages yet. Start the conversation!
+            </p>
+          )}
+        </div>
+
+        {/* Message Input */}
+        <form onSubmit={handleSendMessage} className="flex space-x-3">
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type your message..."
+            className="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 placeholder-gray-500"
+          />
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+          >
+            Send
+          </button>
+        </form>
       </div>
 
-      {activities.length > 10 && (
-        <button
-          onClick={() => setShowAll(!showAll)}
-          className="w-full mt-3 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
-        >
-          {showAll ? 'Show Less' : `Show All (${activities.length})`}
-        </button>
-      )}
-    </div>
-  );
-};
-
-// Real-time Notifications
-export const NotificationCenter = () => {
-  const { notifications, markNotificationRead, clearAllNotifications } = useWebSocket();
-  const [isOpen, setIsOpen] = useState(false);
-  
-  const unreadCount = notifications.filter(n => !n.read).length;
-
-  return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md"
-      >
-        <Bell size={20} />
-        {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-            {unreadCount > 9 ? '9+' : unreadCount}
-          </span>
-        )}
-      </button>
-
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border z-50">
-          <div className="p-4 border-b">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-medium text-gray-900">Notifications</h3>
-              <div className="flex items-center space-x-2">
-                {notifications.length > 0 && (
-                  <button
-                    onClick={clearAllNotifications}
-                    className="text-xs text-gray-500 hover:text-gray-700"
-                  >
-                    Clear All
-                  </button>
-                )}
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X size={16} />
-                </button>
-              </div>
-            </div>
+      {/* Real-time Stats */}
+      <div className="bg-white rounded-lg shadow-sm border p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+          <Activity className="w-5 h-5 text-indigo-600 mr-2" />
+          Real-time Statistics
+        </h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="text-center p-3 bg-blue-50 rounded-lg">
+            <div className="text-2xl font-bold text-blue-600">{connectionStatus === 'connected' ? '🟢' : '🔴'}</div>
+            <div className="text-sm text-blue-800">Status</div>
           </div>
-
-          <div className="max-h-96 overflow-y-auto">
-            {notifications.length === 0 ? (
-              <div className="p-4 text-center text-gray-500">
-                <Bell size={32} className="mx-auto mb-2 opacity-50" />
-                <p className="text-sm">No notifications</p>
-              </div>
-            ) : (
-              <div className="divide-y">
-                {notifications.map(notification => (
-                  <div
-                    key={notification.id}
-                    className={`p-4 hover:bg-gray-50 cursor-pointer ${
-                      !notification.read ? 'bg-blue-50' : ''
-                    }`}
-                    onClick={() => markNotificationRead(notification.id)}
-                  >
-                    <div className="flex items-start space-x-3">
-                      <div className="flex-shrink-0">
-                        <div className={`p-1 rounded-full ${
-                          notification.type === 'success' ? 'bg-green-100' :
-                          notification.type === 'warning' ? 'bg-yellow-100' :
-                          notification.type === 'error' ? 'bg-red-100' :
-                          'bg-blue-100'
-                        }`}>
-                          {notification.type === 'success' ? <Check className="text-green-600" size={12} /> :
-                           notification.type === 'warning' ? <AlertCircle className="text-yellow-600" size={12} /> :
-                           notification.type === 'error' ? <X className="text-red-600" size={12} /> :
-                           <Bell className="text-blue-600" size={12} />}
-                        </div>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm text-gray-900">{notification.message}</p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {new Date(notification.timestamp).toLocaleString()}
-                        </p>
-                      </div>
-                      {!notification.read && (
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+          <div className="text-center p-3 bg-green-50 rounded-lg">
+            <div className="text-2xl font-bold text-green-600">{activeUsers.length}</div>
+            <div className="text-sm text-green-800">Active Users</div>
+          </div>
+          <div className="text-center p-3 bg-purple-50 rounded-lg">
+            <div className="text-2xl font-bold text-purple-600">{messages.length}</div>
+            <div className="text-sm text-purple-800">Messages</div>
+          </div>
+          <div className="text-center p-3 bg-indigo-50 rounded-lg">
+            <div className="text-2xl font-bold text-indigo-600">{getActiveListenerCount()}</div>
+            <div className="text-sm text-indigo-800">Listeners</div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
 
-// Collaborative Editing Indicator
-export const CollaborativeEditIndicator = ({ itemId, field }) => {
-  const { collaborativeEdits } = useWebSocket();
-  
-  const edit = collaborativeEdits[itemId]?.[field];
-  
-  if (!edit) return null;
-
-  return (
-    <div className="flex items-center space-x-2 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-md">
-      <Eye size={12} />
-      <span>{edit.editor.name} is editing this</span>
-      <div className="w-1 h-1 bg-blue-500 rounded-full animate-pulse"></div>
-    </div>
-  );
-};
-
-// Real-time Status Indicator
-export const RealTimeStatus = () => {
-  const { isConnected, onlineUsers } = useWebSocket();
-
-  return (
-    <div className={`flex items-center space-x-2 px-3 py-1 rounded-full text-xs ${
-      isConnected ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-    }`}>
-      {isConnected ? <Wifi size={12} /> : <WifiOff size={12} />}
-      <span>{isConnected ? 'Live' : 'Offline'}</span>
-      {isConnected && onlineUsers.length > 0 && (
-        <span>• {onlineUsers.length} online</span>
-      )}
-    </div>
-  );
-};
-
-export default WebSocketProvider;
+export default RealTimeCollaboration;

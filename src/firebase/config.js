@@ -4,6 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getDatabase } from "firebase/database";
 
 // Firebase Configuration
 // For production, create a .env.local file with your Firebase credentials
@@ -70,6 +71,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+export const realtimeDb = getDatabase(app);
 
 // Initialize analytics with error handling
 let analytics;

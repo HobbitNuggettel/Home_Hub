@@ -17,7 +17,8 @@ import {
   Clock,
   Upload,
   Brain,
-  Wrench
+  Wrench,
+  Wifi
 } from 'lucide-react';
 
 export default function Home() {
@@ -127,9 +128,18 @@ export default function Home() {
       title: 'About',
       description: 'Learn about features, technology stack, and roadmap',
       href: '/about',
-      color: 'bg-gray-50 text-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300',
+      color: 'bg-gray-50 text-gray-600 hover:bg-gray-100 dark:bg-gray-900/20 dark:text-gray-400',
       gradient: 'from-gray-500 to-gray-600',
-      stats: { version: '2.0.0', features: 11, phases: 3 }
+      stats: { features: 11, phases: 3, roadmap: 'Q1 2025' }
+    },
+    {
+      icon: Wifi,
+      title: '🚀 Real-time Demo',
+      description: 'Phase 2: Experience real-time collaboration features',
+      href: '/real-time-demo',
+      color: 'bg-gradient-to-r from-blue-50 to-purple-50 text-blue-600 hover:from-blue-100 hover:to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 dark:text-blue-400',
+      gradient: 'from-blue-500 to-purple-600',
+      stats: { features: 'Live', collaboration: 'Real-time', phase: '2' }
     }
   ];
 
