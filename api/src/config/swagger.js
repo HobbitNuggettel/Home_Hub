@@ -255,7 +255,11 @@ const options = {
     tags: [
       {
         name: 'Authentication',
-        description: 'User authentication and authorization endpoints'
+        description: 'JWT-based authentication endpoints'
+      },
+      {
+        name: 'Firebase Authentication',
+        description: 'Firebase-based authentication and user management'
       },
       {
         name: 'Users',

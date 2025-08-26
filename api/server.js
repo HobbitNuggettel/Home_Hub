@@ -20,6 +20,7 @@ const io = socketIo(server, {
 
 // Import routes
 const authRoutes = require('./src/routes/auth');
+const firebaseAuthRoutes = require('./src/routes/firebaseAuth');
 const userRoutes = require('./src/routes/users');
 const inventoryRoutes = require('./src/routes/inventory');
 const spendingRoutes = require('./src/routes/spending');
@@ -143,6 +144,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
   explorer: true,
   customSiteTitle: '🏠 Home Hub API Documentation',
   customfavIcon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232c3e50"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>',
+  customJs: [
+    'http://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-bundle.js',
+    'http://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-standalone-preset.js'
+  ],
+  customCssUrl: 'http://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css',
   swaggerOptions: {
     docExpansion: 'list',
     filter: true,
@@ -415,6 +421,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/firebase-auth', firebaseAuthRoutes);
 app.use('/api/users', authenticateToken, userRoutes);
 app.use('/api/inventory', authenticateToken, inventoryRoutes);
 app.use('/api/spending', authenticateToken, spendingRoutes);
