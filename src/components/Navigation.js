@@ -107,6 +107,12 @@ export default function Navigation() {
       href: '/advanced-analytics',
       icon: BarChart3,
       description: 'Data visualization and analytics dashboard'
+    },
+    {
+      name: '⚡ Performance Analytics',
+      href: '/performance-analytics',
+      icon: Activity,
+      description: 'Real-time performance monitoring and optimization'
     }
   ];
 

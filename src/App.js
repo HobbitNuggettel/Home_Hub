@@ -26,6 +26,7 @@ import Profile from './components/Profile';
 import RealTimeCollaboration from './components/RealTimeCollaboration';
 import UserAccessManagement from './components/UserAccessManagement';
 import AdvancedAnalytics from './components/AdvancedAnalytics';
+import PerformanceAnalytics from './components/PerformanceAnalytics';
 
 function App() {
   return (
@@ -169,6 +170,14 @@ function App() {
                     <>
                       <Navigation />
                       <AdvancedAnalytics />
+                    </>
+                  } />
+                  
+                  {/* Phase 2: Performance Analytics */}
+                  <Route path="/performance-analytics" element={
+                    <>
+                      <Navigation />
+                      <PerformanceAnalytics />
                     </>
                   } />
 
