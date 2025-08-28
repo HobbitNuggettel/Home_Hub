@@ -4,6 +4,29 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '../contexts/ThemeContext';
 import { DevToolsProvider } from '../contexts/DevToolsContext';
 
+// Mock AuthContext for tests
+jest.mock('../contexts/AuthContext', () => ({
+  useAuth: () => ({
+    currentUser: null,
+    login: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
+    logout: jest.fn(() => Promise.resolve()),
+    loading: false,
+    error: null,
+  }),
+  AuthProvider: ({ children }) => children,
+}));
+
+// Mock RealTimeContext for tests
+jest.mock('../contexts/RealTimeContext', () => ({
+  useRealTime: () => ({
+    isConnected: true,
+    connectionStatus: 'connected',
+    subscribe: jest.fn(() => jest.fn()),
+    stats: { totalListeners: 0, activeConnections: 1 },
+  }),
+  RealTimeProvider: ({ children }) => children,
+}));
+
 // Mock AuthContext to avoid Firebase dependencies in tests
 const MockAuthProvider = ({ children }) => children;
 
