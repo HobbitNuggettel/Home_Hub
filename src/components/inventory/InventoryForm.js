@@ -158,10 +158,11 @@ const InventoryForm = ({
 
             {/* Category */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Category *
               </label>
               <select
+                id="category"
                 name="category"
                 value={formData.category}
                 onChange={handleInputChange}
@@ -186,11 +187,12 @@ const InventoryForm = ({
 
             {/* Quantity */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Quantity *
               </label>
               <input
                 type="number"
+                id="quantity"
                 name="quantity"
                 value={formData.quantity}
                 onChange={handleInputChange}
@@ -210,13 +212,14 @@ const InventoryForm = ({
 
             {/* Location */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Location *
               </label>
               <div className="relative">
                 <MapPin className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                 <input
                   type="text"
+                  id="location"
                   name="location"
                   value={formData.location}
                   onChange={handleInputChange}
@@ -236,13 +239,14 @@ const InventoryForm = ({
 
             {/* Purchase Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="purchaseDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Purchase Date
               </label>
               <div className="relative">
                 <Calendar className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                 <input
                   type="date"
+                  id="purchaseDate"
                   name="purchaseDate"
                   value={formData.purchaseDate}
                   onChange={handleInputChange}
@@ -253,13 +257,14 @@ const InventoryForm = ({
 
             {/* Expiry Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="expiryDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Expiry Date
               </label>
               <div className="relative">
                 <Calendar className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                 <input
                   type="date"
+                  id="expiryDate"
                   name="expiryDate"
                   value={formData.expiryDate}
                   onChange={handleInputChange}
@@ -278,13 +283,14 @@ const InventoryForm = ({
 
             {/* Price */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="price" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Price
               </label>
               <div className="relative">
                 <DollarSign className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                 <input
                   type="number"
+                  id="price"
                   name="price"
                   value={formData.price}
                   onChange={handleInputChange}
@@ -306,11 +312,12 @@ const InventoryForm = ({
 
             {/* Barcode */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="barcode" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Barcode
               </label>
               <input
                 type="text"
+                id="barcode"
                 name="barcode"
                 value={formData.barcode}
                 onChange={handleInputChange}
@@ -322,13 +329,14 @@ const InventoryForm = ({
 
           {/* Tags */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label htmlFor="tags" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Tags
             </label>
             <div className="relative">
               <Tag className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
               <input
                 type="text"
+                id="tags"
                 name="tags"
                 value={formData.tags}
                 onChange={handleInputChange}
@@ -343,10 +351,11 @@ const InventoryForm = ({
 
           {/* Notes */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label htmlFor="notes" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Notes
             </label>
             <textarea
+              id="notes"
               name="notes"
               value={formData.notes}
               onChange={handleInputChange}
@@ -359,11 +368,12 @@ const InventoryForm = ({
           {/* Warranty & Supplier */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="warranty" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Warranty
               </label>
               <input
                 type="text"
+                id="warranty"
                 name="warranty"
                 value={formData.warranty}
                 onChange={handleInputChange}
@@ -373,11 +383,12 @@ const InventoryForm = ({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label htmlFor="supplier" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Supplier
               </label>
               <input
                 type="text"
+                id="supplier"
                 name="supplier"
                 value={formData.supplier}
                 onChange={handleInputChange}

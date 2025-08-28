@@ -1,0 +1,233 @@
+name: 🚀 CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop, code-fixes-and-improvements ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  # Frontend Tests and Build
+  frontend:
+    name: 🌐 Frontend CI
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: 📦 Install dependencies
+      run: npm ci
+      
+    - name: 🔍 Run ESLint
+      run: npx eslint src/ --ext .js,.jsx --max-warnings 0
+      continue-on-error: true
+      
+    - name: 🧪 Run tests
+      run: npm run test:ci
+      env:
+        CI: true
+        
+    - name: 📊 Generate test coverage
+      run: npm run test:coverage
+      
+    - name: 📤 Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: frontend
+        name: frontend-coverage
+        fail_ci_if_error: false
+        
+    - name: 🏗️ Build application
+      run: npm run build
+      
+    - name: 📦 Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-files-${{ matrix.node-version }}
+        path: build/
+        retention-days: 7
+
+  # Backend API Tests
+  backend:
+    name: 🔧 Backend API CI
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: api/package-lock.json
+        
+    - name: 📦 Install API dependencies
+      working-directory: ./api
+      run: npm ci
+      
+    - name: 🔍 Run API linting
+      working-directory: ./api
+      run: npm run lint
+      continue-on-error: true
+      
+    - name: 🧪 Run API tests
+      working-directory: ./api
+      run: npm test
+      
+    - name: 🔧 Test API endpoints
+      working-directory: ./api
+      run: npm run test:api
+      continue-on-error: true
+
+  # Security and Quality Checks
+  security:
+    name: 🔒 Security & Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: 📦 Install dependencies
+      run: npm ci
+      
+    - name: 🔒 Run security audit
+      run: npm audit --audit-level high
+      continue-on-error: true
+      
+    - name: 🔍 Check for outdated packages
+      run: npm outdated
+      continue-on-error: true
+      
+    - name: 📊 Bundle size analysis
+      run: |
+        npm run build
+        npx bundlesize
+      continue-on-error: true
+
+  # Mobile App Build (React Native)
+  mobile:
+    name: 📱 Mobile App CI
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        cache-dependency-path: HomeHubMobile/package-lock.json
+        
+    - name: 📦 Install Expo CLI
+      run: npm install -g @expo/cli
+      
+    - name: 📦 Install mobile dependencies
+      working-directory: ./HomeHubMobile
+      run: npm ci
+      
+    - name: 🔍 Run TypeScript check
+      working-directory: ./HomeHubMobile
+      run: npx tsc --noEmit
+      continue-on-error: true
+      
+    - name: 🏗️ Build mobile app (Expo)
+      working-directory: ./HomeHubMobile
+      run: npx expo export --platform web
+      continue-on-error: true
+
+  # Performance and Lighthouse Audit
+  performance:
+    name: ⚡ Performance Audit
+    runs-on: ubuntu-latest
+    needs: frontend
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: 📦 Install dependencies
+      run: npm ci
+      
+    - name: 🏗️ Build application
+      run: npm run build
+      
+    - name: 🌐 Serve application
+      run: |
+        npm install -g serve
+        serve -s build -p 3000 &
+        sleep 10
+        
+    - name: 🔍 Run Lighthouse CI
+      run: |
+        npm install -g @lhci/cli
+        lhci autorun
+      env:
+        LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+      continue-on-error: true
+
+  # Deployment (only on main branch)
+  deploy:
+    name: 🚀 Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [frontend, backend, security, mobile]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: 📦 Install dependencies
+      run: npm ci
+      
+    - name: 🏗️ Build application
+      run: npm run build
+      
+    - name: 🚀 Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build
+        
+    - name: 📢 Notify deployment
+      run: |
+        echo "🎉 Deployment successful!"
+        echo "🌐 Application deployed to GitHub Pages"

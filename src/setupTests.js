@@ -54,6 +54,33 @@ global.ResizeObserver = class ResizeObserver {
 global.TextEncoder = require('util').TextEncoder;
 global.TextDecoder = require('util').TextDecoder;
 
+// Mock ReadableStream for Firebase tests
+if (typeof global.ReadableStream === 'undefined') {
+  global.ReadableStream = class ReadableStream {
+    constructor() {}
+    cancel() { return Promise.resolve(); }
+    getReader() {
+      return {
+        read() { return Promise.resolve({ done: true, value: undefined }); },
+        releaseLock() {},
+        cancel() { return Promise.resolve(); }
+      };
+    }
+  };
+}
+
+// Mock fetch for tests that need it
+if (typeof global.fetch === 'undefined') {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({}),
+      text: () => Promise.resolve(''),
+      blob: () => Promise.resolve(new Blob()),
+    })
+  );
+}
+
 // Suppress console.error for known test warnings
 const originalError = console.error;
 console.error = (...args) => {
