@@ -82,7 +82,7 @@ export const renderWithProviders = (ui, options = {}) => {
 // Custom render function for Home component that needs DevToolsContext and Router
 export const renderHomeWithProviders = (ui, options = {}) => {
   const HomeWrapper = ({ children }) => (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <DevToolsProvider>
         {children}
       </DevToolsProvider>
@@ -93,7 +93,12 @@ export const renderHomeWithProviders = (ui, options = {}) => {
 
 // Custom render function for components that only need routing
 export const renderWithRouter = (ui, options = {}) => {
-  return render(ui, { wrapper: BrowserRouter, ...options });
+  const RouterWrapper = ({ children }) => (
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      {children}
+    </BrowserRouter>
+  );
+  return render(ui, { wrapper: RouterWrapper, ...options });
 };
 
 // Custom render function for components that only need theme context
