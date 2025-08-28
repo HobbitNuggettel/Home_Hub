@@ -17,7 +17,9 @@ import {
   User,
   Settings,
   Brain,
-  Lightbulb
+  Lightbulb,
+  Wifi,
+  Shield
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import DarkModeToggle from './DarkModeToggle';
@@ -87,6 +89,30 @@ export default function Navigation() {
       href: '/ai-suggestions',
       icon: Lightbulb,
       description: 'AI-powered insights and recommendations'
+    },
+    {
+      name: '🚀 Real-time Demo',
+      href: '/real-time-demo',
+      icon: Wifi,
+      description: 'Phase 2: Real-time collaboration features'
+    },
+    {
+      name: '🔐 User Access',
+      href: '/user-access',
+      icon: Shield,
+      description: 'Manage user permissions and access control'
+    },
+    {
+      name: '📊 Advanced Analytics',
+      href: '/advanced-analytics',
+      icon: BarChart3,
+      description: 'Data visualization and analytics dashboard'
+    },
+    {
+      name: '⚡ Performance Analytics',
+      href: '/performance-analytics',
+      icon: Activity,
+      description: 'Real-time performance monitoring and optimization'
     }
   ];
 

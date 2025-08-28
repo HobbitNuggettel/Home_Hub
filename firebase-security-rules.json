@@ -1,0 +1,42 @@
+{
+  "rules": {
+    "collaboration": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$path": {
+        ".validate": "newData.hasChildren(['lastUpdated', 'updatedBy']) && newData.child('updatedBy').val() == auth.uid"
+      }
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid == $uid || root.child('userAccess').child(auth.uid).child('canAccess').child($uid).val() == true)",
+        ".write": "auth != null && (auth.uid == $uid || root.child('userAccess').child(auth.uid).child('canAccess').child($uid).val() == true)",
+        ".validate": "newData.hasChildren(['id', 'lastSeen', 'isActive'])"
+      }
+    },
+    "userAccess": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid",
+        "canAccess": {
+          "$targetUid": {
+            ".read": "auth != null && (auth.uid == $uid || auth.uid == $targetUid)",
+            ".write": "auth != null && auth.uid == $uid"
+          }
+        },
+        "grantedBy": {
+          ".read": "auth != null && auth.uid == $uid",
+          ".write": "auth != null && auth.uid == $uid"
+        }
+      }
+    },
+    "adminUsers": {
+      ".read": "auth != null && root.child('adminUsers').child(auth.uid).val() == true",
+      ".write": "auth != null && root.child('adminUsers').child(auth.uid).val() == true"
+    },
+    "publicData": {
+      ".read": true,
+      ".write": "auth != null"
+    }
+  }
+}
