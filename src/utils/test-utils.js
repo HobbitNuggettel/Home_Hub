@@ -6,25 +6,38 @@ import { DevToolsProvider } from '../contexts/DevToolsContext';
 
 // Mock AuthContext for tests
 jest.mock('../contexts/AuthContext', () => ({
-  useAuth: () => ({
-    currentUser: null,
+  useAuth: jest.fn(() => ({
+    currentUser: { uid: 'test-uid', email: 'test@example.com' },
+    userProfile: { name: 'Test User', email: 'test@example.com' },
+    updateUserProfile: jest.fn(() => Promise.resolve()),
     login: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
     logout: jest.fn(() => Promise.resolve()),
     loading: false,
     error: null,
-  }),
+  })),
   AuthProvider: ({ children }) => children,
 }));
 
 // Mock RealTimeContext for tests
 jest.mock('../contexts/RealTimeContext', () => ({
-  useRealTime: () => ({
+  useRealTime: jest.fn(() => ({
     isConnected: true,
     connectionStatus: 'connected',
     subscribe: jest.fn(() => jest.fn()),
     stats: { totalListeners: 0, activeConnections: 1 },
-  }),
+  })),
   RealTimeProvider: ({ children }) => children,
+}));
+
+// Mock DevToolsContext for tests
+jest.mock('../contexts/DevToolsContext', () => ({
+  useDevTools: jest.fn(() => ({
+    isDevMode: false,
+    toggleDevMode: jest.fn(),
+    showDevTools: false,
+    toggleDevTools: jest.fn(),
+  })),
+  DevToolsProvider: ({ children }) => children,
 }));
 
 // Mock AuthContext to avoid Firebase dependencies in tests

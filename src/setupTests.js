@@ -84,6 +84,10 @@ if (typeof global.fetch === 'undefined') {
 // Mock Firebase Auth for tests
 jest.mock('firebase/auth', () => ({
   GoogleAuthProvider: jest.fn(),
+  FacebookAuthProvider: jest.fn(),
+  TwitterAuthProvider: jest.fn(),
+  GithubAuthProvider: jest.fn(),
+  PhoneAuthProvider: jest.fn(),
   signInWithPopup: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
   signOut: jest.fn(() => Promise.resolve()),
   onAuthStateChanged: jest.fn(),
@@ -91,18 +95,22 @@ jest.mock('firebase/auth', () => ({
     currentUser: null,
     signOut: jest.fn(() => Promise.resolve()),
   })),
+  createUserWithEmailAndPassword: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
+  signInWithEmailAndPassword: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
+  sendPasswordResetEmail: jest.fn(() => Promise.resolve()),
+  updateProfile: jest.fn(() => Promise.resolve()),
 }));
 
 // Mock Firebase App
 jest.mock('firebase/app', () => ({
-  initializeApp: jest.fn(),
-  getApps: jest.fn(() => []),
-  getApp: jest.fn(),
+  initializeApp: jest.fn(() => ({ name: '[DEFAULT]' })),
+  getApps: jest.fn(() => [{ name: '[DEFAULT]' }]),
+  getApp: jest.fn(() => ({ name: '[DEFAULT]' })),
 }));
 
 // Mock Firebase Firestore
 jest.mock('firebase/firestore', () => ({
-  getFirestore: jest.fn(),
+  getFirestore: jest.fn(() => ({})),
   doc: jest.fn(),
   getDoc: jest.fn(),
   setDoc: jest.fn(),
@@ -114,6 +122,24 @@ jest.mock('firebase/firestore', () => ({
   where: jest.fn(),
   orderBy: jest.fn(),
   limit: jest.fn(),
+}));
+
+// Mock Firebase Storage
+jest.mock('firebase/storage', () => ({
+  getStorage: jest.fn(() => ({})),
+  ref: jest.fn(),
+  uploadBytes: jest.fn(),
+  getDownloadURL: jest.fn(),
+}));
+
+// Mock Firebase Database
+jest.mock('firebase/database', () => ({
+  getDatabase: jest.fn(() => ({})),
+  ref: jest.fn(),
+  set: jest.fn(),
+  get: jest.fn(),
+  onValue: jest.fn(),
+  off: jest.fn(),
 }));
 
 // Mock React contexts will be handled in individual test files as needed
