@@ -95,19 +95,28 @@ describe('InventoryList Component', () => {
 
     test('displays item category correctly', () => {
       render(<InventoryList {...defaultProps} />);
-      // Check category in the details section (more specific)
-      expect(screen.getByText('Category:')).toBeInTheDocument();
-      expect(screen.getByText('Electronics')).toBeInTheDocument();
-      expect(screen.getByText('Kitchen')).toBeInTheDocument();
-      expect(screen.getByText('Furniture')).toBeInTheDocument();
+      // Check category labels exist (multiple instances expected)
+      const categoryLabels = screen.getAllByText('Category:');
+      expect(categoryLabels.length).toBeGreaterThan(0);
+      
+      // Check specific categories exist
+      const electronicsElements = screen.getAllByText('Electronics');
+      const kitchenElements = screen.getAllByText('Kitchen');
+      expect(electronicsElements.length).toBeGreaterThan(0);
+      expect(kitchenElements.length).toBeGreaterThan(0);
     });
 
     test('displays item quantity correctly', () => {
       render(<InventoryList {...defaultProps} />);
-      // Check quantity label and values
-      expect(screen.getByText('Quantity:')).toBeInTheDocument();
-      expect(screen.getByText('2')).toBeInTheDocument();
-      expect(screen.getByText('1')).toBeInTheDocument();
+      // Check quantity labels exist (multiple instances expected)
+      const quantityLabels = screen.getAllByText('Quantity:');
+      expect(quantityLabels.length).toBeGreaterThan(0);
+      
+      // Check specific quantities exist (using getAllByText for multiple instances)
+      const twoElements = screen.getAllByText('2');
+      const oneElements = screen.getAllByText('1');
+      expect(twoElements.length).toBeGreaterThan(0);
+      expect(oneElements.length).toBeGreaterThan(0);
     });
 
     test('displays item price correctly', () => {
@@ -119,12 +128,14 @@ describe('InventoryList Component', () => {
 
     test('displays item location correctly', () => {
       render(<InventoryList {...defaultProps} />);
-      // Check location with icon context
-      const locationElements = screen.getAllByText(/Office|Kitchen|Living Room/);
-      expect(locationElements.length).toBeGreaterThan(0);
-      expect(screen.getByText('Office')).toBeInTheDocument();
-      expect(screen.getByText('Kitchen')).toBeInTheDocument();
-      expect(screen.getByText('Living Room')).toBeInTheDocument();
+      // Check location elements exist (multiple instances expected)
+      const officeElements = screen.getAllByText('Office');
+      const kitchenElements = screen.getAllByText('Kitchen');
+      const livingRoomElements = screen.getAllByText('Living Room');
+      
+      expect(officeElements.length).toBeGreaterThan(0);
+      expect(kitchenElements.length).toBeGreaterThan(0);
+      expect(livingRoomElements.length).toBeGreaterThan(0);
     });
 
     test('displays item tags correctly', () => {

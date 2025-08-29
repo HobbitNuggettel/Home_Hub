@@ -4,6 +4,42 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '../contexts/ThemeContext';
 import { DevToolsProvider } from '../contexts/DevToolsContext';
 
+// Mock AuthContext for tests
+jest.mock('../contexts/AuthContext', () => ({
+  useAuth: jest.fn(() => ({
+    currentUser: { uid: 'test-uid', email: 'test@example.com' },
+    userProfile: { name: 'Test User', email: 'test@example.com' },
+    updateUserProfile: jest.fn(() => Promise.resolve()),
+    login: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
+    logout: jest.fn(() => Promise.resolve()),
+    loading: false,
+    error: null,
+  })),
+  AuthProvider: ({ children }) => children,
+}));
+
+// Mock RealTimeContext for tests
+jest.mock('../contexts/RealTimeContext', () => ({
+  useRealTime: jest.fn(() => ({
+    isConnected: true,
+    connectionStatus: 'connected',
+    subscribe: jest.fn(() => jest.fn()),
+    stats: { totalListeners: 0, activeConnections: 1 },
+  })),
+  RealTimeProvider: ({ children }) => children,
+}));
+
+// Mock DevToolsContext for tests
+jest.mock('../contexts/DevToolsContext', () => ({
+  useDevTools: jest.fn(() => ({
+    isDevMode: false,
+    toggleDevMode: jest.fn(),
+    showDevTools: false,
+    toggleDevTools: jest.fn(),
+  })),
+  DevToolsProvider: ({ children }) => children,
+}));
+
 // Mock AuthContext to avoid Firebase dependencies in tests
 const MockAuthProvider = ({ children }) => children;
 
@@ -82,7 +118,7 @@ export const renderWithProviders = (ui, options = {}) => {
 // Custom render function for Home component that needs DevToolsContext and Router
 export const renderHomeWithProviders = (ui, options = {}) => {
   const HomeWrapper = ({ children }) => (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <DevToolsProvider>
         {children}
       </DevToolsProvider>
@@ -93,7 +129,12 @@ export const renderHomeWithProviders = (ui, options = {}) => {
 
 // Custom render function for components that only need routing
 export const renderWithRouter = (ui, options = {}) => {
-  return render(ui, { wrapper: BrowserRouter, ...options });
+  const RouterWrapper = ({ children }) => (
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      {children}
+    </BrowserRouter>
+  );
+  return render(ui, { wrapper: RouterWrapper, ...options });
 };
 
 // Custom render function for components that only need theme context

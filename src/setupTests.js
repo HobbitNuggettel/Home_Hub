@@ -54,6 +54,96 @@ global.ResizeObserver = class ResizeObserver {
 global.TextEncoder = require('util').TextEncoder;
 global.TextDecoder = require('util').TextDecoder;
 
+// Mock ReadableStream for Firebase tests
+if (typeof global.ReadableStream === 'undefined') {
+  global.ReadableStream = class ReadableStream {
+    constructor() {}
+    cancel() { return Promise.resolve(); }
+    getReader() {
+      return {
+        read() { return Promise.resolve({ done: true, value: undefined }); },
+        releaseLock() {},
+        cancel() { return Promise.resolve(); }
+      };
+    }
+  };
+}
+
+// Mock fetch for tests that need it
+if (typeof global.fetch === 'undefined') {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({}),
+      text: () => Promise.resolve(''),
+      blob: () => Promise.resolve(new Blob()),
+    })
+  );
+}
+
+// Mock Firebase Auth for tests
+jest.mock('firebase/auth', () => ({
+  GoogleAuthProvider: jest.fn(),
+  FacebookAuthProvider: jest.fn(),
+  TwitterAuthProvider: jest.fn(),
+  GithubAuthProvider: jest.fn(),
+  PhoneAuthProvider: jest.fn(),
+  signInWithPopup: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
+  signOut: jest.fn(() => Promise.resolve()),
+  onAuthStateChanged: jest.fn(),
+  getAuth: jest.fn(() => ({
+    currentUser: null,
+    signOut: jest.fn(() => Promise.resolve()),
+  })),
+  createUserWithEmailAndPassword: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
+  signInWithEmailAndPassword: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
+  sendPasswordResetEmail: jest.fn(() => Promise.resolve()),
+  updateProfile: jest.fn(() => Promise.resolve()),
+}));
+
+// Mock Firebase App
+jest.mock('firebase/app', () => ({
+  initializeApp: jest.fn(() => ({ name: '[DEFAULT]' })),
+  getApps: jest.fn(() => [{ name: '[DEFAULT]' }]),
+  getApp: jest.fn(() => ({ name: '[DEFAULT]' })),
+}));
+
+// Mock Firebase Firestore
+jest.mock('firebase/firestore', () => ({
+  getFirestore: jest.fn(() => ({})),
+  doc: jest.fn(),
+  getDoc: jest.fn(),
+  setDoc: jest.fn(),
+  updateDoc: jest.fn(),
+  deleteDoc: jest.fn(),
+  collection: jest.fn(),
+  getDocs: jest.fn(),
+  query: jest.fn(),
+  where: jest.fn(),
+  orderBy: jest.fn(),
+  limit: jest.fn(),
+}));
+
+// Mock Firebase Storage
+jest.mock('firebase/storage', () => ({
+  getStorage: jest.fn(() => ({})),
+  ref: jest.fn(),
+  uploadBytes: jest.fn(),
+  getDownloadURL: jest.fn(),
+}));
+
+// Mock Firebase Database
+jest.mock('firebase/database', () => ({
+  getDatabase: jest.fn(() => ({})),
+  ref: jest.fn(),
+  set: jest.fn(),
+  get: jest.fn(),
+  onValue: jest.fn(),
+  off: jest.fn(),
+}));
+
+// Mock React contexts will be handled in individual test files as needed
+
 // Suppress console.error for known test warnings
 const originalError = console.error;
 console.error = (...args) => {
