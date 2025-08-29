@@ -1,449 +1,508 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, ChefHat, Clock, Users, Star, Heart, Share, Edit, Trash2, Calendar, ShoppingCart, BookOpen, Filter, XCircle } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Trash2, Calendar, Clock, Users, ChefHat, BookOpen, Star, Heart, ShoppingCart, Utensils, Timer, Scale, X } from 'lucide-react';
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
-  const [showAddRecipe, setShowAddRecipe] = useState(false);
-  const [showRecipeDetail, setShowRecipeDetail] = useState(null);
+  const [categories, setCategories] = useState([
+    'Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Desserts', 'Beverages', 'Appetizers', 'Soups', 'Salads', 'Main Dishes'
+  ]);
+  const [cuisines, setCuisines] = useState([
+    'American', 'Italian', 'Mexican', 'Asian', 'Mediterranean', 'Indian', 'French', 'Thai', 'Japanese', 'Greek'
+  ]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
-  const [recipeForm, setRecipeForm] = useState({
+  const [selectedCuisine, setSelectedCuisine] = useState('all');
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [editingRecipe, setEditingRecipe] = useState(null);
+  const [mealPlan, setMealPlan] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  
+  const [formData, setFormData] = useState({
     name: '',
+    category: '',
+    cuisine: '',
     description: '',
-    category: 'main-dish',
-    difficulty: 'medium',
     prepTime: '',
     cookTime: '',
-    servings: 4,
-    ingredients: [{ id: 1, name: '', amount: '', unit: '' }],
-    instructions: [{ id: 1, step: '' }],
-    notes: '',
-    tags: []
+    servings: '',
+    difficulty: 'easy',
+    ingredients: [{ item: '', amount: '', unit: '' }],
+    instructions: [''],
+    nutrition: {
+      calories: '',
+      protein: '',
+      carbs: '',
+      fat: '',
+      fiber: ''
+    },
+    tags: [],
+    image: '',
+    notes: ''
   });
 
-  const categories = [
-    'appetizer', 'main-dish', 'side-dish', 'dessert', 'breakfast', 'lunch', 'dinner', 'snack', 'beverage'
-  ];
-
-  const difficulties = [
-    { value: 'easy', label: 'Easy', color: 'text-green-600 bg-green-100' },
-    { value: 'medium', label: 'Medium', color: 'text-yellow-600 bg-yellow-100' },
-    { value: 'hard', label: 'Hard', color: 'text-red-600 bg-red-100' }
-  ];
-
-  const units = [
-    'cup', 'tbsp', 'tsp', 'oz', 'lb', 'g', 'kg', 'ml', 'l', 'piece', 'slice', 'clove', 'bunch', 'can', 'package'
-  ];
-
-  // Load sample data
+  // Load sample data on component mount
   useEffect(() => {
     const sampleRecipes = [
       {
         id: 1,
-        name: 'Classic Spaghetti Carbonara',
-        description: 'A traditional Italian pasta dish with eggs, cheese, and pancetta',
-        category: 'main-dish',
-        difficulty: 'medium',
-        prepTime: 15,
-        cookTime: 20,
+        name: 'Classic Pancakes',
+        category: 'Breakfast',
+        cuisine: 'American',
+        description: 'Fluffy homemade pancakes perfect for weekend mornings',
+        prepTime: 10,
+        cookTime: 15,
         servings: 4,
+        difficulty: 'easy',
         ingredients: [
-          { id: 1, name: 'Spaghetti', amount: 1, unit: 'lb' },
-          { id: 2, name: 'Eggs', amount: 4, unit: 'piece' },
-          { id: 3, name: 'Pancetta', amount: 8, unit: 'oz' },
-          { id: 4, name: 'Parmesan Cheese', amount: 1, unit: 'cup' },
-          { id: 5, name: 'Black Pepper', amount: 2, unit: 'tsp' },
-          { id: 6, name: 'Salt', amount: 1, unit: 'tsp' }
+          { item: 'All-purpose flour', amount: 2, unit: 'cups' },
+          { item: 'Baking powder', amount: 2, unit: 'tsp' },
+          { item: 'Salt', amount: 0.5, unit: 'tsp' },
+          { item: 'Sugar', amount: 2, unit: 'tbsp' },
+          { item: 'Eggs', amount: 2, unit: 'large' },
+          { item: 'Milk', amount: 1.5, unit: 'cups' },
+          { item: 'Butter', amount: 0.25, unit: 'cup' }
         ],
         instructions: [
-          { id: 1, step: 'Bring a large pot of salted water to boil and cook spaghetti according to package directions.' },
-          { id: 2, step: 'Meanwhile, cook pancetta in a large skillet over medium heat until crispy.' },
-          { id: 3, step: 'In a bowl, whisk together eggs, cheese, and pepper.' },
-          { id: 4, step: 'Drain pasta, reserving 1 cup of pasta water.' },
-          { id: 5, step: 'Add hot pasta to skillet with pancetta, remove from heat.' },
-          { id: 6, step: 'Quickly stir in egg mixture, adding pasta water as needed for creaminess.' }
+          'In a large bowl, whisk together flour, baking powder, salt, and sugar',
+          'In another bowl, beat eggs, then add milk and melted butter',
+          'Pour wet ingredients into dry ingredients and stir until just combined',
+          'Heat a griddle or large skillet over medium heat',
+          'Pour 1/4 cup batter for each pancake',
+          'Cook until bubbles form, then flip and cook until golden brown'
         ],
-        notes: 'Serve immediately while hot. The eggs should create a creamy sauce without scrambling.',
-        tags: ['italian', 'pasta', 'quick', 'dinner'],
+        nutrition: {
+          calories: 280,
+          protein: 8,
+          carbs: 45,
+          fat: 8,
+          fiber: 1
+        },
+        tags: ['breakfast', 'pancakes', 'homemade', 'quick'],
+        image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400',
         rating: 4.8,
-        favorites: 12,
-        createdAt: '2024-01-15'
+        reviews: 124,
+        prepTime: 10,
+        cookTime: 15,
+        servings: 4,
+        difficulty: 'easy',
+        isFavorite: false
       },
       {
         id: 2,
-        name: 'Chocolate Chip Cookies',
-        description: 'Soft and chewy chocolate chip cookies with crispy edges',
-        category: 'dessert',
-        difficulty: 'easy',
+        name: 'Chicken Caesar Salad',
+        category: 'Salads',
+        cuisine: 'Italian',
+        description: 'Fresh and crispy Caesar salad with grilled chicken',
         prepTime: 15,
-        cookTime: 12,
-        servings: 24,
+        cookTime: 20,
+        servings: 2,
+        difficulty: 'medium',
         ingredients: [
-          { id: 1, name: 'All-purpose Flour', amount: 2.25, unit: 'cup' },
-          { id: 2, name: 'Butter', amount: 1, unit: 'cup' },
-          { id: 3, name: 'Brown Sugar', amount: 0.75, unit: 'cup' },
-          { id: 4, name: 'White Sugar', amount: 0.75, unit: 'cup' },
-          { id: 5, name: 'Eggs', amount: 2, unit: 'piece' },
-          { id: 6, name: 'Vanilla Extract', amount: 2, unit: 'tsp' },
-          { id: 7, name: 'Chocolate Chips', amount: 2, unit: 'cup' }
+          { item: 'Chicken breast', amount: 2, unit: 'pieces' },
+          { item: 'Romaine lettuce', amount: 1, unit: 'head' },
+          { item: 'Parmesan cheese', amount: 0.5, unit: 'cup' },
+          { item: 'Croutons', amount: 1, unit: 'cup' },
+          { item: 'Caesar dressing', amount: 0.25, unit: 'cup' },
+          { item: 'Lemon juice', amount: 2, unit: 'tbsp' },
+          { item: 'Black pepper', amount: 1, unit: 'tsp' }
         ],
         instructions: [
-          { id: 1, step: 'Preheat oven to 375°F (190°C).' },
-          { id: 2, step: 'Cream together butter and sugars until light and fluffy.' },
-          { id: 3, step: 'Beat in eggs one at a time, then stir in vanilla.' },
-          { id: 4, step: 'Combine flour, baking soda, and salt; gradually blend into the butter mixture.' },
-          { id: 5, step: 'Stir in chocolate chips.' },
-          { id: 6, step: 'Drop by rounded tablespoons onto ungreased baking sheets.' },
-          { id: 7, step: 'Bake for 10 to 12 minutes or until golden brown.' }
+          'Season chicken breasts with salt and pepper',
+          'Grill chicken for 8-10 minutes per side until cooked through',
+          'Wash and chop romaine lettuce',
+          'Slice grilled chicken into strips',
+          'Toss lettuce with Caesar dressing and lemon juice',
+          'Top with chicken, parmesan, and croutons',
+          'Season with black pepper and serve immediately'
         ],
-        notes: 'Let cookies cool on baking sheet for 2 minutes before transferring to wire rack.',
+        nutrition: {
+          calories: 420,
+          protein: 35,
+          carbs: 12,
+          fat: 28,
+          fiber: 4
+        },
+        tags: ['salad', 'chicken', 'healthy', 'grilled'],
+        image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400',
+        rating: 4.6,
+        reviews: 89,
+        prepTime: 15,
+        cookTime: 20,
+        servings: 2,
+        difficulty: 'medium',
+        isFavorite: true
+      },
+      {
+        id: 3,
+        name: 'Chocolate Chip Cookies',
+        category: 'Desserts',
+        cuisine: 'American',
+        description: 'Classic chocolate chip cookies with crispy edges and chewy centers',
+        prepTime: 20,
+        cookTime: 12,
+        servings: 24,
+        difficulty: 'easy',
+        ingredients: [
+          { item: 'All-purpose flour', amount: 2.25, unit: 'cups' },
+          { item: 'Baking soda', amount: 1, unit: 'tsp' },
+          { item: 'Salt', amount: 1, unit: 'tsp' },
+          { item: 'Butter', amount: 1, unit: 'cup' },
+          { item: 'Granulated sugar', amount: 0.75, unit: 'cup' },
+          { item: 'Brown sugar', amount: 0.75, unit: 'cup' },
+          { item: 'Vanilla extract', amount: 1, unit: 'tsp' },
+          { item: 'Eggs', amount: 2, unit: 'large' },
+          { item: 'Chocolate chips', amount: 2, unit: 'cups' }
+        ],
+        instructions: [
+          'Preheat oven to 375°F (190°C)',
+          'Cream together butter and both sugars until fluffy',
+          'Beat in eggs and vanilla extract',
+          'In a separate bowl, whisk flour, baking soda, and salt',
+          'Gradually mix dry ingredients into wet ingredients',
+          'Fold in chocolate chips',
+          'Drop rounded tablespoons onto baking sheets',
+          'Bake for 10-12 minutes until golden brown'
+        ],
+        nutrition: {
+          calories: 150,
+          protein: 2,
+          carbs: 20,
+          fat: 8,
+          fiber: 1
+        },
         tags: ['dessert', 'cookies', 'chocolate', 'baking'],
+        image: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400',
         rating: 4.9,
-        favorites: 25,
-        createdAt: '2024-01-10'
+        reviews: 256,
+        prepTime: 20,
+        cookTime: 12,
+        servings: 24,
+        difficulty: 'easy',
+        isFavorite: false
       }
     ];
-
+    
     setRecipes(sampleRecipes);
+    
+    // Extract unique tags
+    const allTags = sampleRecipes.reduce((acc, recipe) => {
+      recipe.tags.forEach(tag => {
+        if (!acc.includes(tag)) acc.push(tag);
+      });
+      return acc;
+    }, []);
+    
+    // Set initial favorites
+    setFavorites(sampleRecipes.filter(recipe => recipe.isFavorite).map(recipe => recipe.id));
   }, []);
 
   const handleAddRecipe = () => {
-    if (!recipeForm.name || !recipeForm.ingredients[0].name || !recipeForm.instructions[0].step) return;
+    if (!formData.name || !formData.category) return;
     
     const newRecipe = {
       id: Date.now(),
-      ...recipeForm,
-      prepTime: parseInt(recipeForm.prepTime) || 0,
-      cookTime: parseInt(recipeForm.cookTime) || 0,
-      servings: parseInt(recipeForm.servings) || 4,
-      ingredients: recipeForm.ingredients.filter(ing => ing.name.trim() !== ''),
-      instructions: recipeForm.instructions.filter(inst => inst.step.trim() !== ''),
-      tags: recipeForm.tags.filter(tag => tag.trim() !== ''),
+      ...formData,
       rating: 0,
-      favorites: 0,
-      createdAt: new Date().toISOString().split('T')[0]
+      reviews: 0,
+      isFavorite: false,
+      ingredients: formData.ingredients.filter(ing => ing.item.trim() !== ''),
+      instructions: formData.instructions.filter(inst => inst.trim() !== ''),
+      tags: formData.tags.filter(tag => tag.trim() !== '')
     };
     
     setRecipes([...recipes, newRecipe]);
-    
-    setRecipeForm({
-      name: '',
-      description: '',
-      category: 'main-dish',
-      difficulty: 'medium',
-      prepTime: '',
-      cookTime: '',
-      servings: 4,
-      ingredients: [{ id: 1, name: '', amount: '', unit: '' }],
-      instructions: [{ id: 1, step: '' }],
-      notes: '',
-      tags: []
-    });
-    setShowAddRecipe(false);
+    resetForm();
   };
 
-  const handleDeleteRecipe = (id) => {
-    setRecipes(recipes.filter(recipe => recipe.id !== id));
+  const handleEditRecipe = () => {
+    if (!editingRecipe || !formData.name || !formData.category) return;
+    
+    const updatedRecipes = recipes.map(recipe =>
+      recipe.id === editingRecipe.id
+        ? { ...recipe, ...formData, ingredients: formData.ingredients.filter(ing => ing.item.trim() !== ''), instructions: formData.instructions.filter(inst => inst.trim() !== ''), tags: formData.tags.filter(tag => tag.trim() !== '') }
+        : recipe
+    );
+    
+    setRecipes(updatedRecipes);
+    resetForm();
+  };
+
+  const handleDeleteRecipe = (recipeId) => {
+    setRecipes(recipes.filter(recipe => recipe.id !== recipeId));
+    setFavorites(favorites.filter(id => id !== recipeId));
+  };
+
+  const toggleFavorite = (recipeId) => {
+    setFavorites(prev => 
+      prev.includes(recipeId)
+        ? prev.filter(id => id !== recipeId)
+        : [...prev, recipeId]
+    );
+    
+    setRecipes(prev =>
+      prev.map(recipe =>
+        recipe.id === recipeId
+          ? { ...recipe, isFavorite: !recipe.isFavorite }
+          : recipe
+      )
+    );
   };
 
   const addIngredient = () => {
-    const newId = Math.max(...recipeForm.ingredients.map(ing => ing.id)) + 1;
-    setRecipeForm({
-      ...recipeForm,
-      ingredients: [...recipeForm.ingredients, { id: newId, name: '', amount: '', unit: '' }]
-    });
+    setFormData(prev => ({
+      ...prev,
+      ingredients: [...prev.ingredients, { item: '', amount: '', unit: '' }]
+    }));
   };
 
-  const removeIngredient = (id) => {
-    if (recipeForm.ingredients.length > 1) {
-      setRecipeForm({
-        ...recipeForm,
-        ingredients: recipeForm.ingredients.filter(ing => ing.id !== id)
-      });
-    }
+  const removeIngredient = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      ingredients: prev.ingredients.filter((_, i) => i !== index)
+    }));
   };
 
-  const updateIngredient = (id, field, value) => {
-    setRecipeForm({
-      ...recipeForm,
-      ingredients: recipeForm.ingredients.map(ing =>
-        ing.id === id ? { ...ing, [field]: value } : ing
+  const updateIngredient = (index, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      ingredients: prev.ingredients.map((ing, i) =>
+        i === index ? { ...ing, [field]: value } : ing
       )
-    });
+    }));
   };
 
   const addInstruction = () => {
-    const newId = Math.max(...recipeForm.instructions.map(inst => inst.id)) + 1;
-    setRecipeForm({
-      ...recipeForm,
-      instructions: [...recipeForm.instructions, { id: newId, step: '' }]
-    });
+    setFormData(prev => ({
+      ...prev,
+      instructions: [...prev.instructions, '']
+    }));
   };
 
-  const removeInstruction = (id) => {
-    if (recipeForm.instructions.length > 1) {
-      setRecipeForm({
-        ...recipeForm,
-        instructions: recipeForm.instructions.filter(inst => inst.id !== id)
-      });
-    }
+  const removeInstruction = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      instructions: prev.instructions.filter((_, i) => i !== index)
+    }));
   };
 
-  const updateInstruction = (id, value) => {
-    setRecipeForm({
-      ...recipeForm,
-      instructions: recipeForm.instructions.map(inst =>
-        inst.id === id ? { ...inst, step: value } : inst
+  const updateInstruction = (index, value) => {
+    setFormData(prev => ({
+      ...prev,
+      instructions: prev.instructions.map((inst, i) =>
+        i === index ? value : inst
       )
-    });
+    }));
   };
 
-  const addTag = (tag) => {
-    if (tag && !recipeForm.tags.includes(tag)) {
-      setRecipeForm({ ...recipeForm, tags: [...recipeForm.tags, tag] });
-    }
-  };
-
-  const removeTag = (tagToRemove) => {
-    setRecipeForm({
-      ...recipeForm,
-      tags: recipeForm.tags.filter(tag => tag !== tagToRemove)
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      category: '',
+      cuisine: '',
+      description: '',
+      prepTime: '',
+      cookTime: '',
+      servings: '',
+      difficulty: 'easy',
+      ingredients: [{ item: '', amount: '', unit: '' }],
+      instructions: [''],
+      nutrition: {
+        calories: '',
+        protein: '',
+        carbs: '',
+        fat: '',
+        fiber: ''
+      },
+      tags: [],
+      image: '',
+      notes: ''
     });
+    setEditingRecipe(null);
+    setShowAddForm(false);
   };
 
   const filteredRecipes = recipes.filter(recipe => {
     const matchesSearch = recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          recipe.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          recipe.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    
     const matchesCategory = selectedCategory === 'all' || recipe.category === selectedCategory;
-    const matchesDifficulty = selectedDifficulty === 'all' || recipe.difficulty === selectedDifficulty;
-    
-    return matchesSearch && matchesCategory && matchesDifficulty;
+    const matchesCuisine = selectedCuisine === 'all' || recipe.cuisine === selectedCuisine;
+    return matchesSearch && matchesCategory && matchesCuisine;
   });
 
-  const getTotalTime = (recipe) => {
-    return recipe.prepTime + recipe.cookTime;
-  };
-
   const getDifficultyColor = (difficulty) => {
-    return difficulties.find(d => d.value === difficulty)?.color || 'text-gray-600 bg-gray-100';
-  };
-
-  const getCategoryColor = (category) => {
-    const colors = {
-      'appetizer': 'text-blue-600 bg-blue-100',
-      'main-dish': 'text-green-600 bg-green-100',
-      'side-dish': 'text-yellow-600 bg-yellow-100',
-      'dessert': 'text-pink-600 bg-pink-100',
-      'breakfast': 'text-orange-600 bg-orange-100',
-      'lunch': 'text-purple-600 bg-purple-100',
-      'dinner': 'text-indigo-600 bg-indigo-100',
-      'snack': 'text-gray-600 bg-gray-100',
-      'beverage': 'text-teal-600 bg-teal-100'
-    };
-    return colors[category] || colors['main-dish'];
-  };
-
-  const generateShoppingList = (recipe) => {
-    const ingredients = recipe.ingredients.map(ing => 
-      `${ing.amount} ${ing.unit} ${ing.name}`
-    ).join('\n');
-    
-    alert(`Shopping List for ${recipe.name}:\n\n${ingredients}`);
+    switch (difficulty) {
+      case 'easy': return 'bg-green-100 text-green-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'hard': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Recipe Management
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Store recipes, plan meals, and generate shopping lists
-          </p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <BookOpen className="h-8 w-8 text-blue-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Recipes</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{recipes.length}</p>
-              </div>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl">
+              <ChefHat className="h-8 w-8 text-white" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Recipe Management
+              </h1>
+              <p className="text-lg text-gray-600">
+                Create, organize, and plan your favorite recipes
+              </p>
             </div>
           </div>
           
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <ChefHat className="h-8 w-8 text-green-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Categories</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{categories.length}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <Star className="h-8 w-8 text-yellow-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Avg Rating</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {recipes.length > 0 ? (recipes.reduce((sum, r) => sum + r.rating, 0) / recipes.length).toFixed(1) : '0.0'}
-                </p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <Heart className="h-8 w-8 text-red-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Favorites</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {recipes.reduce((sum, r) => sum + r.favorites, 0)}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Controls */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-8">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <div className="flex flex-col sm:flex-row gap-4 flex-1">
-              {/* Search */}
-              <div className="relative flex-1 max-w-md">
-                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          {/* Search and Filters */}
+          <div className="flex flex-col lg:flex-row gap-4 mb-6">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search recipes..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 />
               </div>
-              
-              {/* Category Filter */}
+            </div>
+            
+            <div className="flex gap-2">
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               >
                 <option value="all">All Categories</option>
                 {categories.map(category => (
-                  <option key={category} value={category}>
-                    {category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ')}
-                  </option>
+                  <option key={category} value={category}>{category}</option>
                 ))}
               </select>
               
-              {/* Difficulty Filter */}
               <select
-                value={selectedDifficulty}
-                onChange={(e) => setSelectedDifficulty(e.target.value)}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                value={selectedCuisine}
+                onChange={(e) => setSelectedCuisine(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               >
-                <option value="all">All Difficulties</option>
-                {difficulties.map(difficulty => (
-                  <option key={difficulty.value} value={difficulty.value}>
-                    {difficulty.label}
-                  </option>
+                <option value="all">All Cuisines</option>
+                {cuisines.map(cuisine => (
+                  <option key={cuisine} value={cuisine}>{cuisine}</option>
                 ))}
               </select>
             </div>
             
-            {/* Add Button */}
             <button
-              onClick={() => setShowAddRecipe(true)}
-              className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+              onClick={() => setShowAddForm(true)}
+              className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors flex items-center gap-2"
             >
-              <Plus className="h-5 w-5 mr-2" />
+              <Plus className="h-5 w-5" />
               Add Recipe
             </button>
           </div>
         </div>
 
-        {/* Recipes Grid */}
+        {/* Recipe Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredRecipes.map((recipe) => (
-            <div key={recipe.id} className="bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-shadow">
+          {filteredRecipes.map(recipe => (
+            <div key={recipe.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+              {/* Recipe Image */}
+              <div className="relative h-48 bg-gray-200">
+                {recipe.image ? (
+                  <img
+                    src={recipe.image}
+                    alt={recipe.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <Utensils className="h-16 w-16 text-gray-400" />
+                  </div>
+                )}
+                
+                {/* Favorite Button */}
+                <button
+                  onClick={() => toggleFavorite(recipe.id)}
+                  className={`absolute top-3 right-3 p-2 rounded-full transition-colors ${
+                    recipe.isFavorite
+                      ? 'bg-red-500 text-white'
+                      : 'bg-white text-gray-400 hover:text-red-500'
+                  }`}
+                >
+                  <Heart className={`h-5 w-5 ${recipe.isFavorite ? 'fill-current' : ''}`} />
+                </button>
+                
+                {/* Difficulty Badge */}
+                <span className={`absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(recipe.difficulty)}`}>
+                  {recipe.difficulty}
+                </span>
+              </div>
+              
+              {/* Recipe Content */}
               <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                      {recipe.name}
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
-                      {recipe.description}
-                    </p>
-                  </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => setShowRecipeDetail(recipe)}
-                      className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-                    >
-                      <BookOpen className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteRecipe(recipe.id)}
-                      className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                    >
-                      <Trash2 className="h-5 w-5" />
-                    </button>
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900">{recipe.name}</h3>
+                  <div className="flex items-center gap-1">
+                    <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                    <span className="text-sm font-medium text-gray-700">{recipe.rating}</span>
                   </div>
                 </div>
                 
-                <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(recipe.category)}`}>
-                    {recipe.category.charAt(0).toUpperCase() + recipe.category.slice(1).replace('-', ' ')}
-                  </span>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(recipe.difficulty)}`}>
-                    {difficulties.find(d => d.value === recipe.difficulty)?.label}
-                  </span>
-                </div>
+                <p className="text-gray-600 mb-4 line-clamp-2">{recipe.description}</p>
                 
-                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  <div className="flex items-center space-x-4">
-                    <span className="flex items-center">
-                      <Clock className="h-4 w-4 mr-1" />
-                      {getTotalTime(recipe)} min
-                    </span>
-                    <span className="flex items-center">
-                      <Users className="h-4 w-4 mr-1" />
-                      {recipe.servings} servings
-                    </span>
+                {/* Recipe Meta */}
+                <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-gray-400" />
+                    <span className="text-gray-700">{recipe.prepTime + recipe.cookTime} min</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="flex items-center">
-                      <Star className="h-4 w-4 mr-1 text-yellow-500" />
-                      {recipe.rating}
-                    </span>
-                    <span className="flex items-center">
-                      <Heart className="h-4 w-4 mr-1 text-red-500" />
-                      {recipe.favorites}
-                    </span>
+                  <div className="flex items-center gap-2">
+                    <Users className="h-4 w-4 text-gray-400" />
+                    <span className="text-gray-700">{recipe.servings} servings</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4 text-gray-400" />
+                    <span className="text-gray-700">{recipe.cuisine}</span>
                   </div>
                 </div>
                 
-                <div className="flex space-x-2">
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {recipe.tags.slice(0, 3).map((tag, index) => (
+                    <span key={index} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
+                      {tag}
+                    </span>
+                  ))}
+                  {recipe.tags.length > 3 && (
+                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
+                      +{recipe.tags.length - 3}
+                    </span>
+                  )}
+                </div>
+                
+                {/* Actions */}
+                <div className="flex gap-2">
                   <button
-                    onClick={() => setShowRecipeDetail(recipe)}
-                    className="flex-1 px-3 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                    onClick={() => {
+                      setEditingRecipe(recipe);
+                      setFormData(recipe);
+                      setShowAddForm(true);
+                    }}
+                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                   >
-                    View Recipe
+                    <Edit className="h-4 w-4" />
+                    Edit
                   </button>
                   <button
-                    onClick={() => generateShoppingList(recipe)}
-                    className="px-3 py-2 text-sm bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                    onClick={() => handleDeleteRecipe(recipe.id)}
+                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
                   >
-                    <ShoppingCart className="h-4 w-4" />
+                    <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
               </div>
@@ -451,357 +510,249 @@ const Recipes = () => {
           ))}
         </div>
 
-        {/* Add Recipe Form */}
-        {showAddRecipe && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full p-6 max-h-[90vh] overflow-y-auto">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Add New Recipe</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Recipe Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={recipeForm.name}
-                    onChange={(e) => setRecipeForm({ ...recipeForm, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                    placeholder="Enter recipe name"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Category
-                  </label>
-                  <select
-                    value={recipeForm.category}
-                    onChange={(e) => setRecipeForm({ ...recipeForm, category: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+        {/* Add/Edit Recipe Modal */}
+        {showAddForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    {editingRecipe ? 'Edit Recipe' : 'Add New Recipe'}
+                  </h2>
+                  <button
+                    onClick={resetForm}
+                    className="text-gray-400 hover:text-gray-600"
                   >
-                    {categories.map(category => (
-                      <option key={category} value={category}>
-                        {category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ')}
-                      </option>
-                    ))}
-                  </select>
+                    <X className="h-6 w-6" />
+                  </button>
                 </div>
                 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Difficulty
-                  </label>
-                  <select
-                    value={recipeForm.difficulty}
-                    onChange={(e) => setRecipeForm({ ...recipeForm, difficulty: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  >
-                    {difficulties.map(difficulty => (
-                      <option key={difficulty.value} value={difficulty.value}>
-                        {difficulty.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Servings
-                  </label>
-                  <input
-                    type="number"
-                    value={recipeForm.servings}
-                    onChange={(e) => setRecipeForm({ ...recipeForm, servings: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                    min="1"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Prep Time (minutes)
-                  </label>
-                  <input
-                    type="number"
-                    value={recipeForm.prepTime}
-                    onChange={(e) => setRecipeForm({ ...recipeForm, prepTime: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                    min="0"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Cook Time (minutes)
-                  </label>
-                  <input
-                    type="number"
-                    value={recipeForm.cookTime}
-                    onChange={(e) => setRecipeForm({ ...recipeForm, cookTime: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                    min="0"
-                  />
-                </div>
-                
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Description
-                  </label>
-                  <textarea
-                    value={recipeForm.description}
-                    onChange={(e) => setRecipeForm({ ...recipeForm, description: e.target.value })}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                    placeholder="Describe your recipe..."
-                  />
-                </div>
-                
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Ingredients *
-                  </label>
-                  <div className="space-y-3">
-                    {recipeForm.ingredients.map((ingredient) => (
-                      <div key={ingredient.id} className="flex space-x-3">
-                        <input
-                          type="number"
-                          value={ingredient.amount}
-                          onChange={(e) => updateIngredient(ingredient.id, 'amount', e.target.value)}
-                          className="w-20 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                          placeholder="Amount"
-                        />
-                        <select
-                          value={ingredient.unit}
-                          onChange={(e) => updateIngredient(ingredient.id, 'unit', e.target.value)}
-                          className="w-24 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                        >
-                          {units.map(unit => (
-                            <option key={unit} value={unit}>{unit}</option>
-                          ))}
-                        </select>
+                <form onSubmit={(e) => { e.preventDefault(); editingRecipe ? handleEditRecipe() : handleAddRecipe(); }}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Basic Information */}
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Recipe Name *
+                        </label>
                         <input
                           type="text"
-                          value={ingredient.name}
-                          onChange={(e) => updateIngredient(ingredient.id, 'name', e.target.value)}
-                          className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                          placeholder="Ingredient name"
+                          value={formData.name}
+                          onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          required
                         />
-                        <button
-                          onClick={() => removeIngredient(ingredient.id)}
-                          className="px-3 py-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
                       </div>
-                    ))}
-                    <button
-                      onClick={addIngredient}
-                      className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm"
-                    >
-                      + Add Ingredient
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Instructions *
-                  </label>
-                  <div className="space-y-3">
-                    {recipeForm.instructions.map((instruction) => (
-                      <div key={instruction.id} className="flex space-x-3">
-                        <span className="flex-shrink-0 w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                          {instruction.id}
-                        </span>
-                        <textarea
-                          value={instruction.step}
-                          onChange={(e) => updateInstruction(instruction.id, e.target.value)}
-                          rows={2}
-                          className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                          placeholder="Describe this step..."
-                        />
-                        <button
-                          onClick={() => removeInstruction(instruction.id)}
-                          className="px-3 py-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    ))}
-                    <button
-                      onClick={addInstruction}
-                      className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm"
-                    >
-                      + Add Step
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Notes
-                  </label>
-                  <textarea
-                    value={recipeForm.notes}
-                    onChange={(e) => setRecipeForm({ ...recipeForm, notes: e.target.value })}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                    placeholder="Additional notes, tips, or variations..."
-                  />
-                </div>
-              </div>
-              
-              <div className="flex justify-end gap-3 mt-6">
-                <button
-                  onClick={() => setShowAddRecipe(false)}
-                  className="px-4 py-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleAddRecipe}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-                >
-                  Add Recipe
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Recipe Detail Modal */}
-        {showRecipeDetail && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full p-6 max-h-[90vh] overflow-y-auto">
-              <div className="flex items-start justify-between mb-6">
-                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
-                  {showRecipeDetail.name}
-                </h3>
-                <button
-                  onClick={() => setShowRecipeDetail(null)}
-                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                >
-                  <XCircle className="h-6 w-6" />
-                </button>
-              </div>
-              
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2">
-                  <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    {showRecipeDetail.description}
-                  </p>
-                  
-                  <div className="mb-6">
-                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Ingredients</h4>
-                    <div className="space-y-2">
-                      {showRecipeDetail.ingredients.map((ingredient) => (
-                        <div key={ingredient.id} className="flex items-center space-x-3">
-                          <span className="w-3 h-3 bg-blue-500 rounded-full"></span>
-                          <span className="text-gray-900 dark:text-white">
-                            {ingredient.amount} {ingredient.unit} {ingredient.name}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Instructions</h4>
-                    <div className="space-y-4">
-                      {showRecipeDetail.instructions.map((instruction) => (
-                        <div key={instruction.id} className="flex space-x-4">
-                          <span className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
-                            {instruction.id}
-                          </span>
-                          <p className="text-gray-700 dark:text-gray-300">{instruction.step}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="space-y-6">
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Recipe Info</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">Category:</span>
-                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(showRecipeDetail.category)}`}>
-                          {showRecipeDetail.category.charAt(0).toUpperCase() + showRecipeDetail.category.slice(1).replace('-', ' ')}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">Difficulty:</span>
-                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(showRecipeDetail.difficulty)}`}>
-                          {difficulties.find(d => d.value === showRecipeDetail.difficulty)?.label}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">Prep Time:</span>
-                        <span>{showRecipeDetail.prepTime} min</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">Cook Time:</span>
-                        <span>{showRecipeDetail.cookTime} min</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">Total Time:</span>
-                        <span>{getTotalTime(showRecipeDetail)} min</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">Servings:</span>
-                        <span>{showRecipeDetail.servings}</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Actions</h4>
-                    <div className="space-y-2">
-                      <button
-                        onClick={() => generateShoppingList(showRecipeDetail)}
-                        className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors flex items-center justify-center space-x-2"
-                      >
-                        <ShoppingCart className="h-4 w-4" />
-                        <span>Generate Shopping List</span>
-                      </button>
-                      <button className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center justify-center space-x-2">
-                        <Calendar className="h-4 w-4" />
-                        <span>Add to Meal Plan</span>
-                      </button>
-                      <button className="w-full px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors flex items-center justify-center space-x-2">
-                        <Heart className="h-4 w-4" />
-                        <span>Add to Favorites</span>
-                      </button>
-                    </div>
-                  </div>
-                  
-                  {showRecipeDetail.notes && (
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                      <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Notes</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {showRecipeDetail.notes}
-                      </p>
-                    </div>
-                  )}
-                  
-                  {showRecipeDetail.tags.length > 0 && (
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                      <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Tags</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {showRecipeDetail.tags.map((tag, index) => (
-                          <span
-                            key={index}
-                            className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Category *
+                          </label>
+                          <select
+                            value={formData.category}
+                            onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                            required
                           >
-                            {tag}
-                          </span>
-                        ))}
+                            <option value="">Select Category</option>
+                            {categories.map(category => (
+                              <option key={category} value={category}>{category}</option>
+                            ))}
+                          </select>
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Cuisine
+                          </label>
+                          <select
+                            value={formData.cuisine}
+                            onChange={(e) => setFormData(prev => ({ ...prev, cuisine: e.target.value }))}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          >
+                            <option value="">Select Cuisine</option>
+                            {cuisines.map(cuisine => (
+                              <option key={cuisine} value={cuisine}>{cuisine}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Description
+                        </label>
+                        <textarea
+                          value={formData.description}
+                          onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                          rows={3}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        />
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Prep Time (min)
+                          </label>
+                          <input
+                            type="number"
+                            value={formData.prepTime}
+                            onChange={(e) => setFormData(prev => ({ ...prev, prepTime: e.target.value }))}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Cook Time (min)
+                          </label>
+                          <input
+                            type="number"
+                            value={formData.cookTime}
+                            onChange={(e) => setFormData(prev => ({ ...prev, cookTime: e.target.value }))}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Servings
+                          </label>
+                          <input
+                            type="number"
+                            value={formData.servings}
+                            onChange={(e) => setFormData(prev => ({ ...prev, servings: e.target.value }))}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Difficulty
+                        </label>
+                        <select
+                          value={formData.difficulty}
+                          onChange={(e) => setFormData(prev => ({ ...prev, difficulty: e.target.value }))}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        >
+                          <option value="easy">Easy</option>
+                          <option value="medium">Medium</option>
+                          <option value="hard">Hard</option>
+                        </select>
                       </div>
                     </div>
-                  )}
-                </div>
+                    
+                    {/* Ingredients and Instructions */}
+                    <div className="space-y-4">
+                      {/* Ingredients */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Ingredients
+                        </label>
+                        <div className="space-y-2">
+                          {formData.ingredients.map((ingredient, index) => (
+                            <div key={index} className="flex gap-2">
+                              <input
+                                type="text"
+                                placeholder="Ingredient"
+                                value={ingredient.item}
+                                onChange={(e) => updateIngredient(index, 'item', e.target.value)}
+                                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                              />
+                              <input
+                                type="text"
+                                placeholder="Amount"
+                                value={ingredient.amount}
+                                onChange={(e) => updateIngredient(index, 'amount', e.target.value)}
+                                className="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                              />
+                              <input
+                                type="text"
+                                placeholder="Unit"
+                                value={ingredient.unit}
+                                onChange={(e) => updateIngredient(index, 'unit', e.target.value)}
+                                className="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeIngredient(index)}
+                                className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={addIngredient}
+                            className="w-full px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-orange-500 hover:text-orange-500 transition-colors"
+                          >
+                            <Plus className="h-4 w-4 inline mr-2" />
+                            Add Ingredient
+                          </button>
+                        </div>
+                      </div>
+                      
+                      {/* Instructions */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Instructions
+                        </label>
+                        <div className="space-y-2">
+                          {formData.instructions.map((instruction, index) => (
+                            <div key={index} className="flex gap-2">
+                              <span className="flex-shrink-0 w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-medium">
+                                {index + 1}
+                              </span>
+                              <textarea
+                                placeholder={`Step ${index + 1}`}
+                                value={instruction}
+                                onChange={(e) => updateInstruction(index, e.target.value)}
+                                rows={2}
+                                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeInstruction(index)}
+                                className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={addInstruction}
+                            className="w-full px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-orange-500 hover:text-orange-500 transition-colors"
+                          >
+                            <Plus className="h-4 w-4 inline mr-2" />
+                            Add Instruction
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Form Actions */}
+                  <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200">
+                    <button
+                      type="button"
+                      onClick={resetForm}
+                      className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+                    >
+                      {editingRecipe ? 'Update Recipe' : 'Add Recipe'}
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
