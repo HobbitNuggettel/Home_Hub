@@ -1,6 +1,17 @@
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { renderHomeWithProviders } from '../../utils/test-utils';
+
+// Mock DevToolsContext
+jest.mock('../../contexts/DevToolsContext', () => ({
+  useDevTools: jest.fn(() => ({
+    isDevMode: false,
+    toggleDevMode: jest.fn(),
+    showDevTools: false,
+    toggleDevTools: jest.fn(),
+  })),
+}));
+
 import Home from '../Home';
 
 // Mock useNavigate

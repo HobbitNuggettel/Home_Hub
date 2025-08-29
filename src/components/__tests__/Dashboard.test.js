@@ -4,6 +4,29 @@ import userEvent from '@testing-library/user-event';
 import Dashboard from '../Dashboard';
 import { renderWithProviders, mockUser, mockInventoryItem } from '../../utils/test-utils';
 
+// Mock AuthContext
+jest.mock('../../contexts/AuthContext', () => ({
+  useAuth: jest.fn(() => ({
+    currentUser: { uid: 'test-uid', email: 'test@example.com' },
+    userProfile: { name: 'Test User', email: 'test@example.com' },
+    updateUserProfile: jest.fn(() => Promise.resolve()),
+    login: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
+    logout: jest.fn(() => Promise.resolve()),
+    loading: false,
+    error: null,
+  })),
+}));
+
+// Mock DevToolsContext
+jest.mock('../../contexts/DevToolsContext', () => ({
+  useDevTools: jest.fn(() => ({
+    isDevMode: false,
+    toggleDevMode: jest.fn(),
+    showDevTools: false,
+    toggleDevTools: jest.fn(),
+  })),
+}));
+
 // Mock the useInventory hook
 jest.mock('../../hooks/useInventory', () => ({
   __esModule: true,
