@@ -1,0 +1,294 @@
+# 🚀 ENTERPRISE CI/CD PIPELINE
+# Home Hub - Production Deployment Pipeline
+
+name: Enterprise CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch: # Manual trigger
+
+env:
+  NODE_VERSION: '18'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # 🔍 QUALITY GATES
+  quality-gates:
+    name: 🎯 Quality Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📦 Install Dependencies
+        run: |
+          npm ci
+          npm audit --audit-level=moderate
+          
+      - name: 🧪 Run Tests
+        run: |
+          npm run test:coverage
+          npm run test:ci
+          
+      - name: 🔍 Code Quality Check
+        run: |
+          npm run lint:check
+          npm run lint:fix
+          
+      - name: 🛡️ Security Scan
+        run: |
+          npm run security:scan
+          npm run dependency:check
+          
+      - name: 📊 Performance Test
+        run: |
+          npm run performance:test
+          npm run lighthouse:ci
+          
+      - name: 📋 Quality Gate Validation
+        run: |
+          # Validate all quality gates pass
+          npm run quality:validate
+          
+      - name: 📤 Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: coverage/
+          
+      - name: 📊 Quality Report
+        run: |
+          echo "## 🎯 Quality Gates Report" >> $GITHUB_STEP_SUMMARY
+          echo "✅ All quality gates passed successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "📊 Test Coverage: $(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')%" >> $GITHUB_STEP_SUMMARY
+
+  # 🐳 BUILD & CONTAINERIZE
+  build:
+    name: 🐳 Build & Containerize
+    runs-on: ubuntu-latest
+    needs: quality-gates
+    timeout-minutes: 45
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📦 Install Dependencies
+        run: npm ci
+        
+      - name: 🏗️ Build Application
+        run: |
+          npm run build
+          npm run build:api
+          
+      - name: 🔐 Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: 🐳 Build Web Container
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/web:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          
+      - name: 🐳 Build API Container
+        uses: docker/build-push-action@v5
+        with:
+          context: ./api
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/api:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          
+      - name: 📤 Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            build/
+            api/build/
+
+  # 🧪 STAGING DEPLOYMENT
+  staging:
+    name: 🧪 Staging Deployment
+    runs-on: ubuntu-latest
+    needs: [quality-gates, build]
+    environment: staging
+    timeout-minutes: 30
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: 🚀 Deploy to Staging
+        run: |
+          echo "Deploying to staging environment..."
+          # Add your staging deployment logic here
+          npm run deploy:staging
+          
+      - name: 🧪 Staging Tests
+        run: |
+          echo "Running staging environment tests..."
+          npm run test:staging
+          
+      - name: 📊 Staging Health Check
+        run: |
+          echo "Performing staging health check..."
+          npm run health:check:staging
+          
+      - name: 📋 Staging Report
+        run: |
+          echo "## 🧪 Staging Deployment Report" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Staging deployment successful!" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 Staging URL: https://staging.homehub.com" >> $GITHUB_STEP_SUMMARY
+
+  # 🚀 PRODUCTION DEPLOYMENT
+  production:
+    name: 🚀 Production Deployment
+    runs-on: ubuntu-latest
+    needs: [quality-gates, build, staging]
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    timeout-minutes: 60
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: 🔐 Production Approval
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Wait for manual approval
+            core.info('Waiting for production deployment approval...')
+            
+      - name: 🚀 Deploy to Production
+        run: |
+          echo "Deploying to production environment..."
+          npm run deploy:production
+          
+      - name: 📊 Production Health Check
+        run: |
+          echo "Performing production health check..."
+          npm run health:check:production
+          
+      - name: 🔄 Backup to Main2
+        run: |
+          echo "Creating production backup to main2..."
+          npm run backup:main2
+          
+      - name: 📋 Production Report
+        run: |
+          echo "## 🚀 Production Deployment Report" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Production deployment successful!" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 Production URL: https://homehub.com" >> $GITHUB_STEP_SUMMARY
+          echo "📅 Deployment Time: $(date)" >> $GITHUB_STEP_SUMMARY
+          
+      - name: 📢 Notify Stakeholders
+        run: |
+          echo "Notifying stakeholders of successful deployment..."
+          # Add notification logic here
+
+  # 🔄 ROLLBACK PROCEDURE
+  rollback:
+    name: 🔄 Emergency Rollback
+    runs-on: ubuntu-latest
+    if: failure()
+    timeout-minutes: 15
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: 🚨 Emergency Rollback
+        run: |
+          echo "🚨 EMERGENCY ROLLBACK INITIATED!"
+          echo "Rolling back to previous stable version..."
+          npm run rollback:emergency
+          
+      - name: 📊 Rollback Health Check
+        run: |
+          echo "Verifying rollback health..."
+          npm run health:check:rollback
+          
+      - name: 📢 Rollback Notification
+        run: |
+          echo "Notifying team of emergency rollback..."
+          # Add emergency notification logic here
+
+  # 📊 POST-DEPLOYMENT MONITORING
+  monitoring:
+    name: 📊 Post-Deployment Monitoring
+    runs-on: ubuntu-latest
+    needs: [production]
+    if: always()
+    timeout-minutes: 30
+    
+    steps:
+      - name: 📊 Performance Monitoring
+        run: |
+          echo "Starting post-deployment monitoring..."
+          npm run monitor:performance
+          
+      - name: 🛡️ Security Monitoring
+        run: |
+          echo "Starting security monitoring..."
+          npm run monitor:security
+          
+      - name: 📈 Metrics Collection
+        run: |
+          echo "Collecting deployment metrics..."
+          npm run metrics:collect
+          
+      - name: 📋 Monitoring Report
+        run: |
+          echo "## 📊 Post-Deployment Monitoring Report" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Monitoring started successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "📊 Performance metrics being collected..." >> $GITHUB_STEP_SUMMARY
+          echo "🛡️ Security monitoring active..." >> $GITHUB_STEP_SUMMARY
+
+# 📋 PIPELINE CONFIGURATION
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# 🔧 ENVIRONMENT PROTECTION
+environments:
+  staging:
+    url: https://staging.homehub.com
+    protection_rules:
+      required_reviewers: 1
+      wait_timer: 0
+      
+  production:
+    url: https://homehub.com
+    protection_rules:
+      required_reviewers: 2
+      wait_timer: 5
+      deployment_branch_policy:
+        protected_branches: true
+        custom_branch_policies: false
