@@ -44,62 +44,84 @@ export function AuthProvider({ children }) {
     return firebaseAuthService.signInWithEmail(email, password);
   }
 
-  // Sign in with Google - TEMPORARILY DISABLED
+  // Sign in with Google
   async function signInWithGoogle() {
     try {
-      // const result = await firebaseAuthService.signInWithGoogle();
-
-      // // Check if user document exists, if not create one
-      // const userDoc = await firestoreService.getDocument('users', result.user.uid);
-      // if (!userDoc) {
-      //   await firestoreService.createDocument('users', result.user.uid, {
-      //     uid: result.user.uid,
-      //     email: result.user.email,
-      //     displayName: result.user.displayName,
-      //     photoURL: result.user.photoURL,
-      //     createdAt: new Date().toISOString(),
-      //     role: 'user',
-      //     preferences: {
-      //       theme: 'light',
-      //       notifications: true
-      //     }
-      //   });
-      // }
-      
-      // return result;
-      console.log('Google signin temporarily disabled');
-      throw new Error('Firebase services temporarily disabled');
+      if (firebaseAuthService && firebaseAuthService.signInWithGoogle) {
+        const result = await firebaseAuthService.signInWithGoogle();
+        return result;
+      } else {
+        throw new Error('Google sign-in not available');
+      }
     } catch (error) {
+      console.error('Google sign-in error:', error);
       throw error;
     }
   }
 
-  // Sign out - TEMPORARILY DISABLED
-  function logout() {
-    // return firebaseAuthService.signOut();
-    console.log('Logout temporarily disabled');
-    throw new Error('Firebase services temporarily disabled');
+  // Sign out
+  async function logout() {
+    try {
+      // Clear local state
+      setCurrentUser(null);
+      setUserProfile(null);
+      
+      // Clear any stored tokens or data
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userProfile');
+
+      // Try to sign out from Firebase if available
+      try {
+        if (firebaseAuthService && firebaseAuthService.signOut) {
+          await firebaseAuthService.signOut();
+        }
+      } catch (firebaseError) {
+        console.log('Firebase logout failed, but local logout successful:', firebaseError.message);
+      }
+
+      return { success: true, message: 'Logged out successfully' };
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if there's an error, clear local state
+      setCurrentUser(null);
+      setUserProfile(null);
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userProfile');
+      throw error;
+    }
   }
 
-  // Reset password - TEMPORARILY DISABLED
-  function resetPassword(email) {
-    // return firebaseAuthService.sendPasswordResetEmail(email);
-    console.log('Password reset temporarily disabled');
-    throw new Error('Firebase services temporarily disabled');
+  // Reset password
+  async function resetPassword(email) {
+    try {
+      if (firebaseAuthService && firebaseAuthService.sendPasswordResetEmail) {
+        return await firebaseAuthService.sendPasswordResetEmail(email);
+      } else {
+        throw new Error('Password reset not available');
+      }
+    } catch (error) {
+      console.error('Password reset error:', error);
+      throw error;
+    }
   }
 
-  // Update user profile - TEMPORARILY DISABLED
+  // Update user profile
   async function updateUserProfile(updates) {
     try {
-      // await firebaseAuthService.updateProfile(updates);
-      
-      // // Update Firestore document
-      // if (firebaseAuthService.getCurrentUser()) {
-      //   await firestoreService.updateDocument('users', firebaseAuthService.getCurrentUser().uid, updates);
-      // }
-      console.log('Profile update temporarily disabled');
-      throw new Error('Firebase services temporarily disabled');
+      if (firebaseAuthService && firebaseAuthService.updateProfile) {
+        await firebaseAuthService.updateProfile(updates);
+
+        // Update local state
+        setUserProfile(prev => ({ ...prev, ...updates }));
+
+        return { success: true, message: 'Profile updated successfully' };
+      } else {
+        // Fallback: just update local state
+        setUserProfile(prev => ({ ...prev, ...updates }));
+        return { success: true, message: 'Profile updated locally' };
+      }
     } catch (error) {
+      console.error('Profile update error:', error);
       throw error;
     }
   }

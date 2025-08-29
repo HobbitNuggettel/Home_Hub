@@ -5,10 +5,10 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar
 } from 'recharts';
 import { 
-  Activity, Database, Zap, TrendingUp, Cpu, Memory, 
+  Activity, Database, Zap, TrendingUp, Cpu, MemoryStick, 
   HardDrive, Network, Clock, BarChart3, Gauge, AlertTriangle 
 } from 'lucide-react';
-import { performanceMonitor, memoryMonitor, cacheService } from '../utils/performance';
+import { performanceMonitor, memoryMonitor, cacheManager } from '../utils/performance';
 
 const PerformanceAnalytics = () => {
   const [performanceData, setPerformanceData] = useState({
@@ -58,7 +58,7 @@ const PerformanceAnalytics = () => {
     }
 
     // Cache data
-    const cacheStats = cacheService.getStats();
+    const cacheStats = cacheManager.getStats ? cacheManager.getStats() : { hits: 0, misses: 0, hitRate: 0, size: 0 };
     setCurrentStats(prev => ({ ...prev, cache: cacheStats }));
     setPerformanceData(prev => ({
       ...prev,
@@ -232,7 +232,7 @@ const PerformanceAnalytics = () => {
             title="Memory Usage"
             value={currentStats.memory?.used || 0}
             unit="MB"
-            icon={Memory}
+            icon={MemoryStick}
             color="bg-blue-500"
             trend={5.2}
           />

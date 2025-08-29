@@ -29,6 +29,10 @@ export default function Navigation() {
   const { currentUser, userProfile, logout } = useAuth();
   const navigate = useNavigate();
 
+  // Debug logging
+  console.log('Navigation render - currentUser:', currentUser);
+  console.log('Navigation render - userProfile:', userProfile);
+
   const navigationItems = [
     {
       name: 'Home',
@@ -138,13 +142,33 @@ export default function Navigation() {
     setIsMenuOpen(false);
   };
 
+  const handleMenuToggle = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   const handleLogout = async () => {
     try {
-      await logout();
+      console.log('🚪 Logout button clicked');
+      console.log('Current user before logout:', currentUser);
+      console.log('Logout function:', logout);
+
+      const result = await logout();
+      console.log('✅ Logout successful:', result);
+
       setIsMenuOpen(false);
+      console.log('Menu closed, navigating to login...');
       navigate('/login');
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error('❌ Logout error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      });
+
+      // Even if logout fails, close menu and redirect
+      setIsMenuOpen(false);
+      navigate('/login');
     }
   };
 
@@ -152,17 +176,20 @@ export default function Navigation() {
     <>
       {/* Hamburger Menu Button */}
       <button
-        onClick={() => setIsMenuOpen(true)}
-        className="fixed top-4 left-4 z-50 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        onClick={handleMenuToggle}
+        className="fixed top-4 left-4 z-[9999] p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors shadow-lg md:p-2 mobile-nav-button"
         aria-label="Open menu"
+
       >
         <Menu size={24} />
+
       </button>
 
       {/* Menu Overlay */}
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
-          <div className="fixed left-0 top-0 h-full w-80 bg-white dark:bg-gray-800 shadow-xl flex flex-col">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-[9998]">
+
+          <div className="fixed left-0 top-0 h-full w-[95vw] max-w-sm bg-white dark:bg-gray-800 shadow-xl flex flex-col overflow-hidden mobile-nav-container">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center space-x-3">
@@ -238,19 +265,31 @@ export default function Navigation() {
             )}
 
             {/* Main Navigation */}
-            <div className="flex-1 overflow-y-auto py-4 max-h-[60vh]">
+            <div className="flex-1 overflow-y-auto py-4 relative mobile-nav-menu mobile-nav-content">
+              {/* Scroll indicator */}
+              <div className="absolute top-0 right-2 w-1 h-8 bg-gradient-to-b from-blue-400 to-transparent rounded-full opacity-60 pointer-events-none"></div>
               <div className="px-4">
-                <h2 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                  Main Features
-                </h2>
-                <nav className="space-y-1">
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Main Features
+                  </h2>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">({navigationItems.length} items) - Scroll to see all</span>
+                  <Link
+                    to="/logout-test"
+                    className="text-xs text-blue-500 hover:text-blue-700 underline"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Test Logout
+                  </Link>
+                </div>
+                <nav className="space-y-1 pb-4">
                   {navigationItems.map((item) => {
                     const Icon = item.icon;
                     return (
                       <button
                         key={item.name}
                         onClick={() => handleNavigation(item.href)}
-                        className="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group"
+                        className="w-full text-left p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 active:bg-gray-200 dark:active:bg-gray-600 transition-colors group touch-manipulation"
                       >
                         <div className="flex items-center space-x-3">
                           <Icon className="text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-400" size={20} />
@@ -271,7 +310,7 @@ export default function Navigation() {
 
               {/* User Menu */}
               {currentUser && (
-                <div className="px-4 mt-6">
+                <div className="px-4 mt-6 pb-4">
                   <h2 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
                     User Menu
                   </h2>
@@ -288,7 +327,7 @@ export default function Navigation() {
                         <button
                           key={item.name}
                           onClick={() => handleNavigation(item.href)}
-                          className="w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group"
+                          className="w-full text-left p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 active:bg-gray-200 dark:active:bg-gray-600 transition-colors group touch-manipulation"
                         >
                           <div className="flex items-center space-x-3">
                             <Icon className="text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-400" size={20} />
@@ -314,11 +353,19 @@ export default function Navigation() {
               <div className="p-4 border-t border-gray-200 dark:border-gray-700">
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                  className="w-full flex items-center justify-center space-x-3 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 active:bg-red-800 transition-all duration-200 shadow-lg"
                 >
                   <LogOut size={20} />
-                  <span>Logout</span>
+                  <span className="font-medium">Logout</span>
                 </button>
+
+                {/* Debug info - remove this later */}
+                <div className="mt-2 text-xs text-gray-500 text-center">
+                  User: {currentUser?.email || 'Unknown'} | Click to logout
+                </div>
+                <div className="mt-1 text-xs text-gray-400 text-center">
+                  Auth Status: {currentUser ? '✅ Authenticated' : '❌ Not Authenticated'}
+                </div>
               </div>
             )}
           </div>

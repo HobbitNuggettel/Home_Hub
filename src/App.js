@@ -27,6 +27,7 @@ import RealTimeCollaboration from './components/RealTimeCollaboration';
 import UserAccessManagement from './components/UserAccessManagement';
 import AdvancedAnalytics from './components/AdvancedAnalytics';
 import PerformanceAnalytics from './components/PerformanceAnalytics';
+import LogoutTest from './components/LogoutTest';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
                   <Route path="/" element={<LandingPage />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<SignUp />} />
+                  <Route path="/logout-test" element={<LogoutTest />} />
 
                   {/* Protected Routes */}
                   <Route path="/home" element={
