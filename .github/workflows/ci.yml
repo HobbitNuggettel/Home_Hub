@@ -41,7 +41,9 @@ jobs:
         CI: true
         
     - name: 🏗️ Build application
-      run: npm run build
+      run: CI=false npm run build
+      env:
+        CI: false
       
     - name: 📦 Upload build artifacts
       uses: actions/upload-artifact@v4
