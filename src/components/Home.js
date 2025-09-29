@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { useDevTools } from '../contexts/DevToolsContext';
+import hybridStorage from '../firebase/hybridStorage';
+import AnalyticsService from '../services/AnalyticsService';
 import { 
   Package, 
   DollarSign, 
@@ -24,8 +27,10 @@ import {
 
 export default function Home() {
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
   const { isDevMode, showDevTools } = useDevTools();
   const [isLoading, setIsLoading] = useState(true);
+  const [realData, setRealData] = useState(null);
   const [animatedStats, setAnimatedStats] = useState({
     inventory: 0,
     budget: 0,
@@ -151,25 +156,76 @@ export default function Home() {
     }
   ];
 
-  // Simulate loading and animate stats
+  // Fetch real data from Firebase
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-      // Animate stats counting up
-      const finalStats = {
-        inventory: 47,
-        budget: 1200,
-        recipes: 15,
-        shopping: 17
-      };
-      
-      Object.keys(finalStats).forEach(key => {
-        animateValue(key, 0, finalStats[key], 1500);
-      });
-    }, 800);
+    const fetchDashboardData = async () => {
+      if (!currentUser) {
+        setIsLoading(false);
+        return;
+      }
 
-    return () => clearTimeout(timer);
-  }, []);
+      try {
+        setIsLoading(true);
+        const analyticsService = new AnalyticsService();
+
+        // Fetch inventory data
+        const inventoryResponse = await hybridStorage.getInventoryItems(currentUser.uid);
+        const inventoryItems = inventoryResponse.success ? inventoryResponse.data : [];
+
+        // Fetch recipes data
+        const recipesResponse = await hybridStorage.getRecipes(currentUser.uid);
+        const recipes = recipesResponse.success ? recipesResponse.data : [];
+
+        // Fetch spending analytics
+        const spendingAnalytics = await analyticsService.getSpendingAnalytics(currentUser.uid, '30d');
+
+        // Calculate real stats
+        const finalStats = {
+          inventory: inventoryItems.length || 0,
+          budget: spendingAnalytics.totalBudget || 0,
+          recipes: recipes.length || 0,
+          shopping: 0 // TODO: Add shopping lists when available
+        };
+
+        setRealData({
+          inventory: {
+            total: inventoryItems.length,
+            lowStock: inventoryItems.filter(item => item.quantity <= 2).length,
+            categories: [...new Set(inventoryItems.map(item => item.category))].length,
+            totalValue: inventoryItems.reduce((sum, item) => sum + (item.price * item.quantity || 0), 0)
+          },
+          spending: {
+            budget: spendingAnalytics.totalBudget || 0,
+            spent: spendingAnalytics.totalSpending || 0,
+            remaining: (spendingAnalytics.totalBudget || 0) - (spendingAnalytics.totalSpending || 0),
+            topCategory: spendingAnalytics.topCategory || 'N/A'
+          },
+          recipes: {
+            total: recipes.length,
+            categories: [...new Set(recipes.map(r => r.category))].length
+          }
+        });
+
+        setIsLoading(false);
+        
+        // Animate stats counting up
+        Object.keys(finalStats).forEach(key => {
+          animateValue(key, 0, finalStats[key], 1500);
+        });
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        setIsLoading(false);
+        
+        // Fallback to demo data on error
+        const finalStats = { inventory: 0, budget: 0, recipes: 0, shopping: 0 };
+        Object.keys(finalStats).forEach(key => {
+          animateValue(key, 0, finalStats[key], 1500);
+        });
+      }
+    };
+
+    fetchDashboardData();
+  }, [currentUser]);
 
   const animateValue = (key, start, end, duration) => {
     const startTime = performance.now();
@@ -268,21 +324,19 @@ export default function Home() {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Items</p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white">{animatedStats.inventory}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">8 categories</p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  {realData?.inventory.categories || 0} categories
+                </p>
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center text-sm text-amber-600 dark:text-amber-400">
                 <AlertCircle className="w-4 h-4 mr-2" />
-                <span>3 items running low</span>
-              </div>
-              <div className="flex items-center text-sm text-red-600 dark:text-red-400">
-                <Clock className="w-4 h-4 mr-2" />
-                <span>2 items expiring soon</span>
+                <span>{realData?.inventory.lowStock || 0} items running low</span>
               </div>
               <div className="flex items-center text-sm text-green-600 dark:text-green-400">
                 <DollarSign className="w-4 h-4 mr-2" />
-                <span>Total value: $234.67</span>
+                <span>Total value: ${realData?.inventory.totalValue.toFixed(2) || '0.00'}</span>
               </div>
             </div>
           </div>
@@ -296,21 +350,23 @@ export default function Home() {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Monthly Budget</p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white">${animatedStats.budget.toLocaleString()}</p>
-                <p className="text-xs text-green-500 font-medium">29% under budget</p>
+                <p className="text-xs text-green-500 font-medium">
+                  {realData?.spending.remaining > 0 ? `$${realData.spending.remaining.toFixed(2)} remaining` : 'Over budget'}
+                </p>
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-600 dark:text-gray-400">Spent:</span>
-                <span className="font-medium">$847.50</span>
+                <span className="font-medium">${realData?.spending.spent.toFixed(2) || '0.00'}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-600 dark:text-gray-400">Remaining:</span>
-                <span className="font-medium text-green-600">$352.50</span>
+                <span className="font-medium text-green-600">${realData?.spending.remaining.toFixed(2) || '0.00'}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-600 dark:text-gray-400">Top Category:</span>
-                <span className="font-medium">Groceries (38%)</span>
+                <span className="font-medium">{realData?.spending.topCategory || 'N/A'}</span>
               </div>
             </div>
           </div>
@@ -324,7 +380,7 @@ export default function Home() {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Saved Recipes</p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white">{animatedStats.recipes}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">5 favorites</p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">{realData?.recipes.categories || 0} categories</p>
               </div>
             </div>
             <div className="space-y-2">
