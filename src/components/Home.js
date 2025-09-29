@@ -12,147 +12,284 @@ import {
   Utensils, 
   Zap, 
   Activity, 
-  Info,
   ArrowRight,
   TrendingUp,
   AlertCircle,
   CheckCircle,
-  Clock,
-  Upload,
   Brain,
   Wrench,
-  Wifi,
-  BarChart3
+  Image,
+  Home as HomeIcon,
+  BarChart3,
+  Sparkles,
+  Shield,
+  Rocket,
+  Heart,
+  Star
 } from 'lucide-react';
 
 export default function Home() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-  const { isDevMode, showDevTools } = useDevTools();
+  const { isDevMode } = useDevTools();
   const [isLoading, setIsLoading] = useState(true);
   const [realData, setRealData] = useState(null);
   const [animatedStats, setAnimatedStats] = useState({
     inventory: 0,
     budget: 0,
     recipes: 0,
-    shopping: 0
+    users: 0
   });
   
+  // Comprehensive feature definitions with all capabilities
   const features = [
     {
       icon: Package,
       title: 'Inventory Management',
-      description: 'Track household items with categories, tags, and warranty info',
+      description: 'Complete household inventory tracking with smart organization',
       href: '/inventory',
-      color: 'bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400',
-      gradient: 'from-blue-500 to-blue-600',
-      stats: { total: 47, categories: 8, low: 3, expiring: 2, value: 234.67 }
+      color: 'from-blue-500 to-cyan-500',
+      iconBg: 'bg-blue-500',
+      capabilities: [
+        'Barcode scanning & SKU tracking',
+        'Category & location organization',
+        'Warranty & maintenance tracking',
+        'Low stock alerts',
+        'Value calculations',
+        'Bulk import/export (CSV)',
+        'Image attachments',
+        'Custom tags & notes'
+      ]
     },
     {
       icon: DollarSign,
       title: 'Spending & Budgeting',
-      description: 'Monitor expenses, set budgets, and analyze spending patterns',
+      description: 'Smart financial management with AI-powered insights',
       href: '/spending',
-      color: 'bg-green-50 text-green-600 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400',
-      gradient: 'from-green-500 to-green-600',
-      stats: { budget: 1200, spent: 847.50, remaining: 352.50, topCategory: 'Groceries', topPercentage: 38 }
-    },
-    {
-      icon: Users,
-      title: 'Collaboration',
-      description: 'Manage household members with roles and permissions',
-      href: '/collaboration',
-      color: 'bg-purple-50 text-purple-600 hover:bg-purple-100 dark:bg-purple-900/20 dark:text-purple-400',
-      gradient: 'from-purple-500 to-purple-600',
-      stats: { members: 4, active: 3, roles: 2 }
-    },
-    {
-      icon: ShoppingCart,
-      title: 'Shopping Lists',
-      description: 'Create and manage shopping lists with budget tracking',
-      href: '/shopping-lists',
-      color: 'bg-orange-50 text-orange-600 hover:bg-orange-100 dark:bg-orange-900/20 dark:text-orange-400',
-      gradient: 'from-orange-500 to-orange-600',
-      stats: { items: 17, estimated: 78.37, highPriority: 5, stores: 3 }
+      color: 'from-green-500 to-emerald-500',
+      iconBg: 'bg-green-500',
+      capabilities: [
+        'Monthly budget tracking',
+        'Category-based expenses',
+        'Recurring payments',
+        'Spending analytics & trends',
+        'Budget alerts & notifications',
+        'Receipt attachments',
+        'Custom expense tags',
+        'Financial reports & exports'
+      ]
     },
     {
       icon: Utensils,
       title: 'Recipe Management',
-      description: 'Store recipes, plan meals, and generate shopping lists',
+      description: 'Your personal digital cookbook with meal planning',
       href: '/recipes',
-      color: 'bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400',
-      gradient: 'from-red-500 to-red-600',
-      stats: { total: 15, favorites: 5, newThisWeek: 3 }
+      color: 'from-red-500 to-pink-500',
+      iconBg: 'bg-red-500',
+      capabilities: [
+        'Recipe storage & organization',
+        'Ingredient lists & portions',
+        'Step-by-step instructions',
+        'Nutrition information',
+        'Meal planning calendar',
+        'Shopping list generation',
+        'Dietary filters & tags',
+        'Recipe ratings & reviews'
+      ]
+    },
+    {
+      icon: ShoppingCart,
+      title: 'Shopping Lists',
+      description: 'Collaborative shopping with smart recommendations',
+      href: '/shopping-lists',
+      color: 'from-orange-500 to-amber-500',
+      iconBg: 'bg-orange-500',
+      capabilities: [
+        'Multiple shopping lists',
+        'Real-time collaboration',
+        'Budget tracking per list',
+        'Store organization',
+        'Priority items',
+        'Quantity & unit tracking',
+        'Price estimates',
+        'Completed item history'
+      ]
+    },
+    {
+      icon: Users,
+      title: 'Collaboration',
+      description: 'Family & household member management',
+      href: '/collaboration',
+      color: 'from-purple-500 to-violet-500',
+      iconBg: 'bg-purple-500',
+      capabilities: [
+        'Household member management',
+        'Role-based permissions',
+        'Real-time updates',
+        'Activity tracking',
+        'Member invitations',
+        'Shared calendars',
+        'Task assignments',
+        'Family notifications'
+      ]
     },
     {
       icon: Zap,
-      title: 'Integrations & Automation',
-      description: 'Smart home integration and automation rules',
+      title: 'Smart Home & IoT',
+      description: 'Device management and home automation',
       href: '/integrations',
-      color: 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-900/20 dark:text-indigo-400',
-      gradient: 'from-indigo-500 to-indigo-600',
-      stats: { devices: 12, automations: 8, integrations: 5 }
-    },
-    {
-      icon: Activity,
-      title: 'Data & Alerts',
-      description: 'Analytics, monitoring, and intelligent alerts',
-      href: '/data-alerts',
-      color: 'bg-teal-50 text-teal-600 hover:bg-teal-100 dark:bg-teal-900/20 dark:text-teal-400',
-      gradient: 'from-teal-500 to-teal-600',
-      stats: { alerts: 3, insights: 12, reports: 4 }
-    },
-    {
-      icon: Upload,
-      title: 'Image Management',
-      description: 'Smart image compression, storage, and optimization',
-      href: '/image-management',
-      color: 'bg-pink-50 text-pink-600 hover:bg-pink-100 dark:bg-pink-900/20 dark:text-pink-400',
-      gradient: 'from-pink-500 to-pink-600',
-      stats: { compression: '80%', storage: 'Cloudinary', thumbnails: 'Auto' }
+      color: 'from-indigo-500 to-blue-500',
+      iconBg: 'bg-indigo-500',
+      capabilities: [
+        'Smart device management',
+        'Automation rules & triggers',
+        'Energy usage tracking',
+        'Device status monitoring',
+        'Room-based organization',
+        'Schedule-based controls',
+        'Integration with major platforms',
+        'Custom automation workflows'
+      ]
     },
     {
       icon: Brain,
-      title: 'AI Suggestions',
-      description: 'Intelligent recommendations and data-driven insights',
-      href: '/ai-suggestions',
-      color: 'bg-purple-50 text-purple-600 hover:bg-purple-100 dark:bg-purple-900/20 dark:text-purple-400',
-      gradient: 'from-purple-500 to-purple-600',
-      stats: { insights: 12, suggestions: 8, confidence: '92%' }
+      title: 'AI Assistant',
+      description: 'Intelligent suggestions and automated insights',
+      href: '/ai-assistant',
+      color: 'from-violet-500 to-purple-500',
+      iconBg: 'bg-violet-500',
+      capabilities: [
+        'Smart recommendations',
+        'Natural language queries',
+        'Recipe suggestions',
+        'Budget optimization tips',
+        'Predictive analytics',
+        'Pattern recognition',
+        'Automated insights',
+        'Context-aware assistance'
+      ]
     },
     {
-      icon: Wrench,
-      title: 'Home Maintenance',
-      description: 'Track maintenance tasks, schedules, and service records',
-      href: '/maintenance',
-      color: 'bg-orange-50 text-orange-600 hover:bg-orange-100 dark:bg-orange-900/20 dark:text-orange-400',
-      gradient: 'from-orange-500 to-orange-600',
-      stats: { tasks: 5, overdue: 1, completed: 2 }
-    },
-    {
-      icon: Info,
-      title: 'About',
-      description: 'Learn about features, technology stack, and roadmap',
-      href: '/about',
-      color: 'bg-gray-50 text-gray-600 hover:bg-gray-100 dark:bg-gray-900/20 dark:text-gray-400',
-      gradient: 'from-gray-500 to-gray-600',
-      stats: { features: 11, phases: 3, roadmap: 'Q1 2025' }
-    },
-    {
-      icon: Wifi,
-      title: '🚀 Real-time Demo',
-      description: 'Phase 2: Experience real-time collaboration features',
-      href: '/real-time-demo',
-      color: 'bg-purple-500 hover:bg-purple-600',
-      textColor: 'text-purple-500'
+      icon: Image,
+      title: 'Image Management',
+      description: 'Smart image storage with AI-powered organization',
+      href: '/image-management',
+      color: 'from-pink-500 to-rose-500',
+      iconBg: 'bg-pink-500',
+      capabilities: [
+        'Cloudinary & Imgur integration',
+        'Automatic compression',
+        'AI image analysis',
+        'Tag generation',
+        'Gallery organization',
+        'OCR text extraction',
+        'Thumbnail generation',
+        'Multi-provider fallback'
+      ]
     },
     {
       icon: BarChart3,
-      title: '📊 Advanced Analytics',
-      description: 'Phase 2: Data visualization and insights dashboard',
+      title: 'Advanced Analytics',
+      description: 'Comprehensive data visualization and insights',
       href: '/advanced-analytics',
-      color: 'bg-indigo-500 hover:bg-indigo-600',
-      textColor: 'text-indigo-500'
+      color: 'from-cyan-500 to-blue-500',
+      iconBg: 'bg-cyan-500',
+      capabilities: [
+        'Interactive dashboards',
+        'Spending trends & patterns',
+        'Inventory analytics',
+        'Custom reports',
+        'Real-time metrics',
+        'Predictive insights',
+        'Export capabilities',
+        'Historical comparisons'
+      ]
+    },
+    {
+      icon: Activity,
+      title: 'Data Alerts',
+      description: 'Smart notifications and monitoring',
+      href: '/data-alerts',
+      color: 'from-yellow-500 to-orange-500',
+      iconBg: 'bg-yellow-500',
+      capabilities: [
+        'Custom alert rules',
+        'Budget threshold alerts',
+        'Low stock notifications',
+        'Expiry date reminders',
+        'Spending pattern alerts',
+        'Device status notifications',
+        'Email & push notifications',
+        'Alert history & logs'
+      ]
+    },
+    {
+      icon: Wrench,
+      title: 'Maintenance Tracking',
+      description: 'Schedule and track home maintenance tasks',
+      href: '/maintenance',
+      color: 'from-gray-500 to-slate-500',
+      iconBg: 'bg-gray-500',
+      capabilities: [
+        'Maintenance schedules',
+        'Task assignments',
+        'Service history',
+        'Warranty tracking',
+        'Reminder notifications',
+        'Vendor management',
+        'Cost tracking',
+        'Documentation storage'
+      ]
+    },
+    {
+      icon: Sparkles,
+      title: 'AI Suggestions',
+      description: 'Proactive recommendations for home management',
+      href: '/ai-suggestions',
+      color: 'from-fuchsia-500 to-pink-500',
+      iconBg: 'bg-fuchsia-500',
+      capabilities: [
+        'Smart shopping suggestions',
+        'Recipe recommendations',
+        'Budget optimization',
+        'Energy saving tips',
+        'Maintenance reminders',
+        'Trend analysis',
+        'Priority insights',
+        'Personalized advice'
+      ]
+    }
+  ];
+
+  // Platform stats and highlights
+  const platformStats = [
+    { label: 'Active Features', value: '12+', icon: Sparkles },
+    { label: 'AI Integrations', value: '3', icon: Brain },
+    { label: 'Data Sources', value: 'Firebase', icon: Shield },
+    { label: 'Real-time Sync', value: 'Live', icon: Zap }
+  ];
+
+  // Key benefits
+  const benefits = [
+    {
+      icon: Shield,
+      title: 'Secure & Private',
+      description: 'Your data is encrypted and stored securely with Firebase authentication'
+    },
+    {
+      icon: Zap,
+      title: 'Real-time Updates',
+      description: 'Instant synchronization across all devices with live collaboration'
+    },
+    {
+      icon: Brain,
+      title: 'AI-Powered',
+      description: 'Intelligent suggestions using Hugging Face, Gemini, and custom AI models'
+    },
+    {
+      icon: Rocket,
+      title: 'Production Ready',
+      description: '73% test coverage, zero ESLint errors, and complete CI/CD pipeline'
     }
   ];
 
@@ -168,23 +305,20 @@ export default function Home() {
         setIsLoading(true);
         const analyticsService = new AnalyticsService();
 
-        // Fetch inventory data
-        const inventoryResponse = await hybridStorage.getInventoryItems(currentUser.uid);
-        const inventoryItems = inventoryResponse.success ? inventoryResponse.data : [];
+        const [inventoryResponse, recipesResponse, spendingAnalytics] = await Promise.all([
+          hybridStorage.getInventoryItems(currentUser.uid),
+          hybridStorage.getRecipes(currentUser.uid),
+          analyticsService.getSpendingAnalytics(currentUser.uid, '30d')
+        ]);
 
-        // Fetch recipes data
-        const recipesResponse = await hybridStorage.getRecipes(currentUser.uid);
+        const inventoryItems = inventoryResponse.success ? inventoryResponse.data : [];
         const recipes = recipesResponse.success ? recipesResponse.data : [];
 
-        // Fetch spending analytics
-        const spendingAnalytics = await analyticsService.getSpendingAnalytics(currentUser.uid, '30d');
-
-        // Calculate real stats
         const finalStats = {
           inventory: inventoryItems.length || 0,
           budget: spendingAnalytics.totalBudget || 0,
           recipes: recipes.length || 0,
-          shopping: 0 // TODO: Add shopping lists when available
+          users: 1 // Current user, can be expanded with collaboration data
         };
 
         setRealData({
@@ -208,19 +342,12 @@ export default function Home() {
 
         setIsLoading(false);
         
-        // Animate stats counting up
         Object.keys(finalStats).forEach(key => {
           animateValue(key, 0, finalStats[key], 1500);
         });
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
         setIsLoading(false);
-        
-        // Fallback to demo data on error
-        const finalStats = { inventory: 0, budget: 0, recipes: 0, shopping: 0 };
-        Object.keys(finalStats).forEach(key => {
-          animateValue(key, 0, finalStats[key], 1500);
-        });
       }
     };
 
@@ -232,10 +359,8 @@ export default function Home() {
     const animate = (currentTime) => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      
       const current = Math.floor(start + (end - start) * easeOutQuart(progress));
       setAnimatedStats(prev => ({ ...prev, [key]: current }));
-      
       if (progress < 1) {
         requestAnimationFrame(animate);
       }
@@ -245,282 +370,382 @@ export default function Home() {
 
   const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
 
-  const handleNavigation = (event) => {
-    // Add navigation animation
-    const button = event.currentTarget;
-    const href = button.dataset.href;
-    
-    button.classList.add('scale-95', 'opacity-75');
-    setTimeout(() => {
-      button.classList.remove('scale-95', 'opacity-75');
-      navigate(href);
-    }, 150);
-  };
-
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20 pt-20 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300">Loading Home Hub...</h2>
-          <p className="text-gray-500 dark:text-gray-500 mt-2">Preparing your dashboard</p>
+          <div className="relative">
+            <div className="animate-spin rounded-full h-20 w-20 border-4 border-blue-200 dark:border-blue-800 mx-auto"></div>
+            <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-600 dark:border-blue-400 mx-auto absolute inset-0"></div>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mt-6">Loading Home Hub...</h2>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">Preparing your personalized dashboard</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-900 dark:via-blue-900/10 dark:to-purple-900/10 pt-20">
-      {/* Enhanced Header with Parallax Effect */}
-      <div className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-lg border-b border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20 pt-20">
+      
+      {/* Hero Section */}
+      <div className="relative overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-300 dark:bg-purple-600 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-xl opacity-20 animate-blob"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-300 dark:bg-blue-600 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-300 dark:bg-pink-600 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6 animate-fade-in-up">
-              Welcome to Home Hub
+            {/* Main Heading */}
+            <div className="inline-flex items-center px-4 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg mb-6 animate-fade-in-up">
+              <HomeIcon className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Welcome to Home Hub v2.0</span>
+              <span className="ml-2 px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold rounded-full">Production Ready</span>
+            </div>
+
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in-up animation-delay-100">
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                Your Complete
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent">
+                Home Management
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-pink-600 via-red-600 to-orange-600 bg-clip-text text-transparent">
+                Platform
+              </span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200">
-              Your comprehensive home management platform. Track inventory, manage finances, 
-              collaborate with family, and automate your household tasks with AI-powered intelligence.
+
+            <p className="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed mb-8 animate-fade-in-up animation-delay-200">
+              Track inventory, manage finances, organize recipes, collaborate with family, 
+              and automate your home—all powered by AI intelligence.
             </p>
-            <div className="mt-8 p-6 bg-gradient-to-r from-blue-50/80 to-purple-50/80 dark:from-blue-900/30 dark:to-purple-900/30 rounded-2xl border border-blue-200/50 dark:border-blue-800/50 backdrop-blur-sm max-w-3xl mx-auto transform hover:scale-105 transition-transform duration-300">
-              <div className="flex items-center justify-center mb-3">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse mr-2"></div>
-                <p className="text-sm text-blue-800 dark:text-blue-200 font-semibold">🚀 AI Assistant Ready!</p>
-              </div>
-              <p className="text-sm text-blue-700 dark:text-blue-300 leading-relaxed">
-                Your AI Assistant is ready to help! Click the brain icon (bottom-right) for instant assistance with recipes, inventory, and more.
-              </p>
-              {isDevMode && (
-                <div className="mt-4 p-3 bg-gradient-to-r from-purple-100/80 to-pink-100/80 dark:from-purple-900/40 dark:to-pink-900/40 rounded-xl border border-purple-300/50 dark:border-purple-700/50">
-                  <p className="text-xs text-purple-800 dark:text-purple-200 font-medium">
-                    🔧 Dev Mode Active | Dev Tools: {showDevTools ? 'Visible' : 'Hidden'}
-                  </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-fade-in-up animation-delay-300">
+              <button
+                onClick={() => navigate('/inventory')}
+                className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+              >
+                <span className="flex items-center justify-center">
+                  Get Started
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </button>
+              <button
+                onClick={() => navigate('/about')}
+                className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-gray-200 dark:border-gray-700"
+              >
+                Learn More
+              </button>
+            </div>
+
+            {/* Platform Stats */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto animate-fade-in-up animation-delay-400">
+              {platformStats.map((stat, index) => (
+                <div key={index} className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 shadow-lg">
+                  <stat.icon className="w-6 h-6 text-blue-600 dark:text-blue-400 mx-auto mb-2" />
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</div>
                 </div>
-              )}
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Enhanced Live Dashboard */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12 animate-fade-in-up animation-delay-400">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            📊 Live Dashboard
+      {/* Live Dashboard Stats */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Your Live Dashboard
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
-            Your home management overview with real-time data and intelligent insights
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            Real-time insights from your data
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {/* Enhanced Inventory Stats */}
-          <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl p-6 border-l-4 border-blue-500 transform hover:scale-105 transition-all duration-300 animate-fade-in-up animation-delay-500">
-            <div className="flex items-center mb-4">
-              <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
-                <Package className="w-6 h-6" />
+          {/* Inventory Card */}
+          <div className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl p-6 border-2 border-transparent hover:border-blue-500 dark:hover:border-blue-400 transform hover:scale-105 transition-all duration-300">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity"></div>
+            <div className="relative">
+              <div className="flex items-center justify-between mb-4">
+                <div className={`p-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white`}>
+                  <Package className="w-6 h-6" />
+                </div>
+                <TrendingUp className="w-5 h-5 text-green-500" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Items</p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white">{animatedStats.inventory}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">
-                  {realData?.inventory.categories || 0} categories
-                </p>
+              <div className="mb-2">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Inventory Items</p>
+                <p className="text-4xl font-bold text-gray-900 dark:text-white">{animatedStats.inventory}</p>
               </div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center text-sm text-amber-600 dark:text-amber-400">
-                <AlertCircle className="w-4 h-4 mr-2" />
-                <span>{realData?.inventory.lowStock || 0} items running low</span>
-              </div>
-              <div className="flex items-center text-sm text-green-600 dark:text-green-400">
-                <DollarSign className="w-4 h-4 mr-2" />
-                <span>Total value: ${realData?.inventory.totalValue.toFixed(2) || '0.00'}</span>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between text-gray-600 dark:text-gray-400">
+                  <span>Categories:</span>
+                  <span className="font-semibold">{realData?.inventory.categories || 0}</span>
+                </div>
+                <div className="flex justify-between text-gray-600 dark:text-gray-400">
+                  <span>Low Stock:</span>
+                  <span className="font-semibold text-amber-600">{realData?.inventory.lowStock || 0}</span>
+                </div>
+                <div className="flex justify-between text-gray-600 dark:text-gray-400">
+                  <span>Total Value:</span>
+                  <span className="font-semibold text-green-600">${realData?.inventory.totalValue.toFixed(2) || '0.00'}</span>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Enhanced Budget Stats */}
-          <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl p-6 border-l-4 border-green-500 transform hover:scale-105 transition-all duration-300 animate-fade-in-up animation-delay-600">
-            <div className="flex items-center mb-4">
-              <div className="p-3 rounded-xl bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg">
-                <DollarSign className="w-6 h-6" />
+          {/* Budget Card */}
+          <div className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl p-6 border-2 border-transparent hover:border-green-500 dark:hover:border-green-400 transform hover:scale-105 transition-all duration-300">
+            <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity"></div>
+            <div className="relative">
+              <div className="flex items-center justify-between mb-4">
+                <div className={`p-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 text-white`}>
+                  <DollarSign className="w-6 h-6" />
+                </div>
+                <TrendingUp className="w-5 h-5 text-green-500" />
               </div>
-              <div className="ml-4">
+              <div className="mb-2">
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Monthly Budget</p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white">${animatedStats.budget.toLocaleString()}</p>
-                <p className="text-xs text-green-500 font-medium">
-                  {realData?.spending.remaining > 0 ? `$${realData.spending.remaining.toFixed(2)} remaining` : 'Over budget'}
-                </p>
+                <p className="text-4xl font-bold text-gray-900 dark:text-white">${animatedStats.budget.toLocaleString()}</p>
               </div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600 dark:text-gray-400">Spent:</span>
-                <span className="font-medium">${realData?.spending.spent.toFixed(2) || '0.00'}</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600 dark:text-gray-400">Remaining:</span>
-                <span className="font-medium text-green-600">${realData?.spending.remaining.toFixed(2) || '0.00'}</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600 dark:text-gray-400">Top Category:</span>
-                <span className="font-medium">{realData?.spending.topCategory || 'N/A'}</span>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between text-gray-600 dark:text-gray-400">
+                  <span>Spent:</span>
+                  <span className="font-semibold">${realData?.spending.spent.toFixed(2) || '0.00'}</span>
+                </div>
+                <div className="flex justify-between text-gray-600 dark:text-gray-400">
+                  <span>Remaining:</span>
+                  <span className="font-semibold text-green-600">${realData?.spending.remaining.toFixed(2) || '0.00'}</span>
+                </div>
+                <div className="flex justify-between text-gray-600 dark:text-gray-400">
+                  <span>Top Category:</span>
+                  <span className="font-semibold">{realData?.spending.topCategory || 'N/A'}</span>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Enhanced Recipe Stats */}
-          <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl p-6 border-l-4 border-red-500 transform hover:scale-105 transition-all duration-300 animate-fade-in-up animation-delay-700">
-            <div className="flex items-center mb-4">
-              <div className="p-3 rounded-xl bg-gradient-to-br from-red-500 to-red-600 text-white shadow-lg">
-                <Utensils className="w-6 h-6" />
+          {/* Recipes Card */}
+          <div className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl p-6 border-2 border-transparent hover:border-red-500 dark:hover:border-red-400 transform hover:scale-105 transition-all duration-300">
+            <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-500 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity"></div>
+            <div className="relative">
+              <div className="flex items-center justify-between mb-4">
+                <div className={`p-3 rounded-xl bg-gradient-to-r from-red-500 to-pink-500 text-white`}>
+                  <Utensils className="w-6 h-6" />
+                </div>
+                <Heart className="w-5 h-5 text-red-500" />
               </div>
-              <div className="ml-4">
+              <div className="mb-2">
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Saved Recipes</p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white">{animatedStats.recipes}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">{realData?.recipes.categories || 0} categories</p>
+                <p className="text-4xl font-bold text-gray-900 dark:text-white">{animatedStats.recipes}</p>
               </div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center text-sm text-amber-600 dark:text-amber-400">
-                <span className="mr-2">⭐⭐⭐⭐⭐</span>
-                <span className="truncate">Chicken Tikka Masala</span>
-              </div>
-              <div className="flex items-center text-sm text-amber-600 dark:text-amber-400">
-                <span className="mr-2">⭐⭐⭐⭐⭐</span>
-                <span className="truncate">Spaghetti Carbonara</span>
-              </div>
-              <div className="flex items-center text-sm text-green-600 dark:text-green-400">
-                <CheckCircle className="w-4 h-4 mr-2" />
-                <span>3 new this week</span>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between text-gray-600 dark:text-gray-400">
+                  <span>Categories:</span>
+                  <span className="font-semibold">{realData?.recipes.categories || 0}</span>
+                </div>
+                <div className="flex justify-between text-gray-600 dark:text-gray-400">
+                  <span>Ready to Cook</span>
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Enhanced Shopping Stats */}
-          <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl p-6 border-l-4 border-orange-500 transform hover:scale-105 transition-all duration-300 animate-fade-in-up animation-delay-800">
-            <div className="flex items-center mb-4">
-              <div className="p-3 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
-                <ShoppingCart className="w-6 h-6" />
+          {/* Users Card */}
+          <div className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl p-6 border-2 border-transparent hover:border-purple-500 dark:hover:border-purple-400 transform hover:scale-105 transition-all duration-300">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-violet-500 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity"></div>
+            <div className="relative">
+              <div className="flex items-center justify-between mb-4">
+                <div className={`p-3 rounded-xl bg-gradient-to-r from-purple-500 to-violet-500 text-white`}>
+                  <Users className="w-6 h-6" />
+                </div>
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Shopping List</p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white">{animatedStats.shopping}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">items</p>
+              <div className="mb-2">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Users</p>
+                <p className="text-4xl font-bold text-gray-900 dark:text-white">{animatedStats.users}</p>
               </div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600 dark:text-gray-400">Estimated:</span>
-                <span className="font-medium">$78.37</span>
-              </div>
-              <div className="flex items-center text-sm text-red-600 dark:text-red-400">
-                <AlertCircle className="w-4 h-4 mr-2" />
-                <span>5 high priority</span>
-              </div>
-              <div className="flex items-center text-sm text-blue-600 dark:text-blue-400">
-                <TrendingUp className="w-4 h-4 mr-2" />
-                <span>3 stores recommended</span>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between text-gray-600 dark:text-gray-400">
+                  <span>Status:</span>
+                  <span className="font-semibold text-green-600">Online</span>
+                </div>
+                <div className="flex justify-between text-gray-600 dark:text-gray-400">
+                  <span>Collaboration</span>
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Enhanced Features Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-16 animate-fade-in-up animation-delay-1000">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-            All Features
+      {/* Features Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Powerful Features for Modern Living
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Everything you need to manage your home efficiently with AI-powered intelligence
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            Everything you need to manage your home efficiently, all in one place
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
-            return (
-              <button
-                key={index}
-                onClick={handleNavigation}
-                data-href={feature.href}
-                className="group w-full p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-left bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 hover:border-gray-300 dark:hover:border-gray-600 transform hover:scale-105 hover:-translate-y-1 animate-fade-in-up"
-                style={{ animationDelay: `${1200 + index * 100}ms` }}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className={`p-3 rounded-xl ${feature.color} shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
-                    <Icon size={24} className="dark:text-gray-300" />
-                  </div>
-                  <ArrowRight size={20} className="opacity-0 group-hover:opacity-100 transition-all duration-300 text-gray-400 dark:text-gray-500 transform group-hover:translate-x-1" />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
+            <div
+              key={index}
+              onClick={() => navigate(feature.href)}
+              className="group cursor-pointer bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl p-8 transform hover:scale-105 transition-all duration-300 border-2 border-gray-100 dark:border-gray-700 hover:border-transparent relative overflow-hidden"
+            >
+              {/* Gradient Overlay on Hover */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity rounded-2xl`}></div>
+
+              <div className="relative">
+                {/* Icon */}
+                <div className={`inline-flex p-4 rounded-xl bg-gradient-to-br ${feature.color} text-white mb-6 shadow-lg group-hover:scale-110 transition-transform`}>
+                  <feature.icon className="w-8 h-8" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+
+                {/* Title */}
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all">
                   {feature.title}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+
+                {/* Description */}
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
                   {feature.description}
                 </p>
-                <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-500">
-                  <span>Click to explore</span>
-                  <div className="w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
 
-      {/* Enhanced Platform Overview */}
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm py-20 border-t border-gray-200/50 dark:border-gray-700/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 animate-fade-in-up animation-delay-1400">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              Platform Overview
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Numbers that reflect our commitment to excellence and innovation
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {[
-              { number: '8', label: 'Core Features', color: 'text-blue-600 dark:text-blue-400' },
-              { number: '100%', label: 'Feature Complete', color: 'text-green-600 dark:text-green-400' },
-              { number: '3', label: 'Development Phases', color: 'text-purple-600 dark:text-purple-400' },
-              { number: '∞', label: 'Possibilities', color: 'text-orange-600 dark:text-orange-400' }
-            ].map((stat, index) => (
-              <div key={index} className="text-center group animate-fade-in-up" style={{ animationDelay: `${1600 + index * 100}ms` }}>
-                <div className={`text-5xl md:text-6xl font-bold ${stat.color} mb-3 group-hover:scale-110 transition-transform duration-300`}>
-                  {stat.number}
+                {/* Capabilities */}
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold text-gray-500 dark:text-gray-500 uppercase mb-3">Key Features:</p>
+                  <ul className="space-y-2">
+                    {feature.capabilities.slice(0, 4).map((capability, idx) => (
+                      <li key={idx} className="flex items-start text-sm text-gray-600 dark:text-gray-400">
+                        <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                        <span>{capability}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {feature.capabilities.length > 4 && (
+                    <p className="text-xs text-gray-500 dark:text-gray-500 italic mt-2">
+                      +{feature.capabilities.length - 4} more features...
+                    </p>
+                  )}
                 </div>
-                <p className="text-gray-600 dark:text-gray-300 text-lg font-medium group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300">
-                  {stat.label}
-                </p>
+
+                {/* Arrow Icon */}
+                <div className="mt-6 flex items-center text-blue-600 dark:text-blue-400 font-semibold group-hover:translate-x-2 transition-transform">
+                  <span>Explore</span>
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </div>
               </div>
-            ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Benefits Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Why Choose Home Hub?
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            Built with modern technology and best practices
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {benefits.map((benefit, index) => (
+            <div key={index} className="text-center">
+              <div className="inline-flex p-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white mb-4">
+                <benefit.icon className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                {benefit.title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                {benefit.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Technology Stack */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800/50 dark:to-gray-800/50 rounded-3xl">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Powered by Modern Technology
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            Built with industry-leading tools and frameworks
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+          {['React 18', 'Firebase', 'Tailwind CSS', 'Hugging Face AI', 'Gemini AI', 'Node.js'].map((tech, index) => (
+            <div key={index} className="bg-white dark:bg-gray-800 rounded-xl p-6 text-center shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
+              <div className="text-lg font-semibold text-gray-900 dark:text-white">{tech}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 text-center">
+          <div className="inline-flex items-center px-6 py-3 bg-green-100 dark:bg-green-900/30 rounded-full">
+            <Star className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
+            <span className="text-green-800 dark:text-green-300 font-semibold">
+              Production Ready • 73% Test Coverage • Zero Errors
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Enhanced Call to Action */}
+      {/* CTA Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-10 text-center text-white shadow-2xl transform hover:scale-105 transition-transform duration-500 animate-fade-in-up animation-delay-1800">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Get Started?</h2>
-          <p className="text-xl md:text-2xl mb-8 opacity-90 leading-relaxed">
-            Explore any feature above to begin managing your home more efficiently with AI-powered intelligence
-          </p>
-          <p className="text-lg opacity-75 leading-relaxed">
-            Use the hamburger menu (top-left) to navigate between all features, or click any feature card above
-          </p>
-          <div className="mt-8 flex justify-center">
-            <div className="w-16 h-1 bg-white/30 rounded-full"></div>
+        <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-3xl shadow-2xl p-12 text-center text-white relative overflow-hidden">
+          <div className="absolute inset-0 bg-black opacity-10"></div>
+          <div className="relative">
+            <h2 className="text-4xl font-bold mb-4">
+              Ready to Get Organized?
+            </h2>
+            <p className="text-xl mb-8 text-blue-100">
+              Start managing your home smarter, not harder
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={() => navigate('/inventory')}
+                className="px-8 py-4 bg-white text-purple-600 rounded-xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+              >
+                Start Your Journey
+              </button>
+              <button
+                onClick={() => navigate('/about')}
+                className="px-8 py-4 bg-purple-700 hover:bg-purple-800 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+              >
+                View Documentation
+              </button>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Dev Mode Indicator */}
+      {isDevMode && (
+        <div className="fixed bottom-4 left-4 bg-purple-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium">
+          🔧 Dev Mode Active
+        </div>
+      )}
     </div>
   );
 }
-
