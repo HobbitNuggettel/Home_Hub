@@ -4,7 +4,8 @@
   "description": "Your Ultimate Household Inventory & Management App",
   "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "BROWSER=firefox react-scripts start",
+    "start:firefox": "BROWSER=firefox react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:watch": "react-scripts test --watch",
