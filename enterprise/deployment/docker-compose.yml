@@ -1,0 +1,331 @@
+# 🐳 ENTERPRISE DOCKER COMPOSE
+# Home Hub - Production Container Configuration
+
+version: '3.8'
+
+services:
+  # 🌐 Web Application
+  web-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: homehub/web:latest
+    container_name: homehub-web
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - FIREBASE_CONFIG=${FIREBASE_CONFIG}
+    depends_on:
+      - database
+      - redis
+      - api-gateway
+    volumes:
+      - web_logs:/app/logs
+      - web_uploads:/app/uploads
+    networks:
+      - homehub-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+
+  # 🔌 API Gateway
+  api-gateway:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+      target: production
+    image: homehub/api:latest
+    container_name: homehub-api
+    ports:
+      - "5001:5001"
+    environment:
+      - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET}
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - FIREBASE_ADMIN_CONFIG=${FIREBASE_ADMIN_CONFIG}
+    depends_on:
+      - database
+      - redis
+    volumes:
+      - api_logs:/app/logs
+    networks:
+      - homehub-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.3'
+        reservations:
+          memory: 128M
+          cpus: '0.15'
+
+  # 🗄️ PostgreSQL Database
+  database:
+    image: postgres:15-alpine
+    container_name: homehub-database
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=${DB_NAME:-homehub}
+      - POSTGRES_USER=${DB_USER:-homehub}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./enterprise/deployment/database/init:/docker-entrypoint-initdb.d
+    networks:
+      - homehub-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-homehub} -d ${DB_NAME:-homehub}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+        reservations:
+          memory: 512M
+          cpus: '0.25'
+
+  # 🔴 Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: homehub-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    networks:
+      - homehub-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.2'
+        reservations:
+          memory: 128M
+          cpus: '0.1'
+
+  # 📊 Prometheus Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: homehub-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./enterprise/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - homehub-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 📈 Grafana Dashboards
+  grafana:
+    image: grafana/grafana:latest
+    container_name: homehub-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./enterprise/monitoring/grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - homehub-network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 📝 Log Aggregation
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: homehub-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - homehub-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 🔍 Log Search
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: homehub-kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    volumes:
+      - kibana_data:/usr/share/kibana/data
+    networks:
+      - homehub-network
+    restart: unless-stopped
+    depends_on:
+      - elasticsearch
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5601/api/status || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 🚨 Alert Manager
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: homehub-alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./enterprise/monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - alertmanager_data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.listen-address=:9093'
+    networks:
+      - homehub-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9093/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 🔄 Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: homehub-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./enterprise/deployment/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./enterprise/deployment/nginx/ssl:/etc/nginx/ssl
+      - nginx_logs:/var/log/nginx
+    networks:
+      - homehub-network
+    restart: unless-stopped
+    depends_on:
+      - web-app
+      - api-gateway
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+# 📦 Volumes
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  kibana_data:
+    driver: local
+  alertmanager_data:
+    driver: local
+  web_logs:
+    driver: local
+  api_logs:
+    driver: local
+  web_uploads:
+    driver: local
+  nginx_logs:
+    driver: local
+
+# 🌐 Networks
+networks:
+  homehub-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+    driver_opts:
+      com.docker.network.bridge.name: homehub-br0
+
+# 🔧 Environment Variables
+# Create .env file with these variables:
+# DATABASE_URL=postgresql://homehub:password@database:5432/homehub
+# REDIS_URL=redis://:password@redis:6379
+# JWT_SECRET=your-super-secret-jwt-key
+# FIREBASE_CONFIG=your-firebase-config
+# FIREBASE_ADMIN_CONFIG=your-firebase-admin-config
+# DB_NAME=homehub
+# DB_USER=homehub
+# DB_PASSWORD=your-database-password
+# REDIS_PASSWORD=your-redis-password
+# GRAFANA_PASSWORD=your-grafana-password

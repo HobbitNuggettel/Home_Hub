@@ -186,14 +186,14 @@ class CloudinaryService {
       this.saveToStorage();
 
       // Log analytics
-      firebaseAnalyticsService.logEvent('cloudinary_upload_success', {
-        image_size: imageFile.size,
-        image_type: imageFile.type,
-        cloudinary_bytes: result.bytes,
-        monthly_storage: this.monthlyUsage.storage,
-        monthly_uploads: this.monthlyUsage.uploads,
-        private: options.private || false
-      });
+      // firebaseAnalyticsService.logEvent('cloudinary_upload_success', {
+      //   image_size: imageFile.size,
+      //   image_type: imageFile.type,
+      //   cloudinary_bytes: result.bytes,
+      //   monthly_storage: this.monthlyUsage.storage,
+      //   monthly_uploads: this.monthlyUsage.uploads,
+      //   private: options.private || false
+      // });
 
       // Return success response
       return {
@@ -233,11 +233,11 @@ class CloudinaryService {
       console.error('Cloudinary upload failed:', error);
       
       // Log analytics
-      firebaseAnalyticsService.logEvent('cloudinary_upload_error', {
-        error: error.message,
-        image_size: imageFile?.size,
-        image_type: imageFile?.type
-      });
+      // firebaseAnalyticsService.logEvent('cloudinary_upload_error', {
+      //   error: error.message,
+      //   image_size: imageFile?.size,
+      //   image_type: imageFile?.type
+      // });
 
       return {
         success: false,

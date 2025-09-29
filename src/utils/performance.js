@@ -17,6 +17,7 @@ export const createLazyComponent = (importFunc, fallback = null) => {
 // Dynamic imports for code splitting
 export const dynamicImport = async (modulePath) => {
   try {
+        // eslint-disable-next-line
     const module = await import(modulePath);
     return module.default || module;
   } catch (error) {

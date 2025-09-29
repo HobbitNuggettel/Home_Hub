@@ -1,0 +1,204 @@
+# 📊 PROMETHEUS MONITORING CONFIGURATION
+# Home Hub - Production Metrics Collection
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: "homehub-production"
+    environment: "production"
+
+# 📝 Alerting Rules
+rule_files:
+  - "alerting-rules.yml"
+
+# 🚨 Alert Manager Configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+# 📈 Scrape Configurations
+scrape_configs:
+  # 🎯 Prometheus Self-Monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+
+  # 🌐 Web Application Metrics
+  - job_name: 'homehub-web'
+    static_configs:
+      - targets: ['web-app:3000']
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    honor_labels: true
+
+  # 🔌 API Gateway Metrics
+  - job_name: 'homehub-api'
+    static_configs:
+      - targets: ['api-gateway:5001']
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    honor_labels: true
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '([^:]+)(?::\d+)?'
+        replacement: '${1}'
+
+  # 🗄️ Database Metrics
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['database:5432']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    honor_labels: true
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '([^:]+)(?::\d+)?'
+        replacement: '${1}'
+
+  # 🔴 Redis Metrics
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    honor_labels: true
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '([^:]+)(?::\d+)?'
+        replacement: '${1}'
+
+  # 📝 Elasticsearch Metrics
+  - job_name: 'elasticsearch'
+    static_configs:
+      - targets: ['elasticsearch:9200']
+    metrics_path: '/_prometheus/metrics'
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    honor_labels: true
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '([^:]+)(?::\d+)?'
+        replacement: '${1}'
+
+  # 🔄 Nginx Metrics
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['nginx:80']
+    metrics_path: '/nginx_status'
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    honor_labels: true
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '([^:]+)(?::\d+)?'
+        replacement: '${1}'
+
+  # 🐳 Docker Metrics
+  - job_name: 'docker'
+    static_configs:
+      - targets: ['localhost:9323']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    honor_labels: true
+
+  # 🖥️ Node Exporter (System Metrics)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['localhost:9100']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    honor_labels: true
+
+  # 📊 Custom Application Metrics
+  - job_name: 'homehub-custom-metrics'
+    static_configs:
+      - targets: ['web-app:3000', 'api-gateway:5001']
+    metrics_path: '/custom-metrics'
+    scrape_interval: 60s
+    scrape_timeout: 30s
+    honor_labels: true
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '([^:]+)(?::\d+)?'
+        replacement: '${1}'
+
+# 🔍 Service Discovery (Future Enhancement)
+# - job_name: 'kubernetes-pods'
+#   kubernetes_sd_configs:
+#     - role: pod
+#   relabel_configs:
+#     - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+#       action: keep
+#       regex: true
+
+# 📊 Recording Rules (Future Enhancement)
+# rule_files:
+#   - "recording-rules.yml"
+
+# 🔧 Storage Configuration
+storage:
+  tsdb:
+    path: /prometheus
+    retention:
+      time: 15d
+      size: 50GB
+    wal:
+      retention:
+        time: 1h
+        size: 1GB
+
+# 🚀 Performance Tuning
+scrape_timeout: 10s
+scrape_interval: 15s
+evaluation_interval: 15s
+
+# 📝 Logging Configuration
+log_level: info
+log_format: json
+
+# 🔐 Security Configuration
+web:
+  enable_lifecycle: true
+  enable_admin_api: true
+  external_url: http://localhost:9090
+  route_prefix: /
+  listen_address: 0.0.0.0:9090
+  max_connections: 512
+  read_timeout: 5m
+  write_timeout: 5m
+
+# 📊 Metrics Retention
+retention:
+  time: 15d
+  size: 50GB
+
+# 🔄 Remote Write (Future Enhancement)
+# remote_write:
+#   - url: "http://remote-storage:9201/write"
+#     remote_timeout: 30s
+#     write_relabel_configs:
+#       - source_labels: [__name__]
+#         regex: 'expensive_metric.*'
+#         action: drop
+
+# 📥 Remote Read (Future Enhancement)
+# remote_read:
+#   - url: "http://remote-storage:9201/read"
+#     read_timeout: 30s

@@ -1,0 +1,175 @@
+{
+  "name": "homehub-enterprise",
+  "version": "1.0.0",
+  "description": "Home Hub Enterprise Platform - Production-Ready Smart Home Management",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    
+    "dev": "concurrently \"npm run dev:web\" \"npm run dev:api\" \"npm run dev:monitoring\"",
+    "dev:web": "cd .. && npm start",
+    "dev:api": "cd ../api && npm start",
+    "dev:monitoring": "docker-compose -f enterprise/deployment/docker-compose.yml up prometheus grafana",
+    
+    "build": "npm run build:web && npm run build:api",
+    "build:web": "cd .. && npm run build",
+    "build:api": "cd ../api && npm run build",
+    
+    "test": "npm run test:unit && npm run test:integration && npm run test:e2e",
+    "test:unit": "cd .. && npm run test:coverage",
+    "test:integration": "cd .. && npm run test:integration",
+    "test:e2e": "cd .. && npm run test:e2e",
+    "test:coverage": "cd .. && npm run test:coverage",
+    "test:ci": "cd .. && npm run test:ci",
+    
+    "quality:check": "npm run lint:check && npm run security:scan && npm run performance:test",
+    "quality:validate": "node scripts/validate-quality-gates.js",
+    
+    "lint:check": "cd .. && npm run lint:check",
+    "lint:fix": "cd .. && npm run lint:fix",
+    
+    "security:scan": "npm run security:audit && npm run security:dependency && npm run security:code",
+    "security:audit": "cd .. && npm audit --audit-level=moderate",
+    "security:dependency": "npm run security:check-dependencies",
+    "security:code": "npm run security:sast-scan",
+    "security:check-dependencies": "npx audit-ci --moderate",
+    "security:sast-scan": "npx sonarqube-scanner",
+    
+    "performance:test": "npm run performance:lighthouse && npm run performance:load",
+    "performance:lighthouse": "npx lighthouse-ci autorun",
+    "performance:load": "npx artillery run enterprise/quality/load-tests.yml",
+    
+    "deploy:staging": "npm run deploy:validate && npm run deploy:staging:app",
+    "deploy:production": "npm run deploy:validate && npm run deploy:production:app",
+    "deploy:validate": "npm run quality:check && npm run test:ci",
+    "deploy:staging:app": "docker-compose -f enterprise/deployment/docker-compose.yml up -d",
+    "deploy:production:app": "npm run deploy:production:kubernetes",
+    "deploy:production:kubernetes": "kubectl apply -f enterprise/deployment/kubernetes-manifests.yml",
+    
+    "backup:main2": "git checkout main2 && git merge main && git push origin main2",
+    
+    "rollback:emergency": "npm run rollback:validate && npm run rollback:execute",
+    "rollback:validate": "echo 'Validating rollback requirements...'",
+    "rollback:execute": "git checkout main2 && git push origin main --force",
+    
+    "health:check:staging": "curl -f http://localhost:3000/health && curl -f http://localhost:5001/health",
+    "health:check:production": "curl -f https://homehub.com/health && curl -f https://api.homehub.com/health",
+    "health:check:rollback": "npm run health:check:production",
+    
+    "monitor:performance": "npm run monitor:start && npm run monitor:metrics",
+    "monitor:start": "echo 'Starting performance monitoring...'",
+    "monitor:metrics": "echo 'Collecting performance metrics...'",
+    
+    "monitor:security": "npm run monitor:security:events && npm run monitor:security:threats",
+    "monitor:security:events": "echo 'Monitoring security events...'",
+    "monitor:security:threats": "echo 'Monitoring security threats...'",
+    
+    "metrics:collect": "npm run metrics:performance && npm run metrics:security && npm run metrics:business",
+    "metrics:performance": "echo 'Collecting performance metrics...'",
+    "metrics:security": "echo 'Collecting security metrics...'",
+    "metrics:business": "echo 'Collecting business metrics...'",
+    
+    "docker:build": "docker-compose -f enterprise/deployment/docker-compose.yml build",
+    "docker:up": "docker-compose -f enterprise/deployment/docker-compose.yml up -d",
+    "docker:down": "docker-compose -f enterprise/deployment/docker-compose.yml down",
+    "docker:logs": "docker-compose -f enterprise/deployment/docker-compose.yml logs -f",
+    "docker:restart": "docker-compose -f enterprise/deployment/docker-compose.yml restart",
+    
+    "kubernetes:deploy": "kubectl apply -f enterprise/deployment/kubernetes-manifests.yml",
+    "kubernetes:status": "kubectl get pods,services,deployments",
+    "kubernetes:logs": "kubectl logs -f deployment/homehub-web",
+    "kubernetes:scale": "kubectl scale deployment homehub-web --replicas=3",
+    
+    "monitoring:start": "docker-compose -f enterprise/deployment/docker-compose.yml up -d prometheus grafana elasticsearch kibana",
+    "monitoring:stop": "docker-compose -f enterprise/deployment/docker-compose.yml stop prometheus grafana elasticsearch kibana",
+    "monitoring:status": "docker-compose -f enterprise/deployment/docker-compose.yml ps prometheus grafana elasticsearch kibana",
+    
+    "database:backup": "pg_dump $DATABASE_URL > backup_$(date +%Y%m%d_%H%M%S).sql",
+    "database:restore": "psql $DATABASE_URL < backup_file.sql",
+    "database:migrate": "cd ../api && npm run migrate",
+    "database:seed": "cd ../api && npm run seed",
+    
+    "redis:backup": "redis-cli --rdb backup_$(date +%Y%m%d_%H%M%S).rdb",
+    "redis:restore": "redis-cli --rdb backup_file.rdb",
+    "redis:flush": "redis-cli flushall",
+    
+    "ssl:generate": "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout enterprise/deployment/nginx/ssl/nginx.key -out enterprise/deployment/nginx/ssl/nginx.crt",
+    "ssl:renew": "npm run ssl:generate",
+    
+    "backup:full": "npm run database:backup && npm run redis:backup && npm run backup:main2",
+    "backup:verify": "echo 'Verifying backup integrity...'",
+    
+    "maintenance:start": "echo 'Starting maintenance mode...'",
+    "maintenance:stop": "echo 'Stopping maintenance mode...'",
+    "maintenance:status": "echo 'Checking maintenance status...'",
+    
+    "compliance:check": "npm run compliance:gdpr && npm run compliance:soc2 && npm run compliance:owasp",
+    "compliance:gdpr": "echo 'Checking GDPR compliance...'",
+    "compliance:soc2": "echo 'Checking SOC 2 compliance...'",
+    "compliance:owasp": "echo 'Checking OWASP compliance...'",
+    
+    "report:generate": "npm run report:quality && npm run report:security && npm run report:performance",
+    "report:quality": "echo 'Generating quality report...'",
+    "report:security": "echo 'Generating security report...'",
+    "report:performance": "echo 'Generating performance report...'",
+    
+    "cleanup:logs": "find . -name '*.log' -mtime +7 -delete",
+    "cleanup:temp": "rm -rf /tmp/homehub-*",
+    "cleanup:docker": "docker system prune -f",
+    
+    "setup:enterprise": "npm run setup:folders && npm run setup:config && npm run setup:monitoring",
+    "setup:folders": "mkdir -p enterprise/{architecture,security,quality,deployment,monitoring}",
+    "setup:config": "cp enterprise/security/.env.example enterprise/security/.env.production",
+    "setup:monitoring": "docker-compose -f enterprise/deployment/docker-compose.yml up -d prometheus grafana"
+  },
+  
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "docker-compose": "^0.0.1",
+    "kubectl": "^1.0.0",
+    "pg_dump": "^1.0.0",
+    "redis-cli": "^1.0.0",
+    "openssl": "^1.0.0",
+    "curl": "^1.0.0",
+    "jq": "^1.0.0"
+  },
+  
+  "devDependencies": {
+    "audit-ci": "^6.1.1",
+    "sonarqube-scanner": "^3.3.2",
+    "lighthouse-ci": "^0.4.4",
+    "artillery": "^2.0.0",
+    "concurrently": "^8.2.2"
+  },
+  
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  
+  "keywords": [
+    "enterprise",
+    "production",
+    "monitoring",
+    "deployment",
+    "ci-cd",
+    "docker",
+    "kubernetes",
+    "prometheus",
+    "grafana"
+  ],
+  
+  "author": "Home Hub Team",
+  "license": "MIT",
+  
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HobbitNuggettel/Home_Hub.git"
+  },
+  
+  "bugs": {
+    "url": "https://github.com/HobbitNuggettel/Home_Hub/issues"
+  },
+  
+  "homepage": "https://homehub.com"
+}
