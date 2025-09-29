@@ -37,7 +37,7 @@ const ExpenseList = ({
       'Travel': 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/20 dark:text-cyan-400',
       'Other': 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300'
     };
-    return colors[category] || colors['Other'];
+    return colors[category] || colors.Other;
   };
 
   const getPaymentMethodIcon = (method) => {

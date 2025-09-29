@@ -1,10 +1,10 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
-import { getDatabase } from "firebase/database";
+import { initializeApp } from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
+import { getDatabase } from 'firebase/database';
 
 // Firebase Configuration
 // For production, create a .env.local file with your Firebase credentials
@@ -43,13 +43,13 @@ if (missingVars.length > 0) {
 
   // Use demo configuration to prevent app crash
   const demoConfig = {
-    apiKey: "demo-api-key",
-    authDomain: "demo-project.firebaseapp.com",
-    projectId: "demo-project",
-    storageBucket: "demo-project.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:demo-app-id",
-    measurementId: "G-DEMO123"
+    apiKey: 'demo-api-key',
+    authDomain: 'demo-project.firebaseapp.com',
+    projectId: 'demo-project',
+    storageBucket: 'demo-project.appspot.com',
+    messagingSenderId: '123456789',
+    appId: '1:123456789:web:demo-app-id',
+    measurementId: 'G-DEMO123'
   };
 
   // Override missing values with demo values

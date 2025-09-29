@@ -318,7 +318,7 @@ export default function SpendingTracker() {
       'Travel': 'bg-cyan-100 text-cyan-800',
       'Other': 'bg-slate-100 text-slate-800'
     };
-    return colors[category] || colors['Other'];
+    return colors[category] || colors.Other;
   };
 
   // Load AI insights and suggestions

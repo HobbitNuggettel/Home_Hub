@@ -89,20 +89,20 @@ class HybridAIService {
     if (message.includes('inventory') || message.includes('stock') || message.includes('items')) {
       return await this.huggingface.analyzeFinanceEmbeddings(
         userMessage,
-        ["inventory status", "stock levels", "expiring items", "low stock", "well stocked"]
+        ['inventory status', 'stock levels', 'expiring items', 'low stock', 'well stocked']
       );
     }
     
     if (message.includes('expense') || message.includes('spending') || message.includes('budget')) {
       return await this.huggingface.analyzeFinanceEmbeddings(
         userMessage,
-        ["expense categorization", "budget analysis", "spending tracking", "financial planning"]
+        ['expense categorization', 'budget analysis', 'spending tracking', 'financial planning']
       );
     }
     
     if (message.includes('recipe') || message.includes('cook') || message.includes('meal')) {
       return await this.huggingface.completeWithFillMask(
-        userMessage + " [MASK] recipe suggestions"
+        userMessage + ' [MASK] recipe suggestions'
       );
     }
     

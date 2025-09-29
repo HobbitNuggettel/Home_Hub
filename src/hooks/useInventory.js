@@ -81,13 +81,14 @@ function inventoryReducer(state, action) {
     case ACTIONS.SET_SELECTED_ITEMS:
       return { ...state, selectedItems: action.payload };
     
-    case ACTIONS.TOGGLE_ITEM_SELECTION:
+    case ACTIONS.TOGGLE_ITEM_SELECTION: {
       const itemId = action.payload;
       const isSelected = state.selectedItems.includes(itemId);
       const newSelectedItems = isSelected
         ? state.selectedItems.filter(id => id !== itemId)
         : [...state.selectedItems, itemId];
       return { ...state, selectedItems: newSelectedItems };
+    }
     
     case ACTIONS.SELECT_ALL:
       return { 

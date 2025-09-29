@@ -267,7 +267,7 @@ class AnalyticsService {
   processRealTimeData(activitiesData) {
     const hourlyData = {};
     let totalActivities = 0;
-    let uniqueUsers = new Set();
+    const uniqueUsers = new Set();
     
     activitiesData.forEach(activity => {
       const date = new Date(activity.timestamp);
