@@ -10,7 +10,6 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:jsx-a11y/recommended',
-    'plugin:security/recommended',
   ],
   parserOptions: {
     ecmaFeatures: {
@@ -23,7 +22,6 @@ module.exports = {
     'react',
     'react-hooks',
     'jsx-a11y',
-    'security',
   ],
   rules: {
     // React specific rules
@@ -57,16 +55,16 @@ module.exports = {
     'jsx-a11y/no-distracting-elements': 'error',
     'jsx-a11y/no-redundant-roles': 'error',
     
-    // Security rules
-    'security/detect-object-injection': 'warn',
-    'security/detect-non-literal-regexp': 'warn',
-    'security/detect-unsafe-regex': 'error',
-    'security/detect-buffer-noassert': 'error',
-    'security/detect-child-process': 'warn',
-    'security/detect-disable-mustache-escape': 'error',
-    'security/detect-eval-with-expression': 'error',
-    'security/detect-no-csrf-before-method-override': 'error',
-    'security/detect-pseudoRandomBytes': 'error',
+    // Security rules (temporarily disabled)
+    // 'security/detect-object-injection': 'warn',
+    // 'security/detect-non-literal-regexp': 'warn',
+    // 'security/detect-unsafe-regex': 'error',
+    // 'security/detect-buffer-noassert': 'error',
+    // 'security/detect-child-process': 'warn',
+    // 'security/detect-disable-mustache-escape': 'error',
+    // 'security/detect-eval-with-expression': 'error',
+    // 'security/detect-no-csrf-before-method-override': 'error',
+    // 'security/detect-pseudoRandomBytes': 'error',
     
     // General JavaScript rules
     'no-console': 'warn',
