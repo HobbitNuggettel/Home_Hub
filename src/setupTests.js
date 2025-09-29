@@ -142,7 +142,10 @@ jest.mock('firebase/database', () => ({
   off: jest.fn(),
 }));
 
-// Mock React contexts will be handled in individual test files as needed
+// Mock React contexts globally
+jest.mock('./contexts/AuthContext');
+jest.mock('./contexts/DevToolsContext');
+jest.mock('./contexts/RealTimeContext');
 
 // Suppress console.error for known test warnings
 const originalError = console.error;
