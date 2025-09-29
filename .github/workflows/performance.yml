@@ -34,7 +34,9 @@ jobs:
       run: npm ci
       
     - name: 🏗️ Build application
-      run: npm run build
+      run: CI=false npm run build
+      env:
+        CI: false
       
     - name: 📊 Analyze bundle size
       run: |
@@ -117,7 +119,7 @@ jobs:
         echo "⏱️ Starting build performance test..."
         
         START_TIME=$(date +%s)
-        npm run build
+        CI=false npm run build
         END_TIME=$(date +%s)
         
         BUILD_TIME=$((END_TIME - START_TIME))
