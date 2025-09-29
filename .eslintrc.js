@@ -135,6 +135,7 @@ module.exports = {
     'no-undef': 'off',
     'no-multiple-empty-lines': 'off',
     'import/no-dynamic-require': 'off',
+    'no-case-declarations': 'error', // This should remain an error
   },
   settings: {
     react: {

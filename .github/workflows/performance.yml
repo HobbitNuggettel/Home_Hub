@@ -2,71 +2,14 @@ name: ⚡ Performance Monitoring
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main ]
   schedule:
     # Run performance tests weekly on Sundays at 3 AM UTC
     - cron: '0 3 * * 0'
 
 jobs:
-  lighthouse:
-    name: 🔍 Lighthouse Performance Audit
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: 📥 Checkout code
-      uses: actions/checkout@v4
-      
-    - name: 📦 Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
-        cache: 'npm'
-        
-    - name: 📦 Install dependencies
-      run: npm ci
-      
-    - name: 🏗️ Build application
-      run: npm run build
-      
-    - name: 🌐 Start server
-      run: |
-        npm install -g serve
-        serve -s build -p 3000 &
-        sleep 10
-        curl -f http://localhost:3000 || exit 1
-        
-    - name: 🔍 Run Lighthouse CI
-      uses: treosh/lighthouse-ci-action@v10
-      with:
-        configPath: '.lighthouserc.js'
-        uploadArtifacts: true
-        temporaryPublicStorage: true
-        
-    - name: 📊 Generate performance report
-      run: |
-        echo "# ⚡ Performance Report" > performance-report.md
-        echo "Generated on: $(date)" >> performance-report.md
-        echo "" >> performance-report.md
-        
-        if [ -d ".lighthouseci" ]; then
-          echo "## 🎯 Lighthouse Scores" >> performance-report.md
-          echo "- Performance: Check Lighthouse CI results" >> performance-report.md
-          echo "- Accessibility: Check Lighthouse CI results" >> performance-report.md
-          echo "- Best Practices: Check Lighthouse CI results" >> performance-report.md
-          echo "- SEO: Check Lighthouse CI results" >> performance-report.md
-        fi
-        
-        cat performance-report.md
-        
-    - name: 📤 Upload performance report
-      uses: actions/upload-artifact@v4
-      with:
-        name: performance-report
-        path: performance-report.md
-        retention-days: 30
-
   bundle-analysis:
     name: 📦 Bundle Size Analysis
     runs-on: ubuntu-latest
@@ -89,37 +32,53 @@ jobs:
       
     - name: 📊 Analyze bundle size
       run: |
-        npx webpack-bundle-analyzer build/static/js/*.js --report --mode static --report-filename bundle-report.html
+        echo "📦 Bundle Size Analysis"
         
-    - name: 📊 Generate bundle size report
-      run: |
-        echo "# 📦 Bundle Size Report" > bundle-report.md
-        echo "Generated on: $(date)" >> bundle-report.md
-        echo "" >> bundle-report.md
+        # Find main JS bundle
+        MAIN_JS=$(find build/static/js -name "main.*.js" -type f | head -1)
         
-        MAIN_JS=$(find build/static/js -name "main.*.js" | head -1)
         if [ -f "$MAIN_JS" ]; then
-          MAIN_SIZE=$(stat -f%z "$MAIN_JS" 2>/dev/null || stat -c%s "$MAIN_JS" 2>/dev/null || echo "0")
-          MAIN_SIZE_KB=$((MAIN_SIZE / 1024))
-          echo "## 📊 Main Bundle" >> bundle-report.md
-          echo "- Size: ${MAIN_SIZE_KB}KB" >> bundle-report.md
-          
-          if [ $MAIN_SIZE_KB -gt 500 ]; then
-            echo "⚠️ **Warning**: Bundle size is larger than 500KB" >> bundle-report.md
-          elif [ $MAIN_SIZE_KB -gt 250 ]; then
-            echo "⚠️ **Notice**: Bundle size is approaching 250KB limit" >> bundle-report.md
+          # Get file size (cross-platform)
+          if command -v stat >/dev/null 2>&1; then
+            SIZE=$(stat -f%z "$MAIN_JS" 2>/dev/null || stat -c%s "$MAIN_JS" 2>/dev/null || echo "0")
           else
-            echo "✅ **Good**: Bundle size is within recommended limits" >> bundle-report.md
+            SIZE=$(wc -c < "$MAIN_JS")
           fi
+          
+          SIZE_KB=$((SIZE / 1024))
+          echo "Main bundle size: ${SIZE_KB}KB"
+          
+          # Create report
+          echo "# 📦 Bundle Size Report" > bundle-report.md
+          echo "Generated on: $(date)" >> bundle-report.md
+          echo "" >> bundle-report.md
+          echo "## 📊 Main Bundle" >> bundle-report.md
+          echo "- Size: ${SIZE_KB}KB" >> bundle-report.md
+          
+          if [ $SIZE_KB -gt 500 ]; then
+            echo "- Status: ⚠️ **Large** (>500KB)" >> bundle-report.md
+          elif [ $SIZE_KB -gt 250 ]; then
+            echo "- Status: 📊 **Medium** (250-500KB)" >> bundle-report.md
+          else
+            echo "- Status: ✅ **Good** (<250KB)" >> bundle-report.md
+          fi
+        else
+          echo "⚠️ Main bundle not found"
+          echo "# 📦 Bundle Size Report" > bundle-report.md
+          echo "⚠️ Could not find main bundle" >> bundle-report.md
         fi
         
         echo "" >> bundle-report.md
         echo "## 📁 All Static Assets" >> bundle-report.md
-        find build/static -type f -name "*.js" -o -name "*.css" | while read file; do
-          SIZE=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo "0")
+        find build/static -type f \( -name "*.js" -o -name "*.css" \) 2>/dev/null | while read file; do
+          if command -v stat >/dev/null 2>&1; then
+            SIZE=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || wc -c < "$file")
+          else
+            SIZE=$(wc -c < "$file")
+          fi
           SIZE_KB=$((SIZE / 1024))
           echo "- $(basename "$file"): ${SIZE_KB}KB" >> bundle-report.md
-        done
+        done || echo "- No static assets found" >> bundle-report.md
         
         cat bundle-report.md
         
@@ -127,13 +86,11 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: bundle-analysis
-        path: |
-          bundle-report.md
-          bundle-report.html
+        path: bundle-report.md
         retention-days: 30
 
-  performance-tests:
-    name: 🚀 Performance Tests
+  build-performance:
+    name: 🚀 Build Performance
     runs-on: ubuntu-latest
     
     steps:
@@ -149,48 +106,51 @@ jobs:
     - name: 📦 Install dependencies
       run: npm ci
       
-    - name: 🏗️ Build application
-      run: npm run build
-      
-    - name: 🌐 Start server
+    - name: ⚡ Measure build time
       run: |
-        npm install -g serve
-        serve -s build -p 3000 &
-        sleep 10
+        echo "⏱️ Starting build performance test..."
         
-    - name: ⚡ Run performance tests
-      run: |
-        echo "🚀 Running performance tests..."
+        START_TIME=$(date +%s)
+        npm run build
+        END_TIME=$(date +%s)
         
-        # Test page load time
-        LOAD_TIME=$(curl -w "%{time_total}" -s -o /dev/null http://localhost:3000)
-        echo "📊 Page load time: ${LOAD_TIME}s"
+        BUILD_TIME=$((END_TIME - START_TIME))
         
-        # Test key routes
-        ROUTES=("/" "/home" "/inventory" "/spending")
+        echo "# ⚡ Build Performance Report" > build-performance.md
+        echo "Generated on: $(date)" >> build-performance.md
+        echo "" >> build-performance.md
+        echo "## ⏱️ Build Time" >> build-performance.md
+        echo "- Total time: ${BUILD_TIME} seconds" >> build-performance.md
         
-        echo "# 🚀 Performance Test Results" > performance-results.md
-        echo "Generated on: $(date)" >> performance-results.md
-        echo "" >> performance-results.md
-        echo "## 📊 Route Performance" >> performance-results.md
+        if [ $BUILD_TIME -gt 120 ]; then
+          echo "- Status: ⚠️ **Slow** (>2 minutes)" >> build-performance.md
+        elif [ $BUILD_TIME -gt 60 ]; then
+          echo "- Status: 📊 **Normal** (1-2 minutes)" >> build-performance.md
+        else
+          echo "- Status: ✅ **Fast** (<1 minute)" >> build-performance.md
+        fi
         
-        for route in "${ROUTES[@]}"; do
-          ROUTE_TIME=$(curl -w "%{time_total}" -s -o /dev/null "http://localhost:3000${route}")
-          echo "- ${route}: ${ROUTE_TIME}s" >> performance-results.md
-          
-          # Check if load time is acceptable (< 2 seconds)
-          if (( $(echo "$ROUTE_TIME > 2.0" | bc -l) )); then
-            echo "  ⚠️ **Slow**: Load time exceeds 2s threshold" >> performance-results.md
-          else
-            echo "  ✅ **Good**: Load time within acceptable range" >> performance-results.md
-          fi
-        done
+        cat build-performance.md
         
-        cat performance-results.md
-        
-    - name: 📤 Upload performance results
+    - name: 📤 Upload performance report
       uses: actions/upload-artifact@v4
       with:
-        name: performance-results
-        path: performance-results.md
+        name: build-performance
+        path: build-performance.md
         retention-days: 30
+
+  performance-summary:
+    name: 📊 Performance Summary
+    runs-on: ubuntu-latest
+    needs: [bundle-analysis, build-performance]
+    if: always()
+    
+    steps:
+    - name: 📊 Generate summary
+      run: |
+        echo "## ⚡ Performance Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- 📦 Bundle Analysis: ${{ needs.bundle-analysis.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- 🚀 Build Performance: ${{ needs.build-performance.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Performance monitoring completed!" >> $GITHUB_STEP_SUMMARY

@@ -433,8 +433,8 @@ class AICachingService {
   monitorLocalStorageSize() {
     try {
       let totalSize = 0;
-      for (let key in localStorage) {
-        if (localStorage.hasOwnProperty(key)) {
+      for (const key in localStorage) {
+        if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
           totalSize += localStorage[key].length;
         }
       }

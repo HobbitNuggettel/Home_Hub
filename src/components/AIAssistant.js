@@ -303,7 +303,7 @@ export default function AIAssistant({
   const renderQuickActions = () => (
     <div className="grid grid-cols-2 gap-2 mb-4">
       <button
-        onClick={() => processAICommand("What items are running low?")}
+        onClick={() => processAICommand('What items are running low?')}
         className="flex items-center gap-2 p-2 bg-blue-50 hover:bg-blue-100 rounded-lg text-sm"
       >
         <Package className="w-4 h-4 text-blue-600" />
@@ -311,7 +311,7 @@ export default function AIAssistant({
       </button>
       
       <button
-        onClick={() => processAICommand("How much did I spend this month?")}
+        onClick={() => processAICommand('How much did I spend this month?')}
         className="flex items-center gap-2 p-2 bg-green-50 hover:bg-green-100 rounded-lg text-sm"
       >
         <DollarSign className="w-4 h-4 text-green-600" />
@@ -319,7 +319,7 @@ export default function AIAssistant({
       </button>
       
       <button
-        onClick={() => processAICommand("What can I cook tonight?")}
+        onClick={() => processAICommand('What can I cook tonight?')}
         className="flex items-center gap-2 p-2 bg-purple-50 hover:bg-purple-100 rounded-lg text-sm"
       >
         <ChefHat className="w-4 h-4 text-purple-600" />
@@ -327,7 +327,7 @@ export default function AIAssistant({
       </button>
       
       <button
-        onClick={() => processAICommand("Generate shopping list")}
+        onClick={() => processAICommand('Generate shopping list')}
         className="flex items-center gap-2 p-2 bg-orange-50 hover:bg-orange-100 rounded-lg text-sm"
       >
         <ShoppingCart className="w-4 h-4 text-orange-600" />

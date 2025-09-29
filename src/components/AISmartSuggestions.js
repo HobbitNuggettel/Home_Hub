@@ -238,6 +238,7 @@ const AISmartSuggestions = () => {
 
   // Sort suggestions
   const sortedSuggestions = useMemo(() => {
+    const impactOrder = { high: 3, medium: 2, low: 1 };
     return [...suggestions].sort((a, b) => {
       switch (sortBy) {
         case 'savings':
@@ -246,7 +247,6 @@ const AISmartSuggestions = () => {
           return b.confidence - a.confidence;
         case 'impact':
         default:
-          const impactOrder = { high: 3, medium: 2, low: 1 };
           return impactOrder[b.impact] - impactOrder[a.impact];
       }
     });

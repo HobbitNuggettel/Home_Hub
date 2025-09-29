@@ -133,7 +133,7 @@ class VisionAI {
     const items = [];
     let total = 0;
     let store = 'Unknown Store';
-    let date = new Date().toISOString().split('T')[0];
+    const date = new Date().toISOString().split('T')[0];
 
     for (const line of lines) {
       // Extract store name (usually first non-empty line)

@@ -213,7 +213,7 @@ class HuggingFaceService {
       requestBody = {
         inputs: prompt,
         parameters: {
-          candidate_labels: ["positive", "negative", "neutral", "informative", "helpful"]
+          candidate_labels: ['positive', 'negative', 'neutral', 'informative', 'helpful']
         }
       };
     } else if (model.includes('distilbart-cnn')) {
@@ -226,7 +226,7 @@ class HuggingFaceService {
       requestBody = {
         inputs: {
           question: prompt,
-          context: "This is a general context for the question."
+          context: 'This is a general context for the question.'
         }
       };
     } else if (model.includes('bert-base-multilingual-uncased-sentiment')) {
@@ -249,7 +249,7 @@ class HuggingFaceService {
       requestBody = {
         inputs: {
           source_sentence: prompt,
-          sentences: ["This is a test sentence", "This is another sentence"]
+          sentences: ['This is a test sentence', 'This is another sentence']
         }
       };
     } else if (model.includes('finance-embeddings-investopedia')) {
@@ -257,7 +257,7 @@ class HuggingFaceService {
       requestBody = {
         inputs: {
           source_sentence: prompt,
-          sentences: ["This is a financial investment", "This is a personal expense", "This is a business transaction"]
+          sentences: ['This is a financial investment', 'This is a personal expense', 'This is a business transaction']
         }
       };
     } else if (model.includes('Splade_PP_en_v2')) {
@@ -360,7 +360,7 @@ class HuggingFaceService {
       const requestBody = {
         inputs: prompt,
         parameters: {
-          candidate_labels: ["positive", "negative", "neutral", "informative", "helpful"]
+          candidate_labels: ['positive', 'negative', 'neutral', 'informative', 'helpful']
         }
       };
 
@@ -685,7 +685,7 @@ class HuggingFaceService {
         body: JSON.stringify({
           inputs: 'Hello, this is a test.',
           parameters: {
-            candidate_labels: ["positive", "negative", "neutral"]
+            candidate_labels: ['positive', 'negative', 'neutral']
           }
         })
       });
@@ -719,26 +719,24 @@ class HuggingFaceService {
     } catch (error) {
       console.error('❌ HuggingFace API test error:', error);
       console.error('❌ Error stack:', error.stack);
-      return { success: false, error: error.message };
-    }
-    
-    // If we get here, try to find a working model
-    console.log('🔄 Trying to find a working model...');
-    const modelResult = await this.findWorkingModel();
-    
-    if (!modelResult.success) {
-      console.log('🔄 No working models found, trying all 9 working models...');
-      // Test with a simple prompt using all 9 models
+      
+      // If we get here, try to find a working model
+      console.log('🔄 Trying to find a working model...');
       try {
-        const fallbackResult = await this.tryAllModels('Hello, this is a test.', 50);
-        return { success: true, message: 'Fallback models working', data: fallbackResult };
+        const modelResult = await this.findWorkingModel();
+        
+        if (!modelResult.success) {
+          console.log('🔄 No working models found, trying all 9 working models...');
+          // Test with a simple prompt using all 9 models
+          const fallbackResult = await this.tryAllModels('Hello, this is a test.', 50);
+          return { success: true, message: 'Fallback models working', data: fallbackResult };
+        }
+        return modelResult;
       } catch (fallbackError) {
         console.log('🔄 All fallback models failed, testing endpoint formats...');
         return await this.testEndpointFormats();
       }
     }
-    
-    return modelResult;
   }
 
   /**
@@ -1042,9 +1040,9 @@ class HuggingFaceService {
         inputs: {
           source_sentence: text,
           sentences: comparisonTexts.length > 0 ? comparisonTexts : [
-            "This is a financial investment",
-            "This is a personal expense",
-            "This is a business transaction"
+            'This is a financial investment',
+            'This is a personal expense',
+            'This is a business transaction'
           ]
         }
       };

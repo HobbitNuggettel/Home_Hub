@@ -55,7 +55,7 @@ class AnalyticsErrorBoundary extends React.Component {
 }
 
 // Chart wrapper component with error boundary
-const ChartWrapper = ({ children, fallback = "Chart failed to load" }) => {
+const ChartWrapper = ({ children, fallback = 'Chart failed to load' }) => {
   const [hasError, setHasError] = useState(false);
 
   if (hasError) {
@@ -203,16 +203,16 @@ const AdvancedAnalytics = () => {
       try {
         const svg = d3.select(d3Container.current);
         if (!svg.empty()) {
-          svg.selectAll("*").remove();
+          svg.selectAll('*').remove();
 
           const width = 400;
           const height = 300;
           const margin = { top: 20, right: 20, bottom: 30, left: 40 };
 
           const chartSvg = svg
-            .append("svg")
-            .attr("width", width)
-            .attr("height", height);
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height);
 
           const x = d3.scaleBand()
             .domain(analyticsData.inventory.map(d => d.category))
@@ -224,40 +224,40 @@ const AdvancedAnalytics = () => {
             .range([height - margin.bottom, margin.top]);
 
           // Add bars
-          chartSvg.selectAll("rect")
+          chartSvg.selectAll('rect')
             .data(analyticsData.inventory)
             .enter()
-            .append("rect")
-            .attr("x", d => x(d.category))
-            .attr("y", d => y(d.value))
-            .attr("width", x.bandwidth())
-            .attr("height", d => height - margin.bottom - y(d.value))
-            .attr("fill", (d, i) => d3.schemeCategory10[i % d3.schemeCategory10.length])
-            .attr("opacity", 0.8)
-            .on("mouseover", function (event, d) {
-              d3.select(this).attr("opacity", 1);
+            .append('rect')
+            .attr('x', d => x(d.category))
+            .attr('y', d => y(d.value))
+            .attr('width', x.bandwidth())
+            .attr('height', d => height - margin.bottom - y(d.value))
+            .attr('fill', (d, i) => d3.schemeCategory10[i % d3.schemeCategory10.length])
+            .attr('opacity', 0.8)
+            .on('mouseover', function (event, d) {
+              d3.select(this).attr('opacity', 1);
               // Add tooltip
-              chartSvg.append("text")
-                .attr("class", "tooltip")
-                .attr("x", x(d.category) + x.bandwidth() / 2)
-                .attr("y", y(d.value) - 10)
-                .attr("text-anchor", "middle")
-                .attr("fill", "white")
-                .attr("font-weight", "bold")
+              chartSvg.append('text')
+                .attr('class', 'tooltip')
+                .attr('x', x(d.category) + x.bandwidth() / 2)
+                .attr('y', y(d.value) - 10)
+                .attr('text-anchor', 'middle')
+                .attr('fill', 'white')
+                .attr('font-weight', 'bold')
                 .text(`$${d.value}`);
             })
-            .on("mouseout", function () {
-              d3.select(this).attr("opacity", 0.8);
-              chartSvg.selectAll(".tooltip").remove();
+            .on('mouseout', function () {
+              d3.select(this).attr('opacity', 0.8);
+              chartSvg.selectAll('.tooltip').remove();
             });
 
           // Add axes
-          chartSvg.append("g")
-            .attr("transform", `translate(0,${height - margin.bottom})`)
+          chartSvg.append('g')
+            .attr('transform', `translate(0,${height - margin.bottom})`)
             .call(d3.axisBottom(x));
 
-          chartSvg.append("g")
-            .attr("transform", `translate(${margin.left},0)`)
+          chartSvg.append('g')
+            .attr('transform', `translate(${margin.left},0)`)
             .call(d3.axisLeft(y));
         }
       } catch (error) {

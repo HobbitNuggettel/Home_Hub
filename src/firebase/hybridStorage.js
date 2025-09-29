@@ -804,7 +804,7 @@ class HybridFirebaseStorage {
       }
 
       const userData = userDoc.data;
-      let optimizations = [];
+      const optimizations = [];
 
       // Check for large base64 images that could be moved to external services
       const checkAndOptimizeImages = (items, type) => {

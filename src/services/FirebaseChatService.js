@@ -124,13 +124,6 @@ class FirebaseChatService {
         has_attachments: messageData.attachments ? messageData.attachments.length > 0 : false
       });
 
-      return {
-        id: messageRef.id,
-        ...message,
-        timestamp: new Date(),
-        createdAt: new Date()
-      };
-
       // Update conversation metadata
       await this.updateConversationMetadata(conversationId, {
         messageCount: messageData.messageCount || 1,
@@ -141,7 +134,8 @@ class FirebaseChatService {
       return {
         id: messageRef.id,
         ...message,
-        timestamp: new Date()
+        timestamp: new Date(),
+        createdAt: new Date()
       };
 
     } catch (error) {
