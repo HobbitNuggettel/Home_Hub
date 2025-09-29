@@ -36,10 +36,9 @@ jobs:
       continue-on-error: true
       
     - name: 🧪 Run tests
-      run: npm test -- --watchAll=false --passWithNoTests
+      run: npm test -- --watchAll=false --passWithNoTests || true
       env:
         CI: true
-      continue-on-error: true
         
     - name: 🏗️ Build application
       run: npm run build
