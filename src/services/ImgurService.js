@@ -375,9 +375,9 @@ class ImgurService {
       }
 
       // Log analytics
-      firebaseAnalyticsService.logEvent('imgur_delete_success', {
-        delete_hash: deleteHash
-      });
+      // firebaseAnalyticsService.logEvent('imgur_delete_success', {
+      //   delete_hash: deleteHash
+      // });
 
       return {
         success: true,
@@ -387,10 +387,10 @@ class ImgurService {
     } catch (error) {
       console.error('Image deletion failed:', error);
       
-      firebaseAnalyticsService.logEvent('imgur_delete_error', {
-        error: error.message,
-        delete_hash: deleteHash
-      });
+      // firebaseAnalyticsService.logEvent('imgur_delete_error', {
+      //   error: error.message,
+      //   delete_hash: deleteHash
+      // });
 
       return {
         success: false,
