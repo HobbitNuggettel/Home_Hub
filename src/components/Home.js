@@ -603,8 +603,17 @@ export default function Home() {
           {features.map((feature, index) => (
             <div
               key={index}
+              role="button"
+              tabIndex={0}
               onClick={() => navigate(feature.href)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  navigate(feature.href);
+                }
+              }}
               className="group cursor-pointer bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl p-8 transform hover:scale-105 transition-all duration-300 border-2 border-gray-100 dark:border-gray-700 hover:border-transparent relative overflow-hidden"
+              aria-label={`Navigate to ${feature.title}`}
             >
               {/* Gradient Overlay on Hover */}
               <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity rounded-2xl`}></div>
