@@ -5,6 +5,12 @@ on:
     branches: [ main, develop, feature-development-* ]
   pull_request:
     branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual trigger'
+        required: false
+        default: 'Manual workflow run'
 
 jobs:
   # Frontend Tests and Build

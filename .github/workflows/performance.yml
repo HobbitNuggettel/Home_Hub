@@ -8,6 +8,12 @@ on:
   schedule:
     # Run performance tests weekly on Sundays at 3 AM UTC
     - cron: '0 3 * * 0'
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual trigger'
+        required: false
+        default: 'Manual performance check'
 
 jobs:
   bundle-analysis:
