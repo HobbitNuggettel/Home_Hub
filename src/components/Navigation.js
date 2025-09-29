@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   Menu, 
@@ -16,7 +16,6 @@ import {
   LogOut,
   User,
   Settings,
-  Brain,
   Lightbulb,
   Wifi,
   Shield
@@ -119,8 +118,6 @@ export default function Navigation() {
       description: 'Real-time performance monitoring and optimization'
     }
   ];
-
-
 
   const userMenuItems = [
     {

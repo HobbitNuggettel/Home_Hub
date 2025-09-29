@@ -1,4 +1,4 @@
-import React from 'react';
+// React import not needed in React 17+
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';

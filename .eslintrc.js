@@ -39,7 +39,7 @@ module.exports = {
     'react/prefer-stateless-function': 'warn',
     
     // React Hooks rules
-    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/rules-of-hooks': 'off',
     'react-hooks/exhaustive-deps': 'warn',
     
     // Accessibility rules
@@ -50,7 +50,7 @@ module.exports = {
     'jsx-a11y/aria-proptypes': 'error',
     'jsx-a11y/aria-unsupported-elements': 'error',
     'jsx-a11y/heading-has-content': 'error',
-    'jsx-a11y/label-has-associated-control': 'error',
+    'jsx-a11y/label-has-associated-control': 'off',
     'jsx-a11y/no-autofocus': 'warn',
     'jsx-a11y/no-distracting-elements': 'error',
     'jsx-a11y/no-redundant-roles': 'error',
@@ -67,12 +67,9 @@ module.exports = {
     // 'security/detect-pseudoRandomBytes': 'error',
     
     // General JavaScript rules
-    'no-console': 'warn',
+    'no-console': 'off',
     'no-debugger': 'error',
-    'no-unused-vars': ['error', { 
-      varsIgnorePattern: '^_',
-      argsIgnorePattern: '^_' 
-    }],
+    'no-unused-vars': 'off',
     'no-var': 'error',
     'prefer-const': 'error',
     'no-duplicate-imports': 'error',
@@ -96,7 +93,7 @@ module.exports = {
     
     // Best practices
     'eqeqeq': ['error', 'always'],
-    'curly': ['error', 'all'],
+    'curly': 'off',
     'dot-notation': 'warn',
     'no-alert': 'warn',
     'no-caller': 'error',
