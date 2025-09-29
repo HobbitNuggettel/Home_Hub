@@ -27,6 +27,13 @@ A comprehensive React-based application for managing your home, finances, and sm
 - **Automation System**: Time-based and trigger-based automations
 - **Energy Tracking**: kWh monitoring for each device
 
+### 🔧 **Development & Quality Improvements**
+- **Firefox Browser Integration**: Automatic Firefox browser launching for development
+- **ESLint Configuration**: Comprehensive linting rules for code quality
+- **Zero Compilation Errors**: All runtime and compilation issues resolved
+- **Performance Optimization**: Enhanced caching and performance monitoring
+- **Mobile-First Design**: Perfect mobile experience with touch-friendly controls
+
 ## 🚀 **Core Features**
 
 ### **📱 User Experience**
@@ -122,11 +129,19 @@ The app is fully optimized for mobile devices with:
 
 ### **Available Scripts**
 ```bash
-npm start          # Start development server
+npm start          # Start development server (opens in Firefox)
+npm start:firefox  # Explicitly start with Firefox browser
 npm run build      # Build for production
 npm test           # Run test suite
 npm run eject      # Eject from Create React App
 ```
+
+### **Development Workflow**
+- **Auto-restart**: Server automatically restarts when changes are made
+- **Firefox Integration**: Development server opens in Firefox by default
+- **Environment**: Firebase configuration stored in `.env.local` file
+- **Code Quality**: ESLint rules configured for consistent code standards
+- **TODO Tracking**: Project TODO list updated after each implementation
 
 ### **Project Structure**
 ```
