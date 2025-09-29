@@ -553,10 +553,6 @@ function SpendingTracker() {
             viewMode={viewMode}
           />
         </div>
-
-        {/* TODO: Add Expense Form Modal */}
-        {/* TODO: Add Budget Form Modal */}
-        {/* TODO: Add Expense Detail Modal */}
       </div>
     </div>
   );
