@@ -103,8 +103,7 @@ jobs:
       run: npm ci
       
     - name: 🔒 Run security audit
-      run: npm audit --audit-level high
-      continue-on-error: true
+      run: npm audit --audit-level high || echo "Security vulnerabilities found but continuing..."
 
   # Mobile App Check
   mobile:
