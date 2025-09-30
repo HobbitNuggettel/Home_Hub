@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import realTimeService from '../services/RealTimeService';
 
 const RealTimeContext = createContext();
@@ -178,6 +179,10 @@ export const RealTimeProvider = ({ children }) => {
       {children}
     </RealTimeContext.Provider>
   );
+};
+
+RealTimeProvider.propTypes = {
+  children: PropTypes.node.isRequired
 };
 
 /**

@@ -26,8 +26,8 @@ const Recipes = () => {
     cookTime: '',
     servings: '',
     difficulty: 'easy',
-    ingredients: [{ item: '', amount: '', unit: '' }],
-    instructions: [''],
+    ingredients: [{ id: Date.now() + Math.random(), item: '', amount: '', unit: '' }],
+    instructions: [{ id: Date.now() + Math.random(), text: '' }],
     nutrition: {
       calories: '',
       protein: '',
@@ -206,7 +206,7 @@ const Recipes = () => {
       reviews: 0,
       isFavorite: false,
       ingredients: formData.ingredients.filter(ing => ing.item.trim() !== ''),
-      instructions: formData.instructions.filter(inst => inst.trim() !== ''),
+      instructions: formData.instructions.filter(inst => (inst.text || inst).trim() !== '').map(inst => inst.text || inst),
       tags: formData.tags.filter(tag => tag.trim() !== '')
     };
     
@@ -219,7 +219,7 @@ const Recipes = () => {
     
     const updatedRecipes = recipes.map(recipe =>
       recipe.id === editingRecipe.id
-        ? { ...recipe, ...formData, ingredients: formData.ingredients.filter(ing => ing.item.trim() !== ''), instructions: formData.instructions.filter(inst => inst.trim() !== ''), tags: formData.tags.filter(tag => tag.trim() !== '') }
+        ? { ...recipe, ...formData, ingredients: formData.ingredients.filter(ing => ing.item.trim() !== ''), instructions: formData.instructions.filter(inst => (inst.text || inst).trim() !== '').map(inst => inst.text || inst), tags: formData.tags.filter(tag => tag.trim() !== '') }
         : recipe
     );
     
@@ -251,7 +251,7 @@ const Recipes = () => {
   const addIngredient = () => {
     setFormData(prev => ({
       ...prev,
-      ingredients: [...prev.ingredients, { item: '', amount: '', unit: '' }]
+      ingredients: [...prev.ingredients, { id: Date.now() + Math.random(), item: '', amount: '', unit: '' }]
     }));
   };
 
@@ -274,7 +274,7 @@ const Recipes = () => {
   const addInstruction = () => {
     setFormData(prev => ({
       ...prev,
-      instructions: [...prev.instructions, '']
+      instructions: [...prev.instructions, { id: Date.now() + Math.random(), text: '' }]
     }));
   };
 
@@ -289,7 +289,7 @@ const Recipes = () => {
     setFormData(prev => ({
       ...prev,
       instructions: prev.instructions.map((inst, i) =>
-        i === index ? value : inst
+        i === index ? { ...inst, text: value } : inst
       )
     }));
   };
@@ -304,8 +304,8 @@ const Recipes = () => {
       cookTime: '',
       servings: '',
       difficulty: 'easy',
-      ingredients: [{ item: '', amount: '', unit: '' }],
-      instructions: [''],
+      ingredients: [{ id: Date.now() + Math.random(), item: '', amount: '', unit: '' }],
+      instructions: [{ id: Date.now() + Math.random(), text: '' }],
       nutrition: {
         calories: '',
         protein: '',
@@ -473,8 +473,8 @@ const Recipes = () => {
                 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {recipe.tags.slice(0, 3).map((tag, index) => (
-                    <span key={index} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
+                  {recipe.tags.slice(0, 3).map((tag) => (
+                    <span key={tag} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
                       {tag}
                     </span>
                   ))}
@@ -654,7 +654,7 @@ const Recipes = () => {
                         </label>
                         <div className="space-y-2">
                           {formData.ingredients.map((ingredient, index) => (
-                            <div key={index} className="flex gap-2">
+                            <div key={ingredient.id || index} className="flex gap-2">
                               <input
                                 type="text"
                                 placeholder="Ingredient"
@@ -703,13 +703,13 @@ const Recipes = () => {
                         </label>
                         <div className="space-y-2">
                           {formData.instructions.map((instruction, index) => (
-                            <div key={index} className="flex gap-2">
+                            <div key={instruction.id || index} className="flex gap-2">
                               <span className="flex-shrink-0 w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-medium">
                                 {index + 1}
                               </span>
                               <textarea
                                 placeholder={`Step ${index + 1}`}
-                                value={instruction}
+                                value={instruction.text || instruction}
                                 onChange={(e) => updateInstruction(index, e.target.value)}
                                 rows={2}
                                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
