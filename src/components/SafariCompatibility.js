@@ -28,46 +28,78 @@ const SafariCompatibility = ({ children }) => {
         // Array.includes polyfill is loaded in index.html
       }
       
-      // Add Object.assign polyfill for very old Safari
+      // Add Object.assign polyfill for very old Safari (safe approach)
       if (!Object.assign) {
-        Object.assign = function(target, ...sources) {
-          sources.forEach(source => {
-            if (source) {
-              Object.keys(source).forEach(key => {
-                target[key] = source[key];
+        try {
+          Object.defineProperty(Object, 'assign', {
+            value: function(target, ...sources) {
+              sources.forEach(source => {
+                if (source) {
+                  Object.keys(source).forEach(key => {
+                    target[key] = source[key];
+                  });
+                }
               });
-            }
+              return target;
+            },
+            writable: true,
+            configurable: true
           });
-          return target;
-        };
+        } catch (error) {
+          console.warn('Could not add Object.assign polyfill:', error);
+        }
       }
       
-      // Add String.includes polyfill for very old Safari
+      // Add String.includes polyfill for very old Safari (safe approach)
       if (!String.prototype.includes) {
-        String.prototype.includes = function(search, start) {
-          if (typeof start !== 'number') {
-            start = 0;
-          }
-          if (start + search.length > this.length) {
-            return false;
-          } else {
-            return this.indexOf(search, start) !== -1;
-          }
-        };
+        try {
+          Object.defineProperty(String.prototype, 'includes', {
+            value: function(search, start) {
+              if (typeof start !== 'number') {
+                start = 0;
+              }
+              if (start + search.length > this.length) {
+                return false;
+              } else {
+                return this.indexOf(search, start) !== -1;
+              }
+            },
+            writable: true,
+            configurable: true
+          });
+        } catch (error) {
+          console.warn('Could not add String.includes polyfill:', error);
+        }
       }
       
-      // Add Number.isNaN polyfill
+      // Add Number.isNaN polyfill (safe approach)
       if (!Number.isNaN) {
-        Number.isNaN = function(value) {
-          return typeof value === 'number' && isNaN(value);
-        };
+        try {
+          Object.defineProperty(Number, 'isNaN', {
+            value: function(value) {
+              return typeof value === 'number' && isNaN(value);
+            },
+            writable: true,
+            configurable: true
+          });
+        } catch (error) {
+          console.warn('Could not add Number.isNaN polyfill:', error);
+        }
       }
       
-      // Add Number.isFinite polyfill
+      // Add Number.isFinite polyfill (safe approach)
       if (!Number.isFinite) {
-        Number.isFinite = function(value) {
-          return typeof value === 'number' && isFinite(value);
-        };
+        try {
+          Object.defineProperty(Number, 'isFinite', {
+            value: function(value) {
+              return typeof value === 'number' && isFinite(value);
+            },
+            writable: true,
+            configurable: true
+          });
+        } catch (error) {
+          console.warn('Could not add Number.isFinite polyfill:', error);
+        }
       }
       
       // Add console.group polyfill for older Safari
