@@ -16,6 +16,7 @@ import {
   EyeOff
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import hybridStorage from '../firebase/hybridStorage';
 
 const UserManagement = () => {
   const [households, setHouseholds] = useState([]);
@@ -36,114 +37,25 @@ const UserManagement = () => {
     }
   });
 
-  // Load data from localStorage
+  // Load real data from Firebase
   useEffect(() => {
-    const savedHouseholds = localStorage.getItem('homeHubHouseholds');
-    const savedCurrentUser = localStorage.getItem('homeHubCurrentUser');
-    const savedInvitations = localStorage.getItem('homeHubInvitations');
-    
-    console.log('Loading collaboration data from localStorage:', { 
-      savedHouseholds, 
-      savedCurrentUser, 
-      savedInvitations 
-    });
-    
-    if (savedHouseholds) {
-      const parsedHouseholds = JSON.parse(savedHouseholds);
-      console.log('Loaded saved households:', parsedHouseholds);
-      setHouseholds(parsedHouseholds);
-    } else {
-      // Load mock household data
-      const mockHouseholds = [
-        {
-          id: '1',
-          name: 'Smith Family',
-          description: 'Main household for the Smith family',
-          createdAt: new Date().toISOString(),
-          members: [
-            {
-              id: 'user1',
-              email: 'john.smith@email.com',
-              name: 'John Smith',
-              role: 'owner',
-              joinedAt: new Date().toISOString(),
-              avatar: null
-            },
-            {
-              id: 'user2',
-              email: 'jane.smith@email.com',
-              name: 'Jane Smith',
-              role: 'admin',
-              joinedAt: new Date().toISOString(),
-              avatar: null
-            },
-            {
-              id: 'user3',
-              email: 'teen.smith@email.com',
-              name: 'Teen Smith',
-              role: 'member',
-              joinedAt: new Date().toISOString(),
-              avatar: null
-            }
-          ],
-          settings: {
-            allowItemSharing: true,
-            allowExpenseSharing: true,
-            requireApproval: false,
-            notifications: true
-          }
+    const loadUserData = async () => {
+      try {
+        // Load households data from Firebase
+        const householdsResponse = await hybridStorage.getHouseholds();
+        if (householdsResponse.success) {
+          setHouseholds(householdsResponse.data || []);
+        } else {
+          console.error('Failed to load households:', householdsResponse.error);
+          setHouseholds([]);
         }
-      ];
-      console.log('Setting mock households:', mockHouseholds);
-      setHouseholds(mockHouseholds);
-      localStorage.setItem('homeHubHouseholds', JSON.stringify(mockHouseholds));
-    }
+      } catch (error) {
+        console.error('Error loading user data:', error);
+        setHouseholds([]);
+      }
+    };
 
-    if (savedCurrentUser) {
-      const parsedUser = JSON.parse(savedCurrentUser);
-      console.log('Loaded saved current user:', parsedUser);
-      setCurrentUser(parsedUser);
-    } else {
-      // Set default current user
-      const defaultUser = {
-        id: 'user1',
-        email: 'john.smith@email.com',
-        name: 'John Smith',
-        role: 'owner',
-        avatar: null,
-        preferences: {
-          theme: 'light',
-          notifications: true,
-          language: 'en'
-        }
-      };
-      console.log('Setting default current user:', defaultUser);
-      setCurrentUser(defaultUser);
-      localStorage.setItem('homeHubCurrentUser', JSON.stringify(defaultUser));
-    }
-
-    if (savedInvitations) {
-      const parsedInvitations = JSON.parse(savedInvitations);
-      console.log('Loaded saved invitations:', parsedInvitations);
-      setInvitations(parsedInvitations);
-    } else {
-      // Load mock invitations
-      const mockInvitations = [
-        {
-          id: 'inv1',
-          householdId: '1',
-          householdName: 'Smith Family',
-          email: 'cousin.smith@email.com',
-          invitedBy: 'John Smith',
-          status: 'pending',
-          invitedAt: new Date().toISOString(),
-          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-        }
-      ];
-      console.log('Setting mock invitations:', mockInvitations);
-      setInvitations(mockInvitations);
-      localStorage.setItem('homeHubInvitations', JSON.stringify(mockInvitations));
-    }
+    loadUserData();
     
     setIsLoading(false);
   }, []);
@@ -359,7 +271,7 @@ const UserManagement = () => {
   const InviteUserForm = () => (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-lg">
-        <h2 className="text-xl font-bold mb-4">Invite User to {selectedHousehold?.name}</h2>
+        <h2 className="text-xl font-bold mb-4">Invite User to {(selectedHousehold && selectedHousehold.name) || 'Household'}</h2>
         
         <form onSubmit={handleSubmit(handleInviteUser)} className="space-y-4">
           <div>
@@ -428,7 +340,7 @@ const UserManagement = () => {
             </label>
             <input
               type="text"
-              value={currentUser?.name || ''}
+              value={(currentUser && currentUser.name) || ''}
               onChange={(e) => setCurrentUser(prev => ({ ...prev, name: e.target.value }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -440,7 +352,7 @@ const UserManagement = () => {
             </label>
             <input
               type="email"
-              value={currentUser?.email || ''}
+              value={(currentUser && currentUser.email) || ''}
               disabled
               className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500"
             />

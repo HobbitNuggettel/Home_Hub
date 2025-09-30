@@ -69,9 +69,9 @@ export const DevToolsProvider = ({ children }) => {
     updateDevToolsConfig
   };
 
-  return (
-    <DevToolsContext.Provider value={value}>
-      {children}
-    </DevToolsContext.Provider>
+  return React.createElement(
+    DevToolsContext.Provider,
+    { value: value },
+    children
   );
 };

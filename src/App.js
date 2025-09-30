@@ -1,10 +1,11 @@
-// React import not needed in React 17+
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
 import { DevToolsProvider } from './contexts/DevToolsContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { RealTimeProvider } from './contexts/RealTimeContext';
+import SafariCompatibility from './components/SafariCompatibility';
 import LandingPage from './components/LandingPage';
 import Settings from './components/Settings';
 import Home from './components/Home';
@@ -31,11 +32,12 @@ import LogoutTest from './components/LogoutTest';
 
 function App() {
   return (
-    <ThemeProvider>
-      <DevToolsProvider>
-        <AuthProvider>
-          <RealTimeProvider>
-            <Router>
+    <SafariCompatibility>
+      <ThemeProvider>
+        <DevToolsProvider>
+          <AuthProvider>
+            <RealTimeProvider>
+              <Router>
               <div className="App">
                 <Routes>
                   {/* Public Routes */}
@@ -211,11 +213,12 @@ function App() {
                   }}
                 />
               </div>
-            </Router>
-          </RealTimeProvider>
-        </AuthProvider>
-      </DevToolsProvider>
-    </ThemeProvider>
+              </Router>
+            </RealTimeProvider>
+          </AuthProvider>
+        </DevToolsProvider>
+      </ThemeProvider>
+    </SafariCompatibility>
   );
 }
 

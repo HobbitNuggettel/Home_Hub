@@ -18,7 +18,8 @@ import {
   Settings,
   Lightbulb,
   Wifi,
-  Shield
+  Shield,
+  QrCode
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import DarkModeToggle from './DarkModeToggle';
@@ -212,7 +213,7 @@ export default function Navigation() {
               <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                    {userProfile?.photoURL ? (
+                    {userProfile && userProfile.photoURL ? (
                       <img
                         src={userProfile.photoURL}
                         alt="Profile"
@@ -224,11 +225,11 @@ export default function Navigation() {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900 dark:text-white">
-                      {userProfile?.displayName || currentUser.displayName || 'User'}
+                      {(userProfile && userProfile.displayName) || currentUser.displayName || 'User'}
                     </p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">{currentUser.email}</p>
                     <p className="text-xs text-blue-600 dark:text-blue-400 font-medium capitalize">
-                      {userProfile?.role || 'user'}
+                      {(userProfile && userProfile.role) || 'user'}
                     </p>
                   </div>
                 </div>
@@ -358,7 +359,7 @@ export default function Navigation() {
 
                 {/* Debug info - remove this later */}
                 <div className="mt-2 text-xs text-gray-500 text-center">
-                  User: {currentUser?.email || 'Unknown'} | Click to logout
+                  User: {(currentUser && currentUser.email) || 'Unknown'} | Click to logout
                 </div>
                 <div className="mt-1 text-xs text-gray-400 text-center">
                   Auth Status: {currentUser ? '✅ Authenticated' : '❌ Not Authenticated'}

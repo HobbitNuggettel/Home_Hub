@@ -173,10 +173,10 @@ export const RealTimeProvider = ({ children }) => {
     cleanup
   };
 
-  return (
-    <RealTimeContext.Provider value={value}>
-      {children}
-    </RealTimeContext.Provider>
+  return React.createElement(
+    RealTimeContext.Provider,
+    { value: value },
+    children
   );
 };
 

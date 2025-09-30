@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { 
   GoogleAuthProvider
 } from 'firebase/auth';
@@ -170,9 +170,9 @@ export function AuthProvider({ children }) {
     fetchUserProfile
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
+  return React.createElement(
+    AuthContext.Provider,
+    { value: value },
+    !loading && children
   );
 }

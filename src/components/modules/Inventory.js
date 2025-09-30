@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Search, Filter, Edit, Trash2, Calendar, Tag, Package, AlertTriangle } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import hybridStorage from '../../firebase/hybridStorage';
 
 const Inventory = () => {
+  const { currentUser } = useAuth();
   const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([
     'Electronics', 'Furniture', 'Kitchen', 'Clothing', 'Books', 'Tools', 'Other'
   ]);
@@ -23,57 +27,61 @@ const Inventory = () => {
     notes: ''
   });
 
-  // Load sample data on component mount
+  // Load real data from Firebase
   useEffect(() => {
-    const sampleItems = [
-      {
-        id: 1,
-        name: 'MacBook Pro',
-        category: 'Electronics',
-        description: '13-inch MacBook Pro with M2 chip',
-        purchaseDate: '2024-01-15',
-        warrantyExpiry: '2027-01-15',
-        price: 1299,
-        location: 'Home Office',
-        tags: ['computer', 'apple', 'work'],
-        notes: 'Company laptop, handle with care'
-      },
-      {
-        id: 2,
-        name: 'Coffee Maker',
-        category: 'Kitchen',
-        description: 'Breville coffee maker with grinder',
-        purchaseDate: '2023-06-20',
-        warrantyExpiry: '2026-06-20',
-        price: 299,
-        location: 'Kitchen',
-        tags: ['coffee', 'appliance', 'daily-use'],
-        notes: 'Used daily, clean regularly'
-      },
-      {
-        id: 3,
-        name: 'Dining Table',
-        category: 'Furniture',
-        description: 'Solid wood dining table, seats 6',
-        purchaseDate: '2022-11-10',
-        warrantyExpiry: '2025-11-10',
-        price: 899,
-        location: 'Dining Room',
-        tags: ['furniture', 'wood', 'dining'],
-        notes: 'Scratch-resistant finish'
+    const loadInventoryData = async () => {
+      if (!currentUser) {
+        setItems([]);
+        setTags([]);
+        setIsLoading(false);
+        return;
       }
-    ];
-    setItems(sampleItems);
-    
-    // Extract unique tags from sample items
-    const allTags = sampleItems.reduce((acc, item) => {
-      item.tags.forEach(tag => {
-        if (!acc.includes(tag)) acc.push(tag);
-      });
-      return acc;
-    }, []);
-    setTags(allTags);
-  }, []);
+
+      try {
+        setIsLoading(true);
+        const response = await hybridStorage.getInventoryItems(currentUser.uid);
+
+        if (response.success) {
+          setItems(response.data || []);
+
+          // Extract unique tags from real data
+          const allTags = response.data.reduce((acc, item) => {
+            if (item.tags) {
+              item.tags.forEach(tag => {
+                if (!acc.includes(tag)) acc.push(tag);
+              });
+            }
+            return acc;
+          }, []);
+          setTags(allTags);
+        } else {
+          console.error('Failed to load inventory items:', response.error);
+          setItems([]);
+          setTags([]);
+        }
+      } catch (error) {
+        console.error('Error loading inventory data:', error);
+        setItems([]);
+        setTags([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadInventoryData();
+  }, [currentUser]);
+
+  // Show loading state while authentication is being determined
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading inventory data...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleAddItem = () => {
     if (!formData.name || !formData.category) return;

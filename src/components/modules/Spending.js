@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, TrendingUp, TrendingDown, DollarSign, Calendar, PieChart, BarChart3, Target, AlertTriangle } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import hybridStorage from '../../firebase/hybridStorage';
 
 const Spending = () => {
+  const { currentUser } = useAuth();
   const [expenses, setExpenses] = useState([]);
   const [budgets, setBudgets] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([
     'Food & Dining', 'Transportation', 'Shopping', 'Entertainment', 'Utilities', 'Healthcare', 'Education', 'Other'
   ]);
@@ -23,77 +27,59 @@ const Spending = () => {
     period: 'month'
   });
 
-  // Load sample data
+  // Load real data from Firebase
   useEffect(() => {
-    const sampleExpenses = [
-      {
-        id: 1,
-        description: 'Grocery Shopping',
-        amount: 85.50,
-        category: 'Food & Dining',
-        date: '2024-01-20',
-        notes: 'Weekly groceries from Whole Foods'
-      },
-      {
-        id: 2,
-        description: 'Gas Station',
-        amount: 45.00,
-        category: 'Transportation',
-        date: '2024-01-19',
-        notes: 'Full tank fill-up'
-      },
-      {
-        id: 3,
-        description: 'Netflix Subscription',
-        amount: 15.99,
-        category: 'Entertainment',
-        date: '2024-01-15',
-        notes: 'Monthly subscription'
-      },
-      {
-        id: 4,
-        description: 'Electric Bill',
-        amount: 120.00,
-        category: 'Utilities',
-        date: '2024-01-18',
-        notes: 'December electricity usage'
+    const loadSpendingData = async () => {
+      if (!currentUser) {
+        setExpenses([]);
+        setBudgets([]);
+        setIsLoading(false);
+        return;
       }
-    ];
 
-    const sampleBudgets = [
-      {
-        id: 1,
-        category: 'Food & Dining',
-        amount: 400,
-        period: 'month',
-        spent: 85.50
-      },
-      {
-        id: 2,
-        category: 'Transportation',
-        amount: 200,
-        period: 'month',
-        spent: 45.00
-      },
-      {
-        id: 3,
-        category: 'Entertainment',
-        amount: 100,
-        period: 'month',
-        spent: 15.99
-      },
-      {
-        id: 4,
-        category: 'Utilities',
-        amount: 300,
-        period: 'month',
-        spent: 120.00
+      try {
+        setIsLoading(true);
+        const [expensesResponse, budgetsResponse] = await Promise.all([
+          hybridStorage.getSpendingExpenses(currentUser.uid),
+          hybridStorage.getSpendingBudgets(currentUser.uid)
+        ]);
+
+        if (expensesResponse.success) {
+          setExpenses(expensesResponse.data || []);
+        } else {
+          console.error('Failed to load expenses:', expensesResponse.error);
+          setExpenses([]);
+        }
+
+        if (budgetsResponse.success) {
+          setBudgets(budgetsResponse.data || []);
+        } else {
+          console.error('Failed to load budgets:', budgetsResponse.error);
+          setBudgets([]);
+        }
+      } catch (error) {
+        console.error('Error loading spending data:', error);
+        setExpenses([]);
+        setBudgets([]);
+      } finally {
+        setIsLoading(false);
       }
-    ];
+    };
 
-    setExpenses(sampleExpenses);
-    setBudgets(sampleBudgets);
-  }, []);
+    loadSpendingData();
+  }, [currentUser]);
+
+  // Show loading state while authentication is being determined
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading spending data...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleAddExpense = () => {
     if (!expenseForm.description || !expenseForm.amount || !expenseForm.category) return;
