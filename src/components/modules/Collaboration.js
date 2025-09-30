@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Users, Shield, Mail, Phone, Calendar, Edit, Trash2, UserPlus, Settings, Bell, CheckCircle, XCircle } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import hybridStorage from '../../firebase/hybridStorage';
 
 const Collaboration = () => {
+  const { currentUser } = useAuth();
   const [members, setMembers] = useState([]);
   const [invitations, setInvitations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [showAddMember, setShowAddMember] = useState(false);
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
@@ -36,61 +40,59 @@ const Collaboration = () => {
     { value: 'settings', label: 'Household Settings', description: 'Modify household configuration' }
   ];
 
-  // Load sample data
+  // Load collaboration data from Firebase
   useEffect(() => {
-    const sampleMembers = [
-      {
-        id: 1,
-        name: 'John Smith',
-        email: 'john@example.com',
-        phone: '+1 (555) 123-4567',
-        role: 'owner',
-        permissions: ['inventory', 'spending', 'shopping', 'recipes', 'collaboration', 'settings'],
-        joinedAt: '2024-01-01',
-        lastActive: '2024-01-20',
-        status: 'active'
-      },
-      {
-        id: 2,
-        name: 'Sarah Johnson',
-        email: 'sarah@example.com',
-        phone: '+1 (555) 234-5678',
-        role: 'admin',
-        permissions: ['inventory', 'spending', 'shopping', 'recipes'],
-        joinedAt: '2024-01-05',
-        lastActive: '2024-01-19',
-        status: 'active'
-      },
-      {
-        id: 3,
-        name: 'Mike Wilson',
-        email: 'mike@example.com',
-        phone: '+1 (555) 345-6789',
-        role: 'member',
-        permissions: ['inventory', 'shopping', 'recipes'],
-        joinedAt: '2024-01-10',
-        lastActive: '2024-01-18',
-        status: 'active'
+    const loadCollaborationData = async () => {
+      if (!currentUser) {
+        setIsLoading(false);
+        return;
       }
-    ];
+      
+      try {
+        setIsLoading(true);
+        const [membersResponse, invitationsResponse] = await Promise.all([
+          hybridStorage.getCollaborationMembers(currentUser.uid),
+          hybridStorage.getCollaborationInvitations(currentUser.uid)
+        ]);
 
-    const sampleInvitations = [
-      {
-        id: 1,
-        email: 'emma@example.com',
-        role: 'member',
-        invitedBy: 'John Smith',
-        invitedAt: '2024-01-15',
-        status: 'pending',
-        expiresAt: '2024-01-22'
+        if (membersResponse.success) {
+          setMembers(membersResponse.data || []);
+        } else {
+          console.error('Failed to load members:', membersResponse.error);
+          setMembers([]);
+        }
+
+        if (invitationsResponse.success) {
+          setInvitations(invitationsResponse.data || []);
+        } else {
+          console.error('Failed to load invitations:', invitationsResponse.error);
+          setInvitations([]);
+        }
+      } catch (error) {
+        console.error('Error loading collaboration data:', error);
+        setMembers([]);
+        setInvitations([]);
+      } finally {
+        setIsLoading(false);
       }
-    ];
+    };
 
-    setMembers(sampleMembers);
-    setInvitations(sampleInvitations);
-  }, []);
+    loadCollaborationData();
+  }, [currentUser]);
 
-  const handleAddMember = () => {
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading collaboration data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const handleAddMember = async () => {
     if (!memberForm.name || !memberForm.email || !memberForm.role) return;
     
     const newMember = {

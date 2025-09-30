@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Search, Filter, Edit, Trash2, Calendar, Clock, Users, ChefHat, BookOpen, Star, Heart, ShoppingCart, Utensils, Timer, Scale, X } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import hybridStorage from '../../firebase/hybridStorage';
 
 const Recipes = () => {
+  const { currentUser } = useAuth();
   const [recipes, setRecipes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([
     'Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Desserts', 'Beverages', 'Appetizers', 'Soups', 'Salads', 'Main Dishes'
   ]);
@@ -40,212 +44,147 @@ const Recipes = () => {
     notes: ''
   });
 
-  // Load sample data on component mount
+  // Load recipes from Firebase
   useEffect(() => {
-    const sampleRecipes = [
-      {
-        id: 1,
-        name: 'Classic Pancakes',
-        category: 'Breakfast',
-        cuisine: 'American',
-        description: 'Fluffy homemade pancakes perfect for weekend mornings',
-        prepTimeMinutes: 10,
-        cookTimeMinutes: 15,
-        servingSize: 4,
-        difficultyLevel: 'easy',
-        ingredients: [
-          { item: 'All-purpose flour', amount: 2, unit: 'cups' },
-          { item: 'Baking powder', amount: 2, unit: 'tsp' },
-          { item: 'Salt', amount: 0.5, unit: 'tsp' },
-          { item: 'Sugar', amount: 2, unit: 'tbsp' },
-          { item: 'Eggs', amount: 2, unit: 'large' },
-          { item: 'Milk', amount: 1.5, unit: 'cups' },
-          { item: 'Butter', amount: 0.25, unit: 'cup' }
-        ],
-        instructions: [
-          'In a large bowl, whisk together flour, baking powder, salt, and sugar',
-          'In another bowl, beat eggs, then add milk and melted butter',
-          'Pour wet ingredients into dry ingredients and stir until just combined',
-          'Heat a griddle or large skillet over medium heat',
-          'Pour 1/4 cup batter for each pancake',
-          'Cook until bubbles form, then flip and cook until golden brown'
-        ],
-        nutrition: {
-          calories: 280,
-          protein: 8,
-          carbs: 45,
-          fat: 8,
-          fiber: 1
-        },
-        tags: ['breakfast', 'pancakes', 'homemade', 'quick'],
-        image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400',
-        rating: 4.8,
-        reviews: 124,
-        prepTimeMinutes: 10,
-        cookTimeMinutes: 15,
-        servingSize: 4,
-        difficultyLevel: 'easy',
-        isFavorite: false
-      },
-      {
-        id: 2,
-        name: 'Chicken Caesar Salad',
-        category: 'Salads',
-        cuisine: 'Italian',
-        description: 'Fresh and crispy Caesar salad with grilled chicken',
-        prepTime: 15,
-        cookTime: 20,
-        servings: 2,
-        difficulty: 'medium',
-        ingredients: [
-          { item: 'Chicken breast', amount: 2, unit: 'pieces' },
-          { item: 'Romaine lettuce', amount: 1, unit: 'head' },
-          { item: 'Parmesan cheese', amount: 0.5, unit: 'cup' },
-          { item: 'Croutons', amount: 1, unit: 'cup' },
-          { item: 'Caesar dressing', amount: 0.25, unit: 'cup' },
-          { item: 'Lemon juice', amount: 2, unit: 'tbsp' },
-          { item: 'Black pepper', amount: 1, unit: 'tsp' }
-        ],
-        instructions: [
-          'Season chicken breasts with salt and pepper',
-          'Grill chicken for 8-10 minutes per side until cooked through',
-          'Wash and chop romaine lettuce',
-          'Slice grilled chicken into strips',
-          'Toss lettuce with Caesar dressing and lemon juice',
-          'Top with chicken, parmesan, and croutons',
-          'Season with black pepper and serve immediately'
-        ],
-        nutrition: {
-          calories: 420,
-          protein: 35,
-          carbs: 12,
-          fat: 28,
-          fiber: 4
-        },
-        tags: ['salad', 'chicken', 'healthy', 'grilled'],
-        image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400',
-        rating: 4.6,
-        reviews: 89,
-        prepTime: 15,
-        cookTime: 20,
-        servings: 2,
-        difficulty: 'medium',
-        isFavorite: true
-      },
-      {
-        id: 3,
-        name: 'Chocolate Chip Cookies',
-        category: 'Desserts',
-        cuisine: 'American',
-        description: 'Classic chocolate chip cookies with crispy edges and chewy centers',
-        prepTime: 20,
-        cookTime: 12,
-        servings: 24,
-        difficulty: 'easy',
-        ingredients: [
-          { item: 'All-purpose flour', amount: 2.25, unit: 'cups' },
-          { item: 'Baking soda', amount: 1, unit: 'tsp' },
-          { item: 'Salt', amount: 1, unit: 'tsp' },
-          { item: 'Butter', amount: 1, unit: 'cup' },
-          { item: 'Granulated sugar', amount: 0.75, unit: 'cup' },
-          { item: 'Brown sugar', amount: 0.75, unit: 'cup' },
-          { item: 'Vanilla extract', amount: 1, unit: 'tsp' },
-          { item: 'Eggs', amount: 2, unit: 'large' },
-          { item: 'Chocolate chips', amount: 2, unit: 'cups' }
-        ],
-        instructions: [
-          'Preheat oven to 375°F (190°C)',
-          'Cream together butter and both sugars until fluffy',
-          'Beat in eggs and vanilla extract',
-          'In a separate bowl, whisk flour, baking soda, and salt',
-          'Gradually mix dry ingredients into wet ingredients',
-          'Fold in chocolate chips',
-          'Drop rounded tablespoons onto baking sheets',
-          'Bake for 10-12 minutes until golden brown'
-        ],
-        nutrition: {
-          calories: 150,
-          protein: 2,
-          carbs: 20,
-          fat: 8,
-          fiber: 1
-        },
-        tags: ['dessert', 'cookies', 'chocolate', 'baking'],
-        image: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400',
-        rating: 4.9,
-        reviews: 256,
-        prepTime: 20,
-        cookTime: 12,
-        servings: 24,
-        difficulty: 'easy',
-        isFavorite: false
+    const loadRecipes = async () => {
+      if (!currentUser) {
+        setIsLoading(false);
+        return;
       }
-    ];
-    
-    setRecipes(sampleRecipes);
-    
-    // Extract unique tags
-    const allTags = sampleRecipes.reduce((acc, recipe) => {
-      recipe.tags.forEach(tag => {
-        if (!acc.includes(tag)) acc.push(tag);
-      });
-      return acc;
-    }, []);
-    
-    // Set initial favorites
-    setFavorites(sampleRecipes.filter(recipe => recipe.isFavorite).map(recipe => recipe.id));
-  }, []);
-
-  const handleAddRecipe = () => {
-    if (!formData.name || !formData.category) return;
-    
-    const newRecipe = {
-      id: Date.now(),
-      ...formData,
-      rating: 0,
-      reviews: 0,
-      isFavorite: false,
-      ingredients: formData.ingredients.filter(ing => ing.item.trim() !== ''),
-      instructions: formData.instructions.filter(inst => (inst.text || inst).trim() !== '').map(inst => inst.text || inst),
-      tags: formData.tags.filter(tag => tag.trim() !== '')
+      
+      try {
+        setIsLoading(true);
+        const response = await hybridStorage.getRecipes(currentUser.uid);
+        if (response.success) {
+          setRecipes(response.data || []);
+        } else {
+          console.error('Failed to load recipes:', response.error);
+          setRecipes([]);
+        }
+      } catch (error) {
+        console.error('Error loading recipes:', error);
+        setRecipes([]);
+      } finally {
+        setIsLoading(false);
+      }
     };
+
+    loadRecipes();
+  }, [currentUser]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-orange-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading recipes...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const handleAddRecipe = async () => {
+    if (!formData.name || !formData.category || !currentUser) return;
     
-    setRecipes([...recipes, newRecipe]);
-    resetForm();
+    try {
+      const newRecipe = {
+        ...formData,
+        rating: 0,
+        reviews: 0,
+        isFavorite: false,
+        ingredients: formData.ingredients.filter(ing => ing.item.trim() !== ''),
+        instructions: formData.instructions.filter(inst => (inst.text || inst).trim() !== '').map(inst => inst.text || inst),
+        tags: formData.tags.filter(tag => tag.trim() !== ''),
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      
+      const response = await hybridStorage.addRecipe(currentUser.uid, newRecipe);
+      if (response.success) {
+        setRecipes(prev => [...prev, response.recipe]);
+        resetForm();
+        setShowAddForm(false);
+      } else {
+        console.error('Failed to add recipe:', response.error);
+      }
+    } catch (error) {
+      console.error('Error adding recipe:', error);
+    }
   };
 
-  const handleEditRecipe = () => {
-    if (!editingRecipe || !formData.name || !formData.category) return;
+  const handleEditRecipe = async () => {
+    if (!editingRecipe || !formData.name || !formData.category || !currentUser) return;
     
-    const updatedRecipes = recipes.map(recipe =>
-      recipe.id === editingRecipe.id
-        ? { ...recipe, ...formData, ingredients: formData.ingredients.filter(ing => ing.item.trim() !== ''), instructions: formData.instructions.filter(inst => (inst.text || inst).trim() !== '').map(inst => inst.text || inst), tags: formData.tags.filter(tag => tag.trim() !== '') }
-        : recipe
-    );
-    
-    setRecipes(updatedRecipes);
-    resetForm();
+    try {
+      const updatedRecipe = {
+        ...editingRecipe,
+        ...formData,
+        ingredients: formData.ingredients.filter(ing => ing.item.trim() !== ''),
+        instructions: formData.instructions.filter(inst => (inst.text || inst).trim() !== '').map(inst => inst.text || inst),
+        tags: formData.tags.filter(tag => tag.trim() !== ''),
+        updatedAt: new Date()
+      };
+      
+      const response = await hybridStorage.updateRecipe(currentUser.uid, editingRecipe.id, updatedRecipe);
+      if (response.success) {
+        setRecipes(prev => prev.map(recipe => 
+          recipe.id === editingRecipe.id ? updatedRecipe : recipe
+        ));
+        resetForm();
+        setEditingRecipe(null);
+      } else {
+        console.error('Failed to update recipe:', response.error);
+      }
+    } catch (error) {
+      console.error('Error updating recipe:', error);
+    }
   };
 
-  const handleDeleteRecipe = (recipeId) => {
-    setRecipes(recipes.filter(recipe => recipe.id !== recipeId));
-    setFavorites(favorites.filter(id => id !== recipeId));
+  const handleDeleteRecipe = async (recipeId) => {
+    if (!currentUser) return;
+    
+    try {
+      const response = await hybridStorage.deleteRecipe(currentUser.uid, recipeId);
+      if (response.success) {
+        setRecipes(prev => prev.filter(recipe => recipe.id !== recipeId));
+        setFavorites(prev => prev.filter(id => id !== recipeId));
+      } else {
+        console.error('Failed to delete recipe:', response.error);
+      }
+    } catch (error) {
+      console.error('Error deleting recipe:', error);
+    }
   };
 
-  const toggleFavorite = (recipeId) => {
-    setFavorites(prev => 
-      prev.includes(recipeId)
-        ? prev.filter(id => id !== recipeId)
-        : [...prev, recipeId]
-    );
+  const toggleFavorite = async (recipeId) => {
+    if (!currentUser) return;
     
-    setRecipes(prev =>
-      prev.map(recipe =>
-        recipe.id === recipeId
-          ? { ...recipe, isFavorite: !recipe.isFavorite }
-          : recipe
-      )
-    );
+    try {
+      const recipe = recipes.find(r => r.id === recipeId);
+      if (!recipe) return;
+      
+      const updatedRecipe = { ...recipe, isFavorite: !recipe.isFavorite };
+      
+      const response = await hybridStorage.updateRecipe(currentUser.uid, recipeId, updatedRecipe);
+      if (response.success) {
+        setFavorites(prev => 
+          prev.includes(recipeId)
+            ? prev.filter(id => id !== recipeId)
+            : [...prev, recipeId]
+        );
+        
+        setRecipes(prev =>
+          prev.map(recipe =>
+            recipe.id === recipeId ? updatedRecipe : recipe
+          )
+        );
+      } else {
+        console.error('Failed to update favorite status:', response.error);
+      }
+    } catch (error) {
+      console.error('Error updating favorite status:', error);
+    }
   };
 
   const addIngredient = () => {

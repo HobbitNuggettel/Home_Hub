@@ -19,107 +19,59 @@ import {
   Info,
   Zap
 } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import hybridStorage from '../../firebase/hybridStorage';
 
 export default function DataAlerts() {
+  const { currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
-  const [alerts, setAlerts] = useState([
-    {
-      id: 1,
-      title: 'Budget Limit Warning',
-      message: 'Grocery spending is approaching 80% of monthly budget',
-      type: 'warning',
-      priority: 'medium',
-      category: 'spending',
-      status: 'active',
-      createdAt: '2 hours ago',
-      acknowledged: false
-    },
-    {
-      id: 2,
-      title: 'Warranty Expiring Soon',
-      message: 'MacBook Pro warranty expires in 15 days',
-      type: 'info',
-      priority: 'high',
-      category: 'inventory',
-      status: 'active',
-      createdAt: '1 day ago',
-      acknowledged: false
-    },
-    {
-      id: 3,
-      title: 'High Energy Usage',
-      message: 'Electric bill 25% higher than last month',
-      type: 'alert',
-      priority: 'high',
-      category: 'utilities',
-      status: 'resolved',
-      createdAt: '3 days ago',
-      acknowledged: true
-    }
-  ]);
+  const [alerts, setAlerts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [insights, setInsights] = useState([
-    {
-      id: 1,
-      title: 'Spending Pattern Detected',
-      description: 'Your grocery spending peaks on weekends',
-      type: 'pattern',
-      impact: 'medium',
-      recommendation: 'Consider meal planning to reduce weekend grocery trips',
-      createdAt: '1 week ago'
-    },
-    {
-      id: 2,
-      title: 'Inventory Optimization',
-      description: 'You have 5 items that haven\'t been used in 6+ months',
-      type: 'optimization',
-      impact: 'low',
-      recommendation: 'Consider donating or selling unused items',
-      createdAt: '2 weeks ago'
-    },
-    {
-      id: 3,
-      title: 'Budget Efficiency',
-      description: 'Your entertainment budget is consistently under-utilized',
-      type: 'efficiency',
-      impact: 'medium',
-      recommendation: 'Consider reallocating funds to other categories',
-      createdAt: '3 weeks ago'
-    }
-  ]);
-
-  const [reports, setReports] = useState([
-    {
-      id: 1,
-      name: 'Monthly Spending Report',
-      type: 'spending',
-      period: 'December 2024',
-      status: 'ready',
-      lastGenerated: '2 hours ago',
-      nextScheduled: 'January 1, 2025'
-    },
-    {
-      id: 2,
-      name: 'Inventory Value Report',
-      type: 'inventory',
-      period: 'Q4 2024',
-      status: 'generating',
-      lastGenerated: '1 day ago',
-      nextScheduled: 'January 1, 2025'
-    },
-    {
-      id: 3,
-      name: 'Energy Usage Analysis',
-      type: 'utilities',
-      period: 'November 2024',
-      status: 'ready',
-      lastGenerated: '1 week ago',
-      nextScheduled: 'December 1, 2024'
-    }
-  ]);
-
+  const [insights, setInsights] = useState([]);
+  const [reports, setReports] = useState([]);
   const [showAddAlert, setShowAddAlert] = useState(false);
   const [showAddInsight, setShowAddInsight] = useState(false);
+
+  // Load alerts data from Firebase
+  useEffect(() => {
+    const loadAlertsData = async () => {
+      if (!currentUser) {
+        setIsLoading(false);
+        return;
+      }
+      
+      try {
+        setIsLoading(true);
+        const response = await hybridStorage.getDataAlerts(currentUser.uid);
+        if (response.success) {
+          setAlerts(response.data || []);
+        } else {
+          console.error('Failed to load alerts:', response.error);
+          setAlerts([]);
+        }
+      } catch (error) {
+        console.error('Error loading alerts:', error);
+        setAlerts([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadAlertsData();
+  }, [currentUser]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-red-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading alerts...</p>
+        </div>
+      </div>
+    );
+  }
 
   const getAlertTypeColor = (type) => {
     switch (type) {

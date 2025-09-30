@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Search, Filter, Edit, Trash2, Calendar, Tag, Package, AlertTriangle } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import hybridStorage from '../../firebase/hybridStorage';
 
 const Inventory = () => {
+  const { currentUser } = useAuth();
   const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([
     'Electronics', 'Furniture', 'Kitchen', 'Clothing', 'Books', 'Tools', 'Other'
   ]);
@@ -23,94 +27,128 @@ const Inventory = () => {
     notes: ''
   });
 
-  // Load sample data on component mount
+  // Load inventory items from Firebase
   useEffect(() => {
-    const sampleItems = [
-      {
-        id: 1,
-        name: 'MacBook Pro',
-        category: 'Electronics',
-        description: '13-inch MacBook Pro with M2 chip',
-        purchaseDate: '2024-01-15',
-        warrantyExpiry: '2027-01-15',
-        price: 1299,
-        location: 'Home Office',
-        tags: ['computer', 'apple', 'work'],
-        notes: 'Company laptop, handle with care'
-      },
-      {
-        id: 2,
-        name: 'Coffee Maker',
-        category: 'Kitchen',
-        description: 'Breville coffee maker with grinder',
-        purchaseDate: '2023-06-20',
-        warrantyExpiry: '2026-06-20',
-        price: 299,
-        location: 'Kitchen',
-        tags: ['coffee', 'appliance', 'daily-use'],
-        notes: 'Used daily, clean regularly'
-      },
-      {
-        id: 3,
-        name: 'Dining Table',
-        category: 'Furniture',
-        description: 'Solid wood dining table, seats 6',
-        purchaseDate: '2022-11-10',
-        warrantyExpiry: '2025-11-10',
-        price: 899,
-        location: 'Dining Room',
-        tags: ['furniture', 'wood', 'dining'],
-        notes: 'Scratch-resistant finish'
+    const loadInventoryItems = async () => {
+      if (!currentUser) {
+        setIsLoading(false);
+        return;
       }
-    ];
-    setItems(sampleItems);
-    
-    // Extract unique tags from sample items
-    const allTags = sampleItems.reduce((acc, item) => {
-      item.tags.forEach(tag => {
-        if (!acc.includes(tag)) acc.push(tag);
-      });
-      return acc;
-    }, []);
-    setTags(allTags);
-  }, []);
-
-  const handleAddItem = () => {
-    if (!formData.name || !formData.category) return;
-    
-    const newItem = {
-      id: Date.now(),
-      ...formData,
-      tags: formData.tags.filter(tag => tag.trim() !== '')
+      
+      try {
+        setIsLoading(true);
+        const response = await hybridStorage.getInventoryItems(currentUser.uid);
+        if (response.success) {
+          setItems(response.data || []);
+          
+          // Extract unique tags from items
+          const allTags = (response.data || []).reduce((acc, item) => {
+            if (item.tags) {
+              item.tags.forEach(tag => {
+                if (!acc.includes(tag)) acc.push(tag);
+              });
+            }
+            return acc;
+          }, []);
+          setTags(allTags);
+        } else {
+          console.error('Failed to load inventory items:', response.error);
+          setItems([]);
+        }
+      } catch (error) {
+        console.error('Error loading inventory items:', error);
+        setItems([]);
+      } finally {
+        setIsLoading(false);
+      }
     };
-    
-    setItems([...items, newItem]);
-    
-    // Add new tags to global tags list
-    newItem.tags.forEach(tag => {
-      if (!tags.includes(tag)) {
-        setTags([...tags, tag]);
-      }
-    });
-    
-    resetForm();
-  };
 
-  const handleEditItem = () => {
-    if (!editingItem || !formData.name || !formData.category) return;
-    
-    const updatedItems = items.map(item => 
-      item.id === editingItem.id 
-        ? { ...formData, id: item.id, tags: formData.tags.filter(tag => tag.trim() !== '') }
-        : item
+    loadInventoryItems();
+  }, [currentUser]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading inventory items...</p>
+        </div>
+      </div>
     );
+  }
+
+  const handleAddItem = async () => {
+    if (!formData.name || !formData.category || !currentUser) return;
     
-    setItems(updatedItems);
-    resetForm();
+    try {
+      const newItem = {
+        ...formData,
+        tags: formData.tags.filter(tag => tag.trim() !== ''),
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      
+      const response = await hybridStorage.addInventoryItem(currentUser.uid, newItem);
+      if (response.success) {
+        setItems(prev => [...prev, response.item]);
+        
+        // Add new tags to global tags list
+        newItem.tags.forEach(tag => {
+          if (!tags.includes(tag)) {
+            setTags(prev => [...prev, tag]);
+          }
+        });
+        
+        resetForm();
+        setShowAddForm(false);
+      } else {
+        console.error('Failed to add inventory item:', response.error);
+      }
+    } catch (error) {
+      console.error('Error adding inventory item:', error);
+    }
   };
 
-  const handleDeleteItem = (id) => {
-    setItems(items.filter(item => item.id !== id));
+  const handleEditItem = async () => {
+    if (!editingItem || !formData.name || !formData.category || !currentUser) return;
+    
+    try {
+      const updatedItem = {
+        ...editingItem,
+        ...formData,
+        tags: formData.tags.filter(tag => tag.trim() !== ''),
+        updatedAt: new Date()
+      };
+      
+      const response = await hybridStorage.updateInventoryItem(currentUser.uid, editingItem.id, updatedItem);
+      if (response.success) {
+        setItems(prev => prev.map(item => 
+          item.id === editingItem.id ? updatedItem : item
+        ));
+        resetForm();
+        setEditingItem(null);
+      } else {
+        console.error('Failed to update inventory item:', response.error);
+      }
+    } catch (error) {
+      console.error('Error updating inventory item:', error);
+    }
+  };
+
+  const handleDeleteItem = async (id) => {
+    if (!currentUser) return;
+    
+    try {
+      const response = await hybridStorage.deleteInventoryItem(currentUser.uid, id);
+      if (response.success) {
+        setItems(prev => prev.filter(item => item.id !== id));
+      } else {
+        console.error('Failed to delete inventory item:', response.error);
+      }
+    } catch (error) {
+      console.error('Error deleting inventory item:', error);
+    }
   };
 
   const resetForm = () => {

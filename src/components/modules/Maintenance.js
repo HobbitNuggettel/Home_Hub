@@ -30,173 +30,68 @@ import {
   Repeat,
   DollarSign
 } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import hybridStorage from '../../firebase/hybridStorage';
 
 export default function Maintenance() {
+  const { currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [maintenanceTasks, setMaintenanceTasks] = useState([
-    {
-      id: 1,
-      title: 'HVAC Filter Replacement',
-      description: 'Replace air filter for better air quality and system efficiency',
-      category: 'HVAC',
-      priority: 'high',
-      status: 'pending',
-      frequency: 'monthly',
-      lastCompleted: '2024-11-20',
-      nextDue: '2024-12-20',
-      estimatedCost: 25,
-      actualCost: 0,
-      assignedTo: 'John',
-      location: 'Basement',
-      instructions: 'Turn off system, remove old filter, insert new filter, turn system back on',
-      tools: ['Screwdriver', 'New filter'],
-      parts: ['Air filter (16x20x1)'],
-      estimatedTime: '15 minutes',
-      actualTime: 0,
-      notes: 'Check filter size before purchasing',
-      attachments: [],
-      completedBy: '',
-      completionDate: null,
-      rating: 0
-    },
-    {
-      id: 2,
-      title: 'Gutter Cleaning',
-      description: 'Remove leaves and debris from gutters to prevent water damage',
-      category: 'Exterior',
-      priority: 'medium',
-      status: 'completed',
-      frequency: 'seasonal',
-      lastCompleted: '2024-11-15',
-      nextDue: '2025-03-15',
-      estimatedCost: 0,
-      actualCost: 0,
-      assignedTo: 'John',
-      location: 'Roof',
-      instructions: 'Use ladder safely, remove debris, flush with water, check for leaks',
-      tools: ['Ladder', 'Gloves', 'Gutter scoop'],
-      parts: [],
-      estimatedTime: '2 hours',
-      actualTime: 2.5,
-      notes: 'Found small leak in corner joint - needs repair',
-      attachments: [],
-      completedBy: 'John',
-      completionDate: '2024-11-15',
-      rating: 4
-    },
-    {
-      id: 3,
-      title: 'Smoke Detector Test',
-      description: 'Test all smoke detectors and replace batteries if needed',
-      category: 'Safety',
-      priority: 'high',
-      status: 'overdue',
-      frequency: 'monthly',
-      lastCompleted: '2024-10-15',
-      nextDue: '2024-11-15',
-      estimatedCost: 15,
-      actualCost: 0,
-      assignedTo: 'Sarah',
-      location: 'Throughout house',
-      instructions: 'Press test button on each detector, replace batteries if chirping',
-      tools: ['Step stool'],
-      parts: ['9V batteries'],
-      estimatedTime: '30 minutes',
-      actualTime: 0,
-      notes: 'Check expiration dates on detectors',
-      attachments: [],
-      completedBy: '',
-      completionDate: null,
-      rating: 0
-    },
-    {
-      id: 4,
-      title: 'Water Heater Flush',
-      description: 'Drain sediment from water heater to improve efficiency',
-      category: 'Plumbing',
-      priority: 'medium',
-      status: 'scheduled',
-      frequency: 'annual',
-      lastCompleted: '2023-12-01',
-      nextDue: '2024-12-01',
-      estimatedCost: 0,
-      actualCost: 0,
-      assignedTo: 'John',
-      location: 'Garage',
-      instructions: 'Turn off power/gas, attach hose, drain tank, refill and restart',
-      tools: ['Garden hose', 'Bucket', 'Wrench'],
-      parts: [],
-      estimatedTime: '1 hour',
-      actualTime: 0,
-      notes: 'Do this when no one needs hot water for 2-3 hours',
-      attachments: [],
-      completedBy: '',
-      completionDate: null,
-      rating: 0
-    },
-    {
-      id: 5,
-      title: 'Refrigerator Coil Cleaning',
-      description: 'Clean condenser coils for better cooling efficiency',
-      category: 'Appliances',
-      priority: 'low',
-      status: 'pending',
-      frequency: 'semi-annual',
-      lastCompleted: '2024-06-15',
-      nextDue: '2024-12-15',
-      estimatedCost: 0,
-      actualCost: 0,
-      assignedTo: 'Sarah',
-      location: 'Kitchen',
-      instructions: 'Unplug fridge, remove back panel, vacuum coils, reassemble',
-      tools: ['Vacuum', 'Screwdriver', 'Brush'],
-      parts: [],
-      estimatedTime: '45 minutes',
-      actualTime: 0,
-      notes: 'Check manual for specific instructions',
-      attachments: [],
-      completedBy: '',
-      completionDate: null,
-      rating: 0
-    }
-  ]);
+  const [maintenanceTasks, setMaintenanceTasks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [serviceRecords, setServiceRecords] = useState([]);
 
-  const [serviceRecords, setServiceRecords] = useState([
-    {
-      id: 1,
-      title: 'AC Unit Annual Service',
-      category: 'HVAC',
-      serviceDate: '2024-06-15',
-      serviceProvider: 'Cool Breeze HVAC',
-      technician: 'Mike Johnson',
-      cost: 89.99,
-      description: 'Annual maintenance including filter change, coil cleaning, and system check',
-      workPerformed: 'Replaced filter, cleaned coils, checked refrigerant levels, tested system',
-      recommendations: 'Consider upgrading to high-efficiency filter, system running well',
-      warranty: '90 days on parts and labor',
-      nextService: '2025-06-15',
-      rating: 5,
-      contact: '+1-555-0123',
-      invoice: 'INV-2024-001'
-    },
-    {
-      id: 2,
-      title: 'Plumbing Emergency Repair',
-      category: 'Plumbing',
-      serviceDate: '2024-11-10',
-      serviceProvider: 'Quick Fix Plumbing',
-      technician: 'Dave Wilson',
-      cost: 245.00,
-      description: 'Emergency repair of burst pipe under kitchen sink',
-      workPerformed: 'Replaced damaged pipe section, tested for leaks, insulated pipe',
-      recommendations: 'Consider whole-house pipe insulation for winter',
-      warranty: '1 year on parts and labor',
-      nextService: 'N/A',
-      rating: 4,
-      contact: '+1-555-0456',
-      invoice: 'INV-2024-002'
-    }
-  ]);
+  // Load maintenance data from Firebase
+  useEffect(() => {
+    const loadMaintenanceData = async () => {
+      if (!currentUser) {
+        setIsLoading(false);
+        return;
+      }
+      
+      try {
+        setIsLoading(true);
+        const [tasksResponse, recordsResponse] = await Promise.all([
+          hybridStorage.getMaintenanceTasks(currentUser.uid),
+          hybridStorage.getServiceRecords(currentUser.uid)
+        ]);
+
+        if (tasksResponse.success) {
+          setMaintenanceTasks(tasksResponse.data || []);
+        } else {
+          console.error('Failed to load maintenance tasks:', tasksResponse.error);
+          setMaintenanceTasks([]);
+        }
+
+        if (recordsResponse.success) {
+          setServiceRecords(recordsResponse.data || []);
+        } else {
+          console.error('Failed to load service records:', recordsResponse.error);
+          setServiceRecords([]);
+        }
+      } catch (error) {
+        console.error('Error loading maintenance data:', error);
+        setMaintenanceTasks([]);
+        setServiceRecords([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadMaintenanceData();
+  }, [currentUser]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-orange-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading maintenance data...</p>
+        </div>
+      </div>
+    );
+  }
+
 
   const [categories] = useState([
     'HVAC', 'Plumbing', 'Electrical', 'Appliances', 'Exterior', 'Interior', 'Safety', 'Landscaping', 'Roofing', 'Foundation'
