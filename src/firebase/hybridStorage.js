@@ -108,6 +108,28 @@ class HybridFirebaseStorage {
     });
   }
 
+  // Fallback to local storage when Firebase fails
+  getLocalStorageFallback(dataType, userId) {
+    try {
+      const key = `fallback_${dataType}_${userId}`;
+      const data = localStorage.getItem(key);
+      return data ? JSON.parse(data) : [];
+    } catch (error) {
+      console.error(`Error reading fallback data for ${dataType}:`, error);
+      return [];
+    }
+  }
+
+  // Save to local storage as fallback
+  saveLocalStorageFallback(dataType, userId, data) {
+    try {
+      const key = `fallback_${dataType}_${userId}`;
+      localStorage.setItem(key, JSON.stringify(data));
+    } catch (error) {
+      console.error(`Error saving fallback data for ${dataType}:`, error);
+    }
+  }
+
   // Check if operation is within free tier limits
   canPerformOperation(type, count = 1) {
     const limits = {
@@ -289,6 +311,9 @@ class HybridFirebaseStorage {
       });
       this.trackOperation('writes', 1);
 
+      // Save to fallback storage
+      this.saveLocalStorageFallback('inventory', userId, [item]);
+
       return {
         success: true,
         itemId,
@@ -370,11 +395,26 @@ class HybridFirebaseStorage {
       };
     } catch (error) {
       console.error('Failed to get inventory items:', error);
-      return {
-        success: false,
-        error: error.message,
-        code: error.code
-      };
+      
+      // Try fallback to local storage
+      try {
+        const fallbackItems = this.getLocalStorageFallback('inventory', userId);
+        console.log('Using fallback data for inventory items');
+        return {
+          success: true,
+          data: fallbackItems,
+          total: fallbackItems.length,
+          fallback: true,
+          message: 'Inventory items retrieved from local storage (Firebase unavailable)'
+        };
+      } catch (fallbackError) {
+        console.error('Fallback also failed:', fallbackError);
+        return {
+          success: false,
+          error: error.message,
+          code: error.code
+        };
+      }
     }
   }
 
