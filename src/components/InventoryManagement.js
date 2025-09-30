@@ -27,6 +27,8 @@ import toast from 'react-hot-toast';
 import BarcodeScanner from './BarcodeScanner';
 import { useInventory } from '../hooks/useInventory';
 import AIInventoryService from '../services/AIInventoryService';
+import { useAuth } from '../contexts/AuthContext';
+import hybridStorage from '../firebase/hybridStorage';
 
 // Mock inventory data
 const mockCategories = [
@@ -198,6 +200,51 @@ const mockItems = [
 ];
 
 function InventoryManagement() {
+  const { currentUser } = useAuth();
+  const [inventoryItems, setInventoryItems] = useState([]);
+  const [inventoryCategories, setInventoryCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load inventory data from Firebase
+  useEffect(() => {
+    const loadInventoryData = async () => {
+      if (!currentUser) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        const [itemsResponse, categoriesResponse] = await Promise.all([
+          hybridStorage.getInventoryItems(currentUser.uid),
+          hybridStorage.getInventoryCategories(currentUser.uid)
+        ]);
+
+        if (itemsResponse.success) {
+          setInventoryItems(itemsResponse.data || []);
+        } else {
+          console.error('Failed to load inventory items:', itemsResponse.error);
+          setInventoryItems([]);
+        }
+
+        if (categoriesResponse.success && categoriesResponse.data) {
+          setInventoryCategories(Object.keys(categoriesResponse.data));
+        } else {
+          // Fallback to default categories
+          setInventoryCategories(['Electronics', 'Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Garden', 'Clothing', 'Books', 'Tools', 'Food']);
+        }
+      } catch (error) {
+        console.error('Error loading inventory data:', error);
+        setInventoryItems([]);
+        setInventoryCategories(['Electronics', 'Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Garden', 'Clothing', 'Books', 'Tools', 'Food']);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadInventoryData();
+  }, [currentUser]);
+
   const {
     items,
     categories,
@@ -212,7 +259,7 @@ function InventoryManagement() {
     filteredItems,
     statistics,
     actions
-  } = useInventory(mockItems, mockCategories);
+  } = useInventory(inventoryItems, inventoryCategories);
 
   // AI Features State
   const [aiPredictions, setAiPredictions] = useState([]);
@@ -491,6 +538,17 @@ function InventoryManagement() {
       )}
     </div>
   );
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading inventory data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">

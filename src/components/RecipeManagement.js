@@ -29,6 +29,8 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import AIRecipeService from '../services/AIRecipeService';
+import { useAuth } from '../contexts/AuthContext';
+import hybridStorage from '../firebase/hybridStorage';
 
 // Mock recipes data
 const mockRecipes = [
@@ -130,13 +132,43 @@ const cuisines = [
 const difficulties = ['easy', 'medium', 'hard'];
 
 export default function RecipeManagement() {
-  const [recipes, setRecipes] = useState(mockRecipes);
+  const { currentUser } = useAuth();
+  const [recipes, setRecipes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState('recipes'); // 'recipes', 'meal-planning', 'shopping'
   const [displayMode, setDisplayMode] = useState('grid'); // 'grid', 'list'
   const [showCreateRecipe, setShowCreateRecipe] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+
+  // Load recipes data from Firebase
+  useEffect(() => {
+    const loadRecipesData = async () => {
+      if (!currentUser) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        const response = await hybridStorage.getRecipes(currentUser.uid);
+        if (response.success) {
+          setRecipes(response.data || []);
+        } else {
+          console.error('Failed to load recipes:', response.error);
+          setRecipes([]);
+        }
+      } catch (error) {
+        console.error('Error loading recipes:', error);
+        setRecipes([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadRecipesData();
+  }, [currentUser]);
   const [selectedCuisine, setSelectedCuisine] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [mealPlan, setMealPlan] = useState({});
@@ -484,6 +516,17 @@ export default function RecipeManagement() {
       )}
     </div>
   );
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading recipes...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">

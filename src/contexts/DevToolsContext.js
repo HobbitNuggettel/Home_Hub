@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 const DevToolsContext = createContext();
 
@@ -74,4 +75,8 @@ export const DevToolsProvider = ({ children }) => {
       {children}
     </DevToolsContext.Provider>
   );
+};
+
+DevToolsProvider.propTypes = {
+  children: PropTypes.node.isRequired
 };

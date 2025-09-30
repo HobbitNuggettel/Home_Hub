@@ -5,6 +5,8 @@ import { AuthProvider } from './contexts/AuthContext';
 import { DevToolsProvider } from './contexts/DevToolsContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { RealTimeProvider } from './contexts/RealTimeContext';
+import SafariCompatibility from './components/SafariCompatibility';
+import SafariErrorBoundary from './components/SafariErrorBoundary';
 import LandingPage from './components/LandingPage';
 import Settings from './components/Settings';
 import Home from './components/Home';
@@ -31,10 +33,12 @@ import LogoutTest from './components/LogoutTest';
 
 function App() {
   return (
-    <ThemeProvider>
-      <DevToolsProvider>
-        <AuthProvider>
-          <RealTimeProvider>
+    <SafariErrorBoundary>
+      <SafariCompatibility>
+        <ThemeProvider>
+          <DevToolsProvider>
+            <AuthProvider>
+              <RealTimeProvider>
             <Router>
               <div className="App">
                 <Routes>
@@ -189,7 +193,7 @@ function App() {
                       <div className="p-8 text-center">
                         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">404 - Page Not Found</h1>
                         <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-                          Oops! The page you're looking for doesn't exist.
+                          Oops! The page you&apos;re looking for doesn&apos;t exist.
                         </p>
                         <Link to="/home" className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
                           Go to Home
@@ -212,10 +216,12 @@ function App() {
                 />
               </div>
             </Router>
-          </RealTimeProvider>
-        </AuthProvider>
-      </DevToolsProvider>
-    </ThemeProvider>
+              </RealTimeProvider>
+            </AuthProvider>
+          </DevToolsProvider>
+        </ThemeProvider>
+      </SafariCompatibility>
+    </SafariErrorBoundary>
   );
 }
 
