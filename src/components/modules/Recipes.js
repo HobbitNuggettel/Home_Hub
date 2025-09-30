@@ -654,7 +654,7 @@ const Recipes = () => {
                         </label>
                         <div className="space-y-2">
                           {formData.ingredients.map((ingredient, index) => (
-                            <div key={ingredient.id || index} className="flex gap-2">
+                            <div key={ingredient.id} className="flex gap-2">
                               <input
                                 type="text"
                                 placeholder="Ingredient"
@@ -703,7 +703,7 @@ const Recipes = () => {
                         </label>
                         <div className="space-y-2">
                           {formData.instructions.map((instruction, index) => (
-                            <div key={instruction.id || index} className="flex gap-2">
+                            <div key={instruction.id} className="flex gap-2">
                               <span className="flex-shrink-0 w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-medium">
                                 {index + 1}
                               </span>
