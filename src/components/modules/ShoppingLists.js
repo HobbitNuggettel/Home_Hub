@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, ShoppingCart, CheckCircle, Circle, Trash2, Edit, Share, DollarSign, Calendar, Tag, List } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import hybridStorage from '../../firebase/hybridStorage';
 
 const ShoppingLists = () => {
+  const { currentUser } = useAuth();
   const [lists, setLists] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [showAddList, setShowAddList] = useState(false);
   const [showAddItem, setShowAddItem] = useState(false);
   const [selectedList, setSelectedList] = useState(null);
@@ -33,107 +37,74 @@ const ShoppingLists = () => {
     { value: 'urgent', label: 'Urgent', color: 'text-red-600 bg-red-100' }
   ];
 
-  // Load sample data
+  // Load shopping lists from Firebase
   useEffect(() => {
-    const sampleLists = [
-      {
-        id: 1,
-        name: 'Weekly Groceries',
-        description: 'Essential items for the week',
-        budget: 150.00,
-        dueDate: '2024-01-25',
-        category: 'groceries',
-        createdAt: '2024-01-20',
-        items: [
-          {
-            id: 1,
-            name: 'Milk',
-            quantity: 2,
-            estimatedPrice: 4.99,
-            priority: 'high',
-            notes: 'Organic whole milk',
-            category: 'groceries',
-            completed: false
-          },
-          {
-            id: 2,
-            name: 'Bread',
-            quantity: 1,
-            estimatedPrice: 3.49,
-            priority: 'high',
-            notes: 'Whole grain bread',
-            category: 'groceries',
-            completed: false
-          },
-          {
-            id: 3,
-            name: 'Bananas',
-            quantity: 1,
-            estimatedPrice: 2.99,
-            priority: 'medium',
-            notes: 'Organic bananas',
-            category: 'groceries',
-            completed: true
-          }
-        ]
-      },
-      {
-        id: 2,
-        name: 'Home Improvement',
-        description: 'Items for bathroom renovation',
-        budget: 500.00,
-        dueDate: '2024-02-15',
-        category: 'household',
-        createdAt: '2024-01-18',
-        items: [
-          {
-            id: 4,
-            name: 'Paint',
-            quantity: 2,
-            estimatedPrice: 45.00,
-            priority: 'medium',
-            notes: 'White semi-gloss paint',
-            category: 'household',
-            completed: false
-          },
-          {
-            id: 5,
-            name: 'Paint Brushes',
-            quantity: 3,
-            estimatedPrice: 12.99,
-            priority: 'low',
-            notes: 'Assorted sizes',
-            category: 'household',
-            completed: false
-          }
-        ]
+    const loadShoppingLists = async () => {
+      if (!currentUser) {
+        setIsLoading(false);
+        return;
       }
-    ];
-
-    setLists(sampleLists);
-  }, []);
-
-  const handleAddList = () => {
-    if (!listForm.name) return;
-    
-    const newList = {
-      id: Date.now(),
-      ...listForm,
-      budget: parseFloat(listForm.budget) || 0,
-      createdAt: new Date().toISOString().split('T')[0],
-      items: []
+      
+      try {
+        setIsLoading(true);
+        const response = await hybridStorage.getShoppingLists(currentUser.uid);
+        if (response.success) {
+          setLists(response.data || []);
+        } else {
+          console.error('Failed to load shopping lists:', response.error);
+          setLists([]);
+        }
+      } catch (error) {
+        console.error('Error loading shopping lists:', error);
+        setLists([]);
+      } finally {
+        setIsLoading(false);
+      }
     };
+
+    loadShoppingLists();
+  }, [currentUser]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading shopping lists...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const handleAddList = async () => {
+    if (!listForm.name || !currentUser) return;
     
-    setLists([...lists, newList]);
-    
-    setListForm({
-      name: '',
-      description: '',
-      budget: '',
-      dueDate: '',
-      category: 'general'
-    });
-    setShowAddList(false);
+    try {
+      const newList = {
+        ...listForm,
+        budget: parseFloat(listForm.budget) || 0,
+        createdAt: new Date().toISOString().split('T')[0],
+        items: []
+      };
+      
+      const response = await hybridStorage.addShoppingList(currentUser.uid, newList);
+      if (response.success) {
+        setLists(prev => [...prev, response.list]);
+        setListForm({
+          name: '',
+          description: '',
+          budget: '',
+          dueDate: '',
+          category: 'general'
+        });
+        setShowAddList(false);
+      } else {
+        console.error('Failed to add shopping list:', response.error);
+      }
+    } catch (error) {
+      console.error('Error adding shopping list:', error);
+    }
   };
 
   const handleAddItem = () => {

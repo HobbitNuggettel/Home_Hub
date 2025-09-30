@@ -19,10 +19,14 @@ import {
   Info,
   Zap
 } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import hybridStorage from '../../firebase/hybridStorage';
 
 export default function DataAlerts() {
+  const { currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
-  const [alerts, setAlerts] = useState([
+  const [alerts, setAlerts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
     {
       id: 1,
       title: 'Budget Limit Warning',

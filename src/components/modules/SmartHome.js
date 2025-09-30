@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Home, Lightbulb, Thermostat, Lock, Camera, Speaker, Wifi, Zap, Settings, Plus, Edit, Trash2, Power, Volume2, Eye, Shield, Clock, Calendar, Sun, Moon, Smartphone, Tablet, Monitor, X } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import hybridStorage from '../../firebase/hybridStorage';
 
 const SmartHome = () => {
+  const { currentUser } = useAuth();
   const [devices, setDevices] = useState([]);
   const [automations, setAutomations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [rooms, setRooms] = useState([
     'Living Room', 'Kitchen', 'Bedroom', 'Bathroom', 'Office', 'Garage', 'Garden', 'Basement'
   ]);
@@ -47,205 +51,62 @@ const SmartHome = () => {
     }
   });
 
-  // Load sample data on component mount
+  // Load smart home data from Firebase
   useEffect(() => {
-    const sampleDevices = [
-      {
-        id: 1,
-        name: 'Living Room Light',
-        type: 'Lighting',
-        room: 'Living Room',
-        brand: 'Philips Hue',
-        model: 'Hue White A19',
-        ipAddress: '192.168.1.100',
-        macAddress: '00:17:88:01:02:03:04:05',
-        status: 'online',
-        power: true,
-        brightness: 80,
-        color: '#ffffff',
-        temperature: 2700,
-        settings: {
-          autoOff: true,
-          motionSensor: true,
-          voiceControl: true
-        },
-        lastSeen: new Date().toISOString(),
-        energyUsage: 12.5
-      },
-      {
-        id: 2,
-        name: 'Smart Thermostat',
-        type: 'Climate',
-        room: 'Living Room',
-        brand: 'Nest',
-        model: 'Learning Thermostat 3rd Gen',
-        ipAddress: '192.168.1.101',
-        macAddress: '18:b4:30:aa:bb:cc',
-        status: 'online',
-        power: true,
-        temperature: 72,
-        targetTemp: 72,
-        mode: 'heat',
-        humidity: 45,
-        settings: {
-          ecoMode: true,
-          schedule: true,
-          awayMode: true
-        },
-        lastSeen: new Date().toISOString(),
-        energyUsage: 8.2
-      },
-      {
-        id: 3,
-        name: 'Front Door Lock',
-        type: 'Security',
-        room: 'Entrance',
-        brand: 'August',
-        model: 'Smart Lock Pro',
-        ipAddress: '192.168.1.102',
-        macAddress: 'a4:cf:12:dd:ee:ff',
-        status: 'online',
-        power: true,
-        locked: true,
-        battery: 85,
-        lastAccess: new Date().toISOString(),
-        settings: {
-          autoLock: true,
-          notifications: true,
-          guestAccess: true
-        },
-        lastSeen: new Date().toISOString(),
-        energyUsage: 2.1
-      },
-      {
-        id: 4,
-        name: 'Security Camera',
-        type: 'Cameras',
-        room: 'Front Yard',
-        brand: 'Ring',
-        model: 'Floodlight Cam',
-        ipAddress: '192.168.1.103',
-        macAddress: 'b8:27:eb:ff:gg:hh',
-        status: 'online',
-        power: true,
-        recording: false,
-        motionDetected: false,
-        nightVision: true,
-        settings: {
-          motionDetection: true,
-          nightVision: true,
-          cloudStorage: true
-        },
-        lastSeen: new Date().toISOString(),
-        energyUsage: 15.8
-      },
-      {
-        id: 5,
-        name: 'Smart Speaker',
-        type: 'Entertainment',
-        room: 'Kitchen',
-        brand: 'Amazon',
-        model: 'Echo Dot 4th Gen',
-        ipAddress: '192.168.1.104',
-        macAddress: '44:65:0d:gg:hh:ii',
-        status: 'online',
-        power: true,
-        volume: 60,
-        playing: false,
-        settings: {
-          voiceControl: true,
-          multiRoom: true,
-          privacyMode: false
-        },
-        lastSeen: new Date().toISOString(),
-        energyUsage: 5.3
+    const loadSmartHomeData = async () => {
+      if (!currentUser) {
+        setIsLoading(false);
+        return;
       }
-    ];
+      
+      try {
+        setIsLoading(true);
+        const [devicesResponse, automationsResponse] = await Promise.all([
+          hybridStorage.getSmartHomeDevices(currentUser.uid),
+          hybridStorage.getSmartHomeAutomations(currentUser.uid)
+        ]);
 
-    const sampleAutomations = [
-      {
-        id: 1,
-        name: 'Good Morning',
-        description: 'Automatically turn on lights and adjust thermostat when waking up',
-        trigger: 'time',
-        triggerValue: '07:00',
-        conditions: [
-          { type: 'time', value: '07:00' },
-          { type: 'presence', value: 'home' }
-        ],
-        actions: [
-          { deviceId: 1, action: 'turnOn', value: { brightness: 50, color: '#ffd700' } },
-          { deviceId: 2, action: 'setTemperature', value: 72 },
-          { deviceId: 5, action: 'playMusic', value: 'morning playlist' }
-        ],
-        enabled: true,
-        schedule: {
-          days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
-          startTime: '07:00',
-          endTime: '07:30'
-        },
-        lastTriggered: new Date().toISOString(),
-        executionCount: 45
-      },
-      {
-        id: 2,
-        name: 'Away Mode',
-        description: 'Secure the house and save energy when leaving',
-        trigger: 'presence',
-        triggerValue: 'away',
-        conditions: [
-          { type: 'presence', value: 'away' },
-          { type: 'time', value: 'any' }
-        ],
-        actions: [
-          { deviceId: 1, action: 'turnOff', value: {} },
-          { deviceId: 2, action: 'setTemperature', value: 65 },
-          { deviceId: 3, action: 'lock', value: {} },
-          { deviceId: 4, action: 'enableRecording', value: {} }
-        ],
-        enabled: true,
-        schedule: {
-          days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
-          startTime: '00:00',
-          endTime: '23:59'
-        },
-        lastTriggered: new Date().toISOString(),
-        executionCount: 23
-      },
-      {
-        id: 3,
-        name: 'Movie Night',
-        description: 'Create the perfect atmosphere for watching movies',
-        trigger: 'manual',
-        triggerValue: 'button',
-        conditions: [
-          { type: 'manual', value: 'button' }
-        ],
-        actions: [
-          { deviceId: 1, action: 'setBrightness', value: 20 },
-          { deviceId: 1, action: 'setColor', value: '#000080' },
-          { deviceId: 5, action: 'setVolume', value: 40 }
-        ],
-        enabled: true,
-        schedule: {
-          days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
-          startTime: '18:00',
-          endTime: '23:00'
-        },
-        lastTriggered: new Date().toISOString(),
-        executionCount: 12
+        if (devicesResponse.success) {
+          setDevices(devicesResponse.data || []);
+          // Calculate total energy usage
+          const totalEnergy = (devicesResponse.data || []).reduce((sum, device) => sum + (device.energyUsage || 0), 0);
+          setEnergyUsage(totalEnergy);
+        } else {
+          console.error('Failed to load devices:', devicesResponse.error);
+          setDevices([]);
+        }
+
+        if (automationsResponse.success) {
+          setAutomations(automationsResponse.data || []);
+        } else {
+          console.error('Failed to load automations:', automationsResponse.error);
+          setAutomations([]);
+        }
+      } catch (error) {
+        console.error('Error loading smart home data:', error);
+        setDevices([]);
+        setAutomations([]);
+      } finally {
+        setIsLoading(false);
       }
-    ];
+    };
 
-    setDevices(sampleDevices);
-    setAutomations(sampleAutomations);
-    
-    // Calculate total energy usage
-    const totalEnergy = sampleDevices.reduce((sum, device) => sum + device.energyUsage, 0);
-    setEnergyUsage(totalEnergy);
-  }, []);
+    loadSmartHomeData();
+  }, [currentUser]);
 
-  const handleAddDevice = () => {
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading smart home devices...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const handleAddDevice = async () => {
     if (!deviceForm.name || !deviceForm.type || !deviceForm.room) return;
     
     const newDevice = {
