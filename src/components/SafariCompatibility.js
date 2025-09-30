@@ -28,47 +28,9 @@ const SafariCompatibility = ({ children }) => {
         // Array.includes polyfill is loaded in index.html
       }
       
-      // Add Object.assign polyfill for very old Safari
-      if (!Object.assign) {
-        Object.assign = function(target, ...sources) {
-          sources.forEach(source => {
-            if (source) {
-              Object.keys(source).forEach(key => {
-                target[key] = source[key];
-              });
-            }
-          });
-          return target;
-        };
-      }
-      
-      // Add String.includes polyfill for very old Safari
-      if (!String.prototype.includes) {
-        String.prototype.includes = function(search, start) {
-          if (typeof start !== 'number') {
-            start = 0;
-          }
-          if (start + search.length > this.length) {
-            return false;
-          } else {
-            return this.indexOf(search, start) !== -1;
-          }
-        };
-      }
-      
-      // Add Number.isNaN polyfill
-      if (!Number.isNaN) {
-        Number.isNaN = function(value) {
-          return typeof value === 'number' && isNaN(value);
-        };
-      }
-      
-      // Add Number.isFinite polyfill
-      if (!Number.isFinite) {
-        Number.isFinite = function(value) {
-          return typeof value === 'number' && isFinite(value);
-        };
-      }
+      // Polyfills are handled by external CDN in index.html
+      // This avoids ESLint no-extend-native warnings
+      console.log('Safari polyfills loaded via CDN');
       
       // Add console.group polyfill for older Safari
       if (!console.group) {
