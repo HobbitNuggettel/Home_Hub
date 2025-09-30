@@ -5,6 +5,8 @@ import { AuthProvider } from './contexts/AuthContext';
 import { DevToolsProvider } from './contexts/DevToolsContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { RealTimeProvider } from './contexts/RealTimeContext';
+import SafariCompatibility from './components/SafariCompatibility';
+import SafariErrorBoundary from './components/SafariErrorBoundary';
 import LandingPage from './components/LandingPage';
 import Settings from './components/Settings';
 import Home from './components/Home';
@@ -31,10 +33,12 @@ import LogoutTest from './components/LogoutTest';
 
 function App() {
   return (
-    <ThemeProvider>
-      <DevToolsProvider>
-        <AuthProvider>
-          <RealTimeProvider>
+    <SafariErrorBoundary>
+      <SafariCompatibility>
+        <ThemeProvider>
+          <DevToolsProvider>
+            <AuthProvider>
+              <RealTimeProvider>
             <Router>
               <div className="App">
                 <Routes>
@@ -212,10 +216,12 @@ function App() {
                 />
               </div>
             </Router>
-          </RealTimeProvider>
-        </AuthProvider>
-      </DevToolsProvider>
-    </ThemeProvider>
+              </RealTimeProvider>
+            </AuthProvider>
+          </DevToolsProvider>
+        </ThemeProvider>
+      </SafariCompatibility>
+    </SafariErrorBoundary>
   );
 }
 
