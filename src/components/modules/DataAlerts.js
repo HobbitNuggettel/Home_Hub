@@ -28,6 +28,11 @@ export default function DataAlerts() {
   const [alerts, setAlerts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [insights, setInsights] = useState([]);
+  const [reports, setReports] = useState([]);
+  const [showAddAlert, setShowAddAlert] = useState(false);
+  const [showAddInsight, setShowAddInsight] = useState(false);
+
   // Load alerts data from Firebase
   useEffect(() => {
     const loadAlertsData = async () => {
@@ -67,13 +72,6 @@ export default function DataAlerts() {
       </div>
     );
   }
-
-  const [insights, setInsights] = useState([]);
-
-  const [reports, setReports] = useState([]);
-
-  const [showAddAlert, setShowAddAlert] = useState(false);
-  const [showAddInsight, setShowAddInsight] = useState(false);
 
   const getAlertTypeColor = (type) => {
     switch (type) {

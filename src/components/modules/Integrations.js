@@ -23,160 +23,126 @@ import {
   Shield,
   Activity
 } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import hybridStorage from '../../firebase/hybridStorage';
 
 export default function Integrations() {
+  const { currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState('devices');
-  const [devices, setDevices] = useState([
-    {
-      id: 1,
-      name: 'Smart Living Room Light',
-      type: 'light',
-      brand: 'Philips Hue',
-      status: 'online',
-      room: 'Living Room',
-      lastSeen: '2 minutes ago',
-      power: 'on',
-      brightness: 80,
-      color: '#ff6b6b',
-      automation: 'sunset'
-    },
-    {
-      id: 2,
-      name: 'Nest Thermostat',
-      type: 'thermostat',
-      brand: 'Google Nest',
-      status: 'online',
-      room: 'Hallway',
-      lastSeen: '1 minute ago',
-      temperature: 72,
-      mode: 'heat',
-      automation: 'schedule'
-    },
-    {
-      id: 3,
-      name: 'Ring Doorbell',
-      type: 'camera',
-      brand: 'Ring',
-      status: 'online',
-      room: 'Front Door',
-      lastSeen: '5 minutes ago',
-      recording: 'motion',
-      automation: 'motion'
-    },
-    {
-      id: 4,
-      name: 'Smart Lock',
-      type: 'lock',
-      brand: 'August',
-      status: 'online',
-      room: 'Front Door',
-      lastSeen: '1 minute ago',
-      locked: true,
-      automation: 'geofence'
-    },
-    {
-      id: 5,
-      name: 'Amazon Echo',
-      type: 'speaker',
-      brand: 'Amazon',
-      status: 'online',
-      room: 'Kitchen',
-      lastSeen: '1 minute ago',
-      volume: 60,
-      automation: 'voice'
-    }
-  ]);
-
-  const [automations, setAutomations] = useState([
-    {
-      id: 1,
-      name: 'Good Morning Routine',
-      description: 'Turn on lights, adjust thermostat, and play music at 7 AM',
-      trigger: 'schedule',
-      triggerValue: '07:00',
-      status: 'active',
-      devices: ['Smart Living Room Light', 'Nest Thermostat', 'Amazon Echo'],
-      lastRun: '2 hours ago',
-      nextRun: 'Tomorrow at 7:00 AM'
-    },
-    {
-      id: 2,
-      name: 'Away Mode',
-      description: 'Turn off lights, lock doors, and enable security when leaving',
-      trigger: 'geofence',
-      triggerValue: 'Home boundary exit',
-      status: 'active',
-      devices: ['Smart Living Room Light', 'Smart Lock', 'Ring Doorbell'],
-      lastRun: '4 hours ago',
-      nextRun: 'When leaving home'
-    },
-    {
-      id: 3,
-      name: 'Movie Night',
-      description: 'Dim lights, adjust thermostat, and enable security',
-      trigger: 'voice',
-      triggerValue: 'Alexa, movie night',
-      status: 'active',
-      devices: ['Smart Living Room Light', 'Nest Thermostat'],
-      lastRun: '1 day ago',
-      nextRun: 'Voice command'
-    },
-    {
-      id: 4,
-      name: 'Sleep Mode',
-      description: 'Turn off lights, lock doors, and set thermostat to sleep temperature',
-      trigger: 'schedule',
-      triggerValue: '22:30',
-      status: 'active',
-      devices: ['Smart Living Room Light', 'Smart Lock', 'Nest Thermostat'],
-      lastRun: '12 hours ago',
-      nextRun: 'Tonight at 10:30 PM'
-    }
-  ]);
-
-  const [integrations, setIntegrations] = useState([
-    {
-      id: 1,
-      name: 'Google Home',
-      type: 'voice-assistant',
-      status: 'connected',
-      lastSync: '5 minutes ago',
-      devices: 8,
-      automations: 4
-    },
-    {
-      id: 2,
-      name: 'Apple HomeKit',
-      type: 'ecosystem',
-      status: 'connected',
-      lastSync: '10 minutes ago',
-      devices: 12,
-      automations: 6
-    },
-    {
-      id: 3,
-      name: 'IFTTT',
-      type: 'automation',
-      status: 'connected',
-      lastSync: '1 hour ago',
-      devices: 5,
-      automations: 8
-    },
-    {
-      id: 4,
-      name: 'Zapier',
-      type: 'workflow',
-      status: 'connected',
-      lastSync: '2 hours ago',
-      devices: 3,
-      automations: 2
-    }
-  ]);
-
+  const [devices, setDevices] = useState([]);
+  const [automations, setAutomations] = useState([]);
+  const [integrations, setIntegrations] = useState([]);
   const [showAddDevice, setShowAddDevice] = useState(false);
   const [showAddAutomation, setShowAddAutomation] = useState(false);
   const [editingDevice, setEditingDevice] = useState(null);
   const [editingAutomation, setEditingAutomation] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load integrations data from Firebase
+  useEffect(() => {
+    const loadIntegrationsData = async () => {
+      if (!currentUser) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        const [devicesResponse, automationsResponse] = await Promise.all([
+          hybridStorage.getSmartHomeDevices(currentUser.uid),
+          hybridStorage.getSmartHomeAutomations(currentUser.uid)
+        ]);
+
+        if (devicesResponse.success) {
+          setDevices(devicesResponse.data || []);
+        } else {
+          console.error('Failed to load devices:', devicesResponse.error);
+          setDevices([]);
+        }
+
+        if (automationsResponse.success) {
+          setAutomations(automationsResponse.data || []);
+        } else {
+          console.error('Failed to load automations:', automationsResponse.error);
+          setAutomations([]);
+        }
+
+        // Generate integrations status based on available data
+        const integrationsData = generateIntegrationsStatus(
+          devicesResponse.success ? devicesResponse.data || [] : [],
+          automationsResponse.success ? automationsResponse.data || [] : []
+        );
+        setIntegrations(integrationsData);
+      } catch (error) {
+        console.error('Error loading integrations data:', error);
+        setDevices([]);
+        setAutomations([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadIntegrationsData();
+  }, [currentUser]);
+
+  // Generate integrations status based on devices and automations
+  const generateIntegrationsStatus = (devices, automations) => {
+    const deviceCount = devices.length;
+    const automationCount = automations.length;
+
+    // Group devices by brand/type to determine integrations
+    const deviceBrands = {};
+    devices.forEach(device => {
+      const brand = device.brand || 'Unknown';
+      if (!deviceBrands[brand]) {
+        deviceBrands[brand] = { count: 0, types: new Set() };
+      }
+      deviceBrands[brand].count++;
+      deviceBrands[brand].types.add(device.type);
+    });
+
+    const integrations = [];
+
+    // Create integration entries based on device brands
+    Object.entries(deviceBrands).forEach(([brand, data], index) => {
+      integrations.push({
+        id: index + 1,
+        name: brand,
+        type: data.types.size > 1 ? 'ecosystem' : 'device',
+        status: 'connected',
+        lastSync: '5 minutes ago',
+        devices: data.count,
+        automations: Math.floor(automationCount * (data.count / deviceCount)) || 0
+      });
+    });
+
+    // Add a general automation integration if there are automations but no specific brand
+    if (automationCount > 0 && integrations.length === 0) {
+      integrations.push({
+        id: 1,
+        name: 'Smart Home Automation',
+        type: 'automation',
+        status: 'connected',
+        lastSync: '5 minutes ago',
+        devices: deviceCount,
+        automations: automationCount
+      });
+    }
+
+    return integrations;
+  };
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading integrations...</p>
+        </div>
+      </div>
+    );
+  }
 
   const deviceTypes = [
     { value: 'light', label: 'Smart Light', icon: Lightbulb },

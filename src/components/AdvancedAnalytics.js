@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useRealTime } from '../contexts/RealTimeContext';
+import hybridStorage from '../firebase/hybridStorage';
 import { 
   BarChart, Bar, LineChart, Line, AreaChart, Area, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -106,36 +107,143 @@ const AdvancedAnalytics = () => {
 
   const d3Container = useRef(null);
 
-  // Sample data for demonstration
-  const sampleData = {
-    spending: [
-      { month: 'Jan', groceries: 450, utilities: 120, entertainment: 80, total: 650 },
-      { month: 'Feb', groceries: 380, utilities: 110, entertainment: 95, total: 585 },
-      { month: 'Mar', groceries: 520, utilities: 125, entertainment: 70, total: 715 },
-      { month: 'Apr', groceries: 410, utilities: 115, entertainment: 110, total: 635 },
-      { month: 'May', groceries: 480, utilities: 130, entertainment: 85, total: 695 },
-      { month: 'Jun', groceries: 390, utilities: 120, entertainment: 90, total: 600 }
-    ],
-    inventory: [
-      { category: 'Electronics', count: 15, value: 2500, lowStock: 2 },
-      { category: 'Kitchen', count: 45, value: 800, lowStock: 8 },
-      { category: 'Clothing', count: 32, value: 1200, lowStock: 5 },
-      { category: 'Books', count: 28, value: 400, lowStock: 3 },
-      { category: 'Tools', count: 18, value: 600, lowStock: 4 }
-    ],
-    users: [
-      { name: 'Family Members', count: 4, active: 3, lastActive: '2h ago' },
-      { name: 'Guests', count: 2, active: 1, lastActive: '1d ago' },
-      { name: 'Admin Users', count: 1, active: 1, lastActive: 'Now' }
-    ],
-    realTime: [
-      { time: '09:00', users: 3, activities: 12, dataPoints: 45 },
-      { time: '10:00', users: 4, activities: 18, dataPoints: 67 },
-      { time: '11:00', users: 2, activities: 8, dataPoints: 23 },
-      { time: '12:00', users: 5, activities: 25, dataPoints: 89 },
-      { time: '13:00', users: 3, activities: 15, dataPoints: 56 },
-      { time: '14:00', users: 4, activities: 20, dataPoints: 78 }
-    ]
+  // Load analytics data from Firebase
+  const loadAnalyticsData = async () => {
+    if (!currentUser) {
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      // Load data from multiple Firebase collections
+      const [spendingResponse, inventoryResponse, collaborationResponse] = await Promise.all([
+        hybridStorage.getSpendingExpenses(currentUser.uid),
+        hybridStorage.getInventoryItems(currentUser.uid),
+        hybridStorage.getCollaborationMembers(currentUser.uid)
+      ]);
+
+      // Process spending data for charts
+      const spendingData = spendingResponse.success ? spendingResponse.data || [] : [];
+      const processedSpending = processSpendingData(spendingData);
+
+      // Process inventory data for charts
+      const inventoryData = inventoryResponse.success ? inventoryResponse.data || [] : [];
+      const processedInventory = processInventoryData(inventoryData);
+
+      // Process collaboration data for charts
+      const collaborationData = collaborationResponse.success ? collaborationResponse.data || [] : [];
+      const processedUsers = processCollaborationData(collaborationData);
+
+      // Generate real-time data (mock for now, could be enhanced with actual real-time data)
+      const realTimeData = generateRealTimeData();
+
+      setAnalyticsData({
+        spending: processedSpending,
+        inventory: processedInventory,
+        users: processedUsers,
+        realTime: realTimeData
+      });
+    } catch (error) {
+      console.error('Error loading analytics data:', error);
+      setError('Failed to load analytics data');
+      setAnalyticsData({});
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Process spending data for chart visualization
+  const processSpendingData = (expenses) => {
+    if (!expenses || expenses.length === 0) return [];
+
+    // Group expenses by month and category
+    const monthlyData = {};
+    expenses.forEach(expense => {
+      const date = new Date(expense.createdAt || expense.date);
+      const month = date.toLocaleDateString('en-US', { month: 'short' });
+
+      if (!monthlyData[month]) {
+        monthlyData[month] = { month, groceries: 0, utilities: 0, entertainment: 0, total: 0 };
+      }
+
+      const amount = parseFloat(expense.amount) || 0;
+      monthlyData[month].total += amount;
+
+      // Categorize expenses
+      const category = expense.category?.toLowerCase() || 'other';
+      if (category.includes('food') || category.includes('grocery')) {
+        monthlyData[month].groceries += amount;
+      } else if (category.includes('utility') || category.includes('electric') || category.includes('water')) {
+        monthlyData[month].utilities += amount;
+      } else if (category.includes('entertainment') || category.includes('movie') || category.includes('game')) {
+        monthlyData[month].entertainment += amount;
+      }
+    });
+
+    return Object.values(monthlyData).sort((a, b) => {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return months.indexOf(a.month) - months.indexOf(b.month);
+    });
+  };
+
+  // Process inventory data for chart visualization
+  const processInventoryData = (items) => {
+    if (!items || items.length === 0) return [];
+
+    // Group items by category
+    const categoryData = {};
+    items.forEach(item => {
+      const category = item.category || 'Other';
+      if (!categoryData[category]) {
+        categoryData[category] = { category, count: 0, value: 0, lowStock: 0 };
+      }
+
+      categoryData[category].count += 1;
+      categoryData[category].value += parseFloat(item.price) || 0;
+
+      // Check for low stock (assuming items with quantity < 5 are low stock)
+      if (item.quantity && item.quantity < 5) {
+        categoryData[category].lowStock += 1;
+      }
+    });
+
+    return Object.values(categoryData);
+  };
+
+  // Process collaboration data for chart visualization
+  const processCollaborationData = (members) => {
+    if (!members || members.length === 0) return [];
+
+    const activeMembers = members.filter(member => member.status === 'active');
+    const adminMembers = members.filter(member => member.role === 'admin' || member.role === 'owner');
+    const regularMembers = members.filter(member => member.role === 'member');
+
+    return [
+      { name: 'Active Members', count: activeMembers.length, active: activeMembers.length, lastActive: 'Now' },
+      { name: 'Admin Users', count: adminMembers.length, active: adminMembers.length, lastActive: 'Now' },
+      { name: 'Regular Members', count: regularMembers.length, active: regularMembers.length, lastActive: '2h ago' }
+    ];
+  };
+
+  // Generate real-time data (mock for demonstration)
+  const generateRealTimeData = () => {
+    const now = new Date();
+    const data = [];
+
+    for (let i = 5; i >= 0; i--) {
+      const time = new Date(now.getTime() - i * 60 * 60 * 1000);
+      data.push({
+        time: time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+        users: Math.floor(Math.random() * 3) + 2,
+        activities: Math.floor(Math.random() * 15) + 5,
+        dataPoints: Math.floor(Math.random() * 50) + 20
+      });
+    }
+
+    return data;
   };
 
   // Color schemes for charts
@@ -151,18 +259,8 @@ const AdvancedAnalytics = () => {
 
   // Initialize analytics data
   useEffect(() => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      setAnalyticsData(sampleData);
-    } catch (error) {
-      console.error('Error setting analytics data:', error);
-      setError('Failed to load analytics data');
-      setAnalyticsData({});
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    loadAnalyticsData();
+  }, [currentUser]);
 
   // Safe chart type switching
   const handleChartTypeChange = (newType) => {
@@ -288,11 +386,7 @@ const AdvancedAnalytics = () => {
 
   // Refresh analytics data
   const refreshData = async () => {
-    setIsLoading(true);
-    // Simulate data refresh
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setAnalyticsData(sampleData);
-    setIsLoading(false);
+    await loadAnalyticsData();
   };
 
   // Calculate key metrics with safety checks
@@ -304,6 +398,18 @@ const AdvancedAnalytics = () => {
     activeUsers: getSafeData(analyticsData.users).reduce((sum, item) => sum + (item.active || 0), 0),
     totalUsers: getSafeData(analyticsData.users).reduce((sum, item) => sum + (item.count || 0), 0)
   };
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading analytics data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <AnalyticsErrorBoundary>
