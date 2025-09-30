@@ -114,9 +114,28 @@ export default function ImageManagement() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const fileInputRef = useRef(null);
+  const [categories, setCategories] = useState(['all', 'family', 'home', 'recipes', 'inventory', 'documents']);
+  const [storageServices, setStorageServices] = useState(['auto', 'base64', 'imgur', 'cloudinary']);
 
-  const categories = ['all', 'family', 'home', 'recipes', 'inventory', 'documents'];
-  const storageServices = ['auto', 'base64', 'imgur', 'cloudinary'];
+  // Load configuration from Firebase
+  useEffect(() => {
+    const loadImageConfig = async () => {
+      if (!currentUser) return;
+      
+      try {
+        const response = await hybridStorage.getImageManagementConfig(currentUser.uid);
+        if (response.success && response.data) {
+          setCategories(['all', ...(response.data.categories || [])]);
+          setStorageServices(response.data.storageServices || ['auto', 'base64', 'imgur', 'cloudinary']);
+        }
+      } catch (error) {
+        console.error('Error loading image management config:', error);
+        // Keep default values on error
+      }
+    };
+
+    loadImageConfig();
+  }, [currentUser]);
 
   const handleFileUpload = (event) => {
     const files = Array.from(event.target.files);

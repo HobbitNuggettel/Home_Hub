@@ -40,6 +40,10 @@ export default function Maintenance() {
     const [maintenanceTasks, setMaintenanceTasks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [serviceRecords, setServiceRecords] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [priorities, setPriorities] = useState([]);
+    const [statuses, setStatuses] = useState([]);
+    const [frequencies, setFrequencies] = useState([]);
     const [showAddTask, setShowAddTask] = useState(false);
     const [showAddRecord, setShowAddRecord] = useState(false);
     const [editingTask, setEditingTask] = useState(null);
@@ -84,45 +88,65 @@ export default function Maintenance() {
     });
 
     // Load real data from Firebase
-    useEffect(() => {
-        const loadMaintenanceData = async () => {
-            if (!currentUser) {
-                setMaintenanceTasks([]);
-                setServiceRecords([]);
-                setIsLoading(false);
-                return;
-            }
+  useEffect(() => {
+    const loadMaintenanceData = async () => {
+      if (!currentUser) {
+        setMaintenanceTasks([]);
+        setServiceRecords([]);
+        setIsLoading(false);
+        return;
+      }
 
-        try {
-            setIsLoading(true);
-            const [tasksResponse, recordsResponse] = await Promise.all([
-                hybridStorage.getMaintenanceTasks(currentUser.uid),
-                hybridStorage.getServiceRecords(currentUser.uid)
-            ]);
+      try {
+        setIsLoading(true);
+        const [tasksResponse, recordsResponse, configResponse] = await Promise.all([
+          hybridStorage.getMaintenanceTasks(currentUser.uid),
+          hybridStorage.getServiceRecords(currentUser.uid),
+          hybridStorage.getMaintenanceConfig(currentUser.uid)
+        ]);
 
-          if (tasksResponse.success) {
-              setMaintenanceTasks(tasksResponse.data || []);
-          } else {
-              console.error('Failed to load maintenance tasks:', tasksResponse.error);
-              setMaintenanceTasks([]);
-          }
-
-            if (recordsResponse.success) {
-                setServiceRecords(recordsResponse.data || []);
-            } else {
-                console.error('Failed to load service records:', recordsResponse.error);
-                setServiceRecords([]);
-            }
-        } catch (error) {
-            console.error('Error loading maintenance data:', error);
-            setMaintenanceTasks([]);
-            setServiceRecords([]);
-        } finally {
-            setIsLoading(false);
+        if (tasksResponse.success) {
+          setMaintenanceTasks(tasksResponse.data || []);
+        } else {
+          console.error('Failed to load maintenance tasks:', tasksResponse.error);
+          setMaintenanceTasks([]);
         }
+
+        if (recordsResponse.success) {
+          setServiceRecords(recordsResponse.data || []);
+        } else {
+          console.error('Failed to load service records:', recordsResponse.error);
+          setServiceRecords([]);
+        }
+
+        // Load configuration data
+        if (configResponse.success && configResponse.data) {
+          setCategories(configResponse.data.categories || []);
+          setPriorities(configResponse.data.priorities || []);
+          setStatuses(configResponse.data.statuses || []);
+          setFrequencies(configResponse.data.frequencies || []);
+        } else {
+          // Fallback to default values
+          setCategories(['HVAC', 'Plumbing', 'Electrical', 'Exterior', 'Interior', 'Safety', 'Appliances', 'Landscaping', 'Other']);
+          setPriorities(['low', 'medium', 'high', 'urgent']);
+          setStatuses(['pending', 'in_progress', 'completed', 'overdue', 'cancelled']);
+          setFrequencies(['daily', 'weekly', 'monthly', 'quarterly', 'semi-annual', 'annual', 'as_needed']);
+        }
+      } catch (error) {
+        console.error('Error loading maintenance data:', error);
+        setMaintenanceTasks([]);
+        setServiceRecords([]);
+        // Set fallback values on error
+        setCategories(['HVAC', 'Plumbing', 'Electrical', 'Exterior', 'Interior', 'Safety', 'Appliances', 'Landscaping', 'Other']);
+        setPriorities(['low', 'medium', 'high', 'urgent']);
+        setStatuses(['pending', 'in_progress', 'completed', 'overdue', 'cancelled']);
+        setFrequencies(['daily', 'weekly', 'monthly', 'quarterly', 'semi-annual', 'annual', 'as_needed']);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-      loadMaintenanceData();
+    loadMaintenanceData();
   }, [currentUser]);
 
     // Show loading state while authentication is being determined
@@ -137,13 +161,7 @@ export default function Maintenance() {
         );
     }
 
-    const categories = [
-        'HVAC', 'Plumbing', 'Electrical', 'Exterior', 'Interior', 'Safety', 'Appliances', 'Landscaping', 'Other'
-    ];
-
-    const priorities = ['low', 'medium', 'high', 'urgent'];
-    const statuses = ['pending', 'in_progress', 'completed', 'overdue', 'cancelled'];
-    const frequencies = ['daily', 'weekly', 'monthly', 'quarterly', 'semi-annual', 'annual', 'as_needed'];
+    // Categories, priorities, statuses, and frequencies are now loaded from Firebase state
 
   const getCategoryIcon = (category) => {
     switch (category) {

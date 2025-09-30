@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Camera, Upload, X, Plus, Minus, Scan, Trash2 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import hybridStorage from '../firebase/hybridStorage';
 
 const MultiItemForm = ({ onSubmit, onCancel, onBarcodeScan }) => {
+  const { currentUser } = useAuth();
   const [imagePreview, setImagePreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addMethod, setAddMethod] = useState('quick'); // 'quick' or 'batch'
   const [batchItems, setBatchItems] = useState([{ id: 1 }]);
+  const [categories, setCategories] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   
   const { register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm({
     defaultValues: {
@@ -21,15 +26,51 @@ const MultiItemForm = ({ onSubmit, onCancel, onBarcodeScan }) => {
   const watchedCategory = watch('category');
   const watchedTotalQuantity = watch('totalQuantity');
 
-  const categories = {
-    'Food': ['Dairy', 'Produce', 'Pantry', 'Frozen', 'Beverages', 'Snacks'],
-    'Electronics': ['Audio', 'Computing', 'Mobile', 'Gaming', 'Kitchen Appliances'],
-    'Cleaning': ['Kitchen Cleaners', 'Bathroom Cleaners', 'Laundry', 'General'],
-    'Personal Care': ['Hair Care', 'Skin Care', 'Oral Care', 'Feminine Care'],
-    'Home & Garden': ['Tools', 'Furniture', 'Decor', 'Outdoor'],
-    'Clothing': ['Men', 'Women', 'Children', 'Accessories'],
-    'Other': ['Miscellaneous']
-  };
+  // Load categories from Firebase
+  useEffect(() => {
+    const loadCategories = async () => {
+      if (!currentUser) {
+        setIsLoading(false);
+        return;
+      }
+      
+      try {
+        setIsLoading(true);
+        // Try to load categories from Firebase
+        const response = await hybridStorage.getInventoryCategories(currentUser.uid);
+        if (response.success && response.data) {
+          setCategories(response.data);
+        } else {
+          // Fallback to default categories if Firebase data not available
+          setCategories({
+            'Food': ['Dairy', 'Produce', 'Pantry', 'Frozen', 'Beverages', 'Snacks'],
+            'Electronics': ['Audio', 'Computing', 'Mobile', 'Gaming', 'Kitchen Appliances'],
+            'Cleaning': ['Kitchen Cleaners', 'Bathroom Cleaners', 'Laundry', 'General'],
+            'Personal Care': ['Hair Care', 'Skin Care', 'Oral Care', 'Feminine Care'],
+            'Home & Garden': ['Tools', 'Furniture', 'Decor', 'Outdoor'],
+            'Clothing': ['Men', 'Women', 'Children', 'Accessories'],
+            'Other': ['Miscellaneous']
+          });
+        }
+      } catch (error) {
+        console.error('Error loading categories:', error);
+        // Fallback to default categories on error
+        setCategories({
+          'Food': ['Dairy', 'Produce', 'Pantry', 'Frozen', 'Beverages', 'Snacks'],
+          'Electronics': ['Audio', 'Computing', 'Mobile', 'Gaming', 'Kitchen Appliances'],
+          'Cleaning': ['Kitchen Cleaners', 'Bathroom Cleaners', 'Laundry', 'General'],
+          'Personal Care': ['Hair Care', 'Skin Care', 'Oral Care', 'Feminine Care'],
+          'Home & Garden': ['Tools', 'Furniture', 'Decor', 'Outdoor'],
+          'Clothing': ['Men', 'Women', 'Children', 'Accessories'],
+          'Other': ['Miscellaneous']
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadCategories();
+  }, [currentUser]);
 
   const measurementUnits = [
     'Pcs', 'Lbs', 'Kg', 'Gallon', 'Liter', 'Oz', 'Ml', 'Box', 'Pack', 'Roll', 'Bottle', 'Can'
@@ -300,6 +341,19 @@ const MultiItemForm = ({ onSubmit, onCancel, onBarcodeScan }) => {
       </div>
     </div>
   );
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading categories...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
