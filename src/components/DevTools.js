@@ -104,7 +104,19 @@ const DevTools = () => {
 
   if (!showDevTools) {
     return (
-      <div className="fixed bottom-4 right-4 bg-blue-500 text-white px-3 py-2 rounded-lg shadow-lg z-50 text-xs cursor-pointer" onClick={toggleDevTools}>
+      <div
+        className="fixed bottom-4 right-4 bg-blue-500 text-white px-3 py-2 rounded-lg shadow-lg z-50 text-xs cursor-pointer"
+        onClick={toggleDevTools}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleDevTools();
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-label="Toggle Developer Tools"
+      >
         🔧 Click to Show Dev Tools
       </div>
     );

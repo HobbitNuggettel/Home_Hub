@@ -27,7 +27,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import hybridStorage from '../../firebase/hybridStorage';
 
 export default function Integrations() {
-  const { currentUser } = useAuth();
+  const auth = useAuth();
+  const currentUser = auth?.currentUser;
   const [activeTab, setActiveTab] = useState('devices');
   const [devices, setDevices] = useState([]);
   const [automations, setAutomations] = useState([]);
@@ -229,7 +230,7 @@ export default function Integrations() {
   const automationStats = getAutomationStats();
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">

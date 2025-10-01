@@ -1,152 +1,163 @@
-name: 🚀 CI/CD Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop, feature-development-* ]
+    branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
-  workflow_dispatch:
-    inputs:
-      reason:
-        description: 'Reason for manual trigger'
-        required: false
-        default: 'Manual workflow run'
+
+env:
+  NODE_VERSION: '18'
+  NPM_CACHE_FOLDER: ~/.npm
+  CACHE_VERSION: v1
 
 jobs:
-  # Frontend Tests and Build
-  frontend:
-    name: 🌐 Frontend CI
+  test:
+    name: Test Suite
     runs-on: ubuntu-latest
     
     steps:
-    - name: 📥 Checkout code
+    - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: 📦 Setup Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20.x'
+        node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
         
-    - name: 📦 Install dependencies
+    - name: Install dependencies
       run: npm ci
       
-    - name: 🔍 Run ESLint
+    - name: Run ESLint
       run: npm run lint
-      continue-on-error: true
       
-    - name: 🧪 Run tests
-      run: npm test -- --watchAll=false --passWithNoTests || true
-      env:
-        CI: true
+    - name: Run tests
+      run: npm test -- --coverage --watchAll=false
+      
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
         
-    - name: 🏗️ Build application
-      run: CI=false npm run build
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build React app
+      run: npm run build
       env:
         CI: false
-      
-    - name: 📦 Upload build artifacts
-      uses: actions/upload-artifact@v4
+        
+    - name: Build API
+      run: |
+        cd api
+        npm ci
+        npm run build
+        
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
       with:
         name: build-files
-        path: build/
-        retention-days: 7
-
-  # Backend API Tests
-  backend:
-    name: 🔧 Backend API CI
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: 📥 Checkout code
-      uses: actions/checkout@v4
-      
-    - name: 📦 Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
-        cache: 'npm'
-        cache-dependency-path: api/package-lock.json
-        
-    - name: 📦 Install API dependencies
-      working-directory: ./api
-      run: npm ci
-      
-    - name: 🔍 Check API structure
-      working-directory: ./api
-      run: |
-        echo "API server structure:"
-        ls -la
-        echo "Package.json scripts:"
-        cat package.json | grep -A 10 "scripts"
-      
-    - name: 🧪 Validate API setup
-      working-directory: ./api
-      run: node -e "console.log('API environment check passed')"
-
-  # Security and Quality Checks
+        path: |
+          build/
+          api/dist/
+          
   security:
-    name: 🔒 Security & Quality
+    name: Security Scan
     runs-on: ubuntu-latest
     
     steps:
-    - name: 📥 Checkout code
+    - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: 📦 Setup Node.js
-      uses: actions/setup-node@v4
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
       with:
-        node-version: '20.x'
-        cache: 'npm'
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
         
-    - name: 📦 Install dependencies
-      run: npm ci
+    - name: Upload Trivy scan results
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-results.sarif'
+        
+    - name: Run npm audit
+      run: npm audit --audit-level moderate
       
-    - name: 🔒 Run security audit
-      run: npm audit --audit-level high || echo "Security vulnerabilities found but continuing..."
-
-  # Mobile App Check
-  mobile:
-    name: 📱 Mobile App CI
+  deploy-staging:
+    name: Deploy to Staging
     runs-on: ubuntu-latest
+    needs: [test, build, security]
+    if: github.ref == 'refs/heads/develop'
     
     steps:
-    - name: 📥 Checkout code
+    - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: 📦 Setup Node.js
-      uses: actions/setup-node@v4
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
       with:
-        node-version: '20.x'
-        cache: 'npm'
-        cache-dependency-path: HomeHubMobile/package-lock.json
+        name: build-files
+        path: ./
         
-    - name: 📦 Install mobile dependencies
-      working-directory: ./HomeHubMobile
-      run: npm ci
-      
-    - name: 🔍 Check mobile structure
-      working-directory: ./HomeHubMobile
+    - name: Deploy to staging
       run: |
-        echo "Mobile app structure:"
-        ls -la
-        echo "✅ Mobile dependencies installed"
-
-  # Build Status Summary
-  build-summary:
-    name: 📊 Build Summary
+        echo "Deploying to staging environment..."
+        # Add your staging deployment commands here
+        
+  deploy-production:
+    name: Deploy to Production
     runs-on: ubuntu-latest
-    needs: [frontend, backend, security, mobile]
+    needs: [test, build, security]
+    if: github.ref == 'refs/heads/main'
+    
+    environment: production
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-files
+        path: ./
+        
+    - name: Deploy to production
+      run: |
+        echo "Deploying to production environment..."
+        # Add your production deployment commands here
+        
+  notify:
+    name: Notify Deployment
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, deploy-production]
     if: always()
     
     steps:
-    - name: 📊 Generate summary
-      run: |
-        echo "## 🏗️ Build Summary" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "- 🌐 Frontend: ${{ needs.frontend.result }}" >> $GITHUB_STEP_SUMMARY
-        echo "- 🔧 Backend: ${{ needs.backend.result }}" >> $GITHUB_STEP_SUMMARY
-        echo "- 🔒 Security: ${{ needs.security.result }}" >> $GITHUB_STEP_SUMMARY
-        echo "- 📱 Mobile: ${{ needs.mobile.result }}" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "✅ Build pipeline completed!" >> $GITHUB_STEP_SUMMARY
+    - name: Notify Slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#deployments'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: always()

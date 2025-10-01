@@ -881,6 +881,186 @@ class HybridFirebaseStorage {
     }
   }
 
+  // Get inventory categories
+  async getInventoryCategories(userId) {
+    try {
+      if (!this.canPerformOperation('reads', 1)) {
+        return {
+          success: false,
+          error: 'Daily read limit exceeded',
+          code: 'LIMIT_EXCEEDED'
+        };
+      }
+
+      const docRef = doc(db, 'users', userId, 'inventory', 'categories');
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        this.trackOperation('reads', 1);
+        return {
+          success: true,
+          data: docSnap.data(),
+          message: 'Inventory categories retrieved successfully!'
+        };
+      } else {
+        // Return default categories
+        const defaultCategories = ['Electronics', 'Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Garden', 'Clothing', 'Books', 'Tools', 'Food'];
+        return {
+          success: true,
+          data: defaultCategories,
+          message: 'Using default inventory categories'
+        };
+      }
+    } catch (error) {
+      console.error('Failed to get inventory categories:', error);
+      return {
+        success: false,
+        error: error.message,
+        code: error.code
+      };
+    }
+  }
+
+  // Get spending budgets
+  async getSpendingBudgets(userId) {
+    try {
+      if (!this.canPerformOperation('reads', 1)) {
+        return {
+          success: false,
+          error: 'Daily read limit exceeded',
+          code: 'LIMIT_EXCEEDED'
+        };
+      }
+
+      const budgetsRef = collection(db, 'users', userId, 'spending', 'budgets');
+      const budgetsSnap = await getDocs(budgetsRef);
+      const budgets = budgetsSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      this.trackOperation('reads', 1);
+      return {
+        success: true,
+        data: budgets,
+        total: budgets.length,
+        message: 'Spending budgets retrieved successfully!'
+      };
+    } catch (error) {
+      console.error('Failed to get spending budgets:', error);
+      return {
+        success: false,
+        error: error.message,
+        code: error.code
+      };
+    }
+  }
+
+  // Get data alerts
+  async getDataAlerts(userId) {
+    try {
+      if (!this.canPerformOperation('reads', 1)) {
+        return {
+          success: false,
+          error: 'Daily read limit exceeded',
+          code: 'LIMIT_EXCEEDED'
+        };
+      }
+
+      const alertsRef = collection(db, 'users', userId, 'analytics', 'alerts');
+      const alertsSnap = await getDocs(alertsRef);
+      const alerts = alertsSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      this.trackOperation('reads', 1);
+      return {
+        success: true,
+        data: alerts,
+        total: alerts.length,
+        message: 'Data alerts retrieved successfully!'
+      };
+    } catch (error) {
+      console.error('Failed to get data alerts:', error);
+      return {
+        success: false,
+        error: error.message,
+        code: error.code
+      };
+    }
+  }
+
+  // Get data insights
+  async getDataInsights(userId) {
+    try {
+      if (!this.canPerformOperation('reads', 1)) {
+        return {
+          success: false,
+          error: 'Daily read limit exceeded',
+          code: 'LIMIT_EXCEEDED'
+        };
+      }
+
+      const insightsRef = collection(db, 'users', userId, 'analytics', 'insights');
+      const insightsSnap = await getDocs(insightsRef);
+      const insights = insightsSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      this.trackOperation('reads', 1);
+      return {
+        success: true,
+        data: insights,
+        total: insights.length,
+        message: 'Data insights retrieved successfully!'
+      };
+    } catch (error) {
+      console.error('Failed to get data insights:', error);
+      return {
+        success: false,
+        error: error.message,
+        code: error.code
+      };
+    }
+  }
+
+  // Get data reports
+  async getDataReports(userId) {
+    try {
+      if (!this.canPerformOperation('reads', 1)) {
+        return {
+          success: false,
+          error: 'Daily read limit exceeded',
+          code: 'LIMIT_EXCEEDED'
+        };
+      }
+
+      const reportsRef = collection(db, 'users', userId, 'analytics', 'reports');
+      const reportsSnap = await getDocs(reportsRef);
+      const reports = reportsSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      this.trackOperation('reads', 1);
+      return {
+        success: true,
+        data: reports,
+        total: reports.length,
+        message: 'Data reports retrieved successfully!'
+      };
+    } catch (error) {
+      console.error('Failed to get data reports:', error);
+      return {
+        success: false,
+        error: error.message,
+        code: error.code
+      };
+    }
+  }
+
   // Service Status and Health
   getServiceStatus() {
     const usage = this.getUsageStats();
@@ -917,6 +1097,245 @@ class HybridFirebaseStorage {
       ]
     };
   }
+
+  // Smart Home Integration Methods
+  async getSmartHomeDevices(userId) {
+    try {
+      if (!this.canPerformOperation('reads', 1)) {
+        return {
+          success: false,
+          error: 'Daily read limit exceeded',
+          code: 'LIMIT_EXCEEDED'
+        };
+      }
+
+      const devicesRef = collection(db, 'users', userId, 'smartHome', 'devices');
+      const devicesSnap = await getDocs(devicesRef);
+      const devices = devicesSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      this.trackOperation('reads', 1);
+      return {
+        success: true,
+        data: devices
+      };
+    } catch (error) {
+      console.error('Error getting smart home devices:', error);
+      return {
+        success: false,
+        error: error.message,
+        data: []
+      };
+    }
+  }
+
+  async getSmartHomeAutomations(userId) {
+    try {
+      if (!this.canPerformOperation('reads', 1)) {
+        return {
+          success: false,
+          error: 'Daily read limit exceeded',
+          code: 'LIMIT_EXCEEDED'
+        };
+      }
+
+      const automationsRef = collection(db, 'users', userId, 'smartHome', 'automations');
+      const automationsSnap = await getDocs(automationsRef);
+      const automations = automationsSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      this.trackOperation('reads', 1);
+      return {
+        success: true,
+        data: automations
+      };
+    } catch (error) {
+      console.error('Error getting smart home automations:', error);
+      return {
+        success: false,
+        error: error.message,
+        data: []
+      };
+    }
+  }
+
+  async addSmartHomeDevice(userId, deviceData) {
+    try {
+      if (!this.canPerformOperation('writes', 1)) {
+        return {
+          success: false,
+          error: 'Daily write limit exceeded',
+          code: 'LIMIT_EXCEEDED'
+        };
+      }
+
+      const devicesRef = collection(db, 'users', userId, 'smartHome', 'devices');
+      const docRef = await addDoc(devicesRef, {
+        ...deviceData,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+
+      this.trackOperation('writes', 1);
+      return {
+        success: true,
+        data: { id: docRef.id, ...deviceData }
+      };
+    } catch (error) {
+      console.error('Error adding smart home device:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  async updateSmartHomeDevice(userId, deviceId, deviceData) {
+    try {
+      if (!this.canPerformOperation('writes', 1)) {
+        return {
+          success: false,
+          error: 'Daily write limit exceeded',
+          code: 'LIMIT_EXCEEDED'
+        };
+      }
+
+      const deviceRef = doc(db, 'users', userId, 'smartHome', 'devices', deviceId);
+      await updateDoc(deviceRef, {
+        ...deviceData,
+        updatedAt: serverTimestamp()
+      });
+
+      this.trackOperation('writes', 1);
+      return {
+        success: true,
+        data: { id: deviceId, ...deviceData }
+      };
+    } catch (error) {
+      console.error('Error updating smart home device:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  async deleteSmartHomeDevice(userId, deviceId) {
+    try {
+      if (!this.canPerformOperation('writes', 1)) {
+        return {
+          success: false,
+          error: 'Daily write limit exceeded',
+          code: 'LIMIT_EXCEEDED'
+        };
+      }
+
+      const deviceRef = doc(db, 'users', userId, 'smartHome', 'devices', deviceId);
+      await deleteDoc(deviceRef);
+
+      this.trackOperation('writes', 1);
+      return {
+        success: true
+      };
+    } catch (error) {
+      console.error('Error deleting smart home device:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  async addSmartHomeAutomation(userId, automationData) {
+    try {
+      if (!this.canPerformOperation('writes', 1)) {
+        return {
+          success: false,
+          error: 'Daily write limit exceeded',
+          code: 'LIMIT_EXCEEDED'
+        };
+      }
+
+      const automationsRef = collection(db, 'users', userId, 'smartHome', 'automations');
+      const docRef = await addDoc(automationsRef, {
+        ...automationData,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+
+      this.trackOperation('writes', 1);
+      return {
+        success: true,
+        data: { id: docRef.id, ...automationData }
+      };
+    } catch (error) {
+      console.error('Error adding smart home automation:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  async updateSmartHomeAutomation(userId, automationId, automationData) {
+    try {
+      if (!this.canPerformOperation('writes', 1)) {
+        return {
+          success: false,
+          error: 'Daily write limit exceeded',
+          code: 'LIMIT_EXCEEDED'
+        };
+      }
+
+      const automationRef = doc(db, 'users', userId, 'smartHome', 'automations', automationId);
+      await updateDoc(automationRef, {
+        ...automationData,
+        updatedAt: serverTimestamp()
+      });
+
+      this.trackOperation('writes', 1);
+      return {
+        success: true,
+        data: { id: automationId, ...automationData }
+      };
+    } catch (error) {
+      console.error('Error updating smart home automation:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  async deleteSmartHomeAutomation(userId, automationId) {
+    try {
+      if (!this.canPerformOperation('writes', 1)) {
+        return {
+          success: false,
+          error: 'Daily write limit exceeded',
+          code: 'LIMIT_EXCEEDED'
+        };
+      }
+
+      const automationRef = doc(db, 'users', userId, 'smartHome', 'automations', automationId);
+      await deleteDoc(automationRef);
+
+      this.trackOperation('writes', 1);
+      return {
+        success: true
+      };
+    } catch (error) {
+      console.error('Error deleting smart home automation:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
 }
 
 // Create and export singleton instance
@@ -929,6 +1348,11 @@ export const {
   updateUserProfile,
   addInventoryItem,
   getInventoryItems,
+  getInventoryCategories,
+  getSpendingBudgets,
+  getDataAlerts,
+  getDataInsights,
+  getDataReports,
   addRecipe,
   addExpense,
   handleImageUpload,

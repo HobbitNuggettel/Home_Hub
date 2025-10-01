@@ -4,7 +4,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import hybridStorage from '../../firebase/hybridStorage';
 
 const Recipes = () => {
-  const { currentUser } = useAuth();
+  const auth = useAuth();
+  const currentUser = auth?.currentUser;
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([
@@ -279,7 +280,7 @@ const Recipes = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">

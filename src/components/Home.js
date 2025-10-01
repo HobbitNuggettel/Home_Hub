@@ -30,7 +30,8 @@ import {
 
 export default function Home() {
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const auth = useAuth();
+  const currentUser = auth?.currentUser;
   const { isDevMode } = useDevTools();
   const [isLoading, setIsLoading] = useState(true);
   const [realData, setRealData] = useState(null);

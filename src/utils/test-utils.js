@@ -3,18 +3,21 @@ import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '../contexts/ThemeContext';
 import { DevToolsProvider } from '../contexts/DevToolsContext';
+import { AuthProvider } from '../contexts/AuthContext';
 
 // Mock AuthContext for tests
+const mockAuthContext = {
+  currentUser: { uid: 'test-uid', email: 'test@example.com', displayName: 'Test User' },
+  userProfile: { name: 'Test User', email: 'test@example.com' },
+  updateUserProfile: jest.fn(() => Promise.resolve()),
+  login: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
+  logout: jest.fn(() => Promise.resolve()),
+  loading: false,
+  error: null,
+};
+
 jest.mock('../contexts/AuthContext', () => ({
-  useAuth: jest.fn(() => ({
-    currentUser: { uid: 'test-uid', email: 'test@example.com' },
-    userProfile: { name: 'Test User', email: 'test@example.com' },
-    updateUserProfile: jest.fn(() => Promise.resolve()),
-    login: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
-    logout: jest.fn(() => Promise.resolve()),
-    loading: false,
-    error: null,
-  })),
+  useAuth: jest.fn(() => mockAuthContext),
   AuthProvider: ({ children }) => children,
 }));
 
@@ -119,9 +122,11 @@ export const renderWithProviders = (ui, options = {}) => {
 export const renderHomeWithProviders = (ui, options = {}) => {
   const HomeWrapper = ({ children }) => (
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <DevToolsProvider>
-        {children}
-      </DevToolsProvider>
+      <AuthProvider>
+        <DevToolsProvider>
+          {children}
+        </DevToolsProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
   return render(ui, { wrapper: HomeWrapper, ...options });

@@ -10,6 +10,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.2s ease, color 0.2s ease;
+  /* Mobile optimization */
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   
   /* Dark mode body styles */
@@ -473,4 +477,102 @@ code {
 
 .text-responsive-xl {
   font-size: clamp(2rem, 6vw, 4rem);
+}
+/* Mobile Optimization Styles */
+@media (max-width: 768px) {
+
+  /* Touch targets - minimum 44px for accessibility */
+  button,
+  .clickable,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+
+  /* Prevent double-tap zoom */
+  * {
+    touch-action: manipulation;
+  }
+
+  /* Improve text readability */
+  body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  /* Better spacing for mobile */
+  .container {
+    padding: 1rem;
+  }
+
+  /* Responsive grid adjustments */
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Card spacing */
+  .card {
+    margin-bottom: 1rem;
+  }
+
+  /* Button improvements */
+  .btn {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    font-size: 16px;
+  }
+
+  /* Form improvements */
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+    font-size: 16px;
+    padding: 0.75rem;
+  }
+
+  /* Navigation improvements */
+  .nav-item {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Prevent horizontal scrolling */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Better touch feedback */
+  button:active,
+  .clickable:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
+}
+
+/* Tablet optimization */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .container {
+    padding: 1.5rem;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+
+  /* Ensure crisp text on high DPI displays */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }

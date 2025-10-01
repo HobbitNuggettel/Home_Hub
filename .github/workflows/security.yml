@@ -1,115 +1,102 @@
-name: 🔒 Security Scan
+name: Security Scan
 
 on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main, develop ]
   schedule:
-    # Run security scan weekly on Mondays at 2 AM UTC
-    - cron: '0 2 * * 1'
-  workflow_dispatch:
-    inputs:
-      reason:
-        description: 'Reason for manual trigger'
-        required: false
-        default: 'Manual security scan'
+    - cron: '0 2 * * 1' # Weekly on Monday at 2 AM
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  security-scan:
-    name: 🔍 Security Analysis
+  dependency-scan:
+    name: Dependency Vulnerability Scan
     runs-on: ubuntu-latest
     
     steps:
-    - name: 📥 Checkout code
+    - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: 📦 Setup Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20.x'
+        node-version: '18'
         cache: 'npm'
         
-    - name: 📦 Install dependencies
+    - name: Install dependencies
       run: npm ci
       
-    - name: 🔒 Run npm audit
-      run: |
-        echo "🔍 Running npm security audit..."
-        npm audit --audit-level moderate || true
-        echo "✅ Security audit completed"
-        
-    - name: 🔍 Check for secrets (basic)
-      run: |
-        echo "🔍 Checking for potential secrets in code..."
-        if grep -r "AKIA" src/ --exclude-dir=node_modules || \
-           grep -r "sk_live_" src/ --exclude-dir=node_modules || \
-           grep -r "sk_test_" src/ --exclude-dir=node_modules; then
-          echo "⚠️ Potential secrets found!"
-          exit 1
-        else
-          echo "✅ No obvious secrets detected"
-        fi
-      continue-on-error: true
-        
-    - name: 📊 Generate security report
-      run: |
-        echo "# 🔒 Security Report" > security-report.md
-        echo "Generated on: $(date)" >> security-report.md
-        echo "" >> security-report.md
-        echo "## ✅ Security Checks Completed" >> security-report.md
-        echo "- npm audit: ✅ Completed" >> security-report.md
-        echo "- Secret detection: ✅ Completed" >> security-report.md
-        echo "" >> security-report.md
-        echo "See workflow logs for details" >> security-report.md
-        cat security-report.md
-        
-    - name: 📤 Upload security report
-      uses: actions/upload-artifact@v4
+    - name: Run npm audit
+      run: npm audit --audit-level moderate
+      
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
-        name: security-report
-        path: security-report.md
-        retention-days: 30
+        args: --severity-threshold=high
         
-  dependency-check:
-    name: 📦 Dependency Analysis
+  code-scan:
+    name: Code Security Scan
     runs-on: ubuntu-latest
     
     steps:
-    - name: 📥 Checkout code
+    - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: 📦 Setup Node.js
-      uses: actions/setup-node@v4
+    - name: Run CodeQL Analysis
+      uses: github/codeql-action/init@v2
       with:
-        node-version: '20.x'
-        cache: 'npm'
+        languages: javascript
         
-    - name: 📦 Install dependencies
-      run: npm ci
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
       
-    - name: 🔍 Check for outdated dependencies
-      run: |
-        echo "📊 Checking for outdated dependencies..."
-        npm outdated || true
-        
-    - name: 📊 Generate dependency report
-      run: |
-        echo "# 📦 Dependency Report" > dependency-report.md
-        echo "Generated on: $(date)" >> dependency-report.md
-        echo "" >> dependency-report.md
-        echo "## 📊 Dependency Stats" >> dependency-report.md
-        
-        PROD_COUNT=$(cat package.json | grep -c '".*":' || echo "0")
-        echo "- Total dependencies: ~${PROD_COUNT}" >> dependency-report.md
-        echo "" >> dependency-report.md
-        echo "✅ Dependency check completed" >> dependency-report.md
-        
-        cat dependency-report.md
-        
-    - name: 📤 Upload dependency report
-      uses: actions/upload-artifact@v4
+    - name: Run Semgrep
+      uses: returntocorp/semgrep-action@v1
       with:
-        name: dependency-report
-        path: dependency-report.md
-        retention-days: 30
+        config: >-
+          p/security-audit
+          p/owasp-top-ten
+          p/javascript
+          
+  container-scan:
+    name: Container Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Build Docker image
+      run: docker build -t home-hub:latest .
+      
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'home-hub:latest'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        
+    - name: Upload Trivy scan results
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-results.sarif'
+        
+  secrets-scan:
+    name: Secrets Detection
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Run TruffleHog
+      uses: trufflesecurity/trufflehog@main
+      with:
+        path: ./
+        base: main
+        head: HEAD
+        extra_args: --debug --only-verified
