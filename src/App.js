@@ -1,47 +1,86 @@
-// React import not needed in React 17+
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
 import { DevToolsProvider } from './contexts/DevToolsContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { RealTimeProvider } from './contexts/RealTimeContext';
-import SafariCompatibility from './components/SafariCompatibility';
-import SafariErrorBoundary from './components/SafariErrorBoundary';
-import LandingPage from './components/LandingPage';
-import Settings from './components/Settings';
-import Home from './components/Home';
-import Navigation from './components/Navigation';
-import Login from './components/auth/Login';
-import SignUp from './components/auth/SignUp';
-import Inventory from './components/modules/Inventory';
-import Spending from './components/modules/Spending';
-import Collaboration from './components/modules/Collaboration';
-import ShoppingLists from './components/modules/ShoppingLists';
-import Recipes from './components/modules/Recipes';
-import Integrations from './components/modules/Integrations';
-import DataAlerts from './components/modules/DataAlerts';
-import About from './components/modules/About';
-import ImageManagement from './components/modules/ImageManagement';
-import AISuggestions from './components/modules/AISuggestions';
-import Maintenance from './components/modules/Maintenance';
-import Profile from './components/Profile';
-import RealTimeCollaboration from './components/RealTimeCollaboration';
-import UserAccessManagement from './components/UserAccessManagement';
-import AdvancedAnalytics from './components/AdvancedAnalytics';
-import PerformanceAnalytics from './components/PerformanceAnalytics';
+import { MonitoringProvider } from './contexts/MonitoringContext';
+import { ValidationProvider } from './contexts/ValidationContext';
+import { OfflineProvider } from './contexts/OfflineContext';
+import { LanguageProvider } from './contexts/LanguageContext';
+import { AnalyticsProvider } from './contexts/AnalyticsContext';
+import { SafariCompatibility, SafariErrorBoundary, ErrorBoundary } from './components/common';
+import { initializePWA } from './utils/serviceWorker';
+import './i18n';
+
+// Lazy load components for better performance
+const LandingPage = lazy(() => import('./components/LandingPage'));
+const Settings = lazy(() => import('./components/Settings'));
+const Home = lazy(() => import('./components/Home'));
+const Navigation = lazy(() => import('./components/layout/Navigation'));
+const Login = lazy(() => import('./components/auth/Login'));
+const SignUp = lazy(() => import('./components/auth/SignUp'));
+const Inventory = lazy(() => import('./modules/inventory/InventoryManagement'));
+const Spending = lazy(() => import('./modules/spending/SpendingTracker'));
+const Collaboration = lazy(() => import('./modules/collaboration/RealTimeCollaboration'));
+const ShoppingLists = lazy(() => import('./components/modules/ShoppingLists'));
+const Recipes = lazy(() => import('./components/modules/Recipes'));
+const Integrations = lazy(() => import('./modules/integrations/IntegrationsAutomation'));
+const DataAlerts = lazy(() => import('./components/modules/DataAlerts'));
+const About = lazy(() => import('./components/modules/About'));
+const ImageManagement = lazy(() => import('./components/modules/ImageManagement'));
+const AISuggestions = lazy(() => import('./components/modules/AISuggestions'));
+const Maintenance = lazy(() => import('./components/modules/Maintenance'));
+const Profile = lazy(() => import('./components/Profile'));
+const UserAccessManagement = lazy(() => import('./components/UserAccessManagement'));
+const AdvancedAnalytics = lazy(() => import('./modules/analytics/AdvancedAnalytics'));
+const PerformanceAnalytics = lazy(() => import('./modules/analytics/PerformanceAnalytics'));
+const MonitoringDashboard = lazy(() => import('./components/monitoring/MonitoringDashboard'));
+const VersionManagement = lazy(() => import('./components/api/VersionManagement'));
+const ValidationDashboard = lazy(() => import('./components/validation/ValidationDashboard'));
+const OfflineDataManager = lazy(() => import('./components/offline/OfflineDataManager'));
+const OfflineIndicator = lazy(() => import('./components/offline/OfflineIndicator'));
+const PWASettings = lazy(() => import('./components/pwa/PWASettings'));
+const PWAInstallPrompt = lazy(() => import('./components/pwa/PWAInstallPrompt'));
+const PWAUpdateNotification = lazy(() => import('./components/pwa/PWAInstallPrompt').then(module => ({ default: module.PWAUpdateNotification })));
+const AnalyticsDashboard = lazy(() => import('./components/analytics/AnalyticsDashboard'));
+const EnterpriseDashboard = lazy(() => import('./components/enterprise/EnterpriseDashboard'));
 import LogoutTest from './components/LogoutTest';
 
+// Loading component for Suspense fallback
+const LoadingSpinner = () => (
+  <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+      <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
+    </div>
+  </div>
+);
+
 function App() {
+  // Initialize PWA features
+  React.useEffect(() => {
+    initializePWA();
+  }, []);
+
   return (
-    <SafariErrorBoundary>
-      <SafariCompatibility>
-        <ThemeProvider>
-          <DevToolsProvider>
-            <AuthProvider>
-              <RealTimeProvider>
+    <ErrorBoundary>
+      <SafariErrorBoundary>
+        <SafariCompatibility>
+          <ThemeProvider>
+            <DevToolsProvider>
+              <AuthProvider>
+                <RealTimeProvider>
+                  <MonitoringProvider>
+                    <ValidationProvider>
+                      <OfflineProvider>
+                        <LanguageProvider>
+                          <AnalyticsProvider>
             <Router>
               <div className="App">
-                <Routes>
+                                <Suspense fallback={<LoadingSpinner />}>
+                                  <Routes>
                   {/* Public Routes */}
                   <Route path="/" element={<LandingPage />} />
                   <Route path="/login" element={<Login />} />
@@ -79,7 +118,11 @@ function App() {
                   <Route path="/collaboration" element={
                     <>
                       <Navigation />
-                      <Collaboration />
+                                        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 p-6">
+                                          <div className="max-w-7xl mx-auto">
+                                            <Collaboration />
+                                          </div>
+                                        </div>
                     </>
                   } />
                   <Route path="/shopping-lists" element={
@@ -135,7 +178,7 @@ function App() {
                   <Route path="/real-time-demo" element={
                     <>
                       <Navigation />
-                      <div className="min-h-screen bg-gray-50 p-6">
+                                        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 p-6">
                         <div className="max-w-7xl mx-auto">
                           <div className="mb-8">
                             <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -145,7 +188,7 @@ function App() {
                               Experience the new real-time collaboration features in action!
                             </p>
                           </div>
-                          <RealTimeCollaboration />
+                                            <Collaboration />
                         </div>
                       </div>
                     </>
@@ -155,7 +198,7 @@ function App() {
                   <Route path="/user-access" element={
                     <>
                       <Navigation />
-                      <div className="min-h-screen bg-gray-50 p-6">
+                                        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 p-6">
                         <div className="max-w-7xl mx-auto">
                           <div className="mb-8">
                             <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -187,6 +230,62 @@ function App() {
                     </>
                   } />
 
+                                    {/* Phase 2: Monitoring Dashboard */}
+                                    <Route path="/monitoring" element={
+                                      <>
+                                        <Navigation />
+                                        <MonitoringDashboard />
+                                      </>
+                                    } />
+
+                                    {/* Phase 2: API Version Management */}
+                                    <Route path="/api-versioning" element={
+                                      <>
+                                        <Navigation />
+                                        <VersionManagement />
+                                      </>
+                                    } />
+
+                                    {/* Phase 2: Data Validation */}
+                                    <Route path="/validation" element={
+                                      <>
+                                        <Navigation />
+                                        <ValidationDashboard />
+                                      </>
+                                    } />
+
+                                    {/* Phase 2: Offline Support */}
+                                    <Route path="/offline" element={
+                                      <>
+                                        <Navigation />
+                                        <OfflineDataManager />
+                                      </>
+                                    } />
+
+                                    {/* Phase 2: PWA Settings */}
+                                    <Route path="/pwa" element={
+                                      <>
+                                        <Navigation />
+                                        <PWASettings />
+                                      </>
+                                    } />
+
+                                    {/* Phase 2: Analytics Dashboard */}
+                                    <Route path="/analytics" element={
+                                      <>
+                                        <Navigation />
+                                        <AnalyticsDashboard />
+                                      </>
+                                    } />
+
+                                    {/* Phase 2: Enterprise Dashboard */}
+                                    <Route path="/enterprise" element={
+                                      <>
+                                        <Navigation />
+                                        <EnterpriseDashboard />
+                                      </>
+                                    } />
+
                   <Route path="*" element={
                     <>
                       <Navigation />
@@ -202,6 +301,7 @@ function App() {
                     </>
                   } />
                 </Routes>
+                                </Suspense>
 
                 {/* Toast Notifications */}
                 <Toaster
@@ -214,14 +314,35 @@ function App() {
                     },
                   }}
                 />
+
+                                {/* Offline Indicator */}
+                                <Suspense fallback={null}>
+                                  <OfflineIndicator />
+                                </Suspense>
+
+                                {/* PWA Install Prompt */}
+                                <Suspense fallback={null}>
+                                  <PWAInstallPrompt />
+                                </Suspense>
+
+                                {/* PWA Update Notification */}
+                                <Suspense fallback={null}>
+                                  <PWAUpdateNotification />
+                                </Suspense>
               </div>
             </Router>
+                          </AnalyticsProvider>
+                        </LanguageProvider>
+                      </OfflineProvider>
+                    </ValidationProvider>
+                  </MonitoringProvider>
               </RealTimeProvider>
             </AuthProvider>
           </DevToolsProvider>
-        </ThemeProvider>
-      </SafariCompatibility>
-    </SafariErrorBoundary>
+          </ThemeProvider>
+        </SafariCompatibility>
+      </SafariErrorBoundary>
+    </ErrorBoundary>
   );
 }
 
