@@ -5,3 +5,6 @@ export { default as InventoryList } from './InventoryList';
 export { default as InventoryAnalytics } from './InventoryAnalytics';
 export { default as InventoryAlerts } from './InventoryAlerts';
 export { default as AIInsights } from './AIInsights';
+
+
+

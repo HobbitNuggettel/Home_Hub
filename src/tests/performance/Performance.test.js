@@ -190,3 +190,6 @@ describe('Performance Tests', () => {
     cy.wait('@getInventory');
   });
 });
+
+
+

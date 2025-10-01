@@ -2,49 +2,11 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '../contexts/ThemeContext';
-import { DevToolsProvider } from '../contexts/DevToolsContext';
-import { AuthProvider } from '../contexts/AuthContext';
 
-// Mock AuthContext for tests
-const mockAuthContext = {
-  currentUser: { uid: 'test-uid', email: 'test@example.com', displayName: 'Test User' },
-  userProfile: { name: 'Test User', email: 'test@example.com' },
-  updateUserProfile: jest.fn(() => Promise.resolve()),
-  login: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
-  logout: jest.fn(() => Promise.resolve()),
-  loading: false,
-  error: null,
-};
-
-jest.mock('../contexts/AuthContext', () => ({
-  useAuth: jest.fn(() => mockAuthContext),
-  AuthProvider: ({ children }) => children,
-}));
-
-// Mock RealTimeContext for tests
-jest.mock('../contexts/RealTimeContext', () => ({
-  useRealTime: jest.fn(() => ({
-    isConnected: true,
-    connectionStatus: 'connected',
-    subscribe: jest.fn(() => jest.fn()),
-    stats: { totalListeners: 0, activeConnections: 1 },
-  })),
-  RealTimeProvider: ({ children }) => children,
-}));
-
-// Mock DevToolsContext for tests
-jest.mock('../contexts/DevToolsContext', () => ({
-  useDevTools: jest.fn(() => ({
-    isDevMode: false,
-    toggleDevMode: jest.fn(),
-    showDevTools: false,
-    toggleDevTools: jest.fn(),
-  })),
-  DevToolsProvider: ({ children }) => children,
-}));
-
-// Mock AuthContext to avoid Firebase dependencies in tests
+// Mock providers for tests
 const MockAuthProvider = ({ children }) => children;
+const MockDevToolsProvider = ({ children }) => children;
+const MockRealTimeProvider = ({ children }) => children;
 
 // Mock useInventory hook
 export const mockUseInventory = {
@@ -106,7 +68,11 @@ const AllTheProviders = ({ children }) => {
     <BrowserRouter>
       <ThemeProvider>
         <MockAuthProvider>
-          {children}
+          <MockDevToolsProvider>
+            <MockRealTimeProvider>
+              {children}
+            </MockRealTimeProvider>
+          </MockDevToolsProvider>
         </MockAuthProvider>
       </ThemeProvider>
     </BrowserRouter>
@@ -122,11 +88,15 @@ export const renderWithProviders = (ui, options = {}) => {
 export const renderHomeWithProviders = (ui, options = {}) => {
   const HomeWrapper = ({ children }) => (
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <AuthProvider>
-        <DevToolsProvider>
-          {children}
-        </DevToolsProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <MockAuthProvider>
+          <MockDevToolsProvider>
+            <MockRealTimeProvider>
+              {children}
+            </MockRealTimeProvider>
+          </MockDevToolsProvider>
+        </MockAuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
   return render(ui, { wrapper: HomeWrapper, ...options });

@@ -302,3 +302,6 @@ PWAInstallPrompt.propTypes = {
 };
 
 export default PWAInstallPrompt;
+
+
+

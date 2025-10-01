@@ -50,3 +50,6 @@ Cypress.Commands.add('checkAccessibility', () => {
   cy.injectAxe();
   cy.checkA11y();
 });
+
+
+

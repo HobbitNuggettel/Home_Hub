@@ -22,3 +22,6 @@ const MobileMenuFooter = ({ userProfile, onLogout }) => {
 };
 
 export default MobileMenuFooter;
+
+
+
