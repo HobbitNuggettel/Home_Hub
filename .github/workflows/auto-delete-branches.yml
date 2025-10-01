@@ -1,0 +1,157 @@
+name: Auto Delete Merged Branches
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  delete-merged-branch:
+    name: 🗑️ Auto Delete Merged Branch
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: 🔍 Check Branch Type
+        id: check-branch
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          echo "Branch name: $BRANCH_NAME"
+          
+          # Check if branch should be deleted
+          if [[ "$BRANCH_NAME" =~ ^(feature|fix)/.* ]]; then
+            echo "✅ Branch matches deletion pattern: $BRANCH_NAME"
+            echo "should_delete=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Branch does not match deletion pattern: $BRANCH_NAME"
+            echo "should_delete=false" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: 🛡️ Verify Branch Protection
+        id: verify-protection
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          
+          # List of protected branch patterns
+          PROTECTED_PATTERNS=(
+            "main"
+            "master"
+            "production"
+            "production-backup"
+            "develop"
+            "development"
+            "staging"
+            "release"
+            "hotfix"
+            "main2"
+            "main3"
+            "backup"
+            "backup-*"
+            "release-*"
+            "hotfix-*"
+            "staging-*"
+            "develop-*"
+            "production-*"
+          )
+          
+          is_protected=false
+          for pattern in "${PROTECTED_PATTERNS[@]}"; do
+            if [[ "$BRANCH_NAME" == $pattern ]] || [[ "$BRANCH_NAME" =~ ^$pattern ]]; then
+              echo "🛡️ Branch is protected: $BRANCH_NAME matches pattern: $pattern"
+              is_protected=true
+              break
+            fi
+          done
+          
+          if [ "$is_protected" = true ]; then
+            echo "is_protected=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_protected=false" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: 🗑️ Delete Branch
+        if: steps.check-branch.outputs.should_delete == 'true' && steps.verify-protection.outputs.is_protected == 'false'
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          echo "🗑️ Deleting branch: $BRANCH_NAME"
+          
+          # Delete local branch
+          git branch -D "$BRANCH_NAME" || echo "Local branch not found or already deleted"
+          
+          # Delete remote branch
+          git push origin --delete "$BRANCH_NAME" || echo "Remote branch not found or already deleted"
+          
+          echo "✅ Successfully deleted branch: $BRANCH_NAME"
+          
+      - name: 📋 Summary
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          echo "## 🗑️ Branch Deletion Summary" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** \`$BRANCH_NAME\`" >> $GITHUB_STEP_SUMMARY
+          echo "**PR:** #${{ github.event.pull_request.number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** ${{ github.event.pull_request.merge_commit_sha }}" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.check-branch.outputs.should_delete }}" = "true" ] && [ "${{ steps.verify-protection.outputs.is_protected }}" = "false" ]; then
+            echo "✅ **Action:** Branch deleted successfully" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.verify-protection.outputs.is_protected }}" = "true" ]; then
+            echo "🛡️ **Action:** Branch protected - not deleted" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Action:** Branch does not match deletion pattern" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Patterns deleted:** \`feature/*\`, \`fix/*\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Protected patterns:** \`main\`, \`production\`, \`production-backup\`, \`develop\`, \`staging\`, \`release\`, \`hotfix\`, \`backup-*\`, \`release-*\`, \`hotfix-*\`, \`staging-*\`, \`develop-*\`, \`production-*\`" >> $GITHUB_STEP_SUMMARY
+
+  # Optional: Clean up old branches that might have been missed
+  cleanup-old-branches:
+    name: 🧹 Cleanup Old Branches
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: 🧹 Find Old Merged Branches
+        id: find-old
+        run: |
+          # Get all remote branches
+          git fetch --prune
+          
+          # Find merged branches older than 7 days
+          OLD_BRANCHES=$(git for-each-ref --format='%(refname:short) %(committerdate)' refs/remotes/origin | \
+            awk '$2 < "'$(date -d '7 days ago' --iso-8601)'" {print $1}' | \
+            grep -E '^origin/(feature|fix)/' | \
+            sed 's/origin\///' | \
+            grep -v -E '^(main|master|production|production-backup|develop|development|staging|release|hotfix)$' | \
+            grep -v -E '^(backup-|release-|hotfix-|staging-|develop-|production-)')
+          
+          if [ -n "$OLD_BRANCHES" ]; then
+            echo "Found old branches to clean up:"
+            echo "$OLD_BRANCHES"
+            echo "branches<<EOF" >> $GITHUB_OUTPUT
+            echo "$OLD_BRANCHES" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "No old branches found"
+            echo "branches=" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: 🗑️ Delete Old Branches
+        if: steps.find-old.outputs.branches != ''
+        run: |
+          echo "${{ steps.find-old.outputs.branches }}" | while read -r branch; do
+            if [ -n "$branch" ]; then
+              echo "Deleting old branch: $branch"
+              git push origin --delete "$branch" || echo "Failed to delete $branch"
+            fi
+          done
