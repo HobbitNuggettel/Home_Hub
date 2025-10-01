@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   Menu, 
@@ -19,161 +19,176 @@ import {
   Lightbulb,
   Wifi,
   Shield,
-  Smartphone
+  Smartphone,
+  ChevronLeft,
+  ChevronRight,
+  ChefHat,
+  TrendingUp,
+  Monitor,
+  Database,
+  AlertTriangle,
+  Code,
+  Building2,
+  Bell,
+  Cpu,
+  Globe,
+  FileText,
+  Lock,
+  CheckCircle,
+  GitBranch,
+  BarChart,
+  PieChart,
+  Gauge,
+  Target,
+  UserCheck,
+  Search,
+  Eye,
+  HelpCircle
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import DarkModeToggle from './DarkModeToggle';
 import LanguageSelector from '../i18n/LanguageSelector';
+import FixedHeader from './FixedHeader';
+import '../../styles/sidebar.css';
 
 export default function Navigation() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [sidebarState, setSidebarState] = useState('hidden'); // 'hidden', 'collapsed', 'expanded'
   const auth = useAuth();
   const currentUser = auth?.currentUser;
   const userProfile = auth?.userProfile;
   const logout = auth?.logout;
   const navigate = useNavigate();
 
-  // Debug logging
-  console.log('Navigation render - currentUser:', currentUser);
-  console.log('Navigation render - userProfile:', userProfile);
-
+  // Navigation items with icons and tooltips
   const navigationItems = [
-    // CORE FEATURES - Most important daily use features
     {
-      name: '🏠 Home',
+      name: 'Home',
       href: '/home',
       icon: Home,
-      description: 'Dashboard and overview'
+      tooltip: 'Dashboard and overview'
     },
     {
-      name: '📦 Inventory Management',
+      name: 'Inventory Management',
       href: '/inventory',
       icon: Package,
-      description: 'Track household items and supplies'
+      tooltip: 'Track household items and supplies',
+      action: true
     },
     {
-      name: '💰 Spending & Budgeting',
+      name: 'Spending & Budgeting',
       href: '/spending',
       icon: DollarSign,
-      description: 'Monitor expenses and manage budgets'
+      tooltip: 'Monitor expenses and manage budgets',
+      action: true
     },
     {
-      name: '🛒 Shopping Lists',
+      name: 'Shopping Lists',
       href: '/shopping-lists',
       icon: ShoppingCart,
-      description: 'Create and manage shopping lists'
+      tooltip: 'Create and manage shopping lists',
+      action: true
     },
     {
-      name: '🍳 Recipe Management',
+      name: 'Recipe Management',
       href: '/recipes',
-      icon: Utensils,
-      description: 'Store recipes and plan meals'
+      icon: ChefHat,
+      tooltip: 'Store recipes and plan meals'
     },
-
-    // COLLABORATION & AI - Smart features
     {
-      name: '👥 Collaboration',
+      name: 'Collaboration',
       href: '/collaboration',
       icon: Users,
-      description: 'Manage household members and roles'
+      tooltip: 'Manage household members and roles'
     },
     {
-      name: '🧠 Smart Suggestions',
+      name: 'Smart Suggestions',
       href: '/ai-suggestions',
       icon: Lightbulb,
-      description: 'AI-powered insights and recommendations'
+      tooltip: 'AI-powered insights and recommendations'
     },
     {
-      name: '🚀 Real-time Demo',
+      name: 'Real-time Demo',
       href: '/real-time-demo',
       icon: Wifi,
-      description: 'Phase 2: Real-time collaboration features'
+      tooltip: 'Phase 2: Real-time collaboration features'
     },
-
-    // INTEGRATIONS & AUTOMATION - Smart home features
     {
-      name: '⚡ Integrations & Automation',
+      name: 'Integrations & Automation',
       href: '/integrations',
       icon: Zap,
-      description: 'Smart home integration and automation'
+      tooltip: 'Smart home integration and automation'
     },
     {
-      name: '📱 PWA Settings',
+      name: 'PWA Settings',
       href: '/pwa',
       icon: Smartphone,
-      description: 'Progressive Web App settings and features'
+      tooltip: 'Progressive Web App settings and features'
     },
     {
-      name: '📱 Offline Support',
+      name: 'Offline Support',
       href: '/offline',
-      icon: Wifi,
-      description: 'Offline data management and synchronization'
+      icon: Database,
+      tooltip: 'Offline data management and synchronization'
     },
-
-    // ANALYTICS & MONITORING - Data insights
     {
-      name: '📊 Analytics',
+      name: 'Analytics',
       href: '/analytics',
       icon: BarChart3,
-      description: 'Comprehensive analytics and user behavior tracking'
+      tooltip: 'Comprehensive analytics and user behavior tracking'
     },
     {
-      name: '📊 Advanced Analytics',
+      name: 'Advanced Analytics',
       href: '/advanced-analytics',
-      icon: BarChart3,
-      description: 'Data visualization and analytics dashboard'
+      icon: TrendingUp,
+      tooltip: 'Data visualization and analytics dashboard'
     },
     {
-      name: '📈 Monitoring Dashboard',
+      name: 'Monitoring Dashboard',
       href: '/monitoring',
-      icon: BarChart3,
-      description: 'System monitoring, logs, and performance metrics'
+      icon: Monitor,
+      tooltip: 'System monitoring, logs, and performance metrics'
     },
     {
-      name: '⚡ Performance Analytics',
+      name: 'Performance Analytics',
       href: '/performance-analytics',
-      icon: Activity,
-      description: 'Real-time performance monitoring and optimization'
+      icon: Gauge,
+      tooltip: 'Real-time performance monitoring and optimization'
     },
     {
-      name: '📊 Data & Alerts',
+      name: 'Data & Alerts',
       href: '/data-alerts',
-      icon: Activity,
-      description: 'Analytics, monitoring, and alerts'
+      icon: Bell,
+      tooltip: 'Analytics, monitoring, and alerts'
     },
-
-    // ADMINISTRATION & SECURITY - Management features
     {
-      name: '🔐 User Access',
+      name: 'User Access',
       href: '/user-access',
-      icon: Shield,
-      description: 'Manage user permissions and access control'
+      icon: UserCheck,
+      tooltip: 'Manage user permissions and access control'
     },
     {
-      name: '🛡️ Data Validation',
+      name: 'Data Validation',
       href: '/validation',
-      icon: Shield,
-      description: 'Data validation, sanitization, and testing tools'
+      icon: CheckCircle,
+      tooltip: 'Data validation, sanitization, and testing tools'
     },
     {
-      name: '🔧 API Versioning',
+      name: 'API Versioning',
       href: '/api-versioning',
-      icon: Settings,
-      description: 'API version management and migration tools'
+      icon: GitBranch,
+      tooltip: 'API version management and migration tools'
     },
     {
-      name: '🏢 Enterprise',
+      name: 'Enterprise',
       href: '/enterprise',
-      icon: Shield,
-      description: 'Enterprise features: SSO, RBAC, audit logging, compliance'
+      icon: Building2,
+      tooltip: 'Enterprise features: SSO, RBAC, audit logging, compliance'
     },
-
-    // INFORMATION - Help and about
     {
-      name: 'ℹ️ About',
+      name: 'About',
       href: '/about',
       icon: Info,
-      description: 'Features, roadmap, and information'
+      tooltip: 'Features, roadmap, and information'
     }
   ];
 
@@ -182,255 +197,326 @@ export default function Navigation() {
       name: 'Profile',
       href: '/profile',
       icon: User,
-      description: 'View and edit your profile'
+      tooltip: 'View and edit your profile'
     },
     {
       name: 'Settings',
       href: '/settings',
       icon: Settings,
-      description: 'Application preferences'
+      tooltip: 'Application preferences'
     }
   ];
 
+  // Toggle sidebar through three states - exactly like HomeVault
+  const toggleSidebar = () => {
+    const body = document.body;
+
+    // State 1: Hidden → Collapsed (show icons)
+    if (!body.classList.contains('sidebar-visible') && !body.classList.contains('sidebar-collapsed')) {
+      setSidebarState('collapsed');
+      body.classList.add('sidebar-collapsed');
+    }
+    // State 2: Collapsed → Expanded (show full)
+    else if (body.classList.contains('sidebar-collapsed')) {
+      setSidebarState('expanded');
+      body.classList.remove('sidebar-collapsed');
+      body.classList.add('sidebar-visible');
+    }
+    // State 3: Expanded → Hidden
+    else {
+      setSidebarState('hidden');
+      body.classList.remove('sidebar-visible');
+    }
+  };
+
+  // Handle navigation and close menu
   const handleNavigation = (href) => {
     navigate(href);
-    setIsMenuOpen(false);
+    // Close menu after navigation
+    setSidebarState('hidden');
+    document.body.classList.remove('sidebar-visible', 'sidebar-collapsed');
   };
 
-  const handleMenuToggle = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
+  // Handle logout
   const handleLogout = async () => {
     try {
       console.log('🚪 Logout button clicked');
-      console.log('Current user before logout:', currentUser);
-      console.log('Logout function:', logout);
-
-      const result = await logout();
-      console.log('✅ Logout successful:', result);
-
-      setIsMenuOpen(false);
-      console.log('Menu closed, navigating to login...');
+      await logout();
+      setSidebarState('hidden');
+      document.body.classList.remove('sidebar-visible', 'sidebar-collapsed');
       navigate('/login');
     } catch (error) {
       console.error('❌ Logout error:', error);
-      console.error('Error details:', {
-        message: error.message,
-        stack: error.stack,
-        name: error.name
-      });
-
-      // Even if logout fails, close menu and redirect
-      setIsMenuOpen(false);
+      setSidebarState('hidden');
+      document.body.classList.remove('sidebar-visible', 'sidebar-collapsed');
       navigate('/login');
     }
   };
 
+  // Get current path for active state
+  const currentPath = window.location.pathname;
+
+  // Effect to manage content shifting when sidebar state changes
+  useEffect(() => {
+    const body = document.body;
+
+    // Remove all sidebar classes first
+    body.classList.remove('sidebar-visible', 'sidebar-collapsed');
+
+    // Apply appropriate class based on state
+    if (sidebarState === 'collapsed') {
+      body.classList.add('sidebar-collapsed');
+    } else if (sidebarState === 'expanded') {
+      body.classList.add('sidebar-visible');
+    }
+    // For 'hidden' state, no classes are added (sidebar stays hidden)
+
+    // Cleanup function
+    return () => {
+      body.classList.remove('sidebar-visible', 'sidebar-collapsed');
+    };
+  }, [sidebarState]);
+
   return (
     <>
-      {/* Hamburger Menu Button */}
-      <button
-        onClick={handleMenuToggle}
-        className="fixed top-4 left-4 z-[9999] p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors shadow-lg md:p-2 mobile-nav-button"
-        aria-label="Open menu"
+      {/* Fixed Header */}
+      <FixedHeader
+        onMenuToggle={toggleSidebar}
+        isMenuOpen={sidebarState !== 'hidden'}
+      />
 
-      >
-        <Menu size={24} />
+      {/* Sidebar */}
+      <aside className="sidebar" id="sidebar">
+        {/* Header */}
+        <div className="sidebar-header">
+          <div className="sidebar-logo">
+            <div className="sidebar-logo-icon">
+              <Home size={20} />
+            </div>
+            <div className="sidebar-logo-text">Home Hub</div>
+          </div>
+        </div>
 
-      </button>
-
-      {/* Menu Overlay */}
-      {isMenuOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-[9998]">
-
-          <div className="fixed left-0 top-0 h-full w-[95vw] max-w-sm bg-white dark:bg-gray-800 shadow-xl flex flex-col overflow-hidden mobile-nav-container">
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <Home className="text-white" size={24} />
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold text-gray-900 dark:text-white">Home Hub</h1>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Navigation</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setIsMenuOpen(false)}
-                className="p-2 text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-100 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                aria-label="Close menu"
+        {/* Main Navigation */}
+        <ul className="sidebar-menu">
+          {/* Core Features Section */}
+          <div className="sidebar-section-header">Core Features</div>
+          {navigationItems.slice(0, 5).map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <li
+                key={item.name}
+                className={`sidebar-item ${currentPath === item.href ? 'active' : ''} ${item.action ? 'action' : ''}`}
+                data-tooltip={sidebarState === 'collapsed' ? item.tooltip : ''}
               >
-                <X size={24} />
-              </button>
+                <button
+                  onClick={() => handleNavigation(item.href)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleNavigation(item.href)}
+                  className="sidebar-item-button"
+                  aria-label={item.name}
+                >
+                  <span className="sidebar-icon">
+                    <IconComponent size={20} />
+                  </span>
+                  <span className="sidebar-text">{item.name}</span>
+                </button>
+              </li>
+            );
+          })}
+
+          {/* Smart Features Section */}
+          <div className="sidebar-section-header">Smart Features</div>
+          {navigationItems.slice(5, 9).map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <li
+                key={item.name}
+                className={`sidebar-item ${currentPath === item.href ? 'active' : ''} ${item.action ? 'action' : ''}`}
+                data-tooltip={sidebarState === 'collapsed' ? item.tooltip : ''}
+              >
+                <button
+                  onClick={() => handleNavigation(item.href)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleNavigation(item.href)}
+                  className="sidebar-item-button"
+                  aria-label={item.name}
+                  tabIndex={0}
+                >
+                  <IconComponent className="sidebar-icon" size={20} />
+                  <span className="sidebar-text">{item.name}</span>
+                </button>
+              </li>
+            );
+          })}
+
+          {/* System & Analytics Section */}
+          <div className="sidebar-section-header">System & Analytics</div>
+          {navigationItems.slice(9, 13).map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <li
+                key={item.name}
+                className={`sidebar-item ${currentPath === item.href ? 'active' : ''} ${item.action ? 'action' : ''}`}
+                data-tooltip={sidebarState === 'collapsed' ? item.tooltip : ''}
+              >
+                <button
+                  onClick={() => handleNavigation(item.href)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleNavigation(item.href)}
+                  className="sidebar-item-button"
+                  aria-label={item.name}
+                  tabIndex={0}
+                >
+                  <IconComponent className="sidebar-icon" size={20} />
+                  <span className="sidebar-text">{item.name}</span>
+                </button>
+              </li>
+            );
+          })}
+
+          {/* Administration Section */}
+          <div className="sidebar-section-header">Administration</div>
+          {navigationItems.slice(13).map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <li
+                key={item.name}
+                className={`sidebar-item ${currentPath === item.href ? 'active' : ''} ${item.action ? 'action' : ''}`}
+                data-tooltip={sidebarState === 'collapsed' ? item.tooltip : ''}
+              >
+                <button
+                  onClick={() => handleNavigation(item.href)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleNavigation(item.href)}
+                  className="sidebar-item-button"
+                  aria-label={item.name}
+                  tabIndex={0}
+                >
+                  <IconComponent className="sidebar-icon" size={20} />
+                  <span className="sidebar-text">{item.name}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+
+        {/* Theme Toggle - Always Visible */}
+        <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
+          <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+            Theme
+          </div>
+          <div className="mb-3 flex justify-center">
+            <DarkModeToggle showLabel={sidebarState === 'expanded'} />
+          </div>
+        </div>
+
+        {/* User Menu */}
+        {currentUser && (
+          <>
+            <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
+              <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                User Menu
+              </div>
+
+              {/* Language Selector */}
+              <div className="mb-3 flex justify-center">
+                <LanguageSelector
+                  variant="dropdown"
+                  showFlag={true}
+                  showName={sidebarState === 'expanded'}
+                />
+              </div>
+
+              <ul className="space-y-1">
+                {userMenuItems.map((item) => {
+                  const IconComponent = item.icon;
+                  return (
+                    <li
+                      key={item.name}
+                      className={`sidebar-item ${currentPath === item.href ? 'active' : ''}`}
+                      data-tooltip={sidebarState === 'collapsed' ? item.tooltip : ''}
+                    >
+                      <button
+                        onClick={() => handleNavigation(item.href)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleNavigation(item.href)}
+                        className="sidebar-item-button"
+                        aria-label={item.name}
+                      >
+                        <span className="sidebar-icon">
+                          <IconComponent size={20} />
+                        </span>
+                        <span className="sidebar-text">{item.name}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
 
             {/* User Info */}
-            {currentUser ? (
-              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                    {userProfile?.photoURL ? (
-                      <img
-                        src={userProfile.photoURL}
-                        alt="Profile"
-                        className="w-10 h-10 rounded-full object-cover"
-                      />
-                    ) : (
-                        <User className="text-blue-600 dark:text-blue-400" size={20} />
-                    )}
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900 dark:text-white">
+            <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                  {userProfile?.photoURL ? (
+                    <img
+                      src={userProfile.photoURL}
+                      alt="Profile"
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  ) : (
+                    <User className="text-blue-600 dark:text-blue-400" size={16} />
+                  )}
+                </div>
+                {sidebarState === 'expanded' && (
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                       {userProfile?.displayName || currentUser.displayName || 'User'}
                     </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{currentUser.email}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                      {currentUser.email}
+                    </p>
                     <p className="text-xs text-blue-600 dark:text-blue-400 font-medium capitalize">
                       {userProfile?.role || 'user'}
                     </p>
                   </div>
-                </div>
+                )}
               </div>
-            ) : (
-                <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                <div className="text-center">
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Not signed in</p>
-                  <div className="space-x-2">
-                    <button
-                      onClick={() => {
-                        navigate('/login');
-                        setIsMenuOpen(false);
-                      }}
-                      className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                    >
-                      Login
-                    </button>
-                    <button
-                      onClick={() => {
-                        navigate('/signup');
-                        setIsMenuOpen(false);
-                      }}
-                        className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700"
-                    >
-                      Sign Up
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Main Navigation */}
-            <div className="flex-1 overflow-y-auto py-4 relative mobile-nav-menu mobile-nav-content">
-              {/* Scroll indicator */}
-              <div className="absolute top-0 right-2 w-1 h-8 bg-gradient-to-b from-blue-400 to-transparent rounded-full opacity-60 pointer-events-none"></div>
-              <div className="px-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Main Features
-                  </h2>
-                  <span className="text-xs text-gray-400 dark:text-gray-500">({navigationItems.length} items) - Scroll to see all</span>
-                  <Link
-                    to="/logout-test"
-                    className="text-xs text-blue-500 hover:text-blue-700 underline"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Test Logout
-                  </Link>
-                </div>
-                <nav className="space-y-1 pb-4">
-                  {navigationItems.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <button
-                        key={item.name}
-                        onClick={() => handleNavigation(item.href)}
-                        className="w-full text-left p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 active:bg-gray-200 dark:active:bg-gray-600 transition-colors group touch-manipulation"
-                      >
-                        <div className="flex items-center space-x-3">
-                          <Icon className="text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-400" size={20} />
-                          <div className="flex-1">
-                            <p className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                              {item.name}
-                            </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300">
-                              {item.description}
-                            </p>
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </nav>
-              </div>
-
-              {/* User Menu */}
-              {currentUser && (
-                <div className="px-4 mt-6 pb-4">
-                  <h2 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                    User Menu
-                  </h2>
-
-                  {/* Dark Mode Toggle */}
-                  <div className="mb-4 flex justify-center">
-                    <DarkModeToggle showLabel={true} />
-                  </div>
-
-                  {/* Language Selector */}
-                  <div className="mb-4 flex justify-center">
-                    <LanguageSelector variant="dropdown" showFlag={true} showName={true} />
-                  </div>
-
-                  <nav className="space-y-1">
-                    {userMenuItems.map((item) => {
-                      const Icon = item.icon;
-                      return (
-                        <button
-                          key={item.name}
-                          onClick={() => handleNavigation(item.href)}
-                          className="w-full text-left p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 active:bg-gray-200 dark:active:bg-gray-600 transition-colors group touch-manipulation"
-                        >
-                          <div className="flex items-center space-x-3">
-                            <Icon className="text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-400" size={20} />
-                            <div className="flex-1">
-                              <p className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                                {item.name}
-                              </p>
-                              <p className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300">
-                                {item.description}
-                              </p>
-                            </div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </nav>
-                </div>
-              )}
             </div>
 
             {/* Logout Button */}
-            {currentUser && (
-              <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center justify-center space-x-3 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 active:bg-red-800 transition-all duration-200 shadow-lg"
-                >
-                  <LogOut size={20} />
-                  <span className="font-medium">Logout</span>
-                </button>
+            <div className="px-4 py-2">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center justify-center space-x-2 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                data-tooltip={sidebarState === 'collapsed' ? 'Logout' : ''}
+              >
+                <LogOut size={16} />
+                {sidebarState === 'expanded' && <span>Logout</span>}
+              </button>
+            </div>
+          </>
+        )}
 
-                {/* Debug info - remove this later */}
-                <div className="mt-2 text-xs text-gray-500 text-center">
-                  User: {currentUser?.email || 'Unknown'} | Click to logout
-                </div>
-                <div className="mt-1 text-xs text-gray-400 text-center">
-                  Auth Status: {currentUser ? '✅ Authenticated' : '❌ Not Authenticated'}
-                </div>
+        {/* Guest User Actions */}
+        {!currentUser && (
+          <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
+            <div className="text-center">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Not signed in</p>
+              <div className="space-y-2">
+                <button
+                  onClick={() => handleNavigation('/login')}
+                  className="w-full px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  Login
+                </button>
+                <button
+                  onClick={() => handleNavigation('/signup')}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  Sign Up
+                </button>
               </div>
-            )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </aside>
     </>
   );
-} 
+}

@@ -1,0 +1,29 @@
+/* Navigation Content Shifting */
+.main-content-shift {
+  transition: transform 0.3s ease-in-out;
+}
+
+.main-content-shift.menu-open {
+  transform: translateX(320px);
+}
+
+/* Ensure the main content area is properly targeted */
+.App > div:not(.fixed) {
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .main-content-shift.menu-open {
+    transform: translateX(280px);
+  }
+  
+  .App > div:not(.fixed) {
+    transition: transform 0.3s ease-in-out;
+  }
+}
+
+/* Prevent horizontal scroll when menu is open */
+body.menu-open {
+  overflow-x: hidden;
+}

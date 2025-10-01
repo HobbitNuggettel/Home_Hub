@@ -11,8 +11,8 @@ const DarkModeToggle = ({ className = '', showLabel = false }) => {
       onClick={toggleDarkMode}
       className={`p-2 rounded-lg transition-colors duration-200 ${
         isDarkMode
-          ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700'
-          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+        ? 'bg-blue-800 text-yellow-400 hover:bg-blue-700'
+        : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
       } ${className}`}
       aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
       title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}

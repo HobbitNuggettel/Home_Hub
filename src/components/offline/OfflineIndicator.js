@@ -199,7 +199,7 @@ const OfflineIndicator = ({
   };
 
   return (
-    <div className={`fixed ${getPositionClasses()} z-50 ${className}`}>
+    <div className={`fixed ${getPositionClasses()} z-40 ${className}`}>
       {/* Main indicator */}
       <button
         className={`

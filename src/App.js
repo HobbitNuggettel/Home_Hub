@@ -19,6 +19,9 @@ const LandingPage = lazy(() => import('./components/LandingPage'));
 const Settings = lazy(() => import('./components/Settings'));
 const Home = lazy(() => import('./components/Home'));
 const Navigation = lazy(() => import('./components/layout/Navigation'));
+const MainContentWrapper = lazy(() => import('./components/layout/MainContentWrapper'));
+const TestLogin = lazy(() => import('./components/TestLogin'));
+const ThemeTest = lazy(() => import('./components/ThemeTest'));
 const Login = lazy(() => import('./components/auth/Login'));
 const SignUp = lazy(() => import('./components/auth/SignUp'));
 const Inventory = lazy(() => import('./modules/inventory/InventoryManagement'));
@@ -46,6 +49,7 @@ const PWAInstallPrompt = lazy(() => import('./components/pwa/PWAInstallPrompt'))
 const PWAUpdateNotification = lazy(() => import('./components/pwa/PWAInstallPrompt').then(module => ({ default: module.PWAUpdateNotification })));
 const AnalyticsDashboard = lazy(() => import('./components/analytics/AnalyticsDashboard'));
 const EnterpriseDashboard = lazy(() => import('./components/enterprise/EnterpriseDashboard'));
+
 import LogoutTest from './components/LogoutTest';
 
 // Loading component for Suspense fallback
@@ -91,10 +95,17 @@ function App() {
                   <Route path="/home" element={
                     <>
                       <Navigation />
+                                        <TestLogin />
+                                        <ThemeTest />
                       <Home />
                     </>
                   } />
-                  <Route path="/settings" element={<Settings />} />
+                                    <Route path="/settings" element={
+                                      <>
+                                        <Navigation />
+                                        <Settings />
+                                      </>
+                                    } />
                   <Route path="/profile" element={
                     <>
                       <Navigation />
@@ -106,23 +117,23 @@ function App() {
                   <Route path="/inventory" element={
                     <>
                       <Navigation />
-                      <Inventory />
+                                        <MainContentWrapper>
+                                          <Inventory />
+                                        </MainContentWrapper>
                     </>
                   } />
                   <Route path="/spending" element={
                     <>
                       <Navigation />
-                      <Spending />
+                                        <MainContentWrapper>
+                                          <Spending />
+                                        </MainContentWrapper>
                     </>
                   } />
                   <Route path="/collaboration" element={
                     <>
-                      <Navigation />
-                                        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 p-6">
-                                          <div className="max-w-7xl mx-auto">
-                                            <Collaboration />
-                                          </div>
-                                        </div>
+                                        <Navigation />
+                                        <Collaboration />
                     </>
                   } />
                   <Route path="/shopping-lists" element={
@@ -177,40 +188,16 @@ function App() {
                   {/* Phase 2: Real-time Collaboration Demo */}
                   <Route path="/real-time-demo" element={
                     <>
-                      <Navigation />
-                                        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 p-6">
-                        <div className="max-w-7xl mx-auto">
-                          <div className="mb-8">
-                            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                              🚀 Phase 2: Real-time Collaboration Demo
-                            </h1>
-                            <p className="text-lg text-gray-600">
-                              Experience the new real-time collaboration features in action!
-                            </p>
-                          </div>
-                                            <Collaboration />
-                        </div>
-                      </div>
+                                        <Navigation />
+                                        <Collaboration />
                     </>
                   } />
 
                   {/* Phase 2: User Access Management */}
                   <Route path="/user-access" element={
                     <>
-                      <Navigation />
-                                        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 p-6">
-                        <div className="max-w-7xl mx-auto">
-                          <div className="mb-8">
-                            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                              🔐 User Access Management
-                            </h1>
-                            <p className="text-lg text-gray-600">
-                              Grant and manage access for other users with secure permissions
-                            </p>
-                          </div>
-                          <UserAccessManagement />
-                        </div>
-                      </div>
+                                        <Navigation />
+                                        <UserAccessManagement />
                     </>
                   } />
 
@@ -246,7 +233,6 @@ function App() {
                                       </>
                                     } />
 
-                                    {/* Phase 2: Data Validation */}
                                     <Route path="/validation" element={
                                       <>
                                         <Navigation />

@@ -1,0 +1,456 @@
+/* CSS Variables for Sidebar */
+:root {
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 80px;
+  --transition-duration: 0.3s;
+  --transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Sidebar Styles - exactly like HomeVault */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 80px; /* Below top header */
+  bottom: 60px; /* Above bottom header */
+  width: var(--sidebar-width);
+  background: #1f2937;
+  border-right: 1px solid #374151;
+  padding: 30px 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 999;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transform: translateX(-100%);
+}
+
+/* Dark mode support */
+.dark .sidebar {
+  background: #1f2937;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure sidebar is hidden by default */
+body:not(.sidebar-visible):not(.sidebar-collapsed) .sidebar {
+  transform: translateX(-100%);
+  visibility: hidden;
+}
+
+/* Sidebar Menu */
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-top: 80px; /* Space for header */
+}
+
+.sidebar-item {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.sidebar-item-button {
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #ffffff;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+}
+
+.sidebar-item-button:hover {
+  background: #374151;
+  color: #ffffff;
+}
+
+.sidebar-item.active .sidebar-item-button {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  border-left: 3px solid #3b82f6;
+}
+
+/* Override active state for action buttons to maintain button appearance */
+.sidebar-item.action.active .sidebar-item-button {
+  background: #3b82f6 !important;
+  color: #ffffff !important;
+  border-left: none !important;
+  border-radius: 6px;
+  margin: 4px 15px;
+}
+
+/* Dark mode button colors */
+.dark .sidebar-item-button {
+  color: #9ca3af;
+}
+
+.dark .sidebar-item-button:hover {
+  background: #374151;
+  color: #f3f4f6;
+}
+
+.dark .sidebar-item.active .sidebar-item-button {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  border-left: 3px solid #3b82f6;
+}
+
+.sidebar-icon {
+  font-size: 20px;
+  min-width: 20px;
+  text-align: center;
+  color: #9ca3af;
+  transition: color 0.3s;
+}
+
+/* Light mode icon colors */
+.sidebar-icon {
+  color: #ffffff;
+}
+
+.sidebar-item-button:hover .sidebar-icon {
+  color: #ffffff;
+}
+
+.sidebar-item.active .sidebar-item-button .sidebar-icon {
+  color: #3b82f6;
+}
+
+/* Override icon color for active action buttons */
+.sidebar-item.action.active .sidebar-item-button .sidebar-icon {
+  color: #ffffff !important;
+}
+
+/* Dark mode icon colors */
+.dark .sidebar-icon {
+  color: #9ca3af;
+}
+
+.dark .sidebar-item-button:hover .sidebar-icon {
+  color: #f3f4f6;
+}
+
+.dark .sidebar-item.active .sidebar-item-button .sidebar-icon {
+  color: #60a5fa;
+}
+
+.sidebar-text {
+  font-weight: 500;
+  color: #ffffff;
+  transition: all 0.3s;
+}
+
+.sidebar-item-button:hover .sidebar-text {
+  color: #ffffff;
+}
+
+.sidebar-item.active .sidebar-item-button .sidebar-text {
+  color: #3b82f6;
+}
+
+/* Override text color for active action buttons */
+.sidebar-item.action.active .sidebar-item-button .sidebar-text {
+  color: #ffffff !important;
+}
+
+/* Dark mode text colors */
+.dark .sidebar-text {
+  color: #9ca3af;
+}
+
+.dark .sidebar-item-button:hover .sidebar-text {
+  color: #f3f4f6;
+}
+
+.dark .sidebar-item.active .sidebar-item-button .sidebar-text {
+  color: #60a5fa;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid #e5e7eb;
+  background: white;
+}
+
+.dark .sidebar-header {
+  border-bottom-color: #374151;
+  background: #1f2937;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-logo-icon {
+  width: 32px;
+  height: 32px;
+  background: #3b82f6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+.sidebar-logo-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: #111827;
+}
+
+.dark .sidebar-logo-text {
+  color: #f9fafb;
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  color: #ffffff;
+  transition: all var(--transition-duration) var(--transition-easing);
+}
+
+.sidebar-toggle:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.dark .sidebar-toggle:hover {
+  background-color: #374151;
+  color: #d1d5db;
+}
+
+/* Main Content - exactly like HomeVault */
+.main-content,
+main,
+.App > div:not(.fixed) {
+  margin-left: 0;
+  margin-top: 80px; /* Below top header */
+  margin-bottom: 60px; /* Above bottom header */
+  padding: 30px;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: calc(100vh - 130px); /* Account for top and bottom headers */
+}
+
+/* State 1: Hidden (Default) */
+.sidebar {
+  transform: translateX(-100%);
+}
+
+.main-content {
+  margin-left: 0;
+}
+
+/* State 2: Collapsed (Icons Only) */
+body.sidebar-collapsed .sidebar {
+  transform: translateX(0);
+  width: var(--sidebar-collapsed-width);
+}
+
+body.sidebar-collapsed .sidebar-item-button {
+  justify-content: center;
+  padding: 15px;
+}
+
+body.sidebar-collapsed .sidebar-item span:not(.sidebar-icon) {
+  display: none;
+}
+
+body.sidebar-collapsed .sidebar-logo-text {
+  display: none;
+}
+
+body.sidebar-collapsed .main-content,
+body.sidebar-collapsed main,
+body.sidebar-collapsed .App > div:not(.fixed) {
+  margin-left: var(--sidebar-collapsed-width);
+}
+
+/* State 3: Expanded (Full Menu) */
+body.sidebar-visible .sidebar {
+  transform: translateX(0);
+  width: var(--sidebar-width);
+}
+
+body.sidebar-visible .sidebar-item-button {
+  justify-content: flex-start;
+  padding: 15px 20px;
+}
+
+body.sidebar-visible .sidebar-text {
+  display: block;
+}
+
+body.sidebar-visible .sidebar-logo-text {
+  display: block;
+}
+
+body.sidebar-visible .sidebar-header {
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+body.sidebar-visible .main-content,
+body.sidebar-visible main,
+body.sidebar-visible .App > div:not(.fixed) {
+  margin-left: var(--sidebar-width);
+}
+
+/* Active state adjustments for collapsed mode */
+body.sidebar-collapsed .sidebar-item.active .sidebar-item-button {
+  border-left: none;
+  border-right: 3px solid #3b82f6;
+}
+
+/* Tooltip for collapsed mode */
+.sidebar-item[data-tooltip] {
+  position: relative;
+}
+
+.sidebar-item[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1f2937;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  white-space: nowrap;
+  z-index: 1001;
+  margin-left: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-item[data-tooltip]:hover::before {
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-right-color: #1f2937;
+  z-index: 1001;
+  margin-left: 5px;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0 !important;
+  }
+  
+  .sidebar {
+    width: 280px;
+  }
+  
+  body.sidebar-collapsed .sidebar {
+    width: 280px;
+  }
+  
+  body.sidebar-visible .sidebar {
+    width: 280px;
+  }
+}
+
+/* Toggle button styles - Always visible ☰ icon */
+.sidebar-toggle-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1001;
+  background: #374151;
+  color: #f3f4f6;
+  border: none;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/* Visual feedback for different states */
+body.sidebar-collapsed .sidebar-toggle-btn {
+  background: #1d4ed8;
+  color: #ffffff;
+}
+
+body.sidebar-visible .sidebar-toggle-btn {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.sidebar-toggle-btn:hover {
+  background: #4b5563;
+  color: #60a5fa;
+  transform: translateY(-1px);
+}
+
+.sidebar-toggle-btn:active {
+  transform: translateY(0);
+}
+
+/* Sidebar Section Headers - My Pantry Tracker Style */
+.sidebar-section-header {
+  padding: 15px 20px 8px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #9ca3af;
+  border-bottom: 1px solid #374151;
+  margin-bottom: 8px;
+}
+
+/* Action Button Styling - My Pantry Tracker Style */
+.sidebar-item.action .sidebar-item-button {
+  background: #3b82f6;
+  color: #ffffff;
+  border-radius: 6px;
+  margin: 4px 15px;
+  font-weight: 600;
+  border-left: none;
+}
+
+.sidebar-item.action .sidebar-item-button:hover {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.sidebar-item.action .sidebar-item-button .sidebar-icon {
+  color: #ffffff;
+}
+
+/* Dark mode section headers */
+.dark .sidebar-section-header {
+  color: #6b7280;
+  border-bottom-color: #4b5563;
+}

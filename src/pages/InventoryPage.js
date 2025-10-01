@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Search, Filter, Grid, List, Camera, Package } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
-import Navigation from '../components/Navigation';
+import Navigation from '../components/layout/Navigation';
 import ItemForm from '../components/ItemForm';
 import MultiItemForm from '../components/MultiItemForm';
 import BarcodeScanner from '../components/BarcodeScanner';

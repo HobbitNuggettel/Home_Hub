@@ -88,11 +88,14 @@ export const ThemeProvider = ({ children }) => {
   }, [themeMode]);
 
   const updateThemeMode = (mode) => {
+    console.log('updateThemeMode called with mode:', mode);
     setThemeMode(mode);
     
     if (mode === 'dark') {
+      console.log('Setting dark mode to true');
       setIsDarkMode(true);
     } else if (mode === 'light') {
+      console.log('Setting dark mode to false');
       setIsDarkMode(false);
     } else if (mode === 'system') {
       // Use system preference - with safety check
@@ -117,14 +120,14 @@ export const ThemeProvider = ({ children }) => {
   };
 
   const toggleDarkMode = () => {
-    // When in system mode, toggle should not change theme mode
-    if (themeMode === 'system') {
-      // Do nothing - stay in system mode
-      return;
-    } else if (themeMode === 'dark') {
-      setThemeMode('light');
+    console.log('toggleDarkMode called!', { currentThemeMode: themeMode, currentIsDarkMode: isDarkMode });
+    // Toggle between light and dark modes
+    if (themeMode === 'dark') {
+      console.log('Switching to light mode');
+      updateThemeMode('light');
     } else {
-      setThemeMode('dark');
+      console.log('Switching to dark mode');
+      updateThemeMode('dark');
     }
   };
 
