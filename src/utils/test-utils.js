@@ -3,10 +3,83 @@ import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '../contexts/ThemeContext';
 
-// Mock providers for tests
-const MockAuthProvider = ({ children }) => children;
-const MockDevToolsProvider = ({ children }) => children;
-const MockRealTimeProvider = ({ children }) => children;
+// Mock the context hooks directly
+jest.mock('../contexts/DevToolsContext', () => ({
+  useDevTools: () => ({
+    isDevMode: false,
+    setIsDevMode: jest.fn(),
+    showDevTools: false,
+    setShowDevTools: jest.fn(),
+    devToolsConfig: {
+      showStateDebug: false,
+      showInstanceTracking: false,
+      showPerformanceMetrics: false,
+      showNetworkLogs: false,
+      enableHotReload: false
+    },
+    setDevToolsConfig: jest.fn(),
+    toggleDevMode: jest.fn(),
+    toggleDevTools: jest.fn(),
+    updateDevToolsConfig: jest.fn()
+  }),
+  DevToolsProvider: ({ children }) => children
+}));
+
+jest.mock('../contexts/AuthContext', () => ({
+  useAuth: () => ({
+    currentUser: null,
+    user: null,
+    loading: false,
+    signIn: jest.fn(),
+    signUp: jest.fn(),
+    signOut: jest.fn(),
+    resetPassword: jest.fn(),
+    updateProfile: jest.fn(),
+    updateEmail: jest.fn(),
+    updatePassword: jest.fn(),
+    deleteUser: jest.fn(),
+    isAuthenticated: false,
+    isAdmin: false,
+    isModerator: false,
+    userRole: 'user',
+    permissions: [],
+    checkPermission: jest.fn(),
+    refreshUser: jest.fn()
+  }),
+  AuthProvider: ({ children }) => children
+}));
+
+jest.mock('../contexts/RealTimeContext', () => ({
+  useRealTime: () => ({
+    isOnline: true,
+    isConnected: true,
+    connectionStatus: 'connected',
+    lastSyncTime: null,
+    syncInProgress: false,
+    syncStatus: {
+      offlineDataSize: 0,
+      queueSize: 0,
+      syncInProgress: false,
+      lastSyncTime: null,
+      conflicts: []
+    },
+    deviceCount: 1,
+    conflictCount: 0,
+    syncProgress: 0,
+    errorState: null,
+    syncOverdue: false,
+    startSync: jest.fn(),
+    stopSync: jest.fn(),
+    forceSync: jest.fn(),
+    resolveConflict: jest.fn(),
+    clearConflicts: jest.fn(),
+    updateConnectionStatus: jest.fn(),
+    addToSyncQueue: jest.fn(),
+    removeFromSyncQueue: jest.fn(),
+    clearSyncQueue: jest.fn()
+  }),
+  RealTimeProvider: ({ children }) => children
+}));
 
 // Mock useInventory hook
 export const mockUseInventory = {
@@ -67,13 +140,7 @@ const AllTheProviders = ({ children }) => {
   return (
     <BrowserRouter>
       <ThemeProvider>
-        <MockAuthProvider>
-          <MockDevToolsProvider>
-            <MockRealTimeProvider>
-              {children}
-            </MockRealTimeProvider>
-          </MockDevToolsProvider>
-        </MockAuthProvider>
+        {children}
       </ThemeProvider>
     </BrowserRouter>
   );
@@ -89,13 +156,7 @@ export const renderHomeWithProviders = (ui, options = {}) => {
   const HomeWrapper = ({ children }) => (
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <ThemeProvider>
-        <MockAuthProvider>
-          <MockDevToolsProvider>
-            <MockRealTimeProvider>
-              {children}
-            </MockRealTimeProvider>
-          </MockDevToolsProvider>
-        </MockAuthProvider>
+        {children}
       </ThemeProvider>
     </BrowserRouter>
   );
