@@ -25,7 +25,8 @@
     "security:audit": "npm audit --audit-level moderate",
     "security:fix": "npm audit fix",
     "analyze": "npm run build && npx webpack-bundle-analyzer build/static/js/*.js",
-    "serve": "serve -s build -p 3000"
+    "serve": "serve -s build -p 3000",
+    "cleanup:branches": "bash scripts/cleanup-merged-branches.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
