@@ -4,7 +4,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import hybridStorage from '../../firebase/hybridStorage';
 
 const Spending = () => {
-  const { currentUser } = useAuth();
+  const auth = useAuth();
+  const currentUser = auth?.currentUser;
   const [expenses, setExpenses] = useState([]);
   const [budgets, setBudgets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -214,7 +215,7 @@ const Spending = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
