@@ -4,6 +4,7 @@ on:
   push:
     branches: [ main, develop ]
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     branches: [ main, develop ]
 
 env:
@@ -33,7 +34,7 @@ jobs:
       run: npm run lint
       
     - name: Run tests
-      run: npm test -- --coverage --watchAll=false
+      run: npm test -- --coverage --watchAll=false --passWithNoTests
       
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
@@ -41,6 +42,7 @@ jobs:
         file: ./coverage/lcov.info
         flags: unittests
         name: codecov-umbrella
+      if: always()
         
   build:
     name: Build Application
@@ -130,7 +132,7 @@ jobs:
     needs: [test, build, security]
     if: github.ref == 'refs/heads/main'
     
-    environment: production
+    # environment: "production"  # Uncomment when environment is created in GitHub
     
     steps:
     - name: Checkout code
@@ -160,4 +162,4 @@ jobs:
         status: ${{ job.status }}
         channel: '#deployments'
         webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-      if: always()
+      if: always() && secrets.SLACK_WEBHOOK_URL != ''

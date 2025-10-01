@@ -46,11 +46,11 @@
     "deploy:production:app": "npm run deploy:production:kubernetes",
     "deploy:production:kubernetes": "kubectl apply -f enterprise/deployment/kubernetes-manifests.yml",
     
-    "backup:main2": "git checkout main2 && git merge main && git push origin main2",
+    "backup:production": "git checkout production-backup && git merge main && git push origin production-backup",
     
     "rollback:emergency": "npm run rollback:validate && npm run rollback:execute",
     "rollback:validate": "echo 'Validating rollback requirements...'",
-    "rollback:execute": "git checkout main2 && git push origin main --force",
+    "rollback:execute": "git checkout production-backup && git push origin main --force",
     
     "health:check:staging": "curl -f http://localhost:3000/health && curl -f http://localhost:5001/health",
     "health:check:production": "curl -f https://homehub.com/health && curl -f https://api.homehub.com/health",
@@ -96,7 +96,7 @@
     "ssl:generate": "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout enterprise/deployment/nginx/ssl/nginx.key -out enterprise/deployment/nginx/ssl/nginx.crt",
     "ssl:renew": "npm run ssl:generate",
     
-    "backup:full": "npm run database:backup && npm run redis:backup && npm run backup:main2",
+    "backup:full": "npm run database:backup && npm run redis:backup && npm run backup:production",
     "backup:verify": "echo 'Verifying backup integrity...'",
     
     "maintenance:start": "echo 'Starting maintenance mode...'",

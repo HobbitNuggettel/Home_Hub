@@ -6,6 +6,7 @@ on:
   push:
     branches: [ main ]
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     branches: [ main ]
 
 jobs:
@@ -35,6 +36,7 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         args: --severity-threshold=high
+      if: secrets.SNYK_TOKEN != ''
         
   code-scan:
     name: Code Security Scan

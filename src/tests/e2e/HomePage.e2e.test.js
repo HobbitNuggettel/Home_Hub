@@ -91,3 +91,6 @@ describe('Home Page E2E Tests', () => {
     cy.focused().should('have.attr', 'data-testid', 'main-content');
   });
 });
+
+
+

@@ -196,10 +196,10 @@ jobs:
           echo "Performing production health check..."
           npm run health:check:production
           
-      - name: 🔄 Backup to Main2
+      - name: 🔄 Backup to Production
         run: |
-          echo "Creating production backup to main2..."
-          npm run backup:main2
+          echo "Creating production backup to production-backup..."
+          npm run backup:production
           
       - name: 📋 Production Report
         run: |

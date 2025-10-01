@@ -131,3 +131,6 @@ describe('Inventory Management E2E Tests', () => {
     cy.get('[data-testid="search-input"]').should('have.value', 'Test');
   });
 });
+
+
+

@@ -228,3 +228,6 @@ class BundleAnalyzer {
 const bundleAnalyzer = new BundleAnalyzer();
 
 export default bundleAnalyzer;
+
+
+
