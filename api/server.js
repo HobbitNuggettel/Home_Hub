@@ -8,6 +8,16 @@ const http = require('http');
 const socketIo = require('socket.io');
 require('dotenv').config();
 
+// Import API versioning middleware
+const {
+  apiVersioningMiddleware,
+  backwardCompatibilityMiddleware,
+  versionInfoEndpoint,
+  versionStatsEndpoint,
+  versionCompatibilityEndpoint,
+  versionMigrationGuideEndpoint
+} = require('./src/middleware/apiVersioningMiddleware');
+
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
@@ -32,6 +42,16 @@ const collaborationRoutes = require('./src/routes/collaboration');
 // Import middleware
 const { authenticateToken } = require('./src/middleware/auth');
 const { errorHandler } = require('./src/middleware/errorHandler');
+const {
+  rateLimit,
+  validateInput,
+  securityHeaders,
+  requestLogging,
+  corsConfig,
+  requestSizeLimit,
+  sqlInjectionProtection,
+  xssProtection
+} = require('../src/middleware/securityMiddleware');
 
 // Import services
 const { initializeSocketHandlers } = require('./src/services/socketService');
@@ -62,6 +82,14 @@ const limiter = rateLimit({
 });
 
 app.use('/api/', limiter);
+
+// Additional security middleware
+app.use(securityHeaders());
+app.use(requestLogging());
+app.use(corsConfig());
+app.use(requestSizeLimit(5 * 1024 * 1024)); // 5MB limit
+app.use(sqlInjectionProtection());
+app.use(xssProtection());
 
 // CORS configuration
 app.use(cors({
@@ -420,6 +448,28 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
 }));
 
 // API routes
+// API Versioning Routes
+app.get('/api/version-info', versionInfoEndpoint);
+app.get('/api/version-stats', versionStatsEndpoint);
+app.get('/api/version-compatibility', versionCompatibilityEndpoint);
+app.get('/api/version-migration-guide/:version', versionMigrationGuideEndpoint);
+
+// API Versioning Middleware
+app.use('/api/v*', apiVersioningMiddleware);
+app.use('/api/v*', backwardCompatibilityMiddleware);
+
+// API Routes with versioning
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/firebase-auth', firebaseAuthRoutes);
+app.use('/api/v1/users', authenticateToken, userRoutes);
+app.use('/api/v1/inventory', authenticateToken, inventoryRoutes);
+app.use('/api/v1/spending', authenticateToken, spendingRoutes);
+app.use('/api/v1/analytics', authenticateToken, analyticsRoutes);
+app.use('/api/v1/budget', authenticateToken, budgetRoutes);
+app.use('/api/v1/notifications', authenticateToken, notificationRoutes);
+app.use('/api/v1/collaboration', authenticateToken, collaborationRoutes);
+
+// Legacy API Routes (for backward compatibility)
 app.use('/api/auth', authRoutes);
 app.use('/api/firebase-auth', firebaseAuthRoutes);
 app.use('/api/users', authenticateToken, userRoutes);

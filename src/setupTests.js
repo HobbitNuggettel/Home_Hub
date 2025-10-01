@@ -143,7 +143,26 @@ jest.mock('firebase/database', () => ({
 }));
 
 // Mock React contexts globally
-jest.mock('./contexts/AuthContext');
+jest.mock('./contexts/AuthContext', () => {
+  const React = require('react');
+  const AuthContext = React.createContext();
+
+  const mockAuthValue = {
+    currentUser: { uid: 'test-uid', email: 'test@example.com', displayName: 'Test User' },
+    userProfile: { name: 'Test User', email: 'test@example.com' },
+    updateUserProfile: jest.fn(() => Promise.resolve()),
+    login: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
+    logout: jest.fn(() => Promise.resolve()),
+    loading: false,
+    error: null,
+  };
+
+  return {
+    AuthContext,
+    useAuth: jest.fn(() => mockAuthValue),
+    AuthProvider: ({ children }) => React.createElement(AuthContext.Provider, { value: mockAuthValue }, children),
+  };
+});
 jest.mock('./contexts/DevToolsContext');
 jest.mock('./contexts/RealTimeContext');
 

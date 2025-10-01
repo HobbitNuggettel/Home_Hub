@@ -200,7 +200,8 @@ const mockItems = [
 ];
 
 function InventoryManagement() {
-  const { currentUser } = useAuth();
+  const auth = useAuth();
+  const currentUser = auth?.currentUser;
   const [inventoryItems, setInventoryItems] = useState([]);
   const [inventoryCategories, setInventoryCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

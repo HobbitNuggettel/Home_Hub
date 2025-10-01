@@ -1,7 +1,9 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import InventoryManagement from '../InventoryManagement';
+import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from '../../contexts/AuthContext';
+import InventoryManagement from '../../modules/inventory/InventoryManagement';
 import {
   renderWithProviders,
   mockInventoryItem,
@@ -20,9 +22,16 @@ jest.mock('../../hooks/useInventory', () => ({
 global.URL.createObjectURL = jest.fn(() => 'mock-url');
 global.URL.revokeObjectURL = jest.fn();
 
-// Create a simple render function without ThemeContext for basic tests
+// Create a simple render function with AuthProvider for basic tests
 const renderSimple = (ui, options = {}) => {
-  return render(ui, options);
+  const TestWrapper = ({ children }) => (
+    <BrowserRouter>
+      <AuthProvider>
+        {children}
+      </AuthProvider>
+    </BrowserRouter>
+  );
+  return render(ui, { wrapper: TestWrapper, ...options });
 };
 
 describe('InventoryManagement Component', () => {
@@ -37,8 +46,8 @@ describe('InventoryManagement Component', () => {
       
       // Check for main sections
       expect(screen.getByText('Inventory Management')).toBeInTheDocument();
-      expect(screen.getByText('Search Items')).toBeInTheDocument();
-      expect(screen.getAllByText('Category').length).toBeGreaterThan(0);
+      expect(screen.getByPlaceholderText('Search inventory...')).toBeInTheDocument();
+      expect(screen.getByText('All Categories')).toBeInTheDocument();
       // Note: Table/Grid view buttons may not be rendered in current component state
     });
 
@@ -47,7 +56,7 @@ describe('InventoryManagement Component', () => {
       
       // Check for stats cards
       expect(screen.getByText('Total Items')).toBeInTheDocument();
-      expect(screen.getByText('Categories')).toBeInTheDocument();
+      expect(screen.getByText('Total Value')).toBeInTheDocument();
       expect(screen.getByText('Low Stock')).toBeInTheDocument();
     });
 
@@ -55,10 +64,10 @@ describe('InventoryManagement Component', () => {
       renderSimple(<InventoryManagement />);
       
       // Check for search input
-      expect(screen.getByText('Search Items')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Search inventory...')).toBeInTheDocument();
       
       // Check for category filter
-      expect(screen.getAllByText('Category').length).toBeGreaterThan(0);
+      expect(screen.getByText('All Categories')).toBeInTheDocument();
       
       // Note: View mode toggle may not be rendered in current component state
     });
@@ -68,8 +77,8 @@ describe('InventoryManagement Component', () => {
       
       // Check for action buttons
       expect(screen.getByText('Add Item')).toBeInTheDocument();
-      expect(screen.getByText('Export CSV')).toBeInTheDocument();
-      expect(screen.getByText('Import CSV')).toBeInTheDocument();
+      expect(screen.getAllByText('Export Data')).toHaveLength(2); // Two export buttons
+      expect(screen.getAllByText('Import Data')).toHaveLength(2); // Two import buttons
       expect(screen.getByText('Clear Filters')).toBeInTheDocument();
     });
   });
@@ -115,14 +124,24 @@ describe('InventoryManagement Component', () => {
     });
 
     test('table view displays items in table format', () => {
+      // Set up some test data
+      setMockInventoryData([
+        { id: '1', name: 'Test Item', category: 'Test Category', quantity: 1, price: 10.00, status: 'active' }
+      ], ['Test Category']);
+
       renderSimple(<InventoryManagement />);
       
-      // Check for table structure if it exists
-      const categoryElements = screen.getAllByText('Category');
-      expect(categoryElements.length).toBeGreaterThan(0);
+      // Check for table structure
+      expect(screen.getByText('Category')).toBeInTheDocument();
+      expect(screen.getByText('Test Item')).toBeInTheDocument();
     });
 
     test('grid view displays items in grid format', () => {
+      // Set up some test data
+      setMockInventoryData([
+        { id: '1', name: 'Test Item', category: 'Test Category', quantity: 1, price: 10.00, status: 'active' }
+      ], ['Test Category']);
+
       // Set view mode to grid
       mockUseInventory.viewMode = 'grid';
       
@@ -177,8 +196,8 @@ describe('InventoryManagement Component', () => {
     test('export CSV functionality works', async () => {
       renderSimple(<InventoryManagement />);
       
-      const exportButton = screen.getByText('Export CSV');
-      await userEvent.click(exportButton);
+      const exportButtons = screen.getAllByText('Export Data');
+      await userEvent.click(exportButtons[0]); // Click the first one
       
       // Should call export function
       expect(mockUseInventory.actions.exportCSV).toBeDefined();
@@ -187,8 +206,8 @@ describe('InventoryManagement Component', () => {
     test('import CSV functionality works', async () => {
       renderSimple(<InventoryManagement />);
       
-      const importButton = screen.getByText('Import CSV');
-      await userEvent.click(importButton);
+      const importButtons = screen.getAllByText('Import Data');
+      await userEvent.click(importButtons[0]); // Click the first one
       
       // Should call import function
       expect(mockUseInventory.actions.importCSV).toBeDefined();
@@ -249,8 +268,8 @@ describe('InventoryManagement Component', () => {
       renderSimple(<InventoryManagement />);
       
       // Check for proper labels
-      expect(screen.getByText('Search Items')).toBeInTheDocument();
-      expect(screen.getAllByText('Category').length).toBeGreaterThan(0);
+      expect(screen.getByPlaceholderText('Search inventory...')).toBeInTheDocument();
+      expect(screen.getByText('All Categories')).toBeInTheDocument();
     });
 
     test('supports keyboard navigation', () => {
@@ -293,7 +312,7 @@ describe('InventoryManagement Component', () => {
       renderSimple(<InventoryManagement />);
       
       // Since the search input doesn't have proper label association, just check the label exists
-      expect(screen.getByText('Search Items')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Search inventory...')).toBeInTheDocument();
       
       // Should call search function when implemented
       expect(mockUseInventory.actions.setSearchTerm).toBeDefined();

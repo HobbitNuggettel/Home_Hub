@@ -25,7 +25,10 @@ import DarkModeToggle from './DarkModeToggle';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { currentUser, userProfile, logout } = useAuth();
+  const auth = useAuth();
+  const currentUser = auth?.currentUser;
+  const userProfile = auth?.userProfile;
+  const logout = auth?.logout;
   const navigate = useNavigate();
 
   // Debug logging
