@@ -4,12 +4,14 @@ import React from 'react';
 export const AuthContext = React.createContext({
   currentUser: null,
   user: null,
+  userProfile: null,
   loading: false,
   signIn: jest.fn(),
   signUp: jest.fn(),
   signOut: jest.fn(),
   resetPassword: jest.fn(),
   updateProfile: jest.fn(),
+  updateUserProfile: jest.fn(),
   updateEmail: jest.fn(),
   updatePassword: jest.fn(),
   deleteUser: jest.fn(),
@@ -19,7 +21,10 @@ export const AuthContext = React.createContext({
   userRole: 'user',
   permissions: [],
   checkPermission: jest.fn(),
-  refreshUser: jest.fn()
+  refreshUser: jest.fn(),
+  login: jest.fn(),
+  logout: jest.fn(),
+  error: null
 });
 
 export const useAuth = () => {
@@ -34,12 +39,14 @@ export const AuthProvider = ({ children }) => {
   const mockValue = {
     currentUser: null,
     user: null,
+    userProfile: null,
     loading: false,
     signIn: jest.fn(),
     signUp: jest.fn(),
     signOut: jest.fn(),
     resetPassword: jest.fn(),
     updateProfile: jest.fn(),
+    updateUserProfile: jest.fn(),
     updateEmail: jest.fn(),
     updatePassword: jest.fn(),
     deleteUser: jest.fn(),
@@ -49,7 +56,10 @@ export const AuthProvider = ({ children }) => {
     userRole: 'user',
     permissions: [],
     checkPermission: jest.fn(),
-    refreshUser: jest.fn()
+    refreshUser: jest.fn(),
+    login: jest.fn(),
+    logout: jest.fn(),
+    error: null
   };
 
   return React.createElement(AuthContext.Provider, { value: mockValue }, children);

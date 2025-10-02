@@ -79,6 +79,7 @@ A comprehensive React-based web application for managing household inventory, ex
 - **♿ Accessibility** - WCAG 2.1 AA compliance with keyboard navigation
 - **🌍 Internationalization** - 11 language support with RTL compatibility
 - **🎯 My Pantry Tracker-style UI** - Modern, intuitive interface design
+- **🎨 Color Picker Tool** - Interactive color wheel for testing and experimenting with color schemes
 
 ### 🔧 Technical Features
 - **⚡ Real-time Updates** - WebSocket-based live collaboration

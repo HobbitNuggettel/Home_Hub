@@ -43,7 +43,8 @@ import {
   UserCheck,
   Search,
   Eye,
-  HelpCircle
+  HelpCircle,
+  Palette
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import DarkModeToggle from './DarkModeToggle';
@@ -52,7 +53,11 @@ import FixedHeader from './FixedHeader';
 import '../../styles/sidebar.css';
 
 export default function Navigation() {
-  const [sidebarState, setSidebarState] = useState('hidden'); // 'hidden', 'collapsed', 'expanded'
+  // Initialize sidebar state from localStorage or default to 'hidden'
+  const [sidebarState, setSidebarState] = useState(() => {
+    const saved = localStorage.getItem('homeHub-sidebar-state');
+    return saved || 'hidden';
+  });
   const auth = useAuth();
   const currentUser = auth?.currentUser;
   const userProfile = auth?.userProfile;
@@ -189,6 +194,12 @@ export default function Navigation() {
       href: '/about',
       icon: Info,
       tooltip: 'Features, roadmap, and information'
+    },
+    {
+      name: 'Color Picker',
+      href: '/color-picker',
+      icon: Palette,
+      tooltip: 'Test and experiment with different color schemes'
     }
   ];
 
@@ -210,31 +221,36 @@ export default function Navigation() {
   // Toggle sidebar through three states - exactly like HomeVault
   const toggleSidebar = () => {
     const body = document.body;
+    let newState;
 
     // State 1: Hidden → Collapsed (show icons)
     if (!body.classList.contains('sidebar-visible') && !body.classList.contains('sidebar-collapsed')) {
-      setSidebarState('collapsed');
+      newState = 'collapsed';
+      setSidebarState(newState);
       body.classList.add('sidebar-collapsed');
     }
     // State 2: Collapsed → Expanded (show full)
     else if (body.classList.contains('sidebar-collapsed')) {
-      setSidebarState('expanded');
+      newState = 'expanded';
+      setSidebarState(newState);
       body.classList.remove('sidebar-collapsed');
       body.classList.add('sidebar-visible');
     }
     // State 3: Expanded → Hidden
     else {
-      setSidebarState('hidden');
+      newState = 'hidden';
+      setSidebarState(newState);
       body.classList.remove('sidebar-visible');
     }
+
+    // Save state to localStorage
+    localStorage.setItem('homeHub-sidebar-state', newState);
   };
 
-  // Handle navigation and close menu
+  // Handle navigation - keep sidebar state persistent
   const handleNavigation = (href) => {
     navigate(href);
-    // Close menu after navigation
-    setSidebarState('hidden');
-    document.body.classList.remove('sidebar-visible', 'sidebar-collapsed');
+    // Don't reset sidebar state - let it persist across pages
   };
 
   // Handle logout
@@ -242,12 +258,15 @@ export default function Navigation() {
     try {
       console.log('🚪 Logout button clicked');
       await logout();
+      // Reset sidebar state only on logout
       setSidebarState('hidden');
+      localStorage.removeItem('homeHub-sidebar-state');
       document.body.classList.remove('sidebar-visible', 'sidebar-collapsed');
       navigate('/login');
     } catch (error) {
       console.error('❌ Logout error:', error);
       setSidebarState('hidden');
+      localStorage.removeItem('homeHub-sidebar-state');
       document.body.classList.remove('sidebar-visible', 'sidebar-collapsed');
       navigate('/login');
     }
@@ -271,9 +290,9 @@ export default function Navigation() {
     }
     // For 'hidden' state, no classes are added (sidebar stays hidden)
 
-    // Cleanup function
+    // Don't remove classes on unmount - let them persist for navigation
     return () => {
-      body.classList.remove('sidebar-visible', 'sidebar-collapsed');
+      // No cleanup needed - preserve state across navigation
     };
   }, [sidebarState]);
 

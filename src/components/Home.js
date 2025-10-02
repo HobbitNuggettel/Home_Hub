@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useDevTools } from '../contexts/DevToolsContext';
@@ -294,6 +294,22 @@ export default function Home() {
     }
   ];
 
+  const animateValue = useCallback((key, start, end, duration) => {
+    const startTime = performance.now();
+    const animate = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const current = Math.floor(start + (end - start) * easeOutQuart(progress));
+      setAnimatedStats(prev => ({ ...prev, [key]: current }));
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+    requestAnimationFrame(animate);
+  }, []);
+
+  const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+
   // Fetch real data from Firebase
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -343,8 +359,10 @@ export default function Home() {
 
         setIsLoading(false);
         
-        Object.keys(finalStats).forEach(key => {
-          animateValue(key, 0, finalStats[key], 1500);
+        Object.keys(finalStats).forEach((key, index) => {
+          setTimeout(() => {
+            animateValue(key, 0, finalStats[key], 1500);
+          }, index * 200);
         });
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
@@ -353,23 +371,7 @@ export default function Home() {
     };
 
     fetchDashboardData();
-  }, [currentUser]);
-
-  const animateValue = (key, start, end, duration) => {
-    const startTime = performance.now();
-    const animate = (currentTime) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const current = Math.floor(start + (end - start) * easeOutQuart(progress));
-      setAnimatedStats(prev => ({ ...prev, [key]: current }));
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
-    requestAnimationFrame(animate);
-  };
-
-  const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+  }, [currentUser, animateValue]);
 
   if (isLoading) {
     return (
@@ -381,6 +383,35 @@ export default function Home() {
           </div>
           <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mt-6">Loading Home Hub...</h2>
           <p className="text-gray-600 dark:text-gray-400 mt-2">Preparing your personalized dashboard</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login prompt if user is not authenticated
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20 pt-20 flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-8">
+          <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <HomeIcon className="w-10 h-10 text-white" />
+          </div>
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-4">Welcome to Home Hub</h1>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">Please log in to access your personalized dashboard and manage your household.</p>
+          <div className="space-y-4">
+            <button
+              onClick={() => navigate('/login')}
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
+            >
+              Log In
+            </button>
+            <button
+              onClick={() => navigate('/signup')}
+              className="w-full border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg font-semibold hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
+              Sign Up
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -447,8 +478,8 @@ export default function Home() {
 
             {/* Platform Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto animate-fade-in-up animation-delay-400">
-              {platformStats.map((stat, index) => (
-                <div key={index} className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 shadow-lg">
+              {platformStats.map((stat) => (
+                <div key={stat.label} className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 shadow-lg">
                   <stat.icon className="w-6 h-6 text-blue-600 dark:text-blue-400 mx-auto mb-2" />
                   <div className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</div>
@@ -601,9 +632,9 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
+          {features.map((feature) => (
             <div
-              key={index}
+              key={feature.title}
               role="button"
               tabIndex={0}
               onClick={() => navigate(feature.href)}
@@ -639,8 +670,8 @@ export default function Home() {
                 <div className="space-y-2">
                   <p className="text-xs font-semibold text-gray-500 dark:text-gray-500 uppercase mb-3">Key Features:</p>
                   <ul className="space-y-2">
-                    {feature.capabilities.slice(0, 4).map((capability, idx) => (
-                      <li key={idx} className="flex items-start text-sm text-gray-600 dark:text-gray-400">
+                    {feature.capabilities.slice(0, 4).map((capability) => (
+                      <li key={capability} className="flex items-start text-sm text-gray-600 dark:text-gray-400">
                         <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
                         <span>{capability}</span>
                       </li>
@@ -676,8 +707,8 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {benefits.map((benefit, index) => (
-            <div key={index} className="text-center">
+          {benefits.map((benefit) => (
+            <div key={benefit.title} className="text-center">
               <div className="inline-flex p-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white mb-4">
                 <benefit.icon className="w-8 h-8" />
               </div>
@@ -704,8 +735,8 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
-          {['React 18', 'Firebase', 'Tailwind CSS', 'Hugging Face AI', 'Gemini AI', 'Node.js'].map((tech, index) => (
-            <div key={index} className="bg-white dark:bg-gray-800 rounded-xl p-6 text-center shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
+          {['React 18', 'Firebase', 'Tailwind CSS', 'Hugging Face AI', 'Gemini AI', 'Node.js'].map((tech) => (
+            <div key={tech} className="bg-white dark:bg-gray-800 rounded-xl p-6 text-center shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
               <div className="text-lg font-semibold text-gray-900 dark:text-white">{tech}</div>
             </div>
           ))}

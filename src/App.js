@@ -48,6 +48,7 @@ const PWASettings = lazy(() => import('./components/pwa/PWASettings'));
 const PWAInstallPrompt = lazy(() => import('./components/pwa/PWAInstallPrompt'));
 const PWAUpdateNotification = lazy(() => import('./components/pwa/PWAInstallPrompt').then(module => ({ default: module.PWAUpdateNotification })));
 const AnalyticsDashboard = lazy(() => import('./components/analytics/AnalyticsDashboard'));
+const ColorPicker = lazy(() => import('./components/ColorPicker'));
 const EnterpriseDashboard = lazy(() => import('./components/enterprise/EnterpriseDashboard'));
 
 import LogoutTest from './components/LogoutTest';
@@ -94,9 +95,7 @@ function App() {
                   {/* Protected Routes */}
                   <Route path="/home" element={
                     <>
-                      <Navigation />
-                                        <TestLogin />
-                                        <ThemeTest />
+                                        <Navigation />
                       <Home />
                     </>
                   } />
@@ -269,6 +268,14 @@ function App() {
                                       <>
                                         <Navigation />
                                         <EnterpriseDashboard />
+                                      </>
+                                    } />
+
+                                    {/* Color Picker Tool */}
+                                    <Route path="/color-picker" element={
+                                      <>
+                                        <Navigation />
+                                        <ColorPicker />
                                       </>
                                     } />
 
