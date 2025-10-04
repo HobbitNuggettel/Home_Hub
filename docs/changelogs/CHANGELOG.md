@@ -2,6 +2,29 @@
 
 All notable changes to the Home Hub project are documented in this file.
 
+## [1.0.1] - 2025-10-04
+
+### Fixed
+- **Weather Dashboard**: Resolved critical weather fetch errors
+  - Fixed data structure handling in WeatherDataStorage service
+  - Corrected API method calls in weather service integration
+  - Resolved temperature display issues (NaN° → actual temperature)
+  - Fixed OpenWeatherMap coordinate format handling
+  - Improved WeatherAPI alerts processing
+  - Enhanced error handling and fallback mechanisms
+
+### Improved
+- **Weather Service**: Enhanced 3-tier fallback system (Primary API → Secondary API → Local Cache)
+- **API Integration**: Better error handling for weather data providers
+- **Data Structure**: Consistent weather data format across all components
+- **Caching System**: Intelligent weather data caching with proper invalidation
+
+### Technical
+- Removed duplicate method definitions in WeatherService
+- Fixed ESLint regex pattern issues in WeatherAPIComparison
+- Improved coordinate handling for OpenWeatherMap API
+- Enhanced alerts data structure processing
+
 ## [1.0.0] - 2025-01-15
 
 ### Added
