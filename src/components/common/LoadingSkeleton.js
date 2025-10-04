@@ -25,7 +25,7 @@ const LoadingSkeleton = ({ type = 'default', className = '' }) => {
         return (
           <div className={`space-y-3 ${className}`}>
             {[...Array(5)].map((_, index) => (
-              <div key={index} className="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
+              <div key={`skeleton-list-${index}`} className="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
                 <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full loading-skeleton mr-3"></div>
                 <div className="flex-1">
                   <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded loading-skeleton mb-2"></div>
@@ -45,7 +45,7 @@ const LoadingSkeleton = ({ type = 'default', className = '' }) => {
             </div>
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {[...Array(6)].map((_, index) => (
-                <div key={index} className="px-6 py-4">
+                <div key={`table-skeleton-row-${index}`} className="px-6 py-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded loading-skeleton mr-3"></div>
@@ -91,7 +91,7 @@ const LoadingSkeleton = ({ type = 'default', className = '' }) => {
         return (
           <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 ${className}`}>
             {[...Array(4)].map((_, index) => (
-              <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+              <div key={`dashboard-skeleton-card-${index}`} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-lg loading-skeleton mr-3"></div>
                   <div className="flex-1">
@@ -121,7 +121,7 @@ const LoadingSkeleton = ({ type = 'default', className = '' }) => {
           <div className={`flex items-center justify-center space-x-2 ${className}`}>
             {[...Array(3)].map((_, index) => (
               <div
-                key={index}
+                key={`dots-skeleton-dot-${index}`}
                 className="w-3 h-3 bg-blue-600 rounded-full animate-pulse"
                 style={{ animationDelay: `${index * 0.2}s` }}
               ></div>

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Camera, QrCode, Package, X, Check, AlertCircle } from 'lucide-react';
 
 export default function BarcodeScanner({ onScan, onClose, isOpen }) {
@@ -248,4 +249,10 @@ export default function BarcodeScanner({ onScan, onClose, isOpen }) {
       </div>
     </div>
   );
-} 
+}
+
+BarcodeScanner.propTypes = {
+  onScan: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+}; 

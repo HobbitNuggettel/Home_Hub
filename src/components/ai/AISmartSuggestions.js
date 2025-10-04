@@ -218,7 +218,7 @@ const AISmartSuggestions = () => {
   // Load suggestions
   useEffect(() => {
     loadSuggestions();
-  }, [selectedCategories]);
+  }, [selectedCategories, loadSuggestions]);
 
   const loadSuggestions = async () => {
     setLoading(true);

@@ -338,6 +338,7 @@ function InventoryManagement() {
 
   // Delete item
   const deleteItem = useCallback((id) => {
+    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to delete this item?')) {
       actions.deleteItem(id);
       toast.success('Item deleted successfully!');
@@ -350,6 +351,7 @@ function InventoryManagement() {
       toast.error('No items selected');
       return;
     }
+    // eslint-disable-next-line no-alert
     if (window.confirm(`Are you sure you want to delete ${selectedItems.length} items?`)) {
       actions.deleteMultiple(selectedItems);
       toast.success(`${selectedItems.length} items deleted successfully!`);
@@ -474,7 +476,7 @@ function InventoryManagement() {
                   </h4>
                   <div className="space-y-2">
                     {aiAlerts.slice(0, 3).map((alert, index) => (
-                      <div key={index} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-red-400">
+                      <div key={`ai-alert-${alert.title}-${index}`} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-red-400">
                         <div className="font-medium text-gray-800 dark:text-gray-200">{alert.title}</div>
                         <div className="text-sm text-gray-600 dark:text-gray-400">
                           {alert.count} items need attention
@@ -495,7 +497,7 @@ function InventoryManagement() {
                   </h4>
                   <div className="space-y-2">
                     {aiPredictions.slice(0, 3).map((prediction, index) => (
-                      <div key={index} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-orange-400">
+                      <div key={`ai-prediction-${prediction.itemName}-${index}`} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-orange-400">
                         <div className="font-medium text-gray-800 dark:text-gray-200">{prediction.itemName}</div>
                         <div className="text-sm text-gray-600 dark:text-gray-400">
                           {prediction.daysRemaining} days remaining • Suggested: {prediction.suggestedReorderQuantity} units
@@ -518,7 +520,7 @@ function InventoryManagement() {
                   </h4>
                   <div className="space-y-2">
                     {aiSuggestions.slice(0, 2).map((suggestion, index) => (
-                      <div key={index} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-blue-400">
+                      <div key={`ai-suggestion-${suggestion.title}-${index}`} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-blue-400">
                         <div className="font-medium text-gray-800 dark:text-gray-200">{suggestion.title}</div>
                         <div className="text-sm text-gray-600 dark:text-gray-400">
                           {suggestion.description || suggestion.action}

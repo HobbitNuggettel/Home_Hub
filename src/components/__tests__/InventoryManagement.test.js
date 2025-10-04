@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
@@ -348,3 +349,7 @@ describe('InventoryManagement Component', () => {
     });
   });
 });
+
+TestWrapper.propTypes = {
+  children: PropTypes.node.isRequired
+};

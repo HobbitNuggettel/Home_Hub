@@ -308,7 +308,7 @@ export default function About() {
                   {features.map((feature, index) => {
                     const IconComponent = feature.icon;
                     return (
-                      <div key={index} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border border-gray-200 dark:border-gray-600">
+                      <div key={`feature-${feature.title}-${index}`} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border border-gray-200 dark:border-gray-600">
                         <div className="flex items-start space-x-4">
                           <div className="p-3 bg-white dark:bg-gray-600 rounded-lg">
                             <IconComponent className="w-6 h-6 text-gray-600 dark:text-gray-300" />
@@ -345,7 +345,7 @@ export default function About() {
 
                 <div className="space-y-6">
                   {techStack.map((category, index) => (
-                    <div key={index} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border border-gray-200 dark:border-gray-600">
+                    <div key={`tech-category-${category.name}-${index}`} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border border-gray-200 dark:border-gray-600">
                       <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                         <Code className="w-5 h-5 text-gray-600" />
                         {category.category}
@@ -381,7 +381,7 @@ export default function About() {
 
                 <div className="space-y-6">
                   {roadmap.map((phase, index) => (
-                    <div key={index} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border border-gray-200 dark:border-gray-600">
+                    <div key={`roadmap-phase-${phase.title}-${index}`} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border border-gray-200 dark:border-gray-600">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center space-x-3">
                           <div className={`p-2 rounded-full ${getStatusColor(phase.status)}`}>
@@ -431,7 +431,7 @@ export default function About() {
                   {achievements.map((achievement, index) => {
                     const IconComponent = achievement.icon;
                     return (
-                      <div key={index} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border border-gray-200 dark:border-gray-600 text-center">
+                      <div key={`contributor-${contributor.name}-${index}`} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border border-gray-200 dark:border-gray-600 text-center">
                         <div className="p-3 bg-white dark:bg-gray-600 rounded-lg inline-block mb-4">
                           <IconComponent className="w-8 h-8 text-gray-600 dark:text-gray-300" />
                         </div>

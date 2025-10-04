@@ -1,32 +1,54 @@
-import React, { createContext, useContext } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const mockDevToolsContext = {
+// Mock DevToolsContext
+export const DevToolsContext = React.createContext({
   isDevMode: false,
-  toggleDevMode: jest.fn(),
+  setIsDevMode: jest.fn(),
   showDevTools: false,
-  toggleDevTools: jest.fn(),
-  devStats: {
-    renderCount: 0,
-    apiCalls: 0,
-    cacheHits: 0,
-    errorCount: 0,
+  setShowDevTools: jest.fn(),
+  devToolsConfig: {
+    showStateDebug: false,
+    showInstanceTracking: false,
+    showPerformanceMetrics: false,
+    showNetworkLogs: false,
+    enableHotReload: false
   },
-  logActivity: jest.fn(),
-  clearLogs: jest.fn(),
-};
-
-const DevToolsContext = createContext(mockDevToolsContext);
+  setDevToolsConfig: jest.fn(),
+  toggleDevMode: jest.fn(),
+  toggleDevTools: jest.fn(),
+  updateDevToolsConfig: jest.fn()
+});
 
 export const useDevTools = () => {
-  return useContext(DevToolsContext);
+  const context = React.useContext(DevToolsContext);
+  if (!context) {
+    throw new Error('useDevTools must be used within a DevToolsProvider');
+  }
+  return context;
 };
 
 export const DevToolsProvider = ({ children }) => {
-  return (
-    <DevToolsContext.Provider value={mockDevToolsContext}>
-      {children}
-    </DevToolsContext.Provider>
-  );
-};
+  const mockValue = {
+    isDevMode: false,
+    setIsDevMode: jest.fn(),
+    showDevTools: false,
+    setShowDevTools: jest.fn(),
+    devToolsConfig: {
+      showStateDebug: false,
+      showInstanceTracking: false,
+      showPerformanceMetrics: false,
+      showNetworkLogs: false,
+      enableHotReload: false
+    },
+    setDevToolsConfig: jest.fn(),
+    toggleDevMode: jest.fn(),
+    toggleDevTools: jest.fn(),
+    updateDevToolsConfig: jest.fn()
+  };
 
-export default mockDevToolsContext;
+  return React.createElement(DevToolsContext.Provider, { value: mockValue }, children);
+};
+DevToolsProvider.propTypes = {
+  children: PropTypes.node.isRequired
+};

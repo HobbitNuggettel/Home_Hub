@@ -203,7 +203,7 @@ const RealTimeCollaboration = () => {
             <div className="flex items-center space-x-2">
               <span className="text-purple-600">🎭</span>
               <p className="text-sm text-purple-700">
-                <strong>Mock Mode Active:</strong> You're experiencing simulated real-time collaboration.
+                <strong>Mock Mode Active:</strong> You&apos;re experiencing simulated real-time collaboration.
                 All features work locally for development and testing purposes.
               </p>
             </div>
@@ -265,7 +265,7 @@ const RealTimeCollaboration = () => {
         {/* Messages */}
         <div className="h-64 overflow-y-auto border border-gray-200 rounded-lg p-3 mb-4 bg-gray-50">
           {messages.map((message, index) => (
-            <div key={index} className="mb-3 p-2 bg-white rounded border">
+            <div key={`collaboration-message-${message.id || message.timestamp}-${index}`} className="mb-3 p-2 bg-white rounded border">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-sm font-medium text-blue-600">{message.user}</span>
                 <span className="text-xs text-gray-500">

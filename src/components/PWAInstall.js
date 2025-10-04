@@ -241,7 +241,7 @@ export const PWAStatus = () => {
         <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
           <p className="text-sm text-blue-700 dark:text-blue-300">
             💡 <strong>Tip:</strong> Install Home Hub as a PWA for the best experience! 
-            Look for the install prompt or use your browser's menu.
+            Look for the install prompt or use your browser&apos;s menu.
           </p>
         </div>
       )}
@@ -302,7 +302,7 @@ export const PWAFeatures = () => {
           };
           
           return (
-            <div key={index} className="flex items-start space-x-3">
+            <div key={`pwa-feature-${feature.title}-${index}`} className="flex items-start space-x-3">
               <div className={`p-2 rounded-lg ${colorClasses[feature.color]}`}>
                 <IconComponent size={16} />
               </div>

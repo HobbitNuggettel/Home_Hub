@@ -84,6 +84,15 @@ const HelpTooltip = ({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleClick}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-label="Help tooltip trigger"
         className="inline-block"
       >
         {children}
@@ -145,7 +154,7 @@ const HelpTooltip = ({
                   <div className="flex space-x-1">
                     {tour.steps.map((_, index) => (
                       <div
-                        key={index}
+                        key={`tooltip-dot-${index}`}
                         className={`w-2 h-2 rounded-full ${
                           index === step ? 'bg-white' : 'bg-gray-600'
                         }`}
@@ -239,7 +248,7 @@ export const GuidedTour = ({ isOpen, onClose, tour }) => {
             <div className="flex space-x-2">
               {tour.steps.map((_, index) => (
                 <div
-                  key={index}
+                  key={`tooltip-indicator-${index}`}
                   className={`w-2 h-2 rounded-full ${
                     index === currentStep ? 'bg-blue-600' : 'bg-gray-300'
                   }`}

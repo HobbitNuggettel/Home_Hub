@@ -43,7 +43,9 @@ import {
   UserCheck,
   Search,
   Eye,
-  HelpCircle
+  HelpCircle,
+  Palette,
+  Cloud
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import DarkModeToggle from './DarkModeToggle';
@@ -52,7 +54,11 @@ import FixedHeader from './FixedHeader';
 import '../../styles/sidebar.css';
 
 export default function Navigation() {
-  const [sidebarState, setSidebarState] = useState('hidden'); // 'hidden', 'collapsed', 'expanded'
+  // Initialize sidebar state from localStorage or default to 'hidden'
+  const [sidebarState, setSidebarState] = useState(() => {
+    const saved = localStorage.getItem('homeHub-sidebar-state');
+    return saved || 'hidden';
+  });
   const auth = useAuth();
   const currentUser = auth?.currentUser;
   const userProfile = auth?.userProfile;
@@ -68,31 +74,28 @@ export default function Navigation() {
       tooltip: 'Dashboard and overview'
     },
     {
+      name: 'Recipe Management',
+      href: '/recipes',
+      icon: ChefHat,
+      tooltip: 'Store recipes and plan meals'
+    },
+    {
       name: 'Inventory Management',
       href: '/inventory',
       icon: Package,
-      tooltip: 'Track household items and supplies',
-      action: true
+      tooltip: 'Track and manage household inventory'
     },
     {
       name: 'Spending & Budgeting',
       href: '/spending',
       icon: DollarSign,
-      tooltip: 'Monitor expenses and manage budgets',
-      action: true
+      tooltip: 'Track expenses and manage budgets'
     },
     {
       name: 'Shopping Lists',
-      href: '/shopping-lists',
+      href: '/shopping',
       icon: ShoppingCart,
-      tooltip: 'Create and manage shopping lists',
-      action: true
-    },
-    {
-      name: 'Recipe Management',
-      href: '/recipes',
-      icon: ChefHat,
-      tooltip: 'Store recipes and plan meals'
+      tooltip: 'Create and manage shopping lists'
     },
     {
       name: 'Collaboration',
@@ -105,6 +108,12 @@ export default function Navigation() {
       href: '/ai-suggestions',
       icon: Lightbulb,
       tooltip: 'AI-powered insights and recommendations'
+    },
+    {
+      name: 'Weather',
+      href: '/weather',
+      icon: Cloud,
+      tooltip: 'Weather forecast and conditions'
     },
     {
       name: 'Real-time Demo',
@@ -189,6 +198,18 @@ export default function Navigation() {
       href: '/about',
       icon: Info,
       tooltip: 'Features, roadmap, and information'
+    },
+    {
+      name: 'Color Picker',
+      href: '/color-picker',
+      icon: Palette,
+      tooltip: 'Test and experiment with different color schemes'
+    },
+    {
+      name: 'Theme Settings',
+      href: '/theme-settings',
+      icon: Settings,
+      tooltip: 'Customize app colors and themes'
     }
   ];
 
@@ -210,31 +231,36 @@ export default function Navigation() {
   // Toggle sidebar through three states - exactly like HomeVault
   const toggleSidebar = () => {
     const body = document.body;
+    let newState;
 
     // State 1: Hidden → Collapsed (show icons)
     if (!body.classList.contains('sidebar-visible') && !body.classList.contains('sidebar-collapsed')) {
-      setSidebarState('collapsed');
+      newState = 'collapsed';
+      setSidebarState(newState);
       body.classList.add('sidebar-collapsed');
     }
     // State 2: Collapsed → Expanded (show full)
     else if (body.classList.contains('sidebar-collapsed')) {
-      setSidebarState('expanded');
+      newState = 'expanded';
+      setSidebarState(newState);
       body.classList.remove('sidebar-collapsed');
       body.classList.add('sidebar-visible');
     }
     // State 3: Expanded → Hidden
     else {
-      setSidebarState('hidden');
+      newState = 'hidden';
+      setSidebarState(newState);
       body.classList.remove('sidebar-visible');
     }
+
+    // Save state to localStorage
+    localStorage.setItem('homeHub-sidebar-state', newState);
   };
 
-  // Handle navigation and close menu
+  // Handle navigation - keep sidebar state persistent
   const handleNavigation = (href) => {
     navigate(href);
-    // Close menu after navigation
-    setSidebarState('hidden');
-    document.body.classList.remove('sidebar-visible', 'sidebar-collapsed');
+    // Don't reset sidebar state - let it persist across pages
   };
 
   // Handle logout
@@ -242,12 +268,15 @@ export default function Navigation() {
     try {
       console.log('🚪 Logout button clicked');
       await logout();
+      // Reset sidebar state only on logout
       setSidebarState('hidden');
+      localStorage.removeItem('homeHub-sidebar-state');
       document.body.classList.remove('sidebar-visible', 'sidebar-collapsed');
       navigate('/login');
     } catch (error) {
       console.error('❌ Logout error:', error);
       setSidebarState('hidden');
+      localStorage.removeItem('homeHub-sidebar-state');
       document.body.classList.remove('sidebar-visible', 'sidebar-collapsed');
       navigate('/login');
     }
@@ -271,9 +300,9 @@ export default function Navigation() {
     }
     // For 'hidden' state, no classes are added (sidebar stays hidden)
 
-    // Cleanup function
+    // Don't remove classes on unmount - let them persist for navigation
     return () => {
-      body.classList.remove('sidebar-visible', 'sidebar-collapsed');
+      // No cleanup needed - preserve state across navigation
     };
   }, [sidebarState]);
 
@@ -301,7 +330,7 @@ export default function Navigation() {
         <ul className="sidebar-menu">
           {/* Core Features Section */}
           <div className="sidebar-section-header">Core Features</div>
-          {navigationItems.slice(0, 5).map((item) => {
+          {navigationItems.slice(0, 3).map((item) => {
             const IconComponent = item.icon;
             return (
               <li
@@ -326,7 +355,7 @@ export default function Navigation() {
 
           {/* Smart Features Section */}
           <div className="sidebar-section-header">Smart Features</div>
-          {navigationItems.slice(5, 9).map((item) => {
+          {navigationItems.slice(3, 7).map((item) => {
             const IconComponent = item.icon;
             return (
               <li
@@ -350,7 +379,7 @@ export default function Navigation() {
 
           {/* System & Analytics Section */}
           <div className="sidebar-section-header">System & Analytics</div>
-          {navigationItems.slice(9, 13).map((item) => {
+          {navigationItems.slice(7, 9).map((item) => {
             const IconComponent = item.icon;
             return (
               <li

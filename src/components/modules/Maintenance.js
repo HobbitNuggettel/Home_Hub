@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { 
   Wrench, 
   Calendar, 
@@ -424,7 +425,7 @@ export default function Maintenance() {
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
                   <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                     <CalendarDays className="w-5 h-5 text-blue-600" />
-                    This Month's Schedule
+                    This Month&apos;s Schedule
                   </h4>
                   <div className="h-64 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                     <div className="text-center text-gray-500">
@@ -802,3 +803,7 @@ export default function Maintenance() {
     </div>
   );
 }
+
+Maintenance.propTypes = {
+  className: PropTypes.string
+};

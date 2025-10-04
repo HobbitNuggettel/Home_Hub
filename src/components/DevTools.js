@@ -266,7 +266,7 @@ const DevTools = () => {
             </h5>
             <div className="space-y-1 max-h-24 overflow-y-auto">
               {networkLogs.map((log, index) => (
-                <div key={index} className="text-xs p-1 bg-white dark:bg-gray-700 rounded">
+                <div key={`network-log-${log.url}-${index}`} className="text-xs p-1 bg-white dark:bg-gray-700 rounded">
                   <div className="flex justify-between">
                     <span className="text-green-600 dark:text-green-400">{log.method}</span>
                     <span className={`text-xs px-1 rounded ${
@@ -311,9 +311,11 @@ const DevTools = () => {
                   const { HybridAIService } = await import('../services/HybridAIService');
                   const result = await HybridAIService.testAllServices();
                   console.log('✅ API Test Result:', result);
+                  // eslint-disable-next-line no-alert
                   alert(`API Test Results:\n\nHuggingFace: ${result.huggingface?.success ? '✅ Working' : '❌ Failed'}\nGemini: ${result.gemini?.success ? '✅ Working' : '❌ Failed'}`);
                 } catch (error) {
                   console.error('❌ API Test Error:', error);
+                  // eslint-disable-next-line no-alert
                   alert('API Test Failed: ' + error.message);
                 }
               }}

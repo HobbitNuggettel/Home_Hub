@@ -21,7 +21,7 @@ const MobileMenuButton = ({ onClick, isOpen, apiStatus }) => {
     <button
       onClick={onClick}
       className="fixed top-4 left-4 z-[9999] p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 shadow-lg mobile-nav-button group min-h-[44px] min-w-[44px] touch-manipulation"
-      aria-label={isOpen ? "Close menu" : "Open menu"}
+      aria-label={isOpen ? 'Close menu' : 'Open menu'}
     >
       <Menu size={24} className="group-hover:scale-110 transition-transform" />
       
@@ -34,6 +34,7 @@ const MobileMenuButton = ({ onClick, isOpen, apiStatus }) => {
 };
 
 export default MobileMenuButton;
+
 
 
 

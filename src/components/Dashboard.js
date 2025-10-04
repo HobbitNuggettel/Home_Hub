@@ -16,7 +16,7 @@ import {
   Plus
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import ThemeDebug from './ThemeDebug';
+import ThemeDebug from './common/ThemeDebug';
 
 const Dashboard = React.memo(function Dashboard() {
   const auth = useAuth();
@@ -206,7 +206,7 @@ const Dashboard = React.memo(function Dashboard() {
                 Welcome back, {userProfile?.displayName || currentUser?.email?.split('@')[0] || 'User'}!
               </h1>
               <p className="text-gray-600 dark:text-dark-text-secondary mt-1">
-                Here's what's happening with your home today
+                Here&apos;s what&apos;s happening with your home today
               </p>
             </div>
             <div className="flex items-center space-x-3">
@@ -412,7 +412,7 @@ const Dashboard = React.memo(function Dashboard() {
                   const Icon = action.icon;
                   return (
                     <button
-                      key={index}
+                      key={`dashboard-action-${action.label.toLowerCase().replace(/\s+/g, '-')}-${index}`}
                       className={`${action.color} text-white p-4 rounded-lg flex flex-col items-center space-y-2 transition-colors`}
                     >
                       <Icon className="w-6 h-6" />

@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Menu, Sun, Moon, LogIn, User } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 
 const FixedHeader = ({ onMenuToggle, isMenuOpen }) => {
   const { currentUser } = useAuth();
-  const { isDarkMode, toggleDarkMode, themeMode } = useTheme();
+  const { isDarkMode, toggleDarkMode, themeMode, colors } = useTheme();
 
   const handleThemeToggle = () => {
     console.log('Theme toggle clicked!', { isDarkMode, themeMode });
@@ -15,13 +16,16 @@ const FixedHeader = ({ onMenuToggle, isMenuOpen }) => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-blue-600 shadow-lg">
+    <header
+      className="fixed top-0 left-0 right-0 z-50 shadow-lg"
+      style={{ backgroundColor: colors.primary }}
+    >
       <div className="flex items-center justify-between px-4 py-3">
         {/* Left side - Menu toggle and Logo */}
         <div className="flex items-center space-x-4">
           <button
             onClick={onMenuToggle}
-            className="p-2 text-white hover:bg-blue-700 rounded-lg transition-colors"
+            className="p-2 text-white rounded-lg transition-colors hover:opacity-80"
             aria-label="Toggle menu"
           >
             <Menu size={24} />
@@ -89,6 +93,11 @@ const FixedHeader = ({ onMenuToggle, isMenuOpen }) => {
       </div>
     </header>
   );
+};
+
+FixedHeader.propTypes = {
+  onMenuToggle: PropTypes.func.isRequired,
+  isMenuOpen: PropTypes.bool.isRequired,
 };
 
 export default FixedHeader;

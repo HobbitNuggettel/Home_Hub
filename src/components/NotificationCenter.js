@@ -124,7 +124,7 @@ export default function NotificationCenter() {
       setNotifications(mockNotifications);
       setIsLoading(false);
     }, 1000);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Filtered notifications based on active tab and search
   const filteredNotifications = useMemo(() => {
@@ -184,6 +184,7 @@ export default function NotificationCenter() {
   };
 
   const clearAll = () => {
+    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to clear all notifications?')) {
       setNotifications([]);
       toast.success('All notifications cleared');

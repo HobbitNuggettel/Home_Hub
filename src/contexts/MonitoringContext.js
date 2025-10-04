@@ -26,12 +26,20 @@ export const MonitoringProvider = ({ children }) => {
   const [performanceMetrics, setPerformanceMetrics] = useState({});
   const [alerts, setAlerts] = useState([]);
   const [recentLogs, setRecentLogs] = useState([]);
-  const [refreshInterval, setRefreshInterval] = useState(5000);
-  const [autoRefresh, setAutoRefresh] = useState(true);
+  const [refreshInterval, setRefreshInterval] = useState(10000); // Increased to 10 seconds
+  const [autoRefresh, setAutoRefresh] = useState(false); // Temporarily disabled to prevent infinite loop
+  const [lastRefresh, setLastRefresh] = useState(0);
 
   // Load monitoring data
   const loadMonitoringData = useCallback(async () => {
+    if (isLoading) return; // Prevent multiple simultaneous calls
+
+    const now = Date.now();
+    if (now - lastRefresh < 5000) return; // Debounce: minimum 5 seconds between calls
+
     try {
+      setLastRefresh(now);
+
       // Load system health
       const health = comprehensiveMonitoringService.getSystemHealth();
       setSystemHealth(health);
@@ -52,7 +60,7 @@ export const MonitoringProvider = ({ children }) => {
       setError(err.message);
       loggingService.error('Failed to load monitoring data', { error: err.message });
     }
-  }, []);
+  }, [isLoading, lastRefresh]);
 
   // Initialize monitoring
   const initializeMonitoring = useCallback(async () => {
@@ -78,9 +86,9 @@ export const MonitoringProvider = ({ children }) => {
 
   // Refresh monitoring data
   const refreshData = useCallback(async () => {
-    if (!isInitialized) return;
+    if (!isInitialized || isLoading) return;
     await loadMonitoringData();
-  }, [isInitialized, loadMonitoringData]);
+  }, [isInitialized, isLoading, loadMonitoringData]);
 
   // Create alert
   const createAlert = useCallback((type, message, metadata = {}) => {
@@ -148,10 +156,10 @@ export const MonitoringProvider = ({ children }) => {
     return () => clearInterval(interval);
   }, [autoRefresh, refreshInterval, refreshData, isInitialized]);
 
-  // Initialize on mount
-  useEffect(() => {
-    initializeMonitoring();
-  }, [initializeMonitoring]);
+  // Initialize on mount - DISABLED to prevent infinite loop
+  // useEffect(() => {
+  //   initializeMonitoring();
+  // }, [initializeMonitoring]);
 
   // Cleanup on unmount
   useEffect(() => {

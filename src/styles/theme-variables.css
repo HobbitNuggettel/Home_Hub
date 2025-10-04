@@ -1,0 +1,195 @@
+/* CSS Custom Properties for Dynamic Theming */
+:root {
+  /* Default Light Theme */
+  --color-primary: #3b82f6;
+  --color-secondary: #8b5cf6;
+  --color-accent: #10b981;
+  --color-background: #ffffff;
+  --color-surface: #f8fafc;
+  --color-text: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-border: #e5e7eb;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Semantic color mappings */
+  --bg-primary: var(--color-background);
+  --bg-secondary: var(--color-surface);
+  --text-primary: var(--color-text);
+  --text-secondary: var(--color-text-secondary);
+  --border-primary: var(--color-border);
+  
+  /* Button colors */
+  --btn-primary: var(--color-primary);
+  --btn-primary-hover: color-mix(in srgb, var(--color-primary) 85%, black);
+  --btn-secondary: var(--color-secondary);
+  --btn-secondary-hover: color-mix(in srgb, var(--color-secondary) 85%, black);
+  
+  /* Card colors */
+  --card-bg: var(--color-surface);
+  --card-border: var(--color-border);
+  --card-shadow: rgba(0, 0, 0, 0.1);
+  
+  /* Input colors */
+  --input-bg: var(--color-background);
+  --input-border: var(--color-border);
+  --input-focus: var(--color-primary);
+  
+  /* Status colors */
+  --status-success: var(--color-success);
+  --status-warning: var(--color-warning);
+  --status-error: var(--color-error);
+  --status-info: var(--color-info);
+}
+
+/* Dark theme overrides */
+.dark {
+  --color-primary: #60a5fa;
+  --color-secondary: #a78bfa;
+  --color-accent: #34d399;
+  --color-background: #111827;
+  --color-surface: #1f2937;
+  --color-text: #f9fafb;
+  --color-text-secondary: #9ca3af;
+  --color-border: #374151;
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-error: #f87171;
+  --color-info: #60a5fa;
+  
+  /* Dark theme specific adjustments */
+  --card-shadow: rgba(0, 0, 0, 0.3);
+  --btn-primary-hover: color-mix(in srgb, var(--color-primary) 85%, white);
+  --btn-secondary-hover: color-mix(in srgb, var(--color-secondary) 85%, white);
+}
+
+/* Utility classes for theme colors */
+.bg-primary { background-color: var(--color-primary) !important; }
+.bg-secondary { background-color: var(--color-secondary) !important; }
+.bg-accent { background-color: var(--color-accent) !important; }
+.bg-surface { background-color: var(--color-surface) !important; }
+
+.text-primary { color: var(--color-text) !important; }
+.text-secondary { color: var(--color-text-secondary) !important; }
+.text-accent { color: var(--color-accent) !important; }
+
+.border-primary { border-color: var(--color-border) !important; }
+.border-accent { border-color: var(--color-accent) !important; }
+
+/* Button utilities */
+.btn-theme-primary {
+  background-color: var(--color-primary);
+  color: white;
+  border: 1px solid var(--color-primary);
+}
+
+.btn-theme-primary:hover {
+  background-color: var(--btn-primary-hover);
+  border-color: var(--btn-primary-hover);
+}
+
+.btn-theme-secondary {
+  background-color: var(--color-secondary);
+  color: white;
+  border: 1px solid var(--color-secondary);
+}
+
+.btn-theme-secondary:hover {
+  background-color: var(--btn-secondary-hover);
+  border-color: var(--btn-secondary-hover);
+}
+
+.btn-theme-outline {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.btn-theme-outline:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* Card utilities */
+.card-theme {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 1px 3px var(--card-shadow);
+}
+
+/* Input utilities */
+.input-theme {
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-primary);
+}
+
+.input-theme:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--input-focus) 20%, transparent);
+}
+
+/* Status utilities */
+.status-success { color: var(--status-success); }
+.status-warning { color: var(--status-warning); }
+.status-error { color: var(--status-error); }
+.status-info { color: var(--status-info); }
+
+/* Gradient utilities */
+.gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-primary));
+}
+
+/* Animation utilities */
+.transition-theme {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Sidebar theme integration */
+.sidebar {
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+}
+
+.sidebar-item-button {
+  color: var(--text-primary);
+}
+
+.sidebar-item-button:hover {
+  background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  color: var(--color-primary);
+}
+
+.sidebar-item.active .sidebar-item-button {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* Header theme integration */
+.header-theme {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--text-primary);
+}
+
+/* Responsive theme adjustments */
+@media (max-width: 768px) {
+  :root {
+    --card-shadow: rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark {
+    --card-shadow: rgba(0, 0, 0, 0.2);
+  }
+}
+
+
+
+
+

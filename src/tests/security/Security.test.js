@@ -18,7 +18,7 @@ describe('Security Tests', () => {
   });
 
   it('should prevent XSS attacks', () => {
-    const maliciousScript = '<script>alert("XSS")</script>';
+    const maliciousScript = '<script>alert(\'XSS\')</script>';
     
     cy.get('[data-testid="search-input"]').type(maliciousScript);
     cy.get('[data-testid="search-results"]').should('not.contain', '<script>');
@@ -26,7 +26,7 @@ describe('Security Tests', () => {
   });
 
   it('should prevent SQL injection', () => {
-    const maliciousQuery = "'; DROP TABLE users; --";
+    const maliciousQuery = '\'; DROP TABLE users; --';
     
     cy.get('[data-testid="search-input"]').type(maliciousQuery);
     cy.get('[data-testid="search-results"]').should('not.contain', 'DROP TABLE');
@@ -235,6 +235,7 @@ describe('Security Tests', () => {
     });
   });
 });
+
 
 
 

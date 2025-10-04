@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { 
   Activity, 
   AlertTriangle, 
@@ -433,6 +434,10 @@ const MonitoringDashboard = () => {
       </div>
     </div>
   );
+};
+
+MonitoringDashboard.propTypes = {
+  className: PropTypes.string
 };
 
 export default MonitoringDashboard;

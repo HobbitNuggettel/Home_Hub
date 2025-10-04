@@ -215,6 +215,7 @@ export default function Settings() {
   };
 
   const handleAccountDeletion = () => {
+    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
       // In a real app, you would call the account deletion function
       toast.success('Account deletion request submitted');
@@ -808,7 +809,7 @@ export default function Settings() {
                       <div className="flex-1">
                         <h3 className="text-lg font-medium text-gray-900 dark:text-white">Developer Mode</h3>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
-                          Enable advanced debugging tools and development features. Only enable if you're a developer or need to troubleshoot issues.
+                          Enable advanced debugging tools and development features. Only enable if you&apos;re a developer or need to troubleshoot issues.
                         </p>
                         <div className="flex items-center space-x-4">
                           <button

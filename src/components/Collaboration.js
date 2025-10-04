@@ -240,6 +240,7 @@ export default function Collaboration() {
 
   // Remove member
   const removeMember = (id) => {
+    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to remove this member?')) {
       setHouseholds(households.map(household => 
         household.id === currentHousehold.id 
@@ -258,6 +259,7 @@ export default function Collaboration() {
 
   // Cancel invitation
   const cancelInvitation = (id) => {
+    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to cancel this invitation?')) {
       setHouseholds(households.map(household => 
         household.id === currentHousehold.id 

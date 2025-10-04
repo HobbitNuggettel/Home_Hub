@@ -124,6 +124,7 @@ export default function ShoppingLists() {
 
   // Delete list
   const deleteList = (id) => {
+    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to delete this shopping list?')) {
       setShoppingLists(shoppingLists.filter(list => list.id !== id));
       toast.success('Shopping list deleted successfully!');
@@ -166,6 +167,7 @@ export default function ShoppingLists() {
 
   // Delete item
   const deleteItem = (listId, itemId) => {
+    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to delete this item?')) {
       setShoppingLists(shoppingLists.map(list => 
         list.id === listId 

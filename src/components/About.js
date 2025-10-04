@@ -160,7 +160,7 @@ export default function About() {
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+              <div key={`feature-${feature.title}-${index}`} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between mb-4">
                   <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
                     <Icon className="text-blue-600 dark:text-blue-400" size={24} />
@@ -191,7 +191,7 @@ export default function About() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {technologies.map((tech, index) => (
-              <div key={index} className="text-center p-4">
+              <div key={`tech-${tech.name}-${index}`} className="text-center p-4">
                 <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center mx-auto mb-3">
                   <Code className="text-gray-600 dark:text-gray-400" size={32} />
                 </div>
@@ -214,7 +214,7 @@ export default function About() {
         
         <div className="space-y-8">
           {roadmap.map((phase, index) => (
-            <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+            <div key={`roadmap-${phase.phase}-${index}`} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{phase.phase}</h3>
                 <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
@@ -225,7 +225,7 @@ export default function About() {
               </div>
               <ul className="space-y-2">
                 {phase.items.map((item, itemIndex) => (
-                  <li key={itemIndex} className="flex items-center text-gray-600 dark:text-gray-300">
+                  <li key={`roadmap-item-${phase.phase}-${item}-${itemIndex}`} className="flex items-center text-gray-600 dark:text-gray-300">
                     <div className={`w-2 h-2 rounded-full mr-3 ${
                       phase.status === 'Completed' ? 'bg-green-500' : 'bg-blue-500'
                     }`}></div>

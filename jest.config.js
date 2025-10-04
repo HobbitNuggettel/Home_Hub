@@ -1,11 +1,13 @@
 module.exports = {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
+  moduleDirectories: ['node_modules', 'src'],
   moduleNameMapping: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
       '<rootDir>/src/__mocks__/fileMock.js',
+    '^@/contexts/(.*)$': '<rootDir>/src/contexts/__mocks__/$1',
   },
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Loader2, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react';
 
 // Spinner Component
@@ -96,7 +97,7 @@ export const SkeletonLoader = ({ lines = 3, className = '' }) => {
     <div className={`animate-pulse ${className}`}>
       {Array.from({ length: lines }).map((_, index) => (
         <div
-          key={index}
+          key={`loading-skeleton-line-${index}`}
           className={`h-4 bg-gray-200 rounded mb-2 ${
             index === lines - 1 ? 'w-3/4' : 'w-full'
           }`}
@@ -316,4 +317,80 @@ export default {
   FadeInAnimation,
   SlideInAnimation,
   LoadingOverlay
+};
+
+// PropTypes
+Spinner.propTypes = {
+  size: PropTypes.oneOf(['sm', 'md', 'lg', 'xl']),
+  color: PropTypes.oneOf(['blue', 'green', 'red', 'gray', 'white'])
+};
+
+LoadingButton.propTypes = {
+  loading: PropTypes.bool,
+  children: PropTypes.node.isRequired,
+  onClick: PropTypes.func,
+  disabled: PropTypes.bool,
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(['primary', 'secondary', 'danger']),
+  size: PropTypes.oneOf(['sm', 'md', 'lg'])
+};
+
+LoadingCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  showProgress: PropTypes.bool,
+  progress: PropTypes.number
+};
+
+SkeletonLoader.propTypes = {
+  lines: PropTypes.number,
+  className: PropTypes.string
+};
+
+StatusIndicator.propTypes = {
+  status: PropTypes.oneOf(['loading', 'success', 'error', 'warning']).isRequired,
+  message: PropTypes.string,
+  showSpinner: PropTypes.bool,
+  className: PropTypes.string
+};
+
+ProgressBar.propTypes = {
+  progress: PropTypes.number.isRequired,
+  showPercentage: PropTypes.bool,
+  color: PropTypes.oneOf(['blue', 'green', 'red', 'yellow', 'purple']),
+  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  className: PropTypes.string
+};
+
+ShimmerEffect.propTypes = {
+  className: PropTypes.string
+};
+
+PulseAnimation.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string
+};
+
+BounceAnimation.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string
+};
+
+FadeInAnimation.propTypes = {
+  children: PropTypes.node.isRequired,
+  delay: PropTypes.number,
+  className: PropTypes.string
+};
+
+SlideInAnimation.propTypes = {
+  children: PropTypes.node.isRequired,
+  direction: PropTypes.oneOf(['left', 'right', 'up', 'down']),
+  delay: PropTypes.number,
+  className: PropTypes.string
+};
+
+LoadingOverlay.propTypes = {
+  isVisible: PropTypes.bool.isRequired,
+  message: PropTypes.string,
+  children: PropTypes.node
 };

@@ -129,7 +129,7 @@ export default function AIDashboard() {
   // Load insights on component mount
   useEffect(() => {
     loadAllAIInsights();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // AI Score Badge Component
   const AIScoreBadge = ({ score }) => {
@@ -305,7 +305,7 @@ export default function AIDashboard() {
             ) : (
               <div className="space-y-3">
                 {expenseInsights.slice(0, 3).map((insight, index) => (
-                  <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <div key={`expense-insight-${insight.title}-${index}`} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <Lightbulb className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
                     <div className="flex-1">
                       <div className="font-medium text-gray-900 dark:text-white text-sm">
@@ -346,7 +346,7 @@ export default function AIDashboard() {
             ) : (
               <div className="space-y-3">
                 {inventoryPredictions.slice(0, 3).map((prediction, index) => (
-                  <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <div key={`inventory-prediction-${prediction.itemName}-${index}`} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <TrendingUp className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
                     <div className="flex-1">
                       <div className="font-medium text-gray-900 dark:text-white text-sm">
@@ -388,7 +388,7 @@ export default function AIDashboard() {
           ) : (
             <div className="space-y-3">
               {aiAlerts.slice(0, 5).map((alert, index) => (
-                <div key={index} className={`flex items-start gap-3 p-4 rounded-lg border-l-4 ${
+                <div key={`ai-alert-${alert.title}-${index}`} className={`flex items-start gap-3 p-4 rounded-lg border-l-4 ${
                   alert.priority === 'critical' ? 'bg-red-50 dark:bg-red-900/20 border-red-400' :
                   alert.priority === 'high' ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-400' :
                   'bg-blue-50 dark:bg-blue-900/20 border-blue-400'

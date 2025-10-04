@@ -1,35 +1,70 @@
-import React, { createContext, useContext } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const mockAuthContext = {
-  currentUser: { uid: 'test-uid', email: 'test@example.com', displayName: 'Test User' },
-  userProfile: { 
-    name: 'Test User', 
-    email: 'test@example.com',
-    uid: 'test-uid',
-    photoURL: null,
-  },
-  login: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid', email: 'test@example.com' } })),
-  register: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid', email: 'test@example.com' } })),
-  logout: jest.fn(() => Promise.resolve()),
-  resetPassword: jest.fn(() => Promise.resolve()),
-  signInWithGoogle: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid', email: 'test@example.com' } })),
-  updateUserProfile: jest.fn(() => Promise.resolve()),
+// Mock AuthContext
+export const AuthContext = React.createContext({
+  currentUser: null,
+  user: null,
+  userProfile: null,
   loading: false,
-  error: null,
-};
-
-const AuthContext = createContext(mockAuthContext);
+  signIn: jest.fn(),
+  signUp: jest.fn(),
+  signOut: jest.fn(),
+  resetPassword: jest.fn(),
+  updateProfile: jest.fn(),
+  updateUserProfile: jest.fn(),
+  updateEmail: jest.fn(),
+  updatePassword: jest.fn(),
+  deleteUser: jest.fn(),
+  isAuthenticated: false,
+  isAdmin: false,
+  isModerator: false,
+  userRole: 'user',
+  permissions: [],
+  checkPermission: jest.fn(),
+  refreshUser: jest.fn(),
+  login: jest.fn(),
+  logout: jest.fn(),
+  error: null
+});
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = React.useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
 
 export const AuthProvider = ({ children }) => {
-  return (
-    <AuthContext.Provider value={mockAuthContext}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+  const mockValue = {
+    currentUser: null,
+    user: null,
+    userProfile: null,
+    loading: false,
+    signIn: jest.fn(),
+    signUp: jest.fn(),
+    signOut: jest.fn(),
+    resetPassword: jest.fn(),
+    updateProfile: jest.fn(),
+    updateUserProfile: jest.fn(),
+    updateEmail: jest.fn(),
+    updatePassword: jest.fn(),
+    deleteUser: jest.fn(),
+    isAuthenticated: false,
+    isAdmin: false,
+    isModerator: false,
+    userRole: 'user',
+    permissions: [],
+    checkPermission: jest.fn(),
+    refreshUser: jest.fn(),
+    login: jest.fn(),
+    logout: jest.fn(),
+    error: null
+  };
 
-export default mockAuthContext;
+  return React.createElement(AuthContext.Provider, { value: mockValue }, children);
+};
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired
+};

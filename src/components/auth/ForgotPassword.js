@@ -66,11 +66,11 @@ export default function ForgotPassword() {
               Check your email
             </h2>
             <p className="mt-2 text-sm text-gray-600">
-              We've sent a password reset link to <strong>{email}</strong>
+              We&apos;ve sent a password reset link to <strong>{email}</strong>
             </p>
             <div className="mt-6 space-y-4">
               <p className="text-sm text-gray-500">
-                Didn't receive the email? Check your spam folder or try again.
+                Didn&apos;t receive the email? Check your spam folder or try again.
               </p>
               <button
                 onClick={() => setSent(false)}
@@ -109,7 +109,7 @@ export default function ForgotPassword() {
             Reset your password
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Enter your email address and we'll send you a link to reset your password
+            Enter your email address and we&apos;ll send you a link to reset your password
           </p>
         </div>
 

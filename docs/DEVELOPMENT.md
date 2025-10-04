@@ -35,6 +35,31 @@ src/
 4. Run test suite
 5. Create pull request
 
+## 🎨 Color Customization System
+
+### Overview
+Home Hub features a comprehensive color customization system that allows users to personalize the entire application with custom themes.
+
+### Key Components
+- **ColorPicker.js** - Interactive HSL color picker with real-time preview
+- **ThemeSettings.js** - Comprehensive theme management interface
+- **ThemePreview.js** - Live preview of color changes across components
+- **ThemeContext.js** - Theme management with localStorage persistence
+- **theme-variables.css** - CSS custom properties for dynamic theming
+
+### Usage
+1. Navigate to `/color-picker` to experiment with colors
+2. Use `/theme-settings` for comprehensive customization
+3. Apply colors as Primary, Secondary, or Accent colors
+4. Generate complete themes from a single color
+5. Export/import themes for sharing
+
+### Technical Implementation
+- CSS custom properties for real-time theming
+- localStorage persistence for custom themes
+- Theme presets for quick customization
+- Real-time preview across all components
+
 ## Code Standards
 
 - Use ESLint configuration

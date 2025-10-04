@@ -48,6 +48,9 @@ const PWASettings = lazy(() => import('./components/pwa/PWASettings'));
 const PWAInstallPrompt = lazy(() => import('./components/pwa/PWAInstallPrompt'));
 const PWAUpdateNotification = lazy(() => import('./components/pwa/PWAInstallPrompt').then(module => ({ default: module.PWAUpdateNotification })));
 const AnalyticsDashboard = lazy(() => import('./components/analytics/AnalyticsDashboard'));
+const ColorPicker = lazy(() => import('./components/ColorPicker'));
+const ThemeSettings = lazy(() => import('./components/ThemeSettings'));
+const WeatherDashboard = lazy(() => import('./components/WeatherDashboard'));
 const EnterpriseDashboard = lazy(() => import('./components/enterprise/EnterpriseDashboard'));
 
 import LogoutTest from './components/LogoutTest';
@@ -94,9 +97,7 @@ function App() {
                   {/* Protected Routes */}
                   <Route path="/home" element={
                     <>
-                      <Navigation />
-                                        <TestLogin />
-                                        <ThemeTest />
+                                        <Navigation />
                       <Home />
                     </>
                   } />
@@ -136,7 +137,7 @@ function App() {
                                         <Collaboration />
                     </>
                   } />
-                  <Route path="/shopping-lists" element={
+                                    <Route path="/shopping" element={
                     <>
                       <Navigation />
                       <ShoppingLists />
@@ -269,6 +270,30 @@ function App() {
                                       <>
                                         <Navigation />
                                         <EnterpriseDashboard />
+                                      </>
+                                    } />
+
+                                    {/* Color Picker Tool */}
+                                    <Route path="/color-picker" element={
+                                      <ErrorBoundary fallback={<div className="flex items-center justify-center min-h-screen text-red-500">Error loading Color Picker</div>}>
+                                        <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading Color Picker...</div>}>
+                                          <Navigation />
+                                          <ColorPicker />
+                                        </Suspense>
+                                      </ErrorBoundary>
+                                    } />
+                                    {/* Theme Settings */}
+                                    <Route path="/theme-settings" element={
+                                      <>
+                                        <Navigation />
+                                        <ThemeSettings />
+                                      </>
+                                    } />
+                                    {/* Weather Dashboard */}
+                                    <Route path="/weather" element={
+                                      <>
+                                        <Navigation />
+                                        <WeatherDashboard />
                                       </>
                                     } />
 

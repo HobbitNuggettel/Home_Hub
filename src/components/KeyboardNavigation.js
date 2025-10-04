@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 const KeyboardNavigation = ({ children }) => {
   useEffect(() => {
@@ -34,6 +35,10 @@ const KeyboardNavigation = ({ children }) => {
   }, []);
 
   return <>{children}</>;
+};
+
+KeyboardNavigation.propTypes = {
+  children: PropTypes.node.isRequired
 };
 
 export default KeyboardNavigation;
