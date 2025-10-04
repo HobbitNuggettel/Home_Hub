@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { 
   User, 
   Lock, 
@@ -399,7 +400,7 @@ export const LoginForm = ({ onSwitchToRegister }) => {
 
         <div className="text-center">
           <p className="text-sm text-gray-600">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <button
               type="button"
               onClick={onSwitchToRegister}
@@ -421,6 +422,10 @@ export const LoginForm = ({ onSwitchToRegister }) => {
       </div>
     </div>
   );
+};
+
+LoginForm.propTypes = {
+  onSwitchToRegister: PropTypes.func.isRequired
 };
 
 // Register Component
@@ -860,6 +865,10 @@ export const UserProfile = () => {
       </div>
     </div>
   );
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired
 };
 
 export default AuthSystem; 

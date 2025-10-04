@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 
 // Mock window.matchMedia for theme testing - must be set up before any imports
 const mockMatchMedia = jest.fn().mockImplementation(query => ({
-  matches: query.includes('dark') ? false : true, // Default to light mode
+  matches: query === '(prefers-color-scheme: dark)' ? false : true, // Default to light mode
   media: query,
   onchange: null,
   addListener: jest.fn(), // deprecated
@@ -142,27 +142,7 @@ jest.mock('firebase/database', () => ({
   off: jest.fn(),
 }));
 
-// Mock React contexts globally
-jest.mock('./contexts/AuthContext', () => {
-  const React = require('react');
-  const AuthContext = React.createContext();
-
-  const mockAuthValue = {
-    currentUser: { uid: 'test-uid', email: 'test@example.com', displayName: 'Test User' },
-    userProfile: { name: 'Test User', email: 'test@example.com' },
-    updateUserProfile: jest.fn(() => Promise.resolve()),
-    login: jest.fn(() => Promise.resolve({ user: { uid: 'test-uid' } })),
-    logout: jest.fn(() => Promise.resolve()),
-    loading: false,
-    error: null,
-  };
-
-  return {
-    AuthContext,
-    useAuth: jest.fn(() => mockAuthValue),
-    AuthProvider: ({ children }) => React.createElement(AuthContext.Provider, { value: mockAuthValue }, children),
-  };
-});
+// Mock React contexts globally - AuthContext mock removed to allow local mocks
 jest.mock('./contexts/DevToolsContext');
 jest.mock('./contexts/RealTimeContext');
 

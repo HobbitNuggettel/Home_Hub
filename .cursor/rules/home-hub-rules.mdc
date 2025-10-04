@@ -1,0 +1,85 @@
+---
+alwaysApply: true
+---
+
+## 📋 **Development Workflow Rules**
+
+### 🔧 **Development Environment Setup**
+- Firebase configuration and API keys stored in `.env.local` file
+- Environment is pre-configured - no need to ask about setup
+- Always open/show the terminal tab you're working to the user, so user can see what you are doing in terminal as well
+
+### 🔄 **Task Execution & Completion Protocol**
+- Ask questions when in doubt rather than making assumptions
+- Restart server every time changes are made
+- Play sound when all the work is completed only (don't play for each task)
+- If you need any approvals (allow, run anything) from user play sound (beeep beep)
+- Give brief info after completing work
+
+### 📝 **Documentation & Project Management**
+- Update README file when implementing new features or adding recommendations
+- Update project's TODO list after implementing tasks
+- Use `main2` branch as safe backup during development
+- Push completed features to `main` branch when ready
+- Maintain `production-backup` branch for production safety
+- Keep track of project status and test coverage
+
+### 🌐 **Testing & Validation Standards**
+- Cursor can open browser to cross-check, test, and verify functionality
+- Use browser testing to ensure user requirements are properly implemented
+- Maintain high test coverage and fix failing tests
+- Add test cases for everything - all modules, APIs, and the whole project
+- Verify offline functionality remains intact
+- Test real-time collaboration features after changes
+
+### 📝 **Code Quality & Standards**
+- Use 3-tier fallback strategy (Primary→Secondary→Local)
+- Implement proper error boundaries and fallback mechanisms
+- Keep code well-documented and maintainable
+- Fix ESLint errors and logging service errors
+- Organize files and maintain good file structure standards
+- Remove unwanted code, reduce redundancy, improve security, break large code files into smaller blocks
+
+### 🚀 **Deployment & Production Readiness**
+- Ensure all changes are production-ready before pushing to main
+- Always maintain backup branches for safety
+- Maintain Swagger documentation for all APIs
+
+### 🎯 **Cross-Platform & Feature Requirements**
+- **Cross-Platform**: Ensure changes work on both web and mobile (React Native)
+- **Performance**: Monitor and optimize for performance with each change
+- **Security**: Always consider security implications of new features
+- **Accessibility**: Maintain WCAG 2.1 AA compliance standards
+- **Internationalization**: Ensure new features support all 11 languages
+- **Memory Management**: Save important patterns/decisions to memory for future reference
+
+### 🔊 **Sound Notification System**
+- **Task Complete**: Play success sound when all todo's tasks are completed
+- **Work Complete**: Play celebration sound when all work is finished
+- **Approval Needed**: Play attention sound when user approval is required
+- **User Approval**: Play confirmation sound when user gives approval
+- **Error/Warning**: Play appropriate error/warning sounds for issues
+
+- **Test Results**: Play pass sound for successful tests, fail sound for failures
+
+
+### 🌐 **Network & Development Tools**
+- Show the link to open localhost over the network (IP address)
+
+---
+
+## ⚠️ **Critical Requirements**
+
+### 📄 **File Management**
+- Whenever you create new files or modify/edit with .md extensions include a timestamp
+
+### 🔄 **Workflow Integration**
+- All rules must be followed consistently across all development tasks
+- Maintain these standards throughout the entire development lifecycle
+
+Whenever you Create a new files or modify edit with .md extensions include a timestamp.
+Always open/show the terminal tab  you're working to the user, so user can see what you are doing in terminal as well
+
+
+open browser and double check before conforming me that it is done or issue is resolved and provide working screen shot from next time and for everything you do open the browser check and tell the user that is running or working logic implemented is texted etc....
+

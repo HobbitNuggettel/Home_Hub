@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useDevTools } from '../contexts/DevToolsContext';
+import { useTheme } from '../contexts/ThemeContext';
 import hybridStorage from '../firebase/hybridStorage';
 import AnalyticsService from '../services/AnalyticsService';
 import { 
@@ -33,6 +34,7 @@ export default function Home() {
   const auth = useAuth();
   const currentUser = auth?.currentUser;
   const { isDevMode } = useDevTools();
+  const { isDarkMode, colors } = useTheme();
   const [isLoading, setIsLoading] = useState(true);
   const [realData, setRealData] = useState(null);
   const [animatedStats, setAnimatedStats] = useState({
@@ -393,7 +395,10 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20 pt-20 flex items-center justify-center">
         <div className="text-center max-w-md mx-auto p-8">
-          <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+            style={{ background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})` }}
+          >
             <HomeIcon className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-4">Welcome to Home Hub</h1>
@@ -401,7 +406,13 @@ export default function Home() {
           <div className="space-y-4">
             <button
               onClick={() => navigate('/login')}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
+              className="w-full text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg"
+              style={{
+                background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
+                '--hover-bg': `linear-gradient(135deg, ${colors.primary}dd, ${colors.secondary}dd)`
+              }}
+              onMouseEnter={(e) => e.target.style.background = `linear-gradient(135deg, ${colors.primary}dd, ${colors.secondary}dd)`}
+              onMouseLeave={(e) => e.target.style.background = `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`}
             >
               Log In
             </button>
@@ -461,7 +472,12 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-fade-in-up animation-delay-300">
               <button
                 onClick={() => navigate('/login')}
-                className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                className="group px-8 py-4 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                style={{
+                  background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`
+                }}
+                onMouseEnter={(e) => e.target.style.background = `linear-gradient(135deg, ${colors.primary}dd, ${colors.secondary}dd)`}
+                onMouseLeave={(e) => e.target.style.background = `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`}
               >
                 <span className="flex items-center justify-center">
                   Get Started

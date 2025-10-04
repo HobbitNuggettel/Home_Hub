@@ -572,7 +572,7 @@ const InventoryPage = () => {
           <h3 className="font-semibold text-gray-800 mb-2">Debug Information:</h3>
           <p className="text-sm text-gray-600">Total Items: {items.length}</p>
           <p className="text-sm text-gray-600">Filtered Items: {filteredItems.length}</p>
-          <p className="text-sm text-gray-600">Search Term: "{searchTerm}"</p>
+          <p className="text-sm text-gray-600">Search Term: &quot;{searchTerm}&quot;</p>
           <p className="text-sm text-gray-600">Selected Category: {selectedCategory}</p>
           <p className="text-sm text-gray-600">View Mode: {viewMode}</p>
         </div>

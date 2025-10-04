@@ -258,7 +258,7 @@ const AISuggestions = () => {
                 <div className="flex items-end gap-1 mb-4 h-16">
                   {insight.data.map((value, index) => (
                     <div
-                      key={index}
+                      key={`chart-bar-${insight.id}-${index}`}
                       className="bg-purple-200 rounded-t flex-1"
                       style={{ height: `${(value / Math.max(...insight.data)) * 100}%` }}
                     />

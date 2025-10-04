@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // Mock RealTimeContext
 export const RealTimeContext = React.createContext({
@@ -69,4 +70,7 @@ export const RealTimeProvider = ({ children }) => {
   };
 
   return React.createElement(RealTimeContext.Provider, { value: mockValue }, children);
+};
+RealTimeProvider.propTypes = {
+  children: PropTypes.node.isRequired
 };

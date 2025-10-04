@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // Mock AuthContext
 export const AuthContext = React.createContext({
@@ -63,4 +64,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return React.createElement(AuthContext.Provider, { value: mockValue }, children);
+};
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired
 };

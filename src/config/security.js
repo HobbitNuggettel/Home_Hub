@@ -175,18 +175,18 @@ export const validationSchemas = {
 // Security headers configuration
 export const securityHeaders = {
   'Content-Security-Policy': [
-    "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.google.com",
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "font-src 'self' https://fonts.gstatic.com",
-    "img-src 'self' data: https: blob:",
-    "connect-src 'self' https://firebaseapp.com https://*.firebaseapp.com wss://*.firebaseapp.com",
-    "frame-src 'self' https://*.firebaseapp.com",
-    "object-src 'none'",
-    "base-uri 'self'",
-    "form-action 'self'",
-    "frame-ancestors 'none'",
-    "upgrade-insecure-requests"
+    'default-src \'self\'',
+    'script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https://www.gstatic.com https://www.google.com',
+    'style-src \'self\' \'unsafe-inline\' https://fonts.googleapis.com',
+    'font-src \'self\' https://fonts.gstatic.com',
+    'img-src \'self\' data: https: blob:',
+    'connect-src \'self\' https://firebaseapp.com https://*.firebaseapp.com wss://*.firebaseapp.com',
+    'frame-src \'self\' https://*.firebaseapp.com',
+    'object-src \'none\'',
+    'base-uri \'self\'',
+    'form-action \'self\'',
+    'frame-ancestors \'none\'',
+    'upgrade-insecure-requests'
   ].join('; '),
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
@@ -282,6 +282,7 @@ export default {
   secureEndpoints,
   securityMonitoring
 };
+
 
 
 

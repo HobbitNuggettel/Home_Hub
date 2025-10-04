@@ -1,7 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '../contexts/ThemeContext';
+import { AuthProvider } from '../contexts/AuthContext';
+import { DevToolsProvider } from '../contexts/DevToolsContext';
 
 // Mock the context hooks directly
 jest.mock('../contexts/DevToolsContext', () => ({
@@ -156,10 +159,16 @@ export const renderHomeWithProviders = (ui, options = {}) => {
   const HomeWrapper = ({ children }) => (
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <ThemeProvider>
-        {children}
+        <DevToolsProvider>
+          {children}
+        </DevToolsProvider>
       </ThemeProvider>
     </BrowserRouter>
   );
+
+  HomeWrapper.propTypes = {
+    children: PropTypes.node.isRequired
+  };
   return render(ui, { wrapper: HomeWrapper, ...options });
 };
 
@@ -170,6 +179,10 @@ export const renderWithRouter = (ui, options = {}) => {
       {children}
     </BrowserRouter>
   );
+
+  RouterWrapper.propTypes = {
+    children: PropTypes.node.isRequired
+  };
   return render(ui, { wrapper: RouterWrapper, ...options });
 };
 
@@ -270,4 +283,36 @@ export const setMockInventoryData = (items = [], categories = []) => {
       return acc;
     }, {})
   };
+};
+
+HomeWrapper.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+AuthWrapper.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+ThemeWrapper.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+DevToolsWrapper.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+AllTheProviders.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+RouterWrapper.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+AllTheProviders.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+RouterWrapper.propTypes = {
+  children: PropTypes.node.isRequired
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -47,6 +48,12 @@ const ThemeToggleButton = ({ className = '', showLabel = false, variant = 'defau
       )}
     </button>
   );
+};
+
+ThemeToggleButton.propTypes = {
+  className: PropTypes.string,
+  showLabel: PropTypes.bool,
+  variant: PropTypes.oneOf(['default', 'floating', 'header'])
 };
 
 export default ThemeToggleButton;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // Mock DevToolsContext
 export const DevToolsContext = React.createContext({
@@ -47,4 +48,7 @@ export const DevToolsProvider = ({ children }) => {
   };
 
   return React.createElement(DevToolsContext.Provider, { value: mockValue }, children);
+};
+DevToolsProvider.propTypes = {
+  children: PropTypes.node.isRequired
 };

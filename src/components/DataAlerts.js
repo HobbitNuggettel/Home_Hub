@@ -246,6 +246,7 @@ export default function DataAlerts() {
 
   // Delete alert
   const deleteAlert = (id) => {
+    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to delete this alert?')) {
       setAlerts(alerts.filter(alert => alert.id !== id));
       toast.success('Alert deleted successfully!');

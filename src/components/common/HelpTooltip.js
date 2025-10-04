@@ -154,7 +154,7 @@ const HelpTooltip = ({
                   <div className="flex space-x-1">
                     {tour.steps.map((_, index) => (
                       <div
-                        key={index}
+                        key={`tooltip-dot-${index}`}
                         className={`w-2 h-2 rounded-full ${
                           index === step ? 'bg-white' : 'bg-gray-600'
                         }`}
@@ -248,7 +248,7 @@ export const GuidedTour = ({ isOpen, onClose, tour }) => {
             <div className="flex space-x-2">
               {tour.steps.map((_, index) => (
                 <div
-                  key={index}
+                  key={`tooltip-indicator-${index}`}
                   className={`w-2 h-2 rounded-full ${
                     index === currentStep ? 'bg-blue-600' : 'bg-gray-300'
                   }`}

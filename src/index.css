@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import theme variables */
+@import './styles/theme-variables.css';
 /* Import layout fixes */
 body {
   margin: 0;

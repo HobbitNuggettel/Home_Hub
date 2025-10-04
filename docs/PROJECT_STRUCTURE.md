@@ -48,6 +48,9 @@ src/
 │   ├── 📁 mobile/                  # Mobile-specific components
 │   ├── 📁 modules/                 # Feature modules
 │   ├── 📁 monitoring/              # Monitoring components
+│   ├── 📄 ColorPicker.js           # 🎨 Color customization tool
+│   ├── 📄 ThemeSettings.js         # 🎨 Theme management interface
+│   ├── 📄 ThemePreview.js          # 🎨 Live theme preview component
 │   ├── 📁 offline/                 # Offline functionality
 │   ├── 📁 pwa/                     # PWA components
 │   ├── 📁 security/                # Security components
@@ -63,6 +66,8 @@ src/
 ├── 📁 pages/                        # Page components
 ├── 📁 services/                     # Business logic services
 ├── 📁 styles/                       # CSS and styling
+│   ├── 📄 theme-variables.css      # 🎨 CSS custom properties for theming
+│   └── 📄 sidebar.css              # Sidebar styling
 ├── 📁 tests/                        # Test utilities
 └── 📁 utils/                        # Utility functions
 ```

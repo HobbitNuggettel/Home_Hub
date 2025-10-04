@@ -592,7 +592,7 @@ const ShoppingLists = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Add Item to "{selectedList.name}"
+                Add Item to &quot;{selectedList.name}&quot;
               </h3>
               
               <div className="space-y-4">

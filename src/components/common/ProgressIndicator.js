@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { CheckCircle, Circle, Clock, AlertCircle } from 'lucide-react';
 
 const ProgressIndicator = ({ 
@@ -95,7 +96,7 @@ const ProgressIndicator = ({
           const stepClasses = getStepClasses(status);
           
           return (
-            <div key={index} className="flex items-start">
+            <div key={`progress-step-${index}`} className="flex items-start">
               <div className={`flex items-center justify-center ${sizeClasses.circle} rounded-full border-2 ${stepClasses}`}>
                 {getStepIcon(index, status)}
               </div>
@@ -128,7 +129,7 @@ const ProgressIndicator = ({
         const isLast = index === steps.length - 1;
         
         return (
-          <React.Fragment key={index}>
+          <React.Fragment key={`progress-fragment-${index}`}>
             <div className="flex flex-col items-center">
               <div className={`flex items-center justify-center ${sizeClasses.circle} rounded-full border-2 ${stepClasses}`}>
                 {getStepIcon(index, status)}
@@ -278,7 +279,7 @@ export const MultiStepProgress = ({
           
           return (
             <button
-              key={index}
+              key={`progress-button-${index}`}
               onClick={() => isClickable && onStepClick(index)}
               disabled={!isClickable}
               className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
@@ -311,6 +312,51 @@ export const MultiStepProgress = ({
       </div>
     </div>
   );
+};
+
+ProgressIndicator.propTypes = {
+  steps: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    icon: PropTypes.elementType
+  })).isRequired,
+  currentStep: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  completedSteps: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+  showLabels: PropTypes.bool,
+  orientation: PropTypes.oneOf(['horizontal', 'vertical']),
+  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  color: PropTypes.oneOf(['blue', 'green', 'purple']),
+  className: PropTypes.string
+};
+
+CircularProgress.propTypes = {
+  progress: PropTypes.number.isRequired,
+  size: PropTypes.number,
+  strokeWidth: PropTypes.number,
+  showPercentage: PropTypes.bool,
+  color: PropTypes.oneOf(['blue', 'green', 'red', 'purple']),
+  className: PropTypes.string
+};
+
+StepProgress.propTypes = {
+  progress: PropTypes.number.isRequired,
+  currentStep: PropTypes.number.isRequired,
+  totalSteps: PropTypes.number.isRequired,
+  color: PropTypes.oneOf(['blue', 'green', 'red', 'purple']),
+  className: PropTypes.string
+};
+
+MultiStepProgress.propTypes = {
+  steps: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string
+  })).isRequired,
+  currentStep: PropTypes.number.isRequired,
+  onStepClick: PropTypes.func,
+  isClickable: PropTypes.bool,
+  className: PropTypes.string
 };
 
 export default ProgressIndicator;

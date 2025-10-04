@@ -118,6 +118,27 @@ function SpendingTracker() {
     return matchesSearch && matchesCategory && matchesPaymentMethod && matchesDateRange;
   });
 
+  // Load AI insights and suggestions
+  const loadAIInsights = useCallback(async () => {
+    setIsLoadingAI(true);
+    try {
+      const [insights, suggestions, predictions] = await Promise.all([
+        AIExpenseService.generateSpendingInsights(expenses),
+        AIExpenseService.generateShoppingSuggestions(expenses),
+        AIExpenseService.predictUpcomingExpenses(expenses)
+      ]);
+
+      setAiInsights(insights);
+      setAiSuggestions(suggestions);
+      setAiPredictions(predictions);
+    } catch (error) {
+      console.error('Error loading AI insights:', error);
+      toast.error('Failed to load AI insights');
+    } finally {
+      setIsLoadingAI(false);
+    }
+  }, [expenses]);
+
   // Add new expense with AI categorization
   const addExpense = useCallback(async (expenseData) => {
     // Get AI prediction for category
@@ -168,7 +189,7 @@ function SpendingTracker() {
     
     // Refresh AI insights
     loadAIInsights();
-  }, [expenses]);
+  }, [expenses, loadAIInsights, currentUser]);
 
   // Add new budget
   const addBudget = useCallback(async (budgetData) => {
@@ -223,6 +244,7 @@ function SpendingTracker() {
 
   // Delete expense
   const deleteExpense = useCallback((id) => {
+    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to delete this expense?')) {
       setExpenses(expenses.filter(expense => expense.id !== id));
       toast.success('Expense deleted successfully!');
@@ -231,6 +253,7 @@ function SpendingTracker() {
 
   // Delete budget
   const deleteBudget = useCallback((id) => {
+    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to delete this budget?')) {
       setBudgets(budgets.filter(budget => budget.id !== id));
       toast.success('Budget deleted successfully!');
@@ -302,6 +325,7 @@ function SpendingTracker() {
       toast.error('No expenses selected');
       return;
     }
+    // eslint-disable-next-line no-alert
     if (window.confirm(`Are you sure you want to delete ${selectedExpenses.length} expenses?`)) {
       setExpenses(expenses.filter(expense => !selectedExpenses.includes(expense.id)));
       setSelectedExpenses([]);
@@ -309,33 +333,13 @@ function SpendingTracker() {
     }
   }, [selectedExpenses, expenses]);
 
-  // Load AI insights and suggestions
-  const loadAIInsights = useCallback(async () => {
-    setIsLoadingAI(true);
-    try {
-      const [insights, suggestions, predictions] = await Promise.all([
-        AIExpenseService.generateSpendingInsights(expenses),
-        AIExpenseService.generateShoppingSuggestions(expenses),
-        AIExpenseService.predictUpcomingExpenses(expenses)
-      ]);
-      
-      setAiInsights(insights);
-      setAiSuggestions(suggestions);
-      setAiPredictions(predictions);
-    } catch (error) {
-      console.error('Error loading AI insights:', error);
-      toast.error('Failed to load AI insights');
-    } finally {
-      setIsLoadingAI(false);
-    }
-  }, [expenses]);
 
   // Load AI insights on component mount and when expenses change
   useEffect(() => {
     if (expenses.length > 0) {
       loadAIInsights();
     }
-  }, [loadAIInsights]);
+  }, [loadAIInsights, expenses.length]);
 
   // Handle view expense
   const handleViewExpense = useCallback((expense) => {

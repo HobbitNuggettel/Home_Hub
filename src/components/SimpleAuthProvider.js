@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { 
   User, 
   Lock, 
@@ -271,6 +272,10 @@ export const SimpleAuthProvider = ({ children }) => {
   );
 };
 
+LoginForm.propTypes = {
+  onSwitchToRegister: PropTypes.func.isRequired
+};
+
 // Login Component
 export const LoginForm = ({ onSwitchToRegister }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -362,7 +367,7 @@ export const LoginForm = ({ onSwitchToRegister }) => {
 
       <div className="mt-6 text-center">
         <p className="text-sm text-gray-600 dark:text-gray-300">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <button
             onClick={onSwitchToRegister}
             className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-medium"
@@ -794,4 +799,8 @@ export const UserProfile = () => {
       </div>
     </div>
   );
+};
+
+SimpleAuthProvider.propTypes = {
+  children: PropTypes.node.isRequired
 };

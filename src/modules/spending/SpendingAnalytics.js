@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { TrendingUp, DollarSign, AlertTriangle, Brain, PieChart, BarChart3, Calendar, Target } from 'lucide-react';
 
 const SpendingAnalytics = ({ 
@@ -176,7 +177,7 @@ const SpendingAnalytics = ({
                 <h4 className="font-medium text-gray-900 dark:text-white mb-3">Smart Insights</h4>
                 <div className="space-y-2">
                   {aiInsights.slice(0, 3).map((insight, index) => (
-                    <div key={index} className="flex items-center space-x-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded">
+                    <div key={`ai-insight-${insight.id || insight.title || index}`} className="flex items-center space-x-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded">
                       <Brain className="w-4 h-4 text-blue-600" />
                       <span className="text-sm text-gray-700 dark:text-gray-300">
                         {insight.message}
@@ -193,7 +194,7 @@ const SpendingAnalytics = ({
                 <h4 className="font-medium text-gray-900 dark:text-white mb-3">Savings Tips</h4>
                 <div className="space-y-2">
                   {aiSuggestions.slice(0, 3).map((suggestion, index) => (
-                    <div key={index} className="flex items-center space-x-2 p-2 bg-green-50 dark:bg-green-900/20 rounded">
+                    <div key={`ai-suggestion-${suggestion.id || suggestion.title || index}`} className="flex items-center space-x-2 p-2 bg-green-50 dark:bg-green-900/20 rounded">
                       <TrendingUp className="w-4 h-4 text-green-600" />
                       <span className="text-sm text-gray-700 dark:text-gray-300">
                         {suggestion.message}
@@ -210,7 +211,7 @@ const SpendingAnalytics = ({
                 <h4 className="font-medium text-gray-900 dark:text-white mb-3">Upcoming Expenses</h4>
                 <div className="space-y-2">
                   {aiPredictions.slice(0, 3).map((prediction, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 bg-purple-50 dark:bg-purple-900/20 rounded">
+                    <div key={`ai-prediction-${prediction.id || prediction.title || index}`} className="flex items-center justify-between p-2 bg-purple-50 dark:bg-purple-900/20 rounded">
                       <div className="flex items-center space-x-2">
                         {getUrgencyIcon(prediction.urgency)}
                         <span className="text-sm text-gray-700 dark:text-gray-300">
@@ -334,6 +335,50 @@ const SpendingAnalytics = ({
       )}
     </div>
   );
+};
+
+SpendingAnalytics.propTypes = {
+  expenses: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    amount: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    paymentMethod: PropTypes.string.isRequired
+  })),
+  budgets: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    name: PropTypes.string.isRequired,
+    amount: PropTypes.number.isRequired,
+    spent: PropTypes.number.isRequired,
+    category: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired
+  })),
+  aiInsights: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    type: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    confidence: PropTypes.number.isRequired,
+    impact: PropTypes.string.isRequired
+  })),
+  aiSuggestions: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    type: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    confidence: PropTypes.number.isRequired,
+    impact: PropTypes.string.isRequired
+  })),
+  aiPredictions: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    type: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    confidence: PropTypes.number.isRequired,
+    impact: PropTypes.string.isRequired
+  })),
+  isLoadingAI: PropTypes.bool
 };
 
 export default SpendingAnalytics;

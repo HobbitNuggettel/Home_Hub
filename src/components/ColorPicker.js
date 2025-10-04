@@ -7,12 +7,27 @@ import {
   Download,
   Upload,
   Eye,
-  EyeOff
+  EyeOff,
+  Save,
+  Settings,
+  Wand2,
+  RefreshCw
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import ThemePreview from './ThemePreview';
+import ColorTest from './ColorTest';
 
 const ColorPicker = () => {
-  const { isDarkMode } = useTheme();
+  const {
+    isDarkMode,
+    colors,
+    setCustomTheme,
+    resetToDefaultTheme,
+    exportTheme,
+    importTheme,
+    getThemePresets,
+    isCustomTheme
+  } = useTheme();
   const [selectedColor, setSelectedColor] = useState('#3b82f6');
   const [hue, setHue] = useState(220);
   const [saturation, setSaturation] = useState(100);
@@ -174,6 +189,94 @@ const ColorPicker = () => {
     }
   }, []);
 
+  // Apply selected color as primary theme color
+  const applyAsPrimaryColor = useCallback(() => {
+    const newTheme = {
+      ...colors,
+      primary: selectedColor
+    };
+    setCustomTheme(newTheme);
+  }, [selectedColor, colors, setCustomTheme]);
+
+  // Apply selected color as secondary theme color
+  const applyAsSecondaryColor = useCallback(() => {
+    const newTheme = {
+      ...colors,
+      secondary: selectedColor
+    };
+    setCustomTheme(newTheme);
+  }, [selectedColor, colors, setCustomTheme]);
+
+  // Apply selected color as accent theme color
+  const applyAsAccentColor = useCallback(() => {
+    const newTheme = {
+      ...colors,
+      accent: selectedColor
+    };
+    setCustomTheme(newTheme);
+  }, [selectedColor, colors, setCustomTheme]);
+
+  // Generate theme from selected color
+  const generateThemeFromColor = useCallback(() => {
+    const hsl = hexToHsl(selectedColor);
+    const baseHue = hsl.h;
+
+    const newTheme = {
+      primary: selectedColor,
+      secondary: hslToHex((baseHue + 60) % 360, 80, 60),
+      accent: hslToHex((baseHue + 120) % 360, 70, 50),
+      background: isDarkMode ? '#111827' : '#ffffff',
+      surface: isDarkMode ? '#1f2937' : '#f8fafc',
+      text: isDarkMode ? '#f9fafb' : '#1f2937',
+      textSecondary: isDarkMode ? '#9ca3af' : '#6b7280',
+      border: isDarkMode ? '#374151' : '#e5e7eb',
+      success: '#10b981',
+      warning: '#f59e0b',
+      error: '#ef4444',
+      info: selectedColor
+    };
+    setCustomTheme(newTheme);
+  }, [selectedColor, isDarkMode, hexToHsl, hslToHex, setCustomTheme]);
+
+  // Apply theme preset
+  const applyThemePreset = useCallback((presetName) => {
+    const presets = getThemePresets();
+    if (presets[presetName]) {
+      setCustomTheme(presets[presetName]);
+    }
+  }, [getThemePresets, setCustomTheme]);
+
+  // Export current theme
+  const exportCurrentTheme = useCallback(() => {
+    const themeData = exportTheme();
+    const blob = new Blob([themeData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'home-hub-theme.json';
+    link.click();
+    URL.revokeObjectURL(url);
+  }, [exportTheme]);
+
+  // Import theme
+  const importThemeFile = useCallback((event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const success = importTheme(e.target.result);
+        if (success) {
+          // eslint-disable-next-line no-alert
+          alert('Theme imported successfully!');
+        } else {
+          // eslint-disable-next-line no-alert
+          alert('Failed to import theme. Please check the file format.');
+        }
+      };
+      reader.readAsText(file);
+    }
+  }, [importTheme]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20 pt-20">
       <div className="container mx-auto px-4 py-8">
@@ -277,35 +380,75 @@ const ColorPicker = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={copyToClipboard}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                  {copied ? 'Copied!' : 'Copy'}
-                </button>
-                <button
-                  onClick={addToCustomColors}
-                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  <Palette className="w-4 h-4" />
-                  Save
-                </button>
-                <button
-                  onClick={addToHistory}
-                  className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-                >
-                  <Palette className="w-4 h-4" />
-                  Add to History
-                </button>
-                <button
-                  onClick={resetColor}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  Reset
-                </button>
+              <div className="space-y-4">
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={copyToClipboard}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    {copied ? 'Copied!' : 'Copy'}
+                  </button>
+                  <button
+                    onClick={addToCustomColors}
+                    className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    <Palette className="w-4 h-4" />
+                    Save
+                  </button>
+                  <button
+                    onClick={addToHistory}
+                    className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                  >
+                    <Palette className="w-4 h-4" />
+                    Add to History
+                  </button>
+                  <button
+                    onClick={resetColor}
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    Reset
+                  </button>
+                </div>
+
+                {/* Theme Integration */}
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                    <Wand2 className="w-5 h-5" />
+                    Apply to App Theme
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={applyAsPrimaryColor}
+                      className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                    >
+                      <Settings className="w-4 h-4" />
+                      Primary
+                    </button>
+                    <button
+                      onClick={applyAsSecondaryColor}
+                      className="flex items-center gap-2 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
+                    >
+                      <Settings className="w-4 h-4" />
+                      Secondary
+                    </button>
+                    <button
+                      onClick={applyAsAccentColor}
+                      className="flex items-center gap-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+                    >
+                      <Settings className="w-4 h-4" />
+                      Accent
+                    </button>
+                    <button
+                      onClick={generateThemeFromColor}
+                      className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-colors text-sm"
+                    >
+                      <Wand2 className="w-4 h-4" />
+                      Generate Theme
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -358,6 +501,62 @@ const ColorPicker = () => {
               </div>
             </div>
           </div>
+
+          {/* Theme Presets */}
+          <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Theme Presets</h2>
+              <div className="flex gap-2">
+                <button
+                  onClick={exportCurrentTheme}
+                  className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                >
+                  <Download className="w-4 h-4" />
+                  Export Theme
+                </button>
+                <label className="flex items-center gap-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm cursor-pointer">
+                  <Upload className="w-4 h-4" />
+                  Import Theme
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={importThemeFile}
+                    className="hidden"
+                  />
+                </label>
+                {isCustomTheme && (
+                  <button
+                    onClick={resetToDefaultTheme}
+                    className="flex items-center gap-2 px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    Reset to Default
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Object.entries(getThemePresets()).map(([name, themeColors]) => (
+                <button
+                  key={name}
+                  onClick={() => applyThemePreset(name)}
+                  className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors text-left"
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-4 h-4 rounded" style={{ backgroundColor: themeColors.primary }}></div>
+                    <div className="w-4 h-4 rounded" style={{ backgroundColor: themeColors.secondary }}></div>
+                    <div className="w-4 h-4 rounded" style={{ backgroundColor: themeColors.accent }}></div>
+                  </div>
+                  <h3 className="font-medium text-gray-900 dark:text-white">{name}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Click to apply</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Theme Preview */}
+          <ThemePreview />
 
           {/* Color Palettes */}
           <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6">
@@ -446,6 +645,11 @@ const ColorPicker = () => {
               </div>
             </div>
           )}
+
+          {/* Color Test Panel */}
+          <div className="mt-8">
+            <ColorTest />
+          </div>
         </div>
       </div>
     </div>

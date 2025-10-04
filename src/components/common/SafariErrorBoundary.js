@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * Safari-specific Error Boundary
@@ -88,5 +89,9 @@ class SafariErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
+
+SafariErrorBoundary.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default SafariErrorBoundary;

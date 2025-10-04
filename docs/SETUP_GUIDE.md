@@ -30,6 +30,38 @@ npm start
 
 ---
 
+## 🎨 **COLOR CUSTOMIZATION SYSTEM**
+
+### **Overview**
+Home Hub features a comprehensive color customization system that allows users to personalize the entire application with custom themes.
+
+### **Key Features**
+- **Dynamic Theme Context** - Complete theme management with custom color support
+- **Color Picker Tool** (`/color-picker`) - Interactive HSL color picker with real-time preview
+- **Theme Settings Page** (`/theme-settings`) - Comprehensive theme management interface
+- **Theme Presets** - Pre-built color schemes (Default, Blue, Purple, Green themes)
+- **Theme Export/Import** - Share and backup custom color schemes
+- **Real-time Preview** - Live preview of color changes across all components
+- **Theme Persistence** - Custom themes saved and restored across sessions
+
+### **Usage**
+1. Navigate to **Color Picker** (`/color-picker`) to experiment with colors
+2. Use **Theme Settings** (`/theme-settings`) for comprehensive customization
+3. Apply colors as Primary, Secondary, or Accent colors
+4. Generate complete themes from a single color
+5. Export themes to share with others
+6. Import themes from other users
+
+### **Technical Details**
+- CSS custom properties for real-time theming
+- localStorage persistence for custom themes
+- Theme presets for quick customization
+- Real-time preview across all components
+
+📚 **Detailed Documentation**: [Color Customization Guide](guides/COLOR_CUSTOMIZATION.md)
+
+---
+
 ## 🔧 **ENVIRONMENT SETUP**
 
 ### **Required Environment Variables**

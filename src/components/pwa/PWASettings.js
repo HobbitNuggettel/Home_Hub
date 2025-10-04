@@ -94,6 +94,7 @@ const PWASettings = () => {
 
   // Handle clear cache
   const handleClearCache = async () => {
+    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to clear all cached data? This will remove offline content.')) {
       setIsLoading(true);
       try {
@@ -372,6 +373,7 @@ const PWASettings = () => {
 };
 
 export default PWASettings;
+
 
 
 

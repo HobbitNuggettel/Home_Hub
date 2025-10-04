@@ -12,6 +12,17 @@ jest.mock('../../contexts/DevToolsContext', () => ({
   })),
 }));
 
+// Mock useAuth to return authenticated user
+jest.mock('../../contexts/AuthContext', () => ({
+  useAuth: jest.fn(() => ({
+    currentUser: { uid: 'test-uid', email: 'test@example.com', displayName: 'Test User' },
+    userProfile: { name: 'Test User', email: 'test@example.com' },
+    loading: false,
+    error: null,
+    isAuthenticated: true,
+  })),
+}));
+
 import Home from '../Home';
 
 // Mock useNavigate
@@ -27,17 +38,17 @@ describe('Home Component', () => {
   });
 
   describe('Rendering & Structure', () => {
-    test('renders home page with main sections', async () => {
+    test('renders login page when user is not authenticated', async () => {
       renderHomeWithProviders(<Home />);
       
       // Wait for loading to complete
       await waitFor(() => {
-        expect(screen.getByText('Welcome to Home Hub v2.0')).toBeInTheDocument();
+        expect(screen.getByText('Welcome to Home Hub')).toBeInTheDocument();
       });
 
-      expect(screen.getByText(/Your Complete/i)).toBeInTheDocument();
-      expect(screen.getAllByText(/Home Management/i)).toHaveLength(2);
-      expect(screen.getByText(/Platform/i)).toBeInTheDocument();
+      expect(screen.getByText('Please log in to access your personalized dashboard and manage your household.')).toBeInTheDocument();
+      expect(screen.getByText('Log In')).toBeInTheDocument();
+      expect(screen.getByText('Sign Up')).toBeInTheDocument();
     });
 
     test('renders mission statement', async () => {

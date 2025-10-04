@@ -4,6 +4,7 @@
  */
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import securityService from '../services/SecurityService';
 import { securityMonitoring } from '../config/security';
 
@@ -233,3 +234,8 @@ export default SecurityContext;
 
 
 
+
+
+SecurityProvider.propTypes = {
+  children: PropTypes.node.isRequired
+};

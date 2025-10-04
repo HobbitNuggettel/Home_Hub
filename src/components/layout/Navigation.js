@@ -44,7 +44,8 @@ import {
   Search,
   Eye,
   HelpCircle,
-  Palette
+  Palette,
+  Cloud
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import DarkModeToggle from './DarkModeToggle';
@@ -73,31 +74,28 @@ export default function Navigation() {
       tooltip: 'Dashboard and overview'
     },
     {
+      name: 'Recipe Management',
+      href: '/recipes',
+      icon: ChefHat,
+      tooltip: 'Store recipes and plan meals'
+    },
+    {
       name: 'Inventory Management',
       href: '/inventory',
       icon: Package,
-      tooltip: 'Track household items and supplies',
-      action: true
+      tooltip: 'Track and manage household inventory'
     },
     {
       name: 'Spending & Budgeting',
       href: '/spending',
       icon: DollarSign,
-      tooltip: 'Monitor expenses and manage budgets',
-      action: true
+      tooltip: 'Track expenses and manage budgets'
     },
     {
       name: 'Shopping Lists',
-      href: '/shopping-lists',
+      href: '/shopping',
       icon: ShoppingCart,
-      tooltip: 'Create and manage shopping lists',
-      action: true
-    },
-    {
-      name: 'Recipe Management',
-      href: '/recipes',
-      icon: ChefHat,
-      tooltip: 'Store recipes and plan meals'
+      tooltip: 'Create and manage shopping lists'
     },
     {
       name: 'Collaboration',
@@ -110,6 +108,12 @@ export default function Navigation() {
       href: '/ai-suggestions',
       icon: Lightbulb,
       tooltip: 'AI-powered insights and recommendations'
+    },
+    {
+      name: 'Weather',
+      href: '/weather',
+      icon: Cloud,
+      tooltip: 'Weather forecast and conditions'
     },
     {
       name: 'Real-time Demo',
@@ -200,6 +204,12 @@ export default function Navigation() {
       href: '/color-picker',
       icon: Palette,
       tooltip: 'Test and experiment with different color schemes'
+    },
+    {
+      name: 'Theme Settings',
+      href: '/theme-settings',
+      icon: Settings,
+      tooltip: 'Customize app colors and themes'
     }
   ];
 
@@ -320,7 +330,7 @@ export default function Navigation() {
         <ul className="sidebar-menu">
           {/* Core Features Section */}
           <div className="sidebar-section-header">Core Features</div>
-          {navigationItems.slice(0, 5).map((item) => {
+          {navigationItems.slice(0, 3).map((item) => {
             const IconComponent = item.icon;
             return (
               <li
@@ -345,7 +355,7 @@ export default function Navigation() {
 
           {/* Smart Features Section */}
           <div className="sidebar-section-header">Smart Features</div>
-          {navigationItems.slice(5, 9).map((item) => {
+          {navigationItems.slice(3, 7).map((item) => {
             const IconComponent = item.icon;
             return (
               <li
@@ -369,7 +379,7 @@ export default function Navigation() {
 
           {/* System & Analytics Section */}
           <div className="sidebar-section-header">System & Analytics</div>
-          {navigationItems.slice(9, 13).map((item) => {
+          {navigationItems.slice(7, 9).map((item) => {
             const IconComponent = item.icon;
             return (
               <li

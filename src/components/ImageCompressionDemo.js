@@ -176,7 +176,7 @@ const ImageCompressionDemo = () => {
             <h4 className="font-medium text-blue-700">Storage Recommendations</h4>
             <ul className="list-disc list-inside text-sm text-blue-600">
               {compressionResult.recommendations.map((rec, index) => (
-                <li key={index}>{rec}</li>
+                <li key={`compression-recommendation-${rec.slice(0, 20)}-${index}`}>{rec}</li>
               ))}
             </ul>
           </div>

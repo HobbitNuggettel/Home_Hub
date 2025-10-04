@@ -21,7 +21,7 @@ import {
   Shield
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import DarkModeToggle from './DarkModeToggle';
+import DarkModeToggle from './layout/DarkModeToggle';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
