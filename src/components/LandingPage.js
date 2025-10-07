@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuthRedirect } from '../hooks/useAuthRedirect';
+import { useAuthRedirect } from '../hooks/useAuthRedirect.js';
 import { 
   Home, 
   Package, 

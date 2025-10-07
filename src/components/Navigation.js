@@ -20,8 +20,8 @@ import {
   Wifi,
   Shield
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import DarkModeToggle from './layout/DarkModeToggle';
+import { useAuth } from '../contexts/AuthContext.js';
+import DarkModeToggle from './layout/DarkModeToggle.js';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

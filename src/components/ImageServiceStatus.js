@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { imageManagementService } from '../services/ImageManagementService';
+import { imageManagementService } from '../services/ImageManagementService.js';
 
 const ImageServiceStatus = () => {
   const [status, setStatus] = useState(null);

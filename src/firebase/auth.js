@@ -30,7 +30,7 @@ import {
   User,
   UserCredential
 } from 'firebase/auth';
-import { auth } from './config';
+import { auth } from './config.js';
 
 // Authentication Service Class
 class FirebaseAuthService {

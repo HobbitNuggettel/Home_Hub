@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Home, Lightbulb, Thermostat, Lock, Camera, Speaker, Wifi, Zap, Settings, Plus, Edit, Trash2, Power, Volume2, Eye, Shield, Clock, Calendar, Sun, Moon, Smartphone, Tablet, Monitor, X } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import hybridStorage from '../../firebase/hybridStorage';
+import { useAuth } from '../../contexts/AuthContext.js';
+import hybridStorage from '../../firebase/hybridStorage.js';
 
 const SmartHome = () => {
   const { currentUser } = useAuth();

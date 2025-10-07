@@ -13,7 +13,7 @@ import {
   UserPropertyNameString,
   CustomUserPropertyName
 } from 'firebase/analytics';
-import { analytics } from './config';
+import { analytics } from './config.js';
 
 // Firebase Analytics Service Class
 class FirebaseAnalyticsService {

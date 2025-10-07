@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext.js';
 import { User, Mail, Calendar, Settings, Save, Edit, LogOut, Camera } from 'lucide-react';
 import toast from 'react-hot-toast';
 

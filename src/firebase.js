@@ -1,4 +1,4 @@
-// Firebase configuration with named exports
+// Firebase configuration and exports
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
@@ -26,3 +26,14 @@ export const analytics = getAnalytics(app);
 export const realtimeDb = getDatabase(app);
 
 export default app;
+
+// Firebase Auth Service
+export const firebaseAuthService = {
+  signIn: (email, password) => auth.signInWithEmailAndPassword(email, password),
+  signUp: (email, password) => auth.createUserWithEmailAndPassword(email, password),
+  signOut: () => auth.signOut(),
+  onAuthStateChange: (callback) => auth.onAuthStateChanged(callback),
+  getCurrentUser: () => auth.currentUser,
+  sendPasswordResetEmail: (email) => auth.sendPasswordResetEmail(email),
+  updatePassword: (newPassword) => auth.currentUser?.updatePassword(newPassword)
+};

@@ -3,7 +3,7 @@
  * Helps verify configuration and troubleshoot setup issues
  */
 
-import { imageManagementService } from '../services/ImageManagementService';
+import { imageManagementService } from '../services/ImageManagementService.js';
 
 export const testImageServices = async () => {
   console.log('🧪 Testing Image Services Configuration...\n');

@@ -10,8 +10,8 @@ import {
   signInWithCredential,
   signOut as firebaseSignOut
 } from 'firebase/auth';
-import { auth } from '../firebase/config';
-import loggingService from './LoggingService';
+import { auth } from '../firebase/config.js';
+import loggingService from './LoggingService.js';
 
 class SSOService {
   constructor() {

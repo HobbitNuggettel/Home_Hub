@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, ShoppingCart, CheckCircle, Circle, Trash2, Edit, Share, DollarSign, Calendar, Tag, List } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import hybridStorage from '../../firebase/hybridStorage';
+import { useAuth } from '../../contexts/AuthContext.js';
+import hybridStorage from '../../firebase/hybridStorage.js';
 
 const ShoppingLists = () => {
   const { currentUser } = useAuth();

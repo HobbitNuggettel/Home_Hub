@@ -8,8 +8,8 @@
  * 3. Use Firebase for data storage (no vector DB needed)
  */
 
-import HuggingFaceService from './HuggingFaceService';
-import GeminiService from './GeminiService';
+import HuggingFaceService from './HuggingFaceService.js';
+import GeminiService from './GeminiService.js';
 
 class HybridAIService {
   constructor() {

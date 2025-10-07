@@ -22,11 +22,11 @@ import {
   Globe,
   Database
 } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import ssoService from '../../services/SSOService';
-import rbacService from '../../services/RBACService';
-import auditLoggingService from '../../services/AuditLoggingService';
-import complianceReportingService from '../../services/ComplianceReportingService';
+import { useAuth } from '../../contexts/AuthContext.js';
+import ssoService from '../../services/SSOService.js';
+import rbacService from '../../services/RBACService.js';
+import auditLoggingService from '../../services/AuditLoggingService.js';
+import complianceReportingService from '../../services/ComplianceReportingService.js';
 
 const EnterpriseDashboard = () => {
   const { currentUser } = useAuth();

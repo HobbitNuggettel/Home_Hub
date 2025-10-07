@@ -3,7 +3,7 @@
  * Provides easy access to analytics functionality
  */
 
-import { useAnalytics } from '../contexts/AnalyticsContext';
+import { useAnalytics } from '../contexts/AnalyticsContext.js';
 
 export default useAnalytics;
 

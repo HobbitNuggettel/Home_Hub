@@ -1,7 +1,7 @@
 // Layout Components Export
-export { default as Navigation } from './Navigation';
-export { default as MobileNavigation } from './MobileNavigation';
-export { default as Dashboard } from './Dashboard';
+export { default as Navigation } from './Navigation.js';
+export { default as MobileNavigation } from './MobileNavigation.js';
+export { default as Dashboard } from './Dashboard.js';
 
 
 

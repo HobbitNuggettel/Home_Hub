@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { useDevTools } from '../contexts/DevToolsContext';
-import { useTheme } from '../contexts/ThemeContext';
-import hybridStorage from '../firebase/hybridStorage';
-import AnalyticsService from '../services/AnalyticsService';
+import { useAuth } from '../contexts/AuthContext.js';
+import { useDevTools } from '../contexts/DevToolsContext.js';
+import { useTheme } from '../contexts/ThemeContext.js';
+import hybridStorage from '../firebase/hybridStorage.js';
+import AnalyticsService from '../services/AnalyticsService.js';
 import { 
   Package, 
   DollarSign, 

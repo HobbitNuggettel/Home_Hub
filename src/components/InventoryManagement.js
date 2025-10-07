@@ -24,11 +24,11 @@ import {
   Target
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import BarcodeScanner from './BarcodeScanner';
-import { useInventory } from '../hooks/useInventory';
-import AIInventoryService from '../services/AIInventoryService';
-import { useAuth } from '../contexts/AuthContext';
-import hybridStorage from '../firebase/hybridStorage';
+import BarcodeScanner from './BarcodeScanner.js';
+import { useInventory } from '../hooks/useInventory.js';
+import AIInventoryService from '../services/AIInventoryService.js';
+import { useAuth } from '../contexts/AuthContext.js';
+import hybridStorage from '../firebase/hybridStorage.js';
 
 // Mock inventory data
 const mockCategories = [

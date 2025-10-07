@@ -23,8 +23,8 @@ import {
   Shield,
   Activity
 } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import hybridStorage from '../../firebase/hybridStorage';
+import { useAuth } from '../../contexts/AuthContext.js';
+import hybridStorage from '../../firebase/hybridStorage.js';
 
 export default function Integrations() {
   const auth = useAuth();

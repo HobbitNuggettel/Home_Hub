@@ -1,5 +1,5 @@
 import { ref, onValue, off, set, push, update, remove } from 'firebase/database';
-import { realtimeDb } from '../firebase/config';
+import { realtimeDb } from '../firebase/config.js';
 
 /**
  * Real-time Service for Home Hub Phase 2

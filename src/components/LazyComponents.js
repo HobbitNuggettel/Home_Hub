@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import LoadingSkeleton from './common/LoadingSkeleton';
+import LoadingSkeleton from './common/LoadingSkeleton.js';
 
 // Lazy load heavy components
 export const LazyInventoryManagement = lazy(() => import('./InventoryManagement'));

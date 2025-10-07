@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Search, Filter, Edit, Trash2, Calendar, Clock, Users, ChefHat, BookOpen, Star, Heart, ShoppingCart, Utensils, Timer, Scale, X } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import hybridStorage from '../../firebase/hybridStorage';
+import { useAuth } from '../../contexts/AuthContext.js';
+import hybridStorage from '../../firebase/hybridStorage.js';
 
 const Recipes = () => {
   const auth = useAuth();

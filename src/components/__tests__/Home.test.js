@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import { renderHomeWithProviders } from '../../utils/test-utils';
+import { renderHomeWithProviders } from '../../utils/test-utils.js';
 
 // Mock DevToolsContext
 jest.mock('../../contexts/DevToolsContext', () => ({
@@ -23,7 +23,7 @@ jest.mock('../../contexts/AuthContext', () => ({
   })),
 }));
 
-import Home from '../Home';
+import Home from '../Home.js';
 
 // Mock useNavigate
 const mockNavigate = jest.fn();

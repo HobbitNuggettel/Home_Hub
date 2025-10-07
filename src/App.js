@@ -1,59 +1,61 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { AuthProvider } from './contexts/AuthContext';
-import { DevToolsProvider } from './contexts/DevToolsContext';
-import { ThemeProvider } from './contexts/ThemeContext';
-import { RealTimeProvider } from './contexts/RealTimeContext';
-import { MonitoringProvider } from './contexts/MonitoringContext';
-import { ValidationProvider } from './contexts/ValidationContext';
-import { OfflineProvider } from './contexts/OfflineContext';
-import { LanguageProvider } from './contexts/LanguageContext';
-import { AnalyticsProvider } from './contexts/AnalyticsContext';
-import { SafariCompatibility, SafariErrorBoundary, ErrorBoundary } from './components/common';
-import { initializePWA } from './utils/serviceWorker';
-import './i18n';
+import { AuthProvider } from './contexts/AuthContext.js';
+import { DevToolsProvider } from './contexts/DevToolsContext.js';
+import { ThemeProvider } from './contexts/ThemeContext.js';
+import { RealTimeProvider } from './contexts/RealTimeContext.js';
+import { MonitoringProvider } from './contexts/MonitoringContext.js';
+import { ValidationProvider } from './contexts/ValidationContext.js';
+import { OfflineProvider } from './contexts/OfflineContext.js';
+import { LanguageProvider } from './contexts/LanguageContext.js';
+import { AnalyticsProvider } from './contexts/AnalyticsContext.js';
+import ErrorBoundary from './components/common/ErrorBoundary.js';
+import SafariCompatibility from './components/common/SafariCompatibility.js';
+import SafariErrorBoundary from './components/common/SafariErrorBoundary.js';
+// import { initializePWA } from './utils/serviceWorker.js';
+import './i18n/index.js';
 
 // Lazy load components for better performance
-const LandingPage = lazy(() => import('./components/LandingPage'));
-const Settings = lazy(() => import('./components/Settings'));
-const Home = lazy(() => import('./components/Home'));
-const Navigation = lazy(() => import('./components/layout/Navigation'));
-const MainContentWrapper = lazy(() => import('./components/layout/MainContentWrapper'));
-const TestLogin = lazy(() => import('./components/TestLogin'));
-const ThemeTest = lazy(() => import('./components/ThemeTest'));
-const Login = lazy(() => import('./components/auth/Login'));
-const SignUp = lazy(() => import('./components/auth/SignUp'));
-const Inventory = lazy(() => import('./modules/inventory/InventoryManagement'));
-const Spending = lazy(() => import('./modules/spending/SpendingTracker'));
-const Collaboration = lazy(() => import('./modules/collaboration/RealTimeCollaboration'));
-const ShoppingLists = lazy(() => import('./components/modules/ShoppingLists'));
-const Recipes = lazy(() => import('./components/modules/Recipes'));
-const Integrations = lazy(() => import('./modules/integrations/IntegrationsAutomation'));
-const DataAlerts = lazy(() => import('./components/modules/DataAlerts'));
-const About = lazy(() => import('./components/modules/About'));
-const ImageManagement = lazy(() => import('./components/modules/ImageManagement'));
-const AISuggestions = lazy(() => import('./components/modules/AISuggestions'));
-const Maintenance = lazy(() => import('./components/modules/Maintenance'));
-const Profile = lazy(() => import('./components/Profile'));
-const UserAccessManagement = lazy(() => import('./components/UserAccessManagement'));
-const AdvancedAnalytics = lazy(() => import('./modules/analytics/AdvancedAnalytics'));
-const PerformanceAnalytics = lazy(() => import('./modules/analytics/PerformanceAnalytics'));
-const MonitoringDashboard = lazy(() => import('./components/monitoring/MonitoringDashboard'));
-const VersionManagement = lazy(() => import('./components/api/VersionManagement'));
-const ValidationDashboard = lazy(() => import('./components/validation/ValidationDashboard'));
-const OfflineDataManager = lazy(() => import('./components/offline/OfflineDataManager'));
-const OfflineIndicator = lazy(() => import('./components/offline/OfflineIndicator'));
-const PWASettings = lazy(() => import('./components/pwa/PWASettings'));
-const PWAInstallPrompt = lazy(() => import('./components/pwa/PWAInstallPrompt'));
-const PWAUpdateNotification = lazy(() => import('./components/pwa/PWAInstallPrompt').then(module => ({ default: module.PWAUpdateNotification })));
-const AnalyticsDashboard = lazy(() => import('./components/analytics/AnalyticsDashboard'));
-const ColorPicker = lazy(() => import('./components/ColorPicker'));
-const ThemeSettings = lazy(() => import('./components/ThemeSettings'));
-const WeatherDashboard = lazy(() => import('./components/WeatherDashboard'));
-const EnterpriseDashboard = lazy(() => import('./components/enterprise/EnterpriseDashboard'));
+const LandingPage = lazy(() => import('./components/LandingPage.js'));
+const Settings = lazy(() => import('./components/Settings.js'));
+const Home = lazy(() => import('./components/Home.js'));
+const Navigation = lazy(() => import('./components/layout/Navigation.js'));
+const MainContentWrapper = lazy(() => import('./components/layout/MainContentWrapper.js'));
+const TestLogin = lazy(() => import('./components/TestLogin.js'));
+const ThemeTest = lazy(() => import('./components/ThemeTest.js'));
+const Login = lazy(() => import('./components/auth/Login.js'));
+const SignUp = lazy(() => import('./components/auth/SignUp.js'));
+const Inventory = lazy(() => import('./modules/inventory/InventoryManagement.js'));
+const Spending = lazy(() => import('./modules/spending/SpendingTracker.js'));
+const Collaboration = lazy(() => import('./modules/collaboration/RealTimeCollaboration.js'));
+const ShoppingLists = lazy(() => import('./components/modules/ShoppingLists.js'));
+const Recipes = lazy(() => import('./components/modules/Recipes.js'));
+const Integrations = lazy(() => import('./modules/integrations/IntegrationsAutomation.js'));
+const DataAlerts = lazy(() => import('./components/modules/DataAlerts.js'));
+const About = lazy(() => import('./components/modules/About.js'));
+const ImageManagement = lazy(() => import('./components/modules/ImageManagement.js'));
+const AISuggestions = lazy(() => import('./components/modules/AISuggestions.js'));
+const Maintenance = lazy(() => import('./components/modules/Maintenance.js'));
+const Profile = lazy(() => import('./components/Profile.js'));
+const UserAccessManagement = lazy(() => import('./components/UserAccessManagement.js'));
+const AdvancedAnalytics = lazy(() => import('./modules/analytics/AdvancedAnalytics.js'));
+const PerformanceAnalytics = lazy(() => import('./modules/analytics/PerformanceAnalytics.js'));
+const MonitoringDashboard = lazy(() => import('./components/monitoring/MonitoringDashboard.js'));
+const VersionManagement = lazy(() => import('./components/api/VersionManagement.js'));
+const ValidationDashboard = lazy(() => import('./components/validation/ValidationDashboard.js'));
+const OfflineDataManager = lazy(() => import('./components/offline/OfflineDataManager.js'));
+const OfflineIndicator = lazy(() => import('./components/offline/OfflineIndicator.js'));
+const PWASettings = lazy(() => import('./components/pwa/PWASettings.js'));
+const PWAInstallPrompt = lazy(() => import('./components/pwa/PWAInstallPrompt.js'));
+const PWAUpdateNotification = lazy(() => import('./components/pwa/PWAInstallPrompt.js').then(module => ({ default: module.PWAUpdateNotification })));
+const AnalyticsDashboard = lazy(() => import('./components/analytics/AnalyticsDashboard.js'));
+const ColorPicker = lazy(() => import('./components/ColorPicker.js'));
+const ThemeSettings = lazy(() => import('./components/ThemeSettings.js'));
+const WeatherDashboard = lazy(() => import('./components/WeatherDashboard.js'));
+const EnterpriseDashboard = lazy(() => import('./components/enterprise/EnterpriseDashboard.js'));
 
-import LogoutTest from './components/LogoutTest';
+import LogoutTest from './components/LogoutTest.js';
 
 // Loading component for Suspense fallback
 const LoadingSpinner = () => (
@@ -68,7 +70,7 @@ const LoadingSpinner = () => (
 function App() {
   // Initialize PWA features
   React.useEffect(() => {
-    initializePWA();
+    // initializePWA(); // Commented out - service worker not available
   }, []);
 
   return (

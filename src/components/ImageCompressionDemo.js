@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { imageCompressionService } from '../services/ImageCompressionService';
-// import { imageManagementService } from '../services/ImageManagementService';
+import { imageCompressionService } from '../services/ImageCompressionService.js';
+// import { imageManagementService } from '../services/ImageManagementService.js';
 
 const ImageCompressionDemo = () => {
   const [selectedFile, setSelectedFile] = useState(null);

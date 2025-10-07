@@ -15,8 +15,8 @@ import {
   Eye,
   Plus
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import ThemeDebug from './ThemeDebug';
+import { useAuth } from '../contexts/AuthContext.js';
+import ThemeDebug from './ThemeDebug.js';
 
 const Dashboard = React.memo(function Dashboard() {
   const auth = useAuth();

@@ -47,10 +47,10 @@ import {
   Palette,
   Cloud
 } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import DarkModeToggle from './DarkModeToggle';
-import LanguageSelector from '../i18n/LanguageSelector';
-import FixedHeader from './FixedHeader';
+import { useAuth } from '../../contexts/AuthContext.js';
+import DarkModeToggle from './DarkModeToggle.js';
+import LanguageSelector from '../i18n/LanguageSelector.js';
+import FixedHeader from './FixedHeader.js';
 import '../../styles/sidebar.css';
 
 export default function Navigation() {

@@ -5,7 +5,7 @@
 
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { useSecurity, usePasswordSecurity, useInputSanitization } from '../../hooks/useSecurity';
+import { useSecurity, usePasswordSecurity, useInputSanitization } from '../../hooks/useSecurity.js';
 
 const SecureForm = ({ 
   schema, 

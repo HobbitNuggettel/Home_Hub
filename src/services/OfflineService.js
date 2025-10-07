@@ -7,7 +7,7 @@ import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
-import loggingService from './LoggingService';
+import loggingService from './LoggingService.js';
 
 /**
  * IndexedDB schema for offline storage

@@ -3,9 +3,9 @@
  * Generate compliance reports for various standards and regulations
  */
 
-import auditLoggingService from './AuditLoggingService';
-import rbacService from './RBACService';
-import loggingService from './LoggingService';
+import auditLoggingService from './AuditLoggingService.js';
+import rbacService from './RBACService.js';
+import loggingService from './LoggingService.js';
 
 class ComplianceReportingService {
   constructor() {

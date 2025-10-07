@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import errorHandlerService from '../services/ErrorHandlerService';
+import errorHandlerService from '../services/ErrorHandlerService.js';
 
 /**
  * Hook for handling errors in React components

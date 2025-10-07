@@ -3,7 +3,7 @@
  * Tracks and reports performance metrics
  */
 
-import loggingService from './LoggingService';
+import loggingService from './LoggingService.js';
 
 class PerformanceMonitoringService {
   constructor() {

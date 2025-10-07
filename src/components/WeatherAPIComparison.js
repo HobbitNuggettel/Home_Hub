@@ -16,7 +16,7 @@ import {
   MapPin,
   RefreshCw
 } from 'lucide-react';
-import weatherAPIComparison from '../services/WeatherAPIComparison';
+import weatherAPIComparison from '../services/WeatherAPIComparison.js';
 
 const WeatherAPIComparisonComponent = ({ location, onClose }) => {
   const [comparison, setComparison] = useState(null);

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Menu, Sun, Moon, LogIn, User } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../contexts/ThemeContext';
+import { useAuth } from '../../contexts/AuthContext.js';
+import { useTheme } from '../../contexts/ThemeContext.js';
 
 const FixedHeader = ({ onMenuToggle, isMenuOpen }) => {
   const { currentUser } = useAuth();

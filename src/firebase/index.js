@@ -2,23 +2,23 @@
 // This file provides a unified interface for all Firebase services
 
 // Core Firebase Configuration
-export { default as firebaseApp } from './config';
-export { auth, db, storage, analytics } from './config';
+export { default as firebaseApp } from './config.js';
+export { auth, db, storage, analytics } from './config.js';
 
 // Authentication Services
-export { default as firebaseAuthService } from './auth';
+export { default as firebaseAuthService } from './auth.js';
 
 // Firestore Services - DISABLED
-// export { default as firestoreService } from './firestore';
+// export { default as firestoreService } from './firestore.js';
 
 // Storage Services - DISABLED
-// export { default as firebaseStorageService } from './storage';
+// export { default as firebaseStorageService } from './storage.js';
 
 // Analytics Services - DISABLED
-// export { default as firebaseAnalyticsService } from './analytics';
+// export { default as firebaseAnalyticsService } from './analytics.js';
 
 // Hybrid Storage Services - DISABLED
-// export { default as hybridFirebaseStorage } from './hybridStorage';
+// export { default as hybridFirebaseStorage } from './hybridStorage.js';
 // export {
 //   createUserProfile,
 //   getUserProfile,
@@ -27,10 +27,10 @@ export { default as firebaseAuthService } from './auth';
 //   exportUserData,
 //   optimizeUserData,
 //   getUsageStats
-// } from './hybridStorage';
+// } from './hybridStorage.js';
 
 // User Data Structure Templates - DISABLED
-// export { default as userDataStructure } from './userDataStructure';
+// export { default as userDataStructure } from './userDataStructure.js';
 // export {
 //   USER_DATA_TEMPLATES,
 //   VALIDATION_RULES,
@@ -41,17 +41,17 @@ export { default as firebaseAuthService } from './auth';
 //   createExpense,
 //   createShoppingList,
 //   createHousehold
-// } from './userDataStructure';
+// } from './userDataStructure.js';
 
 // Image Compression Service - DISABLED
-// export { default as imageCompressionService } from '../services/ImageCompressionService';
+// export { default as imageCompressionService } from '../services/ImageCompressionService.js';
 // export {
 //   compressImageAfterCapture,
 //   compressMultipleImages,
 //   generateThumbnail,
 //   getOptimalCompressionSettings,
 //   getServiceStatus
-// } from '../services/ImageCompressionService';
+// } from '../services/ImageCompressionService.js';
 
 // Unified Firebase Service Class - DISABLED
 // class FirebaseService {

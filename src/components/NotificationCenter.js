@@ -17,7 +17,7 @@ import {
   Filter,
   Search
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext.js';
 import toast from 'react-hot-toast';
 
 export default function NotificationCenter() {

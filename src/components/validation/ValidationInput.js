@@ -6,7 +6,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { AlertTriangle, CheckCircle, Info, Eye, EyeOff } from 'lucide-react';
-import { useValidationForm } from './ValidationForm';
+import { useValidationForm } from './ValidationForm.js';
 
 const ValidationInput = ({
   name,

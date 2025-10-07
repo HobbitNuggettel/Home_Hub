@@ -4,7 +4,7 @@
  */
 
 import { getAnalytics, logEvent, setUserId, setUserProperties } from 'firebase/analytics';
-import loggingService from './LoggingService';
+import loggingService from './LoggingService.js';
 
 class AnalyticsService {
   constructor() {

@@ -34,7 +34,7 @@ import {
   DocumentReference,
   CollectionReference
 } from 'firebase/firestore';
-import { db } from './config';
+import { db } from './config.js';
 
 // Firestore Service Class
 class FirestoreService {

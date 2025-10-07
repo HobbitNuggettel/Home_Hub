@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Settings from '../Settings';
-import { ThemeProvider } from '../../contexts/ThemeContext';
+import Settings from '../Settings.js';
+import { ThemeProvider } from '../../contexts/ThemeContext.js';
 
 // Mock the contexts with proper implementations
 const mockUseAuth = jest.fn();

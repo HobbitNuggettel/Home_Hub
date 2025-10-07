@@ -4,8 +4,8 @@
  */
 
 import { collection, addDoc, query, where, orderBy, limit, getDocs, Timestamp } from 'firebase/firestore';
-import { db } from '../firebase/config';
-import loggingService from './LoggingService';
+import { db } from '../firebase/config.js';
+import loggingService from './LoggingService.js';
 
 class AuditLoggingService {
   constructor() {

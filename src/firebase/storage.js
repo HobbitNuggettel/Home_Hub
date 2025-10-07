@@ -16,7 +16,7 @@ import {
   ListResult,
   FullMetadata
 } from 'firebase/storage';
-import { storage } from './config';
+import { storage } from './config.js';
 
 // Firebase Storage Service Class
 class FirebaseStorageService {

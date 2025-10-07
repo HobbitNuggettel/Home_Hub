@@ -28,12 +28,12 @@ import {
   List
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../contexts/AuthContext';
-import hybridStorage from '../../firebase/hybridStorage';
-import AIExpenseService from '../../services/AIExpenseService';
-import ExpenseList from './ExpenseList';
-import BudgetOverview from './BudgetOverview';
-import SpendingAnalytics from './SpendingAnalytics';
+import { useAuth } from '../../contexts/AuthContext.js';
+import hybridStorage from '../../firebase/hybridStorage.js';
+import AIExpenseService from '../../services/AIExpenseService.js';
+import ExpenseList from './ExpenseList.js';
+import BudgetOverview from './BudgetOverview.js';
+import SpendingAnalytics from './SpendingAnalytics.js';
 
 // Default empty data - will be populated from Firebase
 const defaultExpenses = [];

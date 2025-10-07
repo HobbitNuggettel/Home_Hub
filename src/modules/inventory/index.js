@@ -1,10 +1,10 @@
 // Inventory Module Exports
-export { default as InventoryManagement } from './InventoryManagement';
-export { default as InventoryForm } from './InventoryForm';
-export { default as InventoryList } from './InventoryList';
-export { default as InventoryAnalytics } from './InventoryAnalytics';
-export { default as InventoryAlerts } from './InventoryAlerts';
-export { default as AIInsights } from './AIInsights';
+export { default as InventoryManagement } from './InventoryManagement.js';
+export { default as InventoryForm } from './InventoryForm.js';
+export { default as InventoryList } from './InventoryList.js';
+export { default as InventoryAnalytics } from './InventoryAnalytics.js';
+export { default as InventoryAlerts } from './InventoryAlerts.js';
+export { default as AIInsights } from './AIInsights.js';
 
 
 

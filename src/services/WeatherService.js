@@ -1,4 +1,4 @@
-import weatherConfig from '../config/weather';
+import weatherConfig from '../config/weather.js';
 
 class WeatherService {
   constructor() {

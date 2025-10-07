@@ -19,8 +19,8 @@ import {
   Info,
   Zap
 } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import hybridStorage from '../../firebase/hybridStorage';
+import { useAuth } from '../../contexts/AuthContext.js';
+import hybridStorage from '../../firebase/hybridStorage.js';
 
 export default function DataAlerts() {
   const auth = useAuth();

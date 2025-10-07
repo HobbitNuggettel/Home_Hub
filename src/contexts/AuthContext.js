@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { 
   GoogleAuthProvider
 } from 'firebase/auth';
-import { firebaseAuthService } from '../firebase';
+import { firebaseAuthService } from '../firebase.js';
 
 const AuthContext = createContext();
 

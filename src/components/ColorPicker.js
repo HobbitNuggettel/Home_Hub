@@ -13,9 +13,9 @@ import {
   Wand2,
   RefreshCw
 } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
-import ThemePreview from './ThemePreview';
-import ColorTest from './ColorTest';
+import { useTheme } from '../contexts/ThemeContext.js';
+import ThemePreview from './ThemePreview.js';
+import ColorTest from './ColorTest.js';
 
 const ColorPicker = () => {
   const {

@@ -1,6 +1,6 @@
 // Analytics Module Exports
-export { default as AdvancedAnalytics } from './AdvancedAnalytics';
-export { default as PerformanceAnalytics } from './PerformanceAnalytics';
+export { default as AdvancedAnalytics } from './AdvancedAnalytics.js';
+export { default as PerformanceAnalytics } from './PerformanceAnalytics.js';
 
 
 

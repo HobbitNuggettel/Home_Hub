@@ -1,5 +1,5 @@
-import { firebaseStorageService } from '../firebase';
-// import { firebaseAnalyticsService } from '../firebase';
+import { firebaseStorageService } from '../firebase.js';
+// import { firebaseAnalyticsService } from '../firebase.js';
 
 // AI Vision Service Class
 class AIVisionService {

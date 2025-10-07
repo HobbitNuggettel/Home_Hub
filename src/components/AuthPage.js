@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { LoginForm, RegisterForm, UserProfile } from './AuthSystem';
-import { PWAStatus, PWAFeatures } from './PWAInstall';
+import { useAuth } from '../contexts/AuthContext.js';
+import { LoginForm, RegisterForm, UserProfile } from './AuthSystem.js';
+import { PWAStatus, PWAFeatures } from './PWAInstall.js';
 import { 
   Shield, 
   Smartphone, 

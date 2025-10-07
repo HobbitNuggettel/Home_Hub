@@ -5,8 +5,8 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import offlineService from '../services/OfflineService';
-import loggingService from '../services/LoggingService';
+import offlineService from '../services/OfflineService.js';
+import loggingService from '../services/LoggingService.js';
 
 const OfflineContext = createContext();
 

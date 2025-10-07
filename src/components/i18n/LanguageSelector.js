@@ -6,7 +6,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Globe, Check, ChevronDown } from 'lucide-react';
-import { useLanguage } from '../../contexts/LanguageContext';
+import { useLanguage } from '../../contexts/LanguageContext.js';
 
 const LanguageSelector = ({ 
   variant = 'dropdown',

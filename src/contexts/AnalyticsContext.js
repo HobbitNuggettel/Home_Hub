@@ -5,8 +5,8 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import analyticsService from '../services/AnalyticsService';
-import { useAuth } from './AuthContext';
+import analyticsService from '../services/AnalyticsService.js';
+import { useAuth } from './AuthContext.js';
 
 const AnalyticsContext = createContext();
 

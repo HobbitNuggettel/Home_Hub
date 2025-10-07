@@ -18,7 +18,7 @@ import {
   Calendar,
   Activity
 } from 'lucide-react';
-import { useAnalytics } from '../../contexts/AnalyticsContext';
+import { useAnalytics } from '../../contexts/AnalyticsContext.js';
 
 const AnalyticsDashboard = () => {
   const { 

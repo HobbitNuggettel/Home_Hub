@@ -27,8 +27,8 @@ import {
   arrayUnion,
   arrayRemove
 } from 'firebase/firestore';
-import { db } from './config';
-import { firebaseAnalyticsService } from './analytics';
+import { db } from './config.js';
+import { firebaseAnalyticsService } from './analytics.js';
 
 // Free tier limits and thresholds
 const FREE_TIER_LIMITS = {
