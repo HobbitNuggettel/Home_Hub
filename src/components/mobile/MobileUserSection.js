@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { User } from 'lucide-react';
 
 /**
@@ -63,6 +64,13 @@ const MobileUserSection = ({ userProfile, notifications, onLogin, onSignup }) =>
       </div>
     </div>
   );
+};
+
+MobileUserSection.propTypes = {
+  userProfile: PropTypes.object,
+  notifications: PropTypes.array,
+  onLogin: PropTypes.func.isRequired,
+  onSignup: PropTypes.func.isRequired
 };
 
 export default MobileUserSection;

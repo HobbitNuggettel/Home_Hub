@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { 
   Database, 
   Cloud, 
@@ -108,7 +109,7 @@ const WeatherStorageSettings = ({ onClose }) => {
             <div className="flex flex-wrap gap-2">
               {currentStorage?.features.map((feature, index) => (
                 <span
-                  key={index}
+                  key={`feature-${feature}`}
                   className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
                 >
                   {feature}
@@ -247,6 +248,10 @@ const WeatherStorageSettings = ({ onClose }) => {
       </div>
     </div>
   );
+};
+
+WeatherStorageSettings.propTypes = {
+  onClose: PropTypes.func.isRequired
 };
 
 export default WeatherStorageSettings;

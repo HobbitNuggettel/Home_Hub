@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { 
   Brain, 
   Lightbulb, 
@@ -220,7 +220,7 @@ const AISmartSuggestions = () => {
     loadSuggestions();
   }, [selectedCategories, loadSuggestions]);
 
-  const loadSuggestions = async () => {
+  const loadSuggestions = useCallback(async () => {
     setLoading(true);
     try {
       const preferences = {
@@ -234,7 +234,7 @@ const AISmartSuggestions = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategories, user]);
 
   // Sort suggestions
   const sortedSuggestions = useMemo(() => {

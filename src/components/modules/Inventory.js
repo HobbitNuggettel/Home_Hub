@@ -449,7 +449,7 @@ const Inventory = () => {
                 <div className="flex flex-wrap gap-2 mb-2">
                   {formData.tags.map((tag, index) => (
                     <span
-                      key={`form-tag-${tag}-${index}`}
+                      key={`form-tag-${tag}`}
                       className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
                     >
                       {tag}
@@ -579,7 +579,7 @@ const Inventory = () => {
                             <div className="flex flex-wrap gap-1 mt-1">
                               {item.tags.map((tag, index) => (
                                 <span
-                                  key={`item-tag-${item.id}-${tag}-${index}`}
+                                  key={`item-tag-${item.id}-${tag}`}
                                   className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200"
                                 >
                                   {tag}

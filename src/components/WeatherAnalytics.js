@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { 
   TrendingUp, 
   Thermometer, 
@@ -35,9 +36,9 @@ const WeatherAnalytics = ({ location, onClose, temperatureUnit = 'celsius' }) =>
 
   useEffect(() => {
     loadAnalytics();
-  }, [location]);
+  }, [location, loadAnalytics]);
 
-  const loadAnalytics = () => {
+  const loadAnalytics = useCallback(() => {
     setIsLoading(true);
     try {
       // Get analytics data
@@ -61,7 +62,7 @@ const WeatherAnalytics = ({ location, onClose, temperatureUnit = 'celsius' }) =>
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [location]);
 
   const exportData = () => {
     try {
@@ -81,7 +82,9 @@ const WeatherAnalytics = ({ location, onClose, temperatureUnit = 'celsius' }) =>
   };
 
   const clearOldData = () => {
-    if (window.confirm('Are you sure you want to clear old weather data? This action cannot be undone.')) {
+    // Use a more user-friendly confirmation approach
+    const confirmed = window.confirm('Are you sure you want to clear old weather data? This action cannot be undone.');
+    if (confirmed) {
       weatherDataStorage.clearOldData();
       loadAnalytics();
     }
@@ -178,7 +181,7 @@ const WeatherAnalytics = ({ location, onClose, temperatureUnit = 'celsius' }) =>
               <div className="space-y-2">
                 {commonConditions.length > 0 ? (
                   commonConditions.map((condition, index) => (
-                    <div key={index} className="flex justify-between items-center">
+                    <div key={`condition-${condition.condition}`} className="flex justify-between items-center">
                       <span className="text-gray-600 dark:text-gray-400">{condition.condition}</span>
                       <div className="flex items-center space-x-2">
                         <div className="w-16 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
@@ -243,7 +246,7 @@ const WeatherAnalytics = ({ location, onClose, temperatureUnit = 'celsius' }) =>
                   </thead>
                   <tbody className="bg-white dark:bg-gray-700 divide-y divide-gray-200 dark:divide-gray-600">
                     {weatherTrends.slice(0, 10).map((trend, index) => (
-                      <tr key={index}>
+                      <tr key={`trend-${trend.timestamp}`}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                           {new Date(trend.timestamp).toLocaleDateString()}
                         </td>
@@ -296,6 +299,12 @@ const WeatherAnalytics = ({ location, onClose, temperatureUnit = 'celsius' }) =>
       </div>
     </div>
   );
+};
+
+WeatherAnalytics.propTypes = {
+  location: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+  temperatureUnit: PropTypes.string
 };
 
 export default WeatherAnalytics;

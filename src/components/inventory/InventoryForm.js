@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const InventoryForm = ({ onSubmit, initialData = {} }) => {
   const [formData, setFormData] = useState({
@@ -94,6 +95,11 @@ const InventoryForm = ({ onSubmit, initialData = {} }) => {
       </button>
     </form>
   );
+};
+
+InventoryForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  initialData: PropTypes.object
 };
 
 export default InventoryForm;

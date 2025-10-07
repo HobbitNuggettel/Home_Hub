@@ -244,7 +244,7 @@ const ExpenseList = ({
                   <Tag className="w-4 h-4 mr-2" />
                   {expense.tags.map((tag, index) => (
                     <span
-                      key={index}
+                      key={`expense-tag-${expense.id}-${tag}`}
                       className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded text-xs"
                     >
                       {tag}

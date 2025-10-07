@@ -359,4 +359,12 @@ MultiStepProgress.propTypes = {
   className: PropTypes.string
 };
 
+StepProgress.propTypes = {
+  currentStep: PropTypes.number.isRequired,
+  totalSteps: PropTypes.number.isRequired,
+  showNumbers: PropTypes.bool,
+  color: PropTypes.string,
+  className: PropTypes.string
+};
+
 export default ProgressIndicator;

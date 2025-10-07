@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ThemeToggleButton from '../common/ThemeToggleButton';
 
 const Header = ({ title, subtitle, showThemeToggle = true }) => {
@@ -30,6 +31,12 @@ const Header = ({ title, subtitle, showThemeToggle = true }) => {
       </div>
     </header>
   );
+};
+
+Header.propTypes = {
+  title: PropTypes.string,
+  subtitle: PropTypes.string,
+  showThemeToggle: PropTypes.bool
 };
 
 export default Header;

@@ -65,151 +65,188 @@ export default function Navigation() {
   const logout = auth?.logout;
   const navigate = useNavigate();
 
-  // Navigation items with icons and tooltips
+  // Organized navigation items with logical grouping
   const navigationItems = [
+    // === CORE FEATURES ===
     {
       name: 'Home',
       href: '/home',
       icon: Home,
-      tooltip: 'Dashboard and overview'
-    },
-    {
-      name: 'Recipe Management',
-      href: '/recipes',
-      icon: ChefHat,
-      tooltip: 'Store recipes and plan meals'
+      tooltip: 'Dashboard and overview',
+      section: 'core'
     },
     {
       name: 'Inventory Management',
       href: '/inventory',
       icon: Package,
-      tooltip: 'Track and manage household inventory'
+      tooltip: 'Track and manage household inventory',
+      section: 'core'
     },
     {
       name: 'Spending & Budgeting',
       href: '/spending',
       icon: DollarSign,
-      tooltip: 'Track expenses and manage budgets'
+      tooltip: 'Track expenses and manage budgets',
+      section: 'core'
     },
     {
       name: 'Shopping Lists',
       href: '/shopping',
       icon: ShoppingCart,
-      tooltip: 'Create and manage shopping lists'
+      tooltip: 'Create and manage shopping lists',
+      section: 'core'
     },
     {
-      name: 'Collaboration',
-      href: '/collaboration',
-      icon: Users,
-      tooltip: 'Manage household members and roles'
+      name: 'Recipe Management',
+      href: '/recipes',
+      icon: ChefHat,
+      tooltip: 'Store recipes and plan meals',
+      section: 'core'
     },
+
+    // === SMART FEATURES ===
     {
       name: 'Smart Suggestions',
       href: '/ai-suggestions',
       icon: Lightbulb,
-      tooltip: 'AI-powered insights and recommendations'
+      tooltip: 'AI-powered insights and recommendations',
+      section: 'smart'
     },
     {
       name: 'Weather',
       href: '/weather',
       icon: Cloud,
-      tooltip: 'Weather forecast and conditions'
-    },
-    {
-      name: 'Real-time Demo',
-      href: '/real-time-demo',
-      icon: Wifi,
-      tooltip: 'Phase 2: Real-time collaboration features'
+      tooltip: 'Weather forecast and conditions',
+      section: 'smart'
     },
     {
       name: 'Integrations & Automation',
       href: '/integrations',
       icon: Zap,
-      tooltip: 'Smart home integration and automation'
+      tooltip: 'Smart home integration and automation',
+      section: 'smart'
     },
     {
-      name: 'PWA Settings',
-      href: '/pwa',
-      icon: Smartphone,
-      tooltip: 'Progressive Web App settings and features'
+      name: 'Collaboration',
+      href: '/collaboration',
+      icon: Users,
+      tooltip: 'Manage household members and roles',
+      section: 'smart'
     },
-    {
-      name: 'Offline Support',
-      href: '/offline',
-      icon: Database,
-      tooltip: 'Offline data management and synchronization'
-    },
+
+    // === ANALYTICS & MONITORING ===
     {
       name: 'Analytics',
       href: '/analytics',
       icon: BarChart3,
-      tooltip: 'Comprehensive analytics and user behavior tracking'
+      tooltip: 'Comprehensive analytics and user behavior tracking',
+      section: 'analytics'
     },
     {
       name: 'Advanced Analytics',
       href: '/advanced-analytics',
       icon: TrendingUp,
-      tooltip: 'Data visualization and analytics dashboard'
+      tooltip: 'Data visualization and analytics dashboard',
+      section: 'analytics'
     },
     {
       name: 'Monitoring Dashboard',
       href: '/monitoring',
       icon: Monitor,
-      tooltip: 'System monitoring, logs, and performance metrics'
+      tooltip: 'System monitoring, logs, and performance metrics',
+      section: 'analytics'
     },
     {
       name: 'Performance Analytics',
       href: '/performance-analytics',
       icon: Gauge,
-      tooltip: 'Real-time performance monitoring and optimization'
+      tooltip: 'Real-time performance monitoring and optimization',
+      section: 'analytics'
     },
     {
       name: 'Data & Alerts',
       href: '/data-alerts',
       icon: Bell,
-      tooltip: 'Analytics, monitoring, and alerts'
+      tooltip: 'Analytics, monitoring, and alerts',
+      section: 'analytics'
     },
+
+    // === SYSTEM & ADMIN ===
     {
       name: 'User Access',
       href: '/user-access',
       icon: UserCheck,
-      tooltip: 'Manage user permissions and access control'
-    },
-    {
-      name: 'Data Validation',
-      href: '/validation',
-      icon: CheckCircle,
-      tooltip: 'Data validation, sanitization, and testing tools'
-    },
-    {
-      name: 'API Versioning',
-      href: '/api-versioning',
-      icon: GitBranch,
-      tooltip: 'API version management and migration tools'
+      tooltip: 'Manage user permissions and access control',
+      section: 'admin'
     },
     {
       name: 'Enterprise',
       href: '/enterprise',
       icon: Building2,
-      tooltip: 'Enterprise features: SSO, RBAC, audit logging, compliance'
+      tooltip: 'Enterprise features: SSO, RBAC, audit logging, compliance',
+      section: 'admin'
     },
     {
-      name: 'About',
-      href: '/about',
-      icon: Info,
-      tooltip: 'Features, roadmap, and information'
+      name: 'Data Validation',
+      href: '/validation',
+      icon: CheckCircle,
+      tooltip: 'Data validation, sanitization, and testing tools',
+      section: 'admin'
+    },
+    {
+      name: 'API Versioning',
+      href: '/api-versioning',
+      icon: GitBranch,
+      tooltip: 'API version management and migration tools',
+      section: 'admin'
+    },
+
+    // === APP FEATURES ===
+    {
+      name: 'PWA Settings',
+      href: '/pwa',
+      icon: Smartphone,
+      tooltip: 'Progressive Web App settings and features',
+      section: 'app'
+    },
+    {
+      name: 'Offline Support',
+      href: '/offline',
+      icon: Database,
+      tooltip: 'Offline data management and synchronization',
+      section: 'app'
+    },
+    {
+      name: 'Real-time Demo',
+      href: '/real-time-demo',
+      icon: Wifi,
+      tooltip: 'Phase 2: Real-time collaboration features',
+      section: 'app'
+    },
+
+    // === CUSTOMIZATION ===
+    {
+      name: 'Theme Settings',
+      href: '/theme-settings',
+      icon: Settings,
+      tooltip: 'Customize app colors and themes',
+      section: 'customization'
     },
     {
       name: 'Color Picker',
       href: '/color-picker',
       icon: Palette,
-      tooltip: 'Test and experiment with different color schemes'
+      tooltip: 'Test and experiment with different color schemes',
+      section: 'customization'
     },
+
+    // === INFORMATION ===
     {
-      name: 'Theme Settings',
-      href: '/theme-settings',
-      icon: Settings,
-      tooltip: 'Customize app colors and themes'
+      name: 'About',
+      href: '/about',
+      icon: Info,
+      tooltip: 'Features, roadmap, and information',
+      section: 'info'
     }
   ];
 
@@ -328,102 +365,51 @@ export default function Navigation() {
 
         {/* Main Navigation */}
         <ul className="sidebar-menu">
-          {/* Core Features Section */}
-          <div className="sidebar-section-header">Core Features</div>
-          {navigationItems.slice(0, 3).map((item) => {
-            const IconComponent = item.icon;
+          {/* Render sections dynamically */}
+          {['core', 'smart', 'analytics', 'admin', 'app', 'customization', 'info'].map((section) => {
+            const sectionItems = navigationItems.filter(item => item.section === section);
+            if (sectionItems.length === 0) return null;
+
+            const sectionNames = {
+              'core': 'Core Features',
+              'smart': 'Smart Features',
+              'analytics': 'Analytics & Monitoring',
+              'admin': 'System & Admin',
+              'app': 'App Features',
+              'customization': 'Customization',
+              'info': 'Information'
+            };
+
             return (
-              <li
-                key={item.name}
-                className={`sidebar-item ${currentPath === item.href ? 'active' : ''} ${item.action ? 'action' : ''}`}
-                data-tooltip={sidebarState === 'collapsed' ? item.tooltip : ''}
-              >
-                <button
-                  onClick={() => handleNavigation(item.href)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleNavigation(item.href)}
-                  className="sidebar-item-button"
-                  aria-label={item.name}
-                >
-                  <span className="sidebar-icon">
-                    <IconComponent size={20} />
-                  </span>
-                  <span className="sidebar-text">{item.name}</span>
-                </button>
-              </li>
+              <div key={section}>
+                <div className="sidebar-section-header">{sectionNames[section]}</div>
+                {sectionItems.map((item) => {
+                  const IconComponent = item.icon;
+                  return (
+                    <li
+                      key={item.name}
+                      className={`sidebar-item ${currentPath === item.href ? 'active' : ''} ${item.action ? 'action' : ''}`}
+                      data-tooltip={sidebarState === 'collapsed' ? item.tooltip : ''}
+                    >
+                      <button
+                        onClick={() => handleNavigation(item.href)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleNavigation(item.href)}
+                        className="sidebar-item-button"
+                        aria-label={item.name}
+                        tabIndex={0}
+                      >
+                        <span className="sidebar-icon">
+                          <IconComponent size={20} />
+                        </span>
+                        <span className="sidebar-text">{item.name}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </div>
             );
           })}
 
-          {/* Smart Features Section */}
-          <div className="sidebar-section-header">Smart Features</div>
-          {navigationItems.slice(3, 7).map((item) => {
-            const IconComponent = item.icon;
-            return (
-              <li
-                key={item.name}
-                className={`sidebar-item ${currentPath === item.href ? 'active' : ''} ${item.action ? 'action' : ''}`}
-                data-tooltip={sidebarState === 'collapsed' ? item.tooltip : ''}
-              >
-                <button
-                  onClick={() => handleNavigation(item.href)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleNavigation(item.href)}
-                  className="sidebar-item-button"
-                  aria-label={item.name}
-                  tabIndex={0}
-                >
-                  <IconComponent className="sidebar-icon" size={20} />
-                  <span className="sidebar-text">{item.name}</span>
-                </button>
-              </li>
-            );
-          })}
-
-          {/* System & Analytics Section */}
-          <div className="sidebar-section-header">System & Analytics</div>
-          {navigationItems.slice(7, 9).map((item) => {
-            const IconComponent = item.icon;
-            return (
-              <li
-                key={item.name}
-                className={`sidebar-item ${currentPath === item.href ? 'active' : ''} ${item.action ? 'action' : ''}`}
-                data-tooltip={sidebarState === 'collapsed' ? item.tooltip : ''}
-              >
-                <button
-                  onClick={() => handleNavigation(item.href)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleNavigation(item.href)}
-                  className="sidebar-item-button"
-                  aria-label={item.name}
-                  tabIndex={0}
-                >
-                  <IconComponent className="sidebar-icon" size={20} />
-                  <span className="sidebar-text">{item.name}</span>
-                </button>
-              </li>
-            );
-          })}
-
-          {/* Administration Section */}
-          <div className="sidebar-section-header">Administration</div>
-          {navigationItems.slice(13).map((item) => {
-            const IconComponent = item.icon;
-            return (
-              <li
-                key={item.name}
-                className={`sidebar-item ${currentPath === item.href ? 'active' : ''} ${item.action ? 'action' : ''}`}
-                data-tooltip={sidebarState === 'collapsed' ? item.tooltip : ''}
-              >
-                <button
-                  onClick={() => handleNavigation(item.href)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleNavigation(item.href)}
-                  className="sidebar-item-button"
-                  aria-label={item.name}
-                  tabIndex={0}
-                >
-                  <IconComponent className="sidebar-icon" size={20} />
-                  <span className="sidebar-text">{item.name}</span>
-                </button>
-              </li>
-            );
-          })}
         </ul>
 
         {/* Theme Toggle - Always Visible */}

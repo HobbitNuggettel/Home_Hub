@@ -76,7 +76,7 @@ const ImageServiceStatus = () => {
                     <h6 className="font-medium text-yellow-800 mb-1">Troubleshooting:</h6>
                     <ul className="text-sm text-yellow-700 space-y-1">
                       {config.troubleshooting.map((tip, index) => (
-                        <li key={`troubleshooting-tip-${tip.slice(0, 20)}-${index}`} className="flex items-start">
+                        <li key={`troubleshooting-tip-${tip.slice(0, 20)}`} className="flex items-start">
                           <span className="text-yellow-600 mr-2">💡</span>
                           {tip}
                         </li>

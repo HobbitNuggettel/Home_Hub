@@ -266,7 +266,7 @@ const DevTools = () => {
             </h5>
             <div className="space-y-1 max-h-24 overflow-y-auto">
               {networkLogs.map((log, index) => (
-                <div key={`network-log-${log.url}-${index}`} className="text-xs p-1 bg-white dark:bg-gray-700 rounded">
+                <div key={`network-log-${log.url}-${log.timestamp}`} className="text-xs p-1 bg-white dark:bg-gray-700 rounded">
                   <div className="flex justify-between">
                     <span className="text-green-600 dark:text-green-400">{log.method}</span>
                     <span className={`text-xs px-1 rounded ${

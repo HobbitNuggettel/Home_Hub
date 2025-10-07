@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * Mobile Navigation List Component
@@ -38,6 +39,11 @@ const MobileNavigationList = ({ items, onNavigate }) => {
       })}
     </nav>
   );
+};
+
+MobileNavigationList.propTypes = {
+  items: PropTypes.array.isRequired,
+  onNavigate: PropTypes.func.isRequired
 };
 
 export default MobileNavigationList;

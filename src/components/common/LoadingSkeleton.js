@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const LoadingSkeleton = ({ type = 'default', className = '' }) => {
   const renderSkeleton = () => {
@@ -143,6 +144,11 @@ const LoadingSkeleton = ({ type = 'default', className = '' }) => {
   };
 
   return renderSkeleton();
+};
+
+LoadingSkeleton.propTypes = {
+  type: PropTypes.string,
+  className: PropTypes.string
 };
 
 export default LoadingSkeleton;

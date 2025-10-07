@@ -35,6 +35,10 @@ const renderSimple = (ui, options = {}) => {
   return render(ui, { wrapper: TestWrapper, ...options });
 };
 
+TestWrapper.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
 describe('InventoryManagement Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { Camera, Upload, X, Scan } from 'lucide-react';
 
@@ -372,6 +373,13 @@ const ItemForm = ({ onSubmit, onCancel, initialData = null, onBarcodeScan }) => 
       </div>
     </div>
   );
+};
+
+ItemForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  initialData: PropTypes.object,
+  onBarcodeScan: PropTypes.func.isRequired
 };
 
 export default ItemForm; 

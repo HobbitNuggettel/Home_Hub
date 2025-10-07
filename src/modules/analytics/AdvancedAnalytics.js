@@ -621,7 +621,7 @@ const AdvancedAnalytics = () => {
                             dataKey="count"
                           >
                             {getSafeData(analyticsData.inventory).map((entry, index) => (
-                              <Cell key={`chart-cell-${entry.name || entry.category}-${index}`} fill={Object.values(colors)[index % Object.values(colors).length]} />
+                              <Cell key={`chart-cell-${entry.name || entry.category}`} fill={Object.values(colors)[index % Object.values(colors).length]} />
                             ))}
                           </Pie>
                           <Tooltip />
@@ -753,7 +753,7 @@ const AdvancedAnalytics = () => {
                   {getSafeData(analyticsData.users).length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       {getSafeData(analyticsData.users).map((user, index) => (
-                        <div key={`user-analytics-${user.name || user.id}-${index}`} className="p-4 bg-gray-50 rounded-lg">
+                        <div key={`user-analytics-${user.name || user.id}`} className="p-4 bg-gray-50 rounded-lg">
                           <h4 className="font-medium text-gray-900">{user.name}</h4>
                           <p className="text-2xl font-bold text-blue-600">{user.count}</p>
                           <p className="text-sm text-gray-500">Active: {user.active}</p>

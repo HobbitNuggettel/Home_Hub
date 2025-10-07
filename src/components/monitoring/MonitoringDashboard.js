@@ -300,7 +300,7 @@ const MonitoringDashboard = () => {
               <div className="p-6">
                 <div className="space-y-3">
                     {recentLogs.slice(0, 5).map((log, index) => (
-                      <div key={`recent-log-${log.timestamp}-${index}-${log.level}`} className="flex items-start space-x-3">
+                      <div key={`recent-log-${log.timestamp}-${log.level}`} className="flex items-start space-x-3">
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getLogLevelColor(log.level)}`}>
                         {log.level.toUpperCase()}
                       </span>
@@ -326,7 +326,7 @@ const MonitoringDashboard = () => {
             <div className="p-6">
               <div className="space-y-3 max-h-96 overflow-y-auto">
                     {recentLogs.map((log, index) => (
-                      <div key={`log-${log.timestamp}-${index}-${log.level}`} className="flex items-start space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                      <div key={`log-${log.timestamp}-${log.level}`} className="flex items-start space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getLogLevelColor(log.level)}`}>
                       {log.level.toUpperCase()}
                     </span>

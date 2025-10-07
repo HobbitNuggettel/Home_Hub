@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 class SafariErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: null, errorInfo: null };
+    this.state = { hasError: false };
   }
 
   static getDerivedStateFromError(error) {
@@ -28,11 +28,6 @@ class SafariErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    this.setState({
-      error: error,
-      errorInfo: errorInfo
-    });
-    
     console.error('Safari Error Boundary caught an error:', error, errorInfo);
   }
 

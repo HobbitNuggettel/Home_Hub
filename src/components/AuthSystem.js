@@ -871,4 +871,8 @@ AuthProvider.propTypes = {
   children: PropTypes.node.isRequired
 };
 
+RegisterForm.propTypes = {
+  onSwitchToLogin: PropTypes.func.isRequired
+};
+
 export default AuthSystem; 

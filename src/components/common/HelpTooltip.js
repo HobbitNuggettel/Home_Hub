@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { HelpCircle, X, ArrowRight, ArrowLeft, CheckCircle } from 'lucide-react';
 
 const HelpTooltip = ({ 
@@ -154,7 +155,7 @@ const HelpTooltip = ({
                   <div className="flex space-x-1">
                     {tour.steps.map((_, index) => (
                       <div
-                        key={`tooltip-dot-${index}`}
+                        key={`tooltip-dot-${step}-${index}`}
                         className={`w-2 h-2 rounded-full ${
                           index === step ? 'bg-white' : 'bg-gray-600'
                         }`}
@@ -248,7 +249,7 @@ export const GuidedTour = ({ isOpen, onClose, tour }) => {
             <div className="flex space-x-2">
               {tour.steps.map((_, index) => (
                 <div
-                  key={`tooltip-indicator-${index}`}
+                  key={`tooltip-indicator-${currentStep}-${index}`}
                   className={`w-2 h-2 rounded-full ${
                     index === currentStep ? 'bg-blue-600' : 'bg-gray-300'
                   }`}
@@ -272,6 +273,23 @@ export const GuidedTour = ({ isOpen, onClose, tour }) => {
       </div>
     </div>
   );
+};
+
+HelpTooltip.propTypes = {
+  content: PropTypes.string,
+  position: PropTypes.string,
+  children: PropTypes.node,
+  tour: PropTypes.object,
+  step: PropTypes.number,
+  onNext: PropTypes.func,
+  onPrev: PropTypes.func,
+  onComplete: PropTypes.func
+};
+
+GuidedTour.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  tour: PropTypes.object.isRequired
 };
 
 export default HelpTooltip;

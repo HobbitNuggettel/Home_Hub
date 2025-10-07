@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { X, Home } from 'lucide-react';
 
 /**
@@ -41,6 +42,11 @@ const MobileMenuHeader = ({ onClose, apiStatus }) => {
       </button>
     </div>
   );
+};
+
+MobileMenuHeader.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  apiStatus: PropTypes.string
 };
 
 export default MobileMenuHeader;

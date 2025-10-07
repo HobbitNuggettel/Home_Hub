@@ -270,7 +270,7 @@ const EnterpriseDashboard = () => {
               <div className="p-6">
                 <div className="space-y-4">
                   {auditData?.logs?.logs?.slice(0, 5).map((log, index) => (
-                    <div key={`audit-log-summary-${log.id || log.timestamp}-${index}`} className="flex items-center space-x-3">
+                    <div key={`audit-log-summary-${log.id || log.timestamp}`} className="flex items-center space-x-3">
                       <div className="flex-shrink-0">
                         {log.severity === 'error' ? (
                           <XCircle className="h-5 w-5 text-red-500" />
@@ -380,7 +380,7 @@ const EnterpriseDashboard = () => {
               </div>
               <div className="space-y-3 max-h-96 overflow-y-auto">
                 {auditData?.logs?.logs?.map((log, index) => (
-                  <div key={`audit-log-detail-${log.id || log.timestamp}-${index}`} className="flex items-start space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <div key={`audit-log-detail-${log.id || log.timestamp}`} className="flex items-start space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <div className="flex-shrink-0">
                       {log.severity === 'error' ? (
                         <XCircle className="h-5 w-5 text-red-500" />
