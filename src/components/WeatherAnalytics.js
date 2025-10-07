@@ -13,12 +13,25 @@ import {
 } from 'lucide-react';
 import weatherDataStorage from '../services/WeatherDataStorage';
 
-const WeatherAnalytics = ({ location, onClose }) => {
+const WeatherAnalytics = ({ location, onClose, temperatureUnit = 'celsius' }) => {
   const [analytics, setAnalytics] = useState(null);
   const [temperatureAnalysis, setTemperatureAnalysis] = useState(null);
   const [commonConditions, setCommonConditions] = useState([]);
   const [weatherTrends, setWeatherTrends] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Format temperature based on selected unit
+  const formatTemp = (temp) => {
+    if (temperatureUnit === 'fahrenheit') {
+      return Math.round((temp * 9 / 5) + 32);
+    }
+    return Math.round(temp);
+  };
+
+  // Get temperature unit symbol
+  const getTempUnit = () => {
+    return temperatureUnit === 'fahrenheit' ? 'F' : 'C';
+  };
 
   useEffect(() => {
     loadAnalytics();
@@ -76,8 +89,8 @@ const WeatherAnalytics = ({ location, onClose }) => {
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] sidebar-modal-overlay">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto sidebar-modal-content">
           <div className="p-6">
             <div className="flex items-center justify-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -90,8 +103,8 @@ const WeatherAnalytics = ({ location, onClose }) => {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] sidebar-modal-overlay">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto sidebar-modal-content">
         <div className="p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -133,11 +146,11 @@ const WeatherAnalytics = ({ location, onClose }) => {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Average:</span>
-                    <span className="font-semibold">{temperatureAnalysis.average}°C</span>
+                    <span className="font-semibold">{formatTemp(temperatureAnalysis.average)}°{getTempUnit()}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Range:</span>
-                    <span className="font-semibold">{temperatureAnalysis.minimum}°C - {temperatureAnalysis.maximum}°C</span>
+                    <span className="font-semibold">{formatTemp(temperatureAnalysis.minimum)}°{getTempUnit()} - {formatTemp(temperatureAnalysis.maximum)}°{getTempUnit()}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Trend:</span>
@@ -235,7 +248,7 @@ const WeatherAnalytics = ({ location, onClose }) => {
                           {new Date(trend.timestamp).toLocaleDateString()}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                          {trend.data.current?.temperature || 'N/A'}°C
+                          {trend.data.current?.temperature ? `${formatTemp(trend.data.current.temperature)}°${getTempUnit()}` : 'N/A'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                           {trend.data.current?.condition || 'N/A'}

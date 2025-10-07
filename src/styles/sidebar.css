@@ -407,6 +407,51 @@ body.sidebar-visible .sidebar-toggle-btn {
   color: #ffffff;
 }
 
+/* Modal positioning to respect sidebar layout */
+.sidebar-modal-overlay {
+  /* Default: full viewport coverage */
+  left: 0;
+  right: 0;
+}
+
+.sidebar-modal-content {
+  /* Default: centered in viewport */
+  margin: 0 auto;
+}
+
+/* When sidebar is collapsed, adjust modal positioning */
+body.sidebar-collapsed .sidebar-modal-overlay {
+  left: var(--sidebar-collapsed-width);
+}
+
+body.sidebar-collapsed .sidebar-modal-content {
+  max-width: calc(100vw - var(--sidebar-collapsed-width) - 2rem);
+}
+
+/* When sidebar is visible, adjust modal positioning */
+body.sidebar-visible .sidebar-modal-overlay {
+  left: var(--sidebar-width);
+}
+
+body.sidebar-visible .sidebar-modal-content {
+  max-width: calc(100vw - var(--sidebar-width) - 2rem);
+}
+
+/* Ensure modal content doesn't exceed available space */
+.sidebar-modal-content {
+  max-width: min(calc(100vw - 2rem), 1200px);
+}
+
+/* Mobile responsiveness - on small screens, ignore sidebar adjustments */
+@media (max-width: 768px) {
+  .sidebar-modal-overlay {
+    left: 0 !important;
+  }
+
+  .sidebar-modal-content {
+    max-width: calc(100vw - 2rem) !important;
+  }
+}
 .sidebar-toggle-btn:hover {
   background: #4b5563;
   color: #60a5fa;

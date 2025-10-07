@@ -44,6 +44,9 @@ const WeatherDashboard = () => {
   const [isDetectingLocation, setIsDetectingLocation] = useState(false);
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [showAPIComparison, setShowAPIComparison] = useState(false);
+  const [temperatureUnit, setTemperatureUnit] = useState(() => {
+    return localStorage.getItem('weatherTemperatureUnit') || 'celsius';
+  }); // 'celsius' or 'fahrenheit'
 
   // Fetch weather data with intelligent caching
   const fetchWeatherData = useCallback(async (loc) => {
@@ -213,9 +216,31 @@ const WeatherDashboard = () => {
     return Cloud;
   };
 
-  // Format temperature
+  // Format temperature based on selected unit
   const formatTemp = (temp) => {
+    if (temperatureUnit === 'fahrenheit') {
+      return Math.round((temp * 9 / 5) + 32);
+    }
     return Math.round(temp);
+  };
+
+  // Get temperature unit symbol
+  const getTempUnit = () => {
+    return temperatureUnit === 'fahrenheit' ? 'F' : 'C';
+  };
+
+  // Get the unit symbol for the toggle button (shows what it will switch TO)
+  const getToggleUnit = () => {
+    return temperatureUnit === 'fahrenheit' ? 'C' : 'F';
+  };
+
+  // Toggle temperature unit
+  const toggleTemperatureUnit = () => {
+    setTemperatureUnit(prev => {
+      const newUnit = prev === 'celsius' ? 'fahrenheit' : 'celsius';
+      localStorage.setItem('weatherTemperatureUnit', newUnit);
+      return newUnit;
+    });
   };
 
   // Format wind speed
@@ -293,12 +318,24 @@ const WeatherDashboard = () => {
             )}
           </div>
           
-          <div className="flex items-center space-x-4 mt-4 sm:mt-0">
+          <div className="flex flex-wrap items-center gap-2 mt-4 sm:mt-0">
             {/* Location Management */}
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Temperature Unit Toggle */}
+              <button
+                onClick={toggleTemperatureUnit}
+                className="flex items-center space-x-2 px-3 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow min-w-[60px]"
+                title={`Switch to ${temperatureUnit === 'celsius' ? 'Fahrenheit' : 'Celsius'}`}
+              >
+                <Thermometer className="w-4 h-4" style={{ color: colors.primary }} />
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  °{getToggleUnit()}
+                </span>
+              </button>
+
               <button
                 onClick={() => setShowLocationSettings(!showLocationSettings)}
-                className="flex items-center space-x-2 px-3 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                className="flex items-center space-x-2 px-3 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow min-w-[44px]"
                 title="Location Settings"
               >
                 <Settings className="w-4 h-4" style={{ color: colors.primary }} />
@@ -316,7 +353,7 @@ const WeatherDashboard = () => {
                 <>
                   <button
                     onClick={detectLocationFromIP}
-                    className="flex items-center space-x-2 px-3 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                      className="flex items-center space-x-2 px-3 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow min-w-[100px]"
                     title="Detect My Location"
                   >
                     <Globe className="w-4 h-4" style={{ color: colors.primary }} />
@@ -325,7 +362,7 @@ const WeatherDashboard = () => {
                   
                   <button
                     onClick={() => setShowAnalytics(true)}
-                    className="flex items-center space-x-2 px-3 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                      className="flex items-center space-x-2 px-3 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow min-w-[100px]"
                     title="View Weather Analytics"
                   >
                     <BarChart3 className="w-4 h-4" style={{ color: colors.primary }} />
@@ -334,7 +371,7 @@ const WeatherDashboard = () => {
                   
                   <button
                     onClick={() => setShowAPIComparison(true)}
-                    className="flex items-center space-x-2 px-3 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                      className="flex items-center space-x-2 px-3 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow min-w-[120px]"
                     title="Compare Weather APIs"
                   >
                     <Settings className="w-4 h-4" style={{ color: colors.primary }} />
@@ -348,7 +385,7 @@ const WeatherDashboard = () => {
             <div className="relative">
               <button
                 onClick={() => setShowSearch(!showSearch)}
-                className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow min-w-[150px]"
               >
                 <MapPin className="w-4 h-4" style={{ color: colors.primary }} />
                 <span className="text-gray-700 dark:text-gray-300">{location || 'Select Location'}</span>
@@ -500,10 +537,10 @@ const WeatherDashboard = () => {
                   </div>
                   <div className="text-right">
                     <div className="text-6xl font-bold text-gray-900 dark:text-white">
-                      {formatTemp(weatherData.current.temperature)}°
+                      {formatTemp(weatherData.current.temperature)}°{getTempUnit()}
                     </div>
                     <p className="text-gray-600 dark:text-gray-400">
-                      Feels like {formatTemp(weatherData.current.feelsLike)}°
+                      Feels like {formatTemp(weatherData.current.feelsLike)}°{getTempUnit()}
                     </p>
                   </div>
                 </div>
@@ -609,10 +646,10 @@ const WeatherDashboard = () => {
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{day.condition}</p>
                     <div className="flex justify-center space-x-2">
                       <span className="font-semibold text-gray-900 dark:text-white">
-                        {formatTemp(day.maxTemp)}°
+                        {formatTemp(day.maxTemp)}°{getTempUnit()}
                       </span>
                       <span className="text-gray-500 dark:text-gray-400">
-                        {formatTemp(day.minTemp)}°
+                        {formatTemp(day.minTemp)}°{getTempUnit()}
                       </span>
                     </div>
                     <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
@@ -632,7 +669,8 @@ const WeatherDashboard = () => {
         {showAnalytics && (
           <WeatherAnalytics 
             location={location} 
-            onClose={() => setShowAnalytics(false)} 
+            onClose={() => setShowAnalytics(false)}
+            temperatureUnit={temperatureUnit}
           />
         )}
         
