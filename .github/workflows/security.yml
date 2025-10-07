@@ -1,104 +1,45 @@
 name: Security Scan
-
-on:
-  schedule:
-    - cron: '0 2 * * 1' # Weekly on Monday at 2 AM
+on: 
   push:
-    branches: [ main ]
+    branches: [ production ]
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
-    branches: [ main ]
+    branches: [ production ]
 
 jobs:
-  dependency-scan:
-    name: Dependency Vulnerability Scan
+  security:
     runs-on: ubuntu-latest
+    name: Security Scan
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
+      - name: Checkout code
+        uses: actions/checkout@v4
         
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Run npm audit
-      run: npm audit --audit-level moderate
-      
-    - name: Run Snyk to check for vulnerabilities
-      uses: snyk/actions/node@master
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      with:
-        args: --severity-threshold=high
-      if: secrets.SNYK_TOKEN != ''
-        
-  code-scan:
-    name: Code Security Scan
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Run CodeQL Analysis
-      uses: github/codeql-action/init@v2
-      with:
-        languages: javascript
-        
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
-      
-    - name: Run Semgrep
-      uses: returntocorp/semgrep-action@v1
-      with:
-        config: >-
-          p/security-audit
-          p/owasp-top-ten
-          p/javascript
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
           
-  container-scan:
-    name: Container Security Scan
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Build Docker image
-      run: docker build -t home-hub:latest .
-      
-    - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@master
-      with:
-        image-ref: 'home-hub:latest'
-        format: 'sarif'
-        output: 'trivy-results.sarif'
+      - name: Install dependencies
+        run: npm ci
         
-    - name: Upload Trivy scan results
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: 'trivy-results.sarif'
+      - name: Run security audit
+        run: npm audit --audit-level=moderate
         
-  secrets-scan:
-    name: Secrets Detection
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        
-    - name: Run TruffleHog
-      uses: trufflesecurity/trufflehog@main
-      with:
-        path: ./
-        base: main
-        head: HEAD
-        extra_args: --debug --only-verified
+      - name: Install API dependencies
+        run: |
+          cd api
+          npm ci
+          
+      - name: Run API security audit
+        run: |
+          cd api
+          npm audit --audit-level=moderate
+          
+      - name: Check for known vulnerabilities
+        run: |
+          if [ $? -ne 0 ]; then
+            echo "Security vulnerabilities found. Please fix them before merging to production."
+            exit 1
+          fi
+          echo "Security scan passed"

@@ -83,6 +83,7 @@ const WeatherAnalytics = ({ location, onClose, temperatureUnit = 'celsius' }) =>
 
   const clearOldData = () => {
     // Use a more user-friendly confirmation approach
+    // TODO: Replace with a more user-friendly confirmation dialog
     const confirmed = window.confirm('Are you sure you want to clear old weather data? This action cannot be undone.');
     if (confirmed) {
       weatherDataStorage.clearOldData();

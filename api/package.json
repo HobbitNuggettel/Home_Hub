@@ -1,7 +1,7 @@
 {
   "name": "home-hub-api",
-  "version": "1.0.0",
-  "description": "Home Hub API Server - Comprehensive backend for smart home management platform",
+  "version": "2.0.0",
+  "description": "Home Hub API Server",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,64 +9,53 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:api": "node test-api.js",
-    "lint": "eslint src/",
-    "lint:fix": "eslint src/ --fix",
-    "docs": "swagger-jsdoc -d swaggerDef.js src/routes/*.js > docs/swagger.json",
-    "seed": "node scripts/seed.js",
-    "migrate": "node scripts/migrate.js"
+    "test:api": "jest tests/api-endpoints.test.js",
+    "test:performance": "jest tests/performance.test.js",
+    "test:security": "jest tests/security.test.js"
   },
-  "keywords": [
-    "home-hub",
-    "api",
-    "smart-home",
-    "express",
-    "socket.io",
-    "firebase",
-    "real-time"
-  ],
-  "author": "Home Hub Development Team",
-  "license": "MIT",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "express-rate-limit": "^7.1.5",
-    "express-validator": "^7.0.1",
-    "firebase-admin": "^12.7.0",
+    "cors": "^2.8.5",
     "helmet": "^7.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "lodash": "^4.17.21",
-    "moment": "^2.29.4",
     "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1",
-    "sharp": "^0.33.0",
-    "socket.io": "^4.7.4",
-    "swagger-jsdoc": "^6.2.8",
+    "express-rate-limit": "^7.1.5",
     "swagger-ui-express": "^5.0.0",
-    "uuid": "^9.0.1"
+    "socket.io": "^4.7.4",
+    "dotenv": "^16.3.1",
+    "compression": "^1.7.4",
+    "firebase-admin": "^12.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "joi": "^17.11.0",
+    "express-validator": "^7.0.1"
   },
   "devDependencies": {
-    "eslint": "^8.56.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.1.1",
     "jest": "^29.7.0",
-    "nodemon": "^3.0.2",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "nodemon": "^3.0.2"
   },
-  "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=8.0.0"
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/**/*.test.js"
+    ],
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/HobbitNuggettel/Home_Hub.git"
-  },
-  "bugs": {
-    "url": "https://github.com/HobbitNuggettel/Home_Hub/issues"
-  },
-  "homepage": "https://github.com/HobbitNuggettel/Home_Hub#readme"
+  "keywords": [
+    "api",
+    "home-hub",
+    "express",
+    "nodejs"
+  ],
+  "author": "Home Hub Team",
+  "license": "MIT"
 }

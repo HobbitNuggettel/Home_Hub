@@ -78,15 +78,20 @@ app.use(helmet({
   }
 }));
 
-// Rate limiting
+// Rate limiting with optimized settings
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 1000, // Increased from 100 to 1000 for better performance
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
+  skip: (req) => {
+    // Skip rate limiting for health checks and static assets
+    return req.path === '/health' || req.path === '/api/status' || req.path.startsWith('/api-docs');
+  }
 });
 
+// Apply rate limiting only to API routes
 app.use('/api/', limiter);
 
 // Additional security middleware
@@ -106,15 +111,57 @@ app.use(cors({
 }));
 
 // Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+// Middleware with performance optimizations
+app.use(express.json({
+  limit: '10mb',
+  verify: (req, res, buf) => {
+    // Add request timing
+    req.startTime = Date.now();
+  }
+}));
+app.use(express.urlencoded({
+  extended: true,
+  limit: '10mb',
+  parameterLimit: 1000 // Increased parameter limit
+}));
 
-// Logging middleware
+// Compression middleware for better performance
+const compression = require('compression');
+app.use(compression({
+  level: 6, // Balanced compression level
+  threshold: 1024, // Only compress responses > 1KB
+  filter: (req, res) => {
+    if (req.headers['x-no-compression']) {
+      return false;
+    }
+    return compression.filter(req, res);
+  }
+}));
+
+// Logging middleware with performance optimization
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 } else {
-  app.use(morgan('combined'));
+  // Optimized logging for production
+  app.use(morgan('combined', {
+    skip: (req, res) => {
+      // Skip logging for health checks and static assets
+      return req.path === '/health' || req.path === '/api/status' || req.path.startsWith('/api-docs');
+    }
+  }));
 }
+
+// Response time middleware
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    if (duration > 1000) { // Log slow requests
+      console.log(`Slow request: ${req.method} ${req.path} - ${duration}ms`);
+    }
+  });
+  next();
+});
 
 // Landing page
 app.get('/', (req, res) => {
