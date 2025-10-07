@@ -302,7 +302,7 @@ export const PWAFeatures = () => {
           };
           
           return (
-            <div key={`pwa-feature-${feature.title}-${index}`} className="flex items-start space-x-3">
+            <div key={`pwa-feature-${feature.title}`} className="flex items-start space-x-3">
               <div className={`p-2 rounded-lg ${colorClasses[feature.color]}`}>
                 <IconComponent size={16} />
               </div>

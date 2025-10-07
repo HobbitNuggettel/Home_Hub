@@ -105,7 +105,7 @@ export const useTranslation = (namespace = 'translation') => {
   const translateWithLineBreaks = (key, options = {}) => {
     const translation = t(key, options);
     return translation.split('\n').map((line, index) => (
-      <span key={`translation-line-${index}`}>
+      <span key={`translation-line-${line}`}>
         {line}
         {index < translation.split('\n').length - 1 && <br />}
       </span>

@@ -1,0 +1,191 @@
+
+> home-hub@2.0.0 lint
+> eslint src/ --ext .js,.jsx
+
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/WeatherAnalytics.js
+  86:23  warning  Unexpected confirm  no-alert
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/__tests__/InventoryManagement.test.js
+  28:26  warning  'children' is missing in props validation  react/prop-types
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/common/HelpTooltip.js
+  158:30  warning  Do not use Array index in keys  react/no-array-index-key
+  252:24  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/common/LoadingSkeleton.js
+   29:25  warning  Do not use Array index in keys  react/no-array-index-key
+   49:27  warning  Do not use Array index in keys  react/no-array-index-key
+   95:25  warning  Do not use Array index in keys  react/no-array-index-key
+  125:22  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/common/LoadingStates.js
+  100:16  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/common/ProgressIndicator.js
+   99:23  warning  Do not use Array index in keys  react/no-array-index-key
+  132:32  warning  Do not use Array index in keys  react/no-array-index-key
+  282:20  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/layout/Dashboard.js
+  415:28  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/mobile/MobileNavigationList.js
+   7:33  warning  'items' is missing in props validation       react/prop-types
+   7:40  warning  'onNavigate' is missing in props validation  react/prop-types
+  10:14  warning  'items.map' is missing in props validation   react/prop-types
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/mobile/MobileUserSection.js
+   8:30  warning  'userProfile' is missing in props validation              react/prop-types
+   8:43  warning  'notifications' is missing in props validation            react/prop-types
+   8:58  warning  'onLogin' is missing in props validation                  react/prop-types
+   8:67  warning  'onSignup' is missing in props validation                 react/prop-types
+  14:26  warning  'userProfile.photoURL' is missing in props validation     react/prop-types
+  16:34  warning  'userProfile.photoURL' is missing in props validation     react/prop-types
+  26:28  warning  'userProfile.displayName' is missing in props validation  react/prop-types
+  28:82  warning  'userProfile.email' is missing in props validation        react/prop-types
+  31:30  warning  'userProfile.role' is missing in props validation         react/prop-types
+  33:30  warning  'notifications.length' is missing in props validation     react/prop-types
+  35:34  warning  'notifications.length' is missing in props validation     react/prop-types
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/modules/AISuggestions.js
+  261:28  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/modules/About.js
+  311:33  warning  Do not use Array index in keys  react/no-array-index-key
+  348:31  warning  Do not use Array index in keys  react/no-array-index-key
+  355:37  warning  Do not use Array index in keys  react/no-array-index-key
+  384:31  warning  Do not use Array index in keys  react/no-array-index-key
+  408:37  warning  Do not use Array index in keys  react/no-array-index-key
+  434:33  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/modules/Inventory.js
+  452:28  warning  Do not use Array index in keys  react/no-array-index-key
+  582:40  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/modules/Maintenance.js
+  721:40  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/monitoring/MonitoringDashboard.js
+  303:33  warning  Do not use Array index in keys  react/no-array-index-key
+  329:33  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/pwa/PWAInstallPrompt.js
+  177:41  warning  'className' is missing in props validation  react/prop-types
+  261:38  warning  'className' is missing in props validation  react/prop-types
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/security/SecureInput.js
+  179:26  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/contexts/LanguageContext.js
+  147:6  warning  React Hook useEffect has missing dependencies: 'changeLanguage', 'currentLanguage', and 'getTextDirection'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/contexts/SecurityContext.js
+  52:6  warning  React Hook useCallback has a missing dependency: 'checkAlertThresholds'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/contexts/ThemeContext.js
+   90:9  warning  The 'getCurrentColors' function makes the dependencies of useEffect Hook (at line 114) change on every render. To fix this, wrap the definition of 'getCurrentColors' in its own useCallback() Hook                                                     react-hooks/exhaustive-deps
+  100:9  warning  The 'applyColorsToDocument' function makes the dependencies of useEffect Hook (at line 114) change on every render. Move it inside the useEffect callback. Alternatively, wrap the definition of 'applyColorsToDocument' in its own useCallback() Hook  react-hooks/exhaustive-deps
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/hooks/useMonitoring.js
+  34:6  warning  React Hook useCallback has missing dependencies: 'loadLogs' and 'loadPerformanceMetrics'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/hooks/useTranslation.js
+  108:18  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/modules/analytics/AdvancedAnalytics.js
+  123:9   warning  The 'loadAnalyticsData' function makes the dependencies of useEffect Hook (at line 275) change on every render. To fix this, wrap the definition of 'loadAnalyticsData' in its own useCallback() Hook  react-hooks/exhaustive-deps
+  624:42  warning  Do not use Array index in keys                                                                                                                                                                         react/no-array-index-key
+  756:35  warning  Do not use Array index in keys                                                                                                                                                                         react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/modules/analytics/PerformanceAnalytics.js
+  143:30  warning  'title' is missing in props validation                                                                              react/prop-types
+  143:37  warning  'value' is missing in props validation                                                                              react/prop-types
+  143:44  warning  'unit' is missing in props validation                                                                               react/prop-types
+  143:50  warning  'icon' is missing in props validation                                                                               react/prop-types
+  143:62  warning  'color' is missing in props validation                                                                              react/prop-types
+  143:69  warning  'trend' is missing in props validation                                                                              react/prop-types
+  165:24  warning  'alert' is missing in props validation                                                                              react/prop-types
+  167:13  warning  'alert.type' is missing in props validation                                                                         react/prop-types
+  168:13  warning  'alert.type' is missing in props validation                                                                         react/prop-types
+  173:17  warning  'alert.type' is missing in props validation                                                                         react/prop-types
+  174:17  warning  'alert.type' is missing in props validation                                                                         react/prop-types
+  178:67  warning  'alert.message' is missing in props validation                                                                      react/prop-types
+  179:55  warning  'alert.details' is missing in props validation                                                                      react/prop-types
+  188:6   warning  React Hook useEffect has a missing dependency: 'startMonitoring'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/modules/collaboration/RealTimeCollaboration.js
+  268:23  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/modules/integrations/AutomationRules.js
+  4:43  warning  'rules' is missing in props validation     react/prop-types
+  4:50  warning  'devices' is missing in props validation   react/prop-types
+  4:59  warning  'onToggle' is missing in props validation  react/prop-types
+  4:69  warning  'onDelete' is missing in props validation  react/prop-types
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/modules/integrations/DeviceForm.js
+   5:3  warning  'device' is missing in props validation       react/prop-types
+   6:3  warning  'onSubmit' is missing in props validation     react/prop-types
+   7:3  warning  'onCancel' is missing in props validation     react/prop-types
+   8:3  warning  'deviceTypes' is missing in props validation  react/prop-types
+   9:3  warning  'rooms' is missing in props validation        react/prop-types
+  10:3  warning  'isEditing' is missing in props validation    react/prop-types
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/modules/integrations/DeviceList.js
+    4:38  warning  'devices' is missing in props validation         react/prop-types
+    4:47  warning  'onEdit' is missing in props validation          react/prop-types
+    4:55  warning  'onDelete' is missing in props validation        react/prop-types
+    4:65  warning  'onToggle' is missing in props validation        react/prop-types
+    5:15  warning  'devices.length' is missing in props validation  react/prop-types
+  148:16  warning  'devices.map' is missing in props validation     react/prop-types
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/modules/integrations/IntegrationStatus.js
+  4:45  warning  'devices' is missing in props validation          react/prop-types
+  4:54  warning  'automationRules' is missing in props validation  react/prop-types
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/modules/integrations/SmartHomeDashboard.js
+  4:46  warning  'devices' is missing in props validation          react/prop-types
+  4:55  warning  'automationRules' is missing in props validation  react/prop-types
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/modules/inventory/AIInsights.js
+  4:38  warning  'insights' is missing in props validation   react/prop-types
+  4:48  warning  'isLoading' is missing in props validation  react/prop-types
+  4:59  warning  'onRefresh' is missing in props validation  react/prop-types
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/modules/inventory/InventoryAlerts.js
+  4:43  warning  'inventory' is missing in props validation  react/prop-types
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/modules/inventory/InventoryAnalytics.js
+  4:46  warning  'inventory' is missing in props validation  react/prop-types
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/modules/inventory/InventoryForm.js
+  5:3  warning  'item' is missing in props validation        react/prop-types
+  6:3  warning  'onSubmit' is missing in props validation    react/prop-types
+  7:3  warning  'onCancel' is missing in props validation    react/prop-types
+  8:3  warning  'categories' is missing in props validation  react/prop-types
+  9:3  warning  'isEditing' is missing in props validation   react/prop-types
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/modules/spending/BudgetOverview.js
+  5:3  warning  'budgets' is missing in props validation   react/prop-types
+  6:3  warning  'onEdit' is missing in props validation    react/prop-types
+  7:3  warning  'onDelete' is missing in props validation  react/prop-types
+  8:3  warning  'onAdd' is missing in props validation     react/prop-types
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/modules/spending/ExpenseList.js
+    5:3   warning  'expenses' is missing in props validation                        react/prop-types
+    6:3   warning  'selectedExpenses' is missing in props validation                react/prop-types
+    7:3   warning  'onEdit' is missing in props validation                          react/prop-types
+    8:3   warning  'onDelete' is missing in props validation                        react/prop-types
+    9:3   warning  'onView' is missing in props validation                          react/prop-types
+   10:3   warning  'onToggleSelection' is missing in props validation               react/prop-types
+   11:3   warning  'viewMode' is missing in props validation                        react/prop-types
+  238:19  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  238:35  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  247:28  warning  Do not use Array index in keys                                   react/no-array-index-key
+
+/Volumes/Play ground/Cursor  Projects /Home Hub/src/services/WeatherAPIComparison.js
+  301:56  warning  ["fallback"] is better written in dot notation  dot-notation
+
+✖ 111 problems (0 errors, 111 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+

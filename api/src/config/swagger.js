@@ -288,6 +288,34 @@ const options = {
       {
         name: 'Collaboration',
         description: 'Real-time collaboration features'
+      },
+      {
+        name: 'Weather',
+        description: 'Weather data and analytics endpoints'
+      },
+      {
+        name: 'Recipes',
+        description: 'Recipe management and meal planning'
+      },
+      {
+        name: 'Shopping',
+        description: 'Shopping list management and AI suggestions'
+      },
+      {
+        name: 'Maintenance',
+        description: 'Home maintenance tracking and scheduling'
+      },
+      {
+        name: 'AI Services',
+        description: 'AI-powered features and intelligent assistance'
+      },
+      {
+        name: 'Smart Home',
+        description: 'Smart home device management and automation'
+      },
+      {
+        name: 'Settings',
+        description: 'User preferences and system configuration'
       }
     ],
     security: [

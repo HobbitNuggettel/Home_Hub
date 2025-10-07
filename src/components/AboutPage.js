@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { 
   Home, 
   Package, 
@@ -176,7 +177,7 @@ const AboutPage = () => {
                   <p className="text-gray-600 text-sm mb-4">{feature.description}</p>
                   <div className="space-y-2">
                     {feature.highlights.slice(0, 3).map((highlight, index) => (
-                      <div key={index} className="flex items-center space-x-2 text-sm text-gray-500">
+                      <div key={`highlight-${highlight}`} className="flex items-center space-x-2 text-sm text-gray-500">
                         <CheckCircle size={14} className="text-green-500" />
                         <span>{highlight}</span>
                       </div>
@@ -214,7 +215,7 @@ const AboutPage = () => {
                           <h4 className="font-semibold text-gray-900 mb-3">Key Features</h4>
                           <div className="space-y-2">
                             {feature.highlights.map((highlight, index) => (
-                              <div key={index} className="flex items-center space-x-2 text-sm text-gray-600">
+                              <div key={`feature-highlight-${highlight}`} className="flex items-center space-x-2 text-sm text-gray-600">
                                 <CheckCircle size={16} className="text-green-500" />
                                 <span>{highlight}</span>
                               </div>
@@ -254,7 +255,7 @@ const AboutPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {techStack.map((tech, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-md p-6 border hover:shadow-lg transition-shadow">
+                <div key={`tech-${tech.name}`} className="bg-white rounded-lg shadow-md p-6 border hover:shadow-lg transition-shadow">
                   <div className="text-center">
                     <div className="text-4xl mb-3">{tech.icon}</div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">{tech.name}</h3>
@@ -305,7 +306,7 @@ const AboutPage = () => {
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">Phase 2: Advanced Features</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {upcomingFeatures.slice(0, 5).map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-3 text-sm text-gray-600">
+                    <div key={`upcoming-${feature}`} className="flex items-center space-x-3 text-sm text-gray-600">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                       <span>{feature}</span>
                     </div>
@@ -317,7 +318,7 @@ const AboutPage = () => {
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">Phase 3: Enterprise & Scale</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {upcomingFeatures.slice(5).map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-3 text-sm text-gray-600">
+                    <div key={`upcoming-phase3-${feature}`} className="flex items-center space-x-3 text-sm text-gray-600">
                       <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                       <span>{feature}</span>
                     </div>
@@ -421,6 +422,10 @@ const AboutPage = () => {
       </div>
     </div>
   );
+};
+
+TabContent.propTypes = {
+  tabId: PropTypes.string.isRequired
 };
 
 export default AboutPage; 

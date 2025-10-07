@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { 
   BarChart3, 
   CheckCircle, 
@@ -153,7 +154,7 @@ const WeatherAPIComparisonComponent = ({ location, onClose }) => {
                 <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">Unique Features:</h4>
                 <div className="space-y-1">
                   {detailedComparison?.weatherAPI?.uniqueFeatures?.slice(0, 3).map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-2">
+                    <div key={`weatherapi-feature-${feature}`} className="flex items-center space-x-2">
                       <CheckCircle className="w-3 h-3 text-green-500" />
                       <span className="text-xs text-gray-600 dark:text-gray-400">{feature}</span>
                     </div>
@@ -197,7 +198,7 @@ const WeatherAPIComparisonComponent = ({ location, onClose }) => {
                 <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">Unique Features:</h4>
                 <div className="space-y-1">
                   {detailedComparison?.openWeatherMap?.uniqueFeatures?.slice(0, 3).map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-2">
+                    <div key={`openweathermap-feature-${feature}`} className="flex items-center space-x-2">
                       <CheckCircle className="w-3 h-3 text-green-500" />
                       <span className="text-xs text-gray-600 dark:text-gray-400">{feature}</span>
                     </div>
@@ -287,6 +288,11 @@ const WeatherAPIComparisonComponent = ({ location, onClose }) => {
       </div>
     </div>
   );
+};
+
+WeatherAPIComparisonComponent.propTypes = {
+  location: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired
 };
 
 export default WeatherAPIComparisonComponent;

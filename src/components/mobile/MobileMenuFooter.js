@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { LogOut } from 'lucide-react';
 
 /**
@@ -19,6 +20,11 @@ const MobileMenuFooter = ({ userProfile, onLogout }) => {
       </button>
     </div>
   );
+};
+
+MobileMenuFooter.propTypes = {
+  userProfile: PropTypes.object,
+  onLogout: PropTypes.func.isRequired
 };
 
 export default MobileMenuFooter;

@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { 
   Mic, 
   Camera, 
@@ -59,9 +60,9 @@ export default function AIAssistant({
     };
     
     initAI();
-  }, []); // ✅ FIXED: Empty dependency array - runs only once
+  }, [generateComprehensiveInsights]); // ✅ FIXED: Include generateComprehensiveInsights in dependencies
 
-  const generateComprehensiveInsights = async () => {
+  const generateComprehensiveInsights = useCallback(async () => {
     setIsProcessing(true);
     
     try {
@@ -91,7 +92,7 @@ export default function AIAssistant({
     } finally {
       setIsProcessing(false);
     }
-  };
+  }, [inventory, expenses, recipes, budgets]);
 
   const handleVoiceInput = async () => {
     if (!recognitionRef.current) {
@@ -521,7 +522,7 @@ export default function AIAssistant({
             </button>
             
             <p className="text-xs text-gray-600 mt-3 text-center">
-              Try saying: "Add milk to shopping list" or "How much did I spend on groceries?"
+              Try saying: &quot;Add milk to shopping list&quot; or &quot;How much did I spend on groceries?&quot;
             </p>
           </div>
         )}
@@ -624,3 +625,11 @@ export default function AIAssistant({
     </div>
   );
 }
+
+AIAssistant.propTypes = {
+  inventory: PropTypes.array,
+  expenses: PropTypes.array,
+  recipes: PropTypes.array,
+  budgets: PropTypes.array,
+  onUpdateData: PropTypes.func.isRequired
+};

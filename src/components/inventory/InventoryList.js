@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const InventoryList = ({ items = [], onEdit, onDelete }) => {
   if (items.length === 0) {
@@ -46,6 +47,12 @@ const InventoryList = ({ items = [], onEdit, onDelete }) => {
       ))}
     </div>
   );
+};
+
+InventoryList.propTypes = {
+  items: PropTypes.array,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired
 };
 
 export default InventoryList;

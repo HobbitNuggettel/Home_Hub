@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -376,3 +377,11 @@ export default function InventoryItemForm({
     </div>
   );
 }
+
+InventoryItemForm.propTypes = {
+  item: PropTypes.object,
+  categories: PropTypes.array,
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  isSubmitting: PropTypes.bool
+};

@@ -389,8 +389,25 @@ SlideInAnimation.propTypes = {
   className: PropTypes.string
 };
 
+StatusIndicator.propTypes = {
+  status: PropTypes.string.isRequired,
+  message: PropTypes.string,
+  showIcon: PropTypes.bool,
+  className: PropTypes.string
+};
+
+ProgressBar.propTypes = {
+  progress: PropTypes.number.isRequired,
+  total: PropTypes.number,
+  showPercentage: PropTypes.bool,
+  color: PropTypes.string,
+  size: PropTypes.string,
+  className: PropTypes.string
+};
+
 LoadingOverlay.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   message: PropTypes.string,
-  children: PropTypes.node
+  progress: PropTypes.number,
+  onCancel: PropTypes.func
 };

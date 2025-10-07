@@ -173,6 +173,9 @@ export const sqlInjectionProtection = (req, res, next) => {
   ];
 
   const checkInput = (obj) => {
+    if (!obj || typeof obj !== 'object') {
+      return false;
+    }
     for (const [key, value] of Object.entries(obj)) {
       if (typeof value === 'string') {
         for (const pattern of suspiciousPatterns) {
@@ -221,6 +224,9 @@ export const sqlInjectionProtection = (req, res, next) => {
  */
 export const xssProtection = (req, res, next) => {
   const checkInput = (obj) => {
+    if (!obj || typeof obj !== 'object') {
+      return false;
+    }
     for (const [key, value] of Object.entries(obj)) {
       if (typeof value === 'string') {
         const securityCheck = securityService.checkSuspiciousPatterns(value);

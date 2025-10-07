@@ -804,3 +804,7 @@ export const UserProfile = () => {
 SimpleAuthProvider.propTypes = {
   children: PropTypes.node.isRequired
 };
+
+RegisterForm.propTypes = {
+  onSwitchToLogin: PropTypes.func.isRequired
+};

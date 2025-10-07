@@ -176,7 +176,7 @@ const SecureInput = ({
           {passwordStrength.feedback.length > 0 && (
             <ul className="mt-2 text-xs text-gray-600 dark:text-gray-400">
               {passwordStrength.feedback.map((feedback, index) => (
-                <li key={`password-feedback-${feedback}-${index}`} className="flex items-center">
+                <li key={`password-feedback-${feedback}`} className="flex items-center">
                   <span className="w-1 h-1 bg-gray-400 rounded-full mr-2" />
                   {feedback}
                 </li>

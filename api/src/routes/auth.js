@@ -519,4 +519,58 @@ router.post('/forgot-password',
   })
 );
 
+/**
+ * @swagger
+ * /api/auth/profile:
+ *   get:
+ *     summary: Get user profile
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User profile retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.get('/profile', asyncHandler(async (req, res) => {
+  // Mock user profile - replace with database query
+  const userProfile = {
+    id: req.user?.id || 'user-123',
+    email: req.user?.email || 'user@example.com',
+    displayName: req.user?.displayName || 'User Name',
+    role: req.user?.role || 'user',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    preferences: {
+      theme: 'light',
+      notifications: true,
+      language: 'en'
+    },
+    stats: {
+      totalSpending: 1250.50,
+      totalItems: 45,
+      lastLogin: new Date().toISOString()
+    }
+  };
+
+  res.json({
+    success: true,
+    data: userProfile
+  });
+}));
+
 module.exports = router;

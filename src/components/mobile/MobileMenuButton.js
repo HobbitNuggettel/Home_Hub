@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Menu } from 'lucide-react';
 
 /**
@@ -31,6 +32,12 @@ const MobileMenuButton = ({ onClick, isOpen, apiStatus }) => {
       </div>
     </button>
   );
+};
+
+MobileMenuButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  apiStatus: PropTypes.string
 };
 
 export default MobileMenuButton;

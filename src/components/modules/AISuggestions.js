@@ -258,7 +258,7 @@ const AISuggestions = () => {
                 <div className="flex items-end gap-1 mb-4 h-16">
                   {insight.data.map((value, index) => (
                     <div
-                      key={`chart-bar-${insight.id}-${index}`}
+                      key={`chart-bar-${insight.id}-${value}`}
                       className="bg-purple-200 rounded-t flex-1"
                       style={{ height: `${(value / Math.max(...insight.data)) * 100}%` }}
                     />
@@ -298,7 +298,7 @@ const AISuggestions = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {filteredSuggestions.map(suggestion => (
                 <div
-                  key={suggestion.id}
+                  key={`suggestion-${suggestion.id}-${suggestion.title}`}
                   className={`bg-white rounded-xl p-6 border-2 transition-all hover:shadow-lg ${
                     suggestion.completed 
                       ? 'border-green-200 bg-green-50' 

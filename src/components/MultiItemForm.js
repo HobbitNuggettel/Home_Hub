@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { Camera, Upload, X, Plus, Minus, Scan, Trash2 } from 'lucide-react';
 
@@ -635,7 +636,7 @@ const MultiItemForm = ({ onSubmit, onCancel, onBarcodeScan }) => {
               <div className="bg-blue-50 p-4 rounded-lg">
                 <h3 className="font-medium text-blue-800 mb-2">Summary</h3>
                 <p className="text-sm text-blue-700">
-                  You will create <strong>{watchedTotalQuantity || 1} identical items</strong> with the name "{watch('name') || 'Item'}" 
+                  You will create <strong>{watchedTotalQuantity || 1} identical items</strong> with the name &quot;{watch('name') || 'Item'}&quot; 
                   in the {watch('category') || 'Food'} category.
                 </p>
               </div>
@@ -708,6 +709,12 @@ const MultiItemForm = ({ onSubmit, onCancel, onBarcodeScan }) => {
       </div>
     </div>
   );
+};
+
+MultiItemForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onBarcodeScan: PropTypes.func.isRequired
 };
 
 export default MultiItemForm; 

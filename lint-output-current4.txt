@@ -3,183 +3,29 @@
 > eslint src/ --ext .js,.jsx
 
 
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/About.js
-  163:25  warning  Do not use Array index in keys  react/no-array-index-key
-  194:25  warning  Do not use Array index in keys  react/no-array-index-key
-  217:23  warning  Do not use Array index in keys  react/no-array-index-key
-  228:28  warning  Do not use Array index in keys  react/no-array-index-key
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/AboutPage.js
-  154:25  warning  'tabId' is missing in props validation  react/prop-types
-  179:33  warning  Do not use Array index in keys          react/no-array-index-key
-  217:41  warning  Do not use Array index in keys          react/no-array-index-key
-  257:27  warning  Do not use Array index in keys          react/no-array-index-key
-  308:31  warning  Do not use Array index in keys          react/no-array-index-key
-  320:31  warning  Do not use Array index in keys          react/no-array-index-key
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/AuthSystem.js
-  432:32  warning  'onSwitchToLogin' is missing in props validation  react/prop-types
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/Dashboard.js
-  415:28  warning  Do not use Array index in keys  react/no-array-index-key
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/DevTools.js
-  269:27  warning  Do not use Array index in keys  react/no-array-index-key
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/ImageCompressionDemo.js
-  179:26  warning  Do not use Array index in keys  react/no-array-index-key
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/ImageServiceStatus.js
-  79:34  warning  Do not use Array index in keys  react/no-array-index-key
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/InventoryManagement.js
-  479:33  warning  Do not use Array index in keys  react/no-array-index-key
-  500:33  warning  Do not use Array index in keys  react/no-array-index-key
-  523:33  warning  Do not use Array index in keys  react/no-array-index-key
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/ItemForm.js
-  5:21  warning  'onSubmit' is missing in props validation       react/prop-types
-  5:31  warning  'onCancel' is missing in props validation       react/prop-types
-  5:41  warning  'initialData' is missing in props validation    react/prop-types
-  5:61  warning  'onBarcodeScan' is missing in props validation  react/prop-types
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/MultiItemForm.js
-    5:26   warning  'onSubmit' is missing in props validation                        react/prop-types
-    5:36   warning  'onCancel' is missing in props validation                        react/prop-types
-    5:46   warning  'onBarcodeScan' is missing in props validation                   react/prop-types
-  638:110  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
-  638:136  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/PWAInstall.js
-  305:23  warning  Do not use Array index in keys  react/no-array-index-key
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/RecipeManagement.js
-  446:33  warning  Do not use Array index in keys  react/no-array-index-key
-  474:33  warning  Do not use Array index in keys  react/no-array-index-key
-  499:33  warning  Do not use Array index in keys  react/no-array-index-key
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/SimpleAuthProvider.js
-  384:32  warning  'onSwitchToLogin' is missing in props validation  react/prop-types
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/WeatherAPIComparison.js
-   20:42  warning  'location' is missing in props validation  react/prop-types
-   20:52  warning  'onClose' is missing in props validation   react/prop-types
-  156:31  warning  Do not use Array index in keys             react/no-array-index-key
-  200:31  warning  Do not use Array index in keys             react/no-array-index-key
-
 /Volumes/Play ground/Cursor  Projects /Home Hub/src/components/WeatherAnalytics.js
-   16:29  warning  'location' is missing in props validation                                                                         react/prop-types
-   16:39  warning  'onClose' is missing in props validation                                                                          react/prop-types
-   16:48  warning  'temperatureUnit' is missing in props validation                                                                  react/prop-types
-   38:6   warning  React Hook useEffect has a missing dependency: 'loadAnalytics'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
-   84:9   warning  Unexpected confirm                                                                                                no-alert
-  181:31  warning  Do not use Array index in keys                                                                                    react/no-array-index-key
-  246:32  warning  Do not use Array index in keys                                                                                    react/no-array-index-key
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/WeatherStorageSettings.js
-   15:35  warning  'onClose' is missing in props validation  react/prop-types
-  111:24  warning  Do not use Array index in keys            react/no-array-index-key
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/__tests__/ErrorBoundary.test.js
-  7:23  warning  'shouldThrow' is missing in props validation  react/prop-types
+  86:23  warning  Unexpected confirm  no-alert
 
 /Volumes/Play ground/Cursor  Projects /Home Hub/src/components/__tests__/InventoryManagement.test.js
   28:26  warning  'children' is missing in props validation  react/prop-types
 
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/ai/AIAssistant.js
-   27:3   warning  'inventory' is missing in props validation                                                                                        react/prop-types
-   28:3   warning  'expenses' is missing in props validation                                                                                         react/prop-types
-   29:3   warning  'recipes' is missing in props validation                                                                                          react/prop-types
-   30:3   warning  'budgets' is missing in props validation                                                                                          react/prop-types
-   31:3   warning  'onUpdateData' is missing in props validation                                                                                     react/prop-types
-   62:6   warning  React Hook useEffect has a missing dependency: 'generateComprehensiveInsights'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
-  524:27  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                   react/no-unescaped-entities
-  524:53  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                   react/no-unescaped-entities
-  524:58  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                   react/no-unescaped-entities
-  524:93  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                   react/no-unescaped-entities
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/ai/AIDashboard.js
-  135:27  warning  'score' is missing in props validation  react/prop-types
-  308:29  warning  Do not use Array index in keys          react/no-array-index-key
-  349:29  warning  Do not use Array index in keys          react/no-array-index-key
-  391:27  warning  Do not use Array index in keys          react/no-array-index-key
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/ai/AISmartSuggestions.js
-  223:9  warning  The 'loadSuggestions' function makes the dependencies of useEffect Hook (at line 221) change on every render. To fix this, wrap the definition of 'loadSuggestions' in its own useCallback() Hook  react-hooks/exhaustive-deps
-
 /Volumes/Play ground/Cursor  Projects /Home Hub/src/components/common/HelpTooltip.js
-    5:3   warning  'content' is missing in props validation               react/prop-types
-    6:3   warning  'position' is missing in props validation              react/prop-types
-    7:3   warning  'children' is missing in props validation              react/prop-types
-    8:3   warning  'tour' is missing in props validation                  react/prop-types
-    9:3   warning  'step' is missing in props validation                  react/prop-types
-   10:3   warning  'onNext' is missing in props validation                react/prop-types
-   11:3   warning  'onPrev' is missing in props validation                react/prop-types
-   12:3   warning  'onComplete' is missing in props validation            react/prop-types
-  157:30  warning  Do not use Array index in keys                         react/no-array-index-key
-  191:30  warning  'isOpen' is missing in props validation                react/prop-types
-  191:38  warning  'onClose' is missing in props validation               react/prop-types
-  191:47  warning  'tour' is missing in props validation                  react/prop-types
-  196:28  warning  'tour.steps' is missing in props validation            react/prop-types
-  196:34  warning  'tour.steps.length' is missing in props validation     react/prop-types
-  217:32  warning  'tour.steps' is missing in props validation            react/prop-types
-  224:71  warning  'tour.title' is missing in props validation            react/prop-types
-  234:79  warning  'tour.steps[].title' is missing in props validation    react/prop-types
-  235:67  warning  'tour.steps[].content' is missing in props validation  react/prop-types
-  249:21  warning  'tour.steps' is missing in props validation            react/prop-types
-  249:27  warning  'tour.steps.map' is missing in props validation        react/prop-types
-  251:24  warning  Do not use Array index in keys                         react/no-array-index-key
-  260:45  warning  'tour.steps' is missing in props validation            react/prop-types
-  260:51  warning  'tour.steps.length' is missing in props validation     react/prop-types
-  263:43  warning  'tour.steps' is missing in props validation            react/prop-types
-  263:49  warning  'tour.steps.length' is missing in props validation     react/prop-types
-  264:37  warning  'tour.steps' is missing in props validation            react/prop-types
-  264:43  warning  'tour.steps.length' is missing in props validation     react/prop-types
+  158:30  warning  Do not use Array index in keys  react/no-array-index-key
+  252:24  warning  Do not use Array index in keys  react/no-array-index-key
 
 /Volumes/Play ground/Cursor  Projects /Home Hub/src/components/common/LoadingSkeleton.js
-   28:25  warning  Do not use Array index in keys  react/no-array-index-key
-   48:27  warning  Do not use Array index in keys  react/no-array-index-key
-   94:25  warning  Do not use Array index in keys  react/no-array-index-key
-  124:22  warning  Do not use Array index in keys  react/no-array-index-key
+   29:25  warning  Do not use Array index in keys  react/no-array-index-key
+   49:27  warning  Do not use Array index in keys  react/no-array-index-key
+   95:25  warning  Do not use Array index in keys  react/no-array-index-key
+  125:22  warning  Do not use Array index in keys  react/no-array-index-key
 
 /Volumes/Play ground/Cursor  Projects /Home Hub/src/components/common/LoadingStates.js
-  100:16  warning  Do not use Array index in keys             react/no-array-index-key
-  114:3   warning  'showIcon' is missing in props validation  react/prop-types
-  164:3   warning  'total' is missing in props validation     react/prop-types
-  273:3   warning  'progress' is missing in props validation  react/prop-types
-  274:3   warning  'onCancel' is missing in props validation  react/prop-types
+  100:16  warning  Do not use Array index in keys  react/no-array-index-key
 
 /Volumes/Play ground/Cursor  Projects /Home Hub/src/components/common/ProgressIndicator.js
-   99:23  warning  Do not use Array index in keys                react/no-array-index-key
-  132:32  warning  Do not use Array index in keys                react/no-array-index-key
-  228:3   warning  'showNumbers' is missing in props validation  react/prop-types
-  282:20  warning  Do not use Array index in keys                react/no-array-index-key
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/common/SafariErrorBoundary.js
-  12:37  warning  Unused state field: 'error'      react/no-unused-state
-  12:50  warning  Unused state field: 'errorInfo'  react/no-unused-state
-  32:7   warning  Unused state field: 'error'      react/no-unused-state
-  33:7   warning  Unused state field: 'errorInfo'  react/no-unused-state
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/enterprise/EnterpriseDashboard.js
-  273:31  warning  Do not use Array index in keys  react/no-array-index-key
-  383:29  warning  Do not use Array index in keys  react/no-array-index-key
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/forms/InventoryItemForm.js
-  24:3  warning  'item' is missing in props validation          react/prop-types
-  25:3  warning  'categories' is missing in props validation    react/prop-types
-  26:3  warning  'onSubmit' is missing in props validation      react/prop-types
-  27:3  warning  'onCancel' is missing in props validation      react/prop-types
-  28:3  warning  'isSubmitting' is missing in props validation  react/prop-types
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/inventory/InventoryForm.js
-  3:26  warning  'onSubmit' is missing in props validation     react/prop-types
-  3:36  warning  'initialData' is missing in props validation  react/prop-types
-
-/Volumes/Play ground/Cursor  Projects /Home Hub/src/components/inventory/InventoryList.js
-  3:26  warning  'items' is missing in props validation     react/prop-types
-  3:38  warning  'onEdit' is missing in props validation    react/prop-types
-  3:46  warning  'onDelete' is missing in props validation  react/prop-types
+   99:23  warning  Do not use Array index in keys  react/no-array-index-key
+  132:32  warning  Do not use Array index in keys  react/no-array-index-key
+  282:20  warning  Do not use Array index in keys  react/no-array-index-key
 
 /Volumes/Play ground/Cursor  Projects /Home Hub/src/components/layout/Dashboard.js
   415:28  warning  Do not use Array index in keys  react/no-array-index-key
@@ -358,6 +204,6 @@
 /Volumes/Play ground/Cursor  Projects /Home Hub/src/services/WeatherAPIComparison.js
   301:56  warning  ["fallback"] is better written in dot notation  dot-notation
 
-✖ 227 problems (0 errors, 227 warnings)
+✖ 121 problems (0 errors, 121 warnings)
   0 errors and 1 warning potentially fixable with the `--fix` option.
 

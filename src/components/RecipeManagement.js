@@ -443,7 +443,7 @@ export default function RecipeManagement() {
                   </h4>
                   <div className="space-y-2">
                     {aiRecommendations.slice(0, 3).map((recommendation, index) => (
-                      <div key={`ai-recommendation-${recommendation.recipeName}-${index}`} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-red-400">
+                      <div key={`ai-recommendation-${recommendation.recipeName}`} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-red-400">
                         <div className="font-medium text-gray-800 dark:text-gray-200">{recommendation.recipeName}</div>
                         <div className="text-sm text-gray-600 dark:text-gray-400">{recommendation.reasoning}</div>
                         {recommendation.type === 'waste_reduction' && (
@@ -471,7 +471,7 @@ export default function RecipeManagement() {
                   </h4>
                   <div className="space-y-2">
                     {aiMealPlan.days.slice(0, 3).map((day, index) => (
-                      <div key={`ai-meal-plan-${day.day}-${index}`} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-orange-400">
+                      <div key={`ai-meal-plan-${day.day}`} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-orange-400">
                         <div className="font-medium text-gray-800 dark:text-gray-200">
                           {new Date(day.date).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
                         </div>
@@ -496,7 +496,7 @@ export default function RecipeManagement() {
                   </h4>
                   <div className="space-y-2">
                     {aiShoppingList.slice(0, 5).map((item, index) => (
-                      <div key={`ai-shopping-item-${item.name}-${index}`} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-green-400">
+                      <div key={`ai-shopping-item-${item.name}`} className="bg-white dark:bg-gray-800 rounded-lg p-3 border-l-4 border-green-400">
                         <div className="font-medium text-gray-800 dark:text-gray-200">{item.name}</div>
                         <div className="text-sm text-gray-600 dark:text-gray-400">
                           {item.quantity} {item.category} • ${item.estimatedCost?.toFixed(2) || '0'}
