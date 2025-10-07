@@ -5,6 +5,72 @@ const router = express.Router();
 
 /**
  * @swagger
+ * /api/analytics:
+ *   get:
+ *     summary: Get analytics overview
+ *     tags: [Analytics]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: period
+ *         schema:
+ *           type: string
+ *           enum: [week, month, quarter, year]
+ *         description: Time period for analytics
+ *     responses:
+ *       200:
+ *         description: Analytics overview retrieved successfully
+ */
+router.get('/', asyncHandler(async (req, res) => {
+  const { period = 'month' } = req.query;
+  const userId = req.user.id;
+
+  // Mock analytics overview - replace with database aggregation
+  const overview = {
+    period,
+    totalSpending: 1250.50,
+    totalItems: 45,
+    averageSpending: 27.79,
+    topCategories: [
+      { name: 'Groceries', amount: 450.00, percentage: 36.0 },
+      { name: 'Utilities', amount: 200.00, percentage: 16.0 },
+      { name: 'Entertainment', amount: 150.00, percentage: 12.0 }
+    ],
+    spendingTrend: 'increasing',
+    savingsRate: 15.2,
+    insights: [
+      'Your spending on groceries has increased by 12% this month',
+      'Consider setting a budget for entertainment expenses',
+      'Great job maintaining your savings rate above 15%'
+    ],
+    charts: {
+      spendingByCategory: [
+        { category: 'Groceries', amount: 450.00 },
+        { category: 'Utilities', amount: 200.00 },
+        { category: 'Entertainment', amount: 150.00 },
+        { category: 'Transportation', amount: 100.00 },
+        { category: 'Other', amount: 350.50 }
+      ],
+      monthlyTrend: [
+        { month: 'Jan', spending: 1200.00 },
+        { month: 'Feb', spending: 1100.00 },
+        { month: 'Mar', spending: 1300.00 },
+        { month: 'Apr', spending: 1250.50 }
+      ]
+    },
+    userId,
+    generatedAt: new Date().toISOString()
+  };
+
+  res.json({
+    success: true,
+    data: overview
+  });
+}));
+
+/**
+ * @swagger
  * components:
  *   schemas:
  *     AnalyticsData:

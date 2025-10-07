@@ -38,12 +38,18 @@ const analyticsRoutes = require('./src/routes/analytics');
 const budgetRoutes = require('./src/routes/budget');
 const notificationRoutes = require('./src/routes/notifications');
 const collaborationRoutes = require('./src/routes/collaboration');
+const weatherRoutes = require('./src/routes/weather');
+const recipesRoutes = require('./src/routes/recipes');
+const shoppingRoutes = require('./src/routes/shopping');
+const maintenanceRoutes = require('./src/routes/maintenance');
+const aiRoutes = require('./src/routes/ai');
+const smartHomeRoutes = require('./src/routes/smart-home');
+const settingsRoutes = require('./src/routes/settings');
 
 // Import middleware
 const { authenticateToken } = require('./src/middleware/auth');
 const { errorHandler } = require('./src/middleware/errorHandler');
 const {
-  rateLimit,
   validateInput,
   securityHeaders,
   requestLogging,
@@ -84,12 +90,12 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // Additional security middleware
-app.use(securityHeaders());
-app.use(requestLogging());
-app.use(corsConfig());
+app.use(securityHeaders);
+app.use(requestLogging);
+app.use(corsConfig);
 app.use(requestSizeLimit(5 * 1024 * 1024)); // 5MB limit
-app.use(sqlInjectionProtection());
-app.use(xssProtection());
+app.use(sqlInjectionProtection);
+app.use(xssProtection);
 
 // CORS configuration
 app.use(cors({
@@ -150,8 +156,8 @@ app.get('/health', (req, res) => {
     environment: process.env.NODE_ENV || 'development',
     version: '2.0.0',
     endpoints: {
-      total: 8,
-      categories: ['auth', 'users', 'inventory', 'spending', 'analytics', 'budget', 'notifications', 'collaboration']
+      total: 14,
+      categories: ['auth', 'users', 'inventory', 'spending', 'analytics', 'budget', 'notifications', 'collaboration', 'weather', 'recipes', 'shopping', 'maintenance', 'ai', 'smart-home', 'settings']
     }
   });
 });
@@ -468,6 +474,30 @@ app.use('/api/v1/analytics', authenticateToken, analyticsRoutes);
 app.use('/api/v1/budget', authenticateToken, budgetRoutes);
 app.use('/api/v1/notifications', authenticateToken, notificationRoutes);
 app.use('/api/v1/collaboration', authenticateToken, collaborationRoutes);
+app.use('/api/v1/weather', authenticateToken, weatherRoutes);
+app.use('/api/v1/recipes', authenticateToken, recipesRoutes);
+app.use('/api/v1/shopping', authenticateToken, shoppingRoutes);
+app.use('/api/v1/maintenance', authenticateToken, maintenanceRoutes);
+app.use('/api/v1/ai', authenticateToken, aiRoutes);
+app.use('/api/v1/smart-home', authenticateToken, smartHomeRoutes);
+app.use('/api/v1/settings', authenticateToken, settingsRoutes);
+
+// Public weather test endpoint
+app.get('/api/weather/test', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Weather API is working!',
+    timestamp: new Date().toISOString(),
+    endpoints: [
+      '/api/weather/current',
+      '/api/weather/forecast',
+      '/api/weather/air-quality',
+      '/api/weather/alerts',
+      '/api/weather/analytics',
+      '/api/weather/location'
+    ]
+  });
+});
 
 // Legacy API Routes (for backward compatibility)
 app.use('/api/auth', authRoutes);
@@ -479,6 +509,13 @@ app.use('/api/analytics', authenticateToken, analyticsRoutes);
 app.use('/api/budget', authenticateToken, budgetRoutes);
 app.use('/api/notifications', authenticateToken, notificationRoutes);
 app.use('/api/collaboration', authenticateToken, collaborationRoutes);
+app.use('/api/weather', authenticateToken, weatherRoutes);
+app.use('/api/recipes', authenticateToken, recipesRoutes);
+app.use('/api/shopping', authenticateToken, shoppingRoutes);
+app.use('/api/maintenance', authenticateToken, maintenanceRoutes);
+app.use('/api/ai', authenticateToken, aiRoutes);
+app.use('/api/smart-home', authenticateToken, smartHomeRoutes);
+app.use('/api/settings', authenticateToken, settingsRoutes);
 
 // API status endpoint
 app.get('/api/status', (req, res) => {
@@ -489,7 +526,7 @@ app.get('/api/status', (req, res) => {
     version: '2.0.0',
     environment: process.env.NODE_ENV || 'development',
     endpoints: {
-      total: 8,
+      total: 14,
       categories: [
         { name: 'Authentication', path: '/api/auth', status: 'active' },
         { name: 'Users', path: '/api/users', status: 'active' },
@@ -498,7 +535,14 @@ app.get('/api/status', (req, res) => {
         { name: 'Analytics', path: '/api/analytics', status: 'active' },
         { name: 'Budget', path: '/api/budget', status: 'active' },
         { name: 'Notifications', path: '/api/notifications', status: 'active' },
-        { name: 'Collaboration', path: '/api/collaboration', status: 'active' }
+        { name: 'Collaboration', path: '/api/collaboration', status: 'active' },
+        { name: 'Weather', path: '/api/weather', status: 'active' },
+        { name: 'Recipes', path: '/api/recipes', status: 'active' },
+        { name: 'Shopping', path: '/api/shopping', status: 'active' },
+        { name: 'Maintenance', path: '/api/maintenance', status: 'active' },
+        { name: 'AI Services', path: '/api/ai', status: 'active' },
+        { name: 'Smart Home', path: '/api/smart-home', status: 'active' },
+        { name: 'Settings', path: '/api/settings', status: 'active' }
       ]
     },
     documentation: `${req.protocol}://${req.get('host')}/api-docs`,
@@ -574,7 +618,7 @@ process.on('SIGINT', () => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 server.listen(PORT, () => {
   console.log(`🚀 Home Hub API Server running on port ${PORT}`);
