@@ -1,0 +1,45 @@
+name: Build
+on: 
+  push:
+    branches: [ main, production, main2, production-backup ]
+  pull_request:
+    branches: [ main, production, main2, production-backup ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build Application
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install frontend dependencies
+        run: npm ci
+        
+      - name: Build frontend
+        run: npm run build
+        
+      - name: Install API dependencies
+        run: |
+          cd api
+          npm ci
+          
+      - name: Build API
+        run: |
+          cd api
+          npm run build || echo "No build script for API"
+          
+      - name: Check build artifacts
+        run: |
+          if [ ! -d "build" ]; then
+            echo "Frontend build failed - no build directory found"
+            exit 1
+          fi
+          echo "Build completed successfully"

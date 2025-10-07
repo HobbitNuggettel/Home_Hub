@@ -298,7 +298,7 @@ class WeatherAPIComparison {
       }
     };
 
-    return recommendations[useCase] || recommendations['fallback'];
+    return recommendations[useCase] || recommendations.fallback;
   }
 
   // Generate comparison report

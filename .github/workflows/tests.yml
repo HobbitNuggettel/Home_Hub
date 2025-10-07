@@ -1,0 +1,39 @@
+name: Tests
+on: 
+  push:
+    branches: [ main, production, main2, production-backup ]
+  pull_request:
+    branches: [ main, production, main2, production-backup ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Run Tests
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run frontend tests
+        run: npm test -- --coverage --watchAll=false
+        
+      - name: Run API tests
+        run: |
+          cd api
+          npm ci
+          npm test -- --coverage --watchAll=false
+          
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/lcov.info,./api/coverage/lcov.info
+          fail_ci_if_error: true

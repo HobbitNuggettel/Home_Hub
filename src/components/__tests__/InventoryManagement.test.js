@@ -32,11 +32,8 @@ const renderSimple = (ui, options = {}) => {
       </AuthProvider>
     </BrowserRouter>
   );
-  return render(ui, { wrapper: TestWrapper, ...options });
-};
 
-TestWrapper.propTypes = {
-  children: PropTypes.node.isRequired
+  return render(ui, { wrapper: TestWrapper, ...options });
 };
 
 describe('InventoryManagement Component', () => {

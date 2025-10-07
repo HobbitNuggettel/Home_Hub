@@ -1,0 +1,53 @@
+# 🏠 Home Hub - Code Owners
+# This file defines who should review code changes in different parts of the repository
+
+# Global owners - these people will be requested for review on every PR
+* @HobbitNuggettel
+
+# Core application files - require review from maintainers
+/src/ @HobbitNuggettel
+/public/ @HobbitNuggettel
+/package.json @HobbitNuggettel
+/package-lock.json @HobbitNuggettel
+
+# API backend - require review from backend maintainers
+/api/ @HobbitNuggettel
+/api/src/ @HobbitNuggettel
+/api/server.js @HobbitNuggettel
+/api/package.json @HobbitNuggettel
+
+# Configuration files - require review from maintainers
+/.github/ @HobbitNuggettel
+/.env.example @HobbitNuggettel
+/tailwind.config.js @HobbitNuggettel
+/jest.config.js @HobbitNuggettel
+
+# Documentation - require review from maintainers
+/docs/ @HobbitNuggettel
+/README.md @HobbitNuggettel
+/TODO.md @HobbitNuggettel
+
+# Security-related files - require review from security team
+/firebase-security-rules.json @HobbitNuggettel
+/firestore.rules @HobbitNuggettel
+/src/config/security.js @HobbitNuggettel
+/api/src/middleware/securityMiddleware.js @HobbitNuggettel
+
+# Deployment files - require review from DevOps team
+/Dockerfile @HobbitNuggettel
+/docker-compose.yml @HobbitNuggettel
+/.github/workflows/ @HobbitNuggettel
+
+# Mobile app - require review from mobile team
+/HomeHubMobile/ @HobbitNuggettel
+
+# Enterprise features - require review from enterprise team
+/enterprise/ @HobbitNuggettel
+
+# Test files - require review from QA team
+/src/tests/ @HobbitNuggettel
+/api/tests/ @HobbitNuggettel
+/cypress.config.js @HobbitNuggettel
+
+# Scripts - require review from maintainers
+/scripts/ @HobbitNuggettel
