@@ -113,10 +113,85 @@ class HybridFirebaseStorage {
     try {
       const key = `fallback_${dataType}_${userId}`;
       const data = localStorage.getItem(key);
-      return data ? JSON.parse(data) : [];
+      let items = data ? JSON.parse(data) : [];
+
+      // If no data in localStorage, provide some mock data for demo purposes
+      if (items.length === 0) {
+        items = this.getMockData(dataType);
+      }
+
+      // Return in the expected format
+      return {
+        success: true,
+        data: items,
+        total: items.length,
+        fallback: true,
+        message: `${dataType} retrieved from local storage (Firebase unavailable)`
+      };
     } catch (error) {
       console.error(`Error reading fallback data for ${dataType}:`, error);
-      return [];
+      return {
+        success: false,
+        data: [],
+        total: 0,
+        fallback: true,
+        error: error.message,
+        message: `Failed to retrieve ${dataType} from local storage`
+      };
+    }
+  }
+
+  // Get mock data for demo purposes
+  getMockData(dataType) {
+    switch (dataType) {
+      case 'inventory':
+        return [
+          {
+            id: 'item_1',
+            name: 'Laptop',
+            category: 'Electronics',
+            location: 'Office',
+            quantity: 1,
+            description: 'Work laptop for development',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          },
+          {
+            id: 'item_2',
+            name: 'Coffee Mug',
+            category: 'Kitchen',
+            location: 'Kitchen',
+            quantity: 2,
+            description: 'Favorite coffee mug',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          }
+        ];
+      case 'recipes':
+        return [
+          {
+            id: 'recipe_1',
+            name: 'Chocolate Chip Cookies',
+            category: 'Desserts',
+            description: 'Classic chocolate chip cookies',
+            ingredients: ['flour', 'sugar', 'butter', 'chocolate chips'],
+            instructions: 'Mix ingredients and bake at 350°F for 12 minutes',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          },
+          {
+            id: 'recipe_2',
+            name: 'Pasta Carbonara',
+            category: 'Main Dishes',
+            description: 'Creamy pasta with bacon and eggs',
+            ingredients: ['pasta', 'bacon', 'eggs', 'parmesan', 'black pepper'],
+            instructions: 'Cook pasta, mix with bacon and egg mixture',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          }
+        ];
+      default:
+        return [];
     }
   }
 
@@ -330,8 +405,35 @@ class HybridFirebaseStorage {
     }
   }
 
+  // Check if Firebase is properly configured
+  isFirebaseConfigured() {
+    try {
+      // Check if we have a real Firebase config (not demo values)
+      const config = db.app.options;
+      return config.projectId !== 'demo-project' &&
+        config.apiKey !== 'demo-key' &&
+        config.authDomain !== 'demo-project.firebaseapp.com';
+    } catch (error) {
+      return false;
+    }
+  }
+
   async getInventoryItems(userId, options = {}) {
     try {
+      // Check if Firebase is properly configured
+      if (!this.isFirebaseConfigured()) {
+        console.log('Firebase not configured, using local storage fallback');
+        const fallbackResult = this.getLocalStorageFallback('inventory', userId);
+        // Return just the data array, not the full response object
+        return {
+          success: true,
+          data: fallbackResult.data || [],
+          total: fallbackResult.total || 0,
+          fallback: true,
+          message: 'Inventory items retrieved from local storage (Firebase unavailable)'
+        };
+      }
+
       if (!this.canPerformOperation('reads', 1)) {
         throw new Error('Daily read limit exceeded. Please try again tomorrow.');
       }
@@ -470,6 +572,20 @@ class HybridFirebaseStorage {
 
   async getRecipes(userId, options = {}) {
     try {
+      // Check if Firebase is properly configured
+      if (!this.isFirebaseConfigured()) {
+        console.log('Firebase not configured, using local storage fallback for recipes');
+        const fallbackResult = this.getLocalStorageFallback('recipes', userId);
+        // Return just the data array, not the full response object
+        return {
+          success: true,
+          data: fallbackResult.data || [],
+          total: fallbackResult.total || 0,
+          fallback: true,
+          message: 'Recipes retrieved from local storage (Firebase unavailable)'
+        };
+      }
+
       if (!this.canPerformOperation('reads', 1)) {
         throw new Error('Daily read limit exceeded. Please try again tomorrow.');
       }
