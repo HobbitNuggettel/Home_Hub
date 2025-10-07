@@ -6,7 +6,7 @@
 import Joi from 'joi';
 import DOMPurify from 'dompurify';
 import validator from 'validator';
-import loggingService from './LoggingService';
+import loggingService from './LoggingService.js';
 
 class ValidationService {
   constructor() {

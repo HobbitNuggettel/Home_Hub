@@ -4,8 +4,8 @@
  */
 
 import { useState, useCallback, useMemo } from 'react';
-import validationService from '../services/ValidationService';
-import loggingService from '../services/LoggingService';
+import validationService from '../services/ValidationService.js';
+import loggingService from '../services/LoggingService.js';
 
 const useValidation = (schemaName = null, options = {}) => {
   const [validationState, setValidationState] = useState({

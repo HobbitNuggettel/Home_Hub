@@ -5,8 +5,8 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import securityService from '../services/SecurityService';
-import { securityMonitoring } from '../config/security';
+import securityService from '../services/SecurityService.js';
+import { securityMonitoring } from '../config/security.js';
 
 const SecurityContext = createContext();
 

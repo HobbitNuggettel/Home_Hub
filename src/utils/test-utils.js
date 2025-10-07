@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from '../contexts/ThemeContext';
-import { AuthProvider } from '../contexts/AuthContext';
-import { DevToolsProvider } from '../contexts/DevToolsContext';
+import { ThemeProvider } from '../contexts/ThemeContext.js';
+import { AuthProvider } from '../contexts/AuthContext.js';
+import { DevToolsProvider } from '../contexts/DevToolsContext.js';
 
 // Mock the context hooks directly
 jest.mock('../contexts/DevToolsContext', () => ({

@@ -4,8 +4,8 @@
  */
 
 import { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../firebase/config';
-import loggingService from './LoggingService';
+import { db } from '../firebase/config.js';
+import loggingService from './LoggingService.js';
 
 class RBACService {
   constructor() {

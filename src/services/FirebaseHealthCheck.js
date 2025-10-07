@@ -4,7 +4,7 @@
  */
 
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { db } from '../firebase/config.js';
 
 class FirebaseHealthCheckService {
   constructor() {

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme } from '../contexts/ThemeContext.js';
 import {
   Palette,
   Download,
@@ -14,8 +14,8 @@ import {
   Save,
   RotateCcw
 } from 'lucide-react';
-import ColorPicker from './ColorPicker';
-import ThemePreview from './ThemePreview';
+import ColorPicker from './ColorPicker.js';
+import ThemePreview from './ThemePreview.js';
 
 const ThemeSettings = () => {
   const {

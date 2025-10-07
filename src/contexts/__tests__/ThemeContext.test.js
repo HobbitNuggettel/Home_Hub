@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen, act, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ThemeProvider, useTheme } from '../ThemeContext';
-import { renderWithProviders } from '../../utils/test-utils';
+import { ThemeProvider, useTheme } from '../ThemeContext.js';
+import { renderWithProviders } from '../../utils/test-utils.js';
 
 // Test component to access theme context
 const TestComponent = () => {

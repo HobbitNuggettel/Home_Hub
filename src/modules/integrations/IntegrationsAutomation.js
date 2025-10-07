@@ -33,13 +33,13 @@ import {
   Database
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../contexts/AuthContext';
-import hybridStorage from '../../firebase/hybridStorage';
-import DeviceList from './DeviceList';
-import DeviceForm from './DeviceForm';
-import AutomationRules from './AutomationRules';
-import IntegrationStatus from './IntegrationStatus';
-import SmartHomeDashboard from './SmartHomeDashboard';
+import { useAuth } from '../../contexts/AuthContext.js';
+import hybridStorage from '../../firebase/hybridStorage.js';
+import DeviceList from './DeviceList.js';
+import DeviceForm from './DeviceForm.js';
+import AutomationRules from './AutomationRules.js';
+import IntegrationStatus from './IntegrationStatus.js';
+import SmartHomeDashboard from './SmartHomeDashboard.js';
 
 // Mock smart home devices
 const mockDevices = [

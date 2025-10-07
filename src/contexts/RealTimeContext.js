@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import realTimeService from '../services/RealTimeService';
+import realTimeService from '../services/RealTimeService.js';
 
 const RealTimeContext = createContext();
 

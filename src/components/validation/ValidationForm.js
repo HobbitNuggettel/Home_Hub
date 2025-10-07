@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { AlertTriangle, CheckCircle, Info, X } from 'lucide-react';
-import useValidation from '../../hooks/useValidation';
+import useValidation from '../../hooks/useValidation.js';
 
 const ValidationForm = ({
   children,

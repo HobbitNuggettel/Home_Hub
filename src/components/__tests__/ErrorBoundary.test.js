@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { render, screen } from '@testing-library/react';
-import { renderWithProviders, renderWithRouter } from '../../utils/test-utils';
-import ErrorBoundary from '../ErrorBoundary';
+import { renderWithProviders, renderWithRouter } from '../../utils/test-utils.js';
+import ErrorBoundary from '../ErrorBoundary.js';
 
 // Create a component that throws an error for testing
 const ThrowError = ({ shouldThrow = false }) => {

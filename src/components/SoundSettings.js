@@ -5,8 +5,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX, Play, Settings, Bell, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
-import SoundNotificationService from '../services/SoundNotificationService';
-import NotificationService from '../services/NotificationService';
+import SoundNotificationService from '../services/SoundNotificationService.js';
+import NotificationService from '../services/NotificationService.js';
 
 export default function SoundSettings() {
   const [soundSettings, setSoundSettings] = useState(SoundNotificationService.getSettings());

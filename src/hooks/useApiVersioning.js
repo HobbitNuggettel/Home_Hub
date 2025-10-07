@@ -4,8 +4,8 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import versionedApiClient from '../services/VersionedApiClient';
-import loggingService from '../services/LoggingService';
+import versionedApiClient from '../services/VersionedApiClient.js';
+import loggingService from '../services/LoggingService.js';
 
 const useApiVersioning = () => {
   const [version, setVersion] = useState(versionedApiClient.getVersion());

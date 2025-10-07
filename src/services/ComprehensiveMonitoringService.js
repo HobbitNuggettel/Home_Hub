@@ -3,8 +3,8 @@
  * Integrates logging, performance monitoring, and system health tracking
  */
 
-import loggingService from './LoggingService';
-import performanceMonitoringService from './PerformanceMonitoringService';
+import loggingService from './LoggingService.js';
+import performanceMonitoringService from './PerformanceMonitoringService.js';
 
 class ComprehensiveMonitoringService {
   constructor() {

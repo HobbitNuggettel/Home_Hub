@@ -11,7 +11,7 @@ import {
   isAppInstalled, 
   showInstallPrompt,
   updateApp 
-} from '../../utils/serviceWorker';
+} from '../../utils/serviceWorker.js';
 
 const PWAInstallPrompt = ({ 
   onInstall,

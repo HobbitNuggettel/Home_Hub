@@ -23,8 +23,8 @@ import {
   CheckCircle2,
   Loader2
 } from 'lucide-react';
-import { useOffline } from '../../contexts/OfflineContext';
-import deviceService from '../../services/DeviceService';
+import { useOffline } from '../../contexts/OfflineContext.js';
+import deviceService from '../../services/DeviceService.js';
 
 const OfflineIndicator = ({ 
   position = 'top-right',

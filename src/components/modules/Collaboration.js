@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Users, Shield, Mail, Phone, Calendar, Edit, Trash2, UserPlus, Settings, Bell, CheckCircle, XCircle } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import hybridStorage from '../../firebase/hybridStorage';
+import { useAuth } from '../../contexts/AuthContext.js';
+import hybridStorage from '../../firebase/hybridStorage.js';
 
 const Collaboration = () => {
   const { currentUser } = useAuth();

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDevTools } from '../contexts/DevToolsContext';
+import { useDevTools } from '../contexts/DevToolsContext.js';
 import { 
   Bug, 
   Settings, 

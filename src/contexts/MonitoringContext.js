@@ -5,8 +5,8 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import comprehensiveMonitoringService from '../services/ComprehensiveMonitoringService';
-import loggingService from '../services/LoggingService';
+import comprehensiveMonitoringService from '../services/ComprehensiveMonitoringService.js';
+import loggingService from '../services/LoggingService.js';
 
 const MonitoringContext = createContext();
 

@@ -11,7 +11,7 @@ import {
   Download,
   Upload
 } from 'lucide-react';
-import weatherStorageConfig from '../services/WeatherStorageConfig';
+import weatherStorageConfig from '../services/WeatherStorageConfig.js';
 
 const WeatherStorageSettings = ({ onClose }) => {
   const [currentStorage, setCurrentStorage] = useState(null);

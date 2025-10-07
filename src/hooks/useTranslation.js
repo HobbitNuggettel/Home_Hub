@@ -4,7 +4,7 @@
  */
 
 import { useTranslation as useI18nTranslation } from 'react-i18next';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/LanguageContext.js';
 
 export const useTranslation = (namespace = 'translation') => {
   const { t, i18n } = useI18nTranslation(namespace);

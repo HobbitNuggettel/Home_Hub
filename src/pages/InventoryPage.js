@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Search, Filter, Grid, List, Camera, Package } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
-import Navigation from '../components/layout/Navigation';
-import ItemForm from '../components/ItemForm';
-import MultiItemForm from '../components/MultiItemForm';
-import BarcodeScanner from '../components/BarcodeScanner';
-import { ActivityFeed, NotificationCenter, RealTimeStatus } from '../components/RealTimeCollaboration';
+import Navigation from '../components/layout/Navigation.js';
+import ItemForm from '../components/ItemForm.js';
+import MultiItemForm from '../components/MultiItemForm.js';
+import BarcodeScanner from '../components/BarcodeScanner.js';
+import { ActivityFeed, NotificationCenter, RealTimeStatus } from '../components/RealTimeCollaboration.js';
 import toast from 'react-hot-toast';
 
 const InventoryPage = () => {

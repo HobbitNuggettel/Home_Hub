@@ -5,7 +5,7 @@
  * Storage: Unlimited
  */
 
-// import { firebaseAnalyticsService } from '../firebase';
+// import { firebaseAnalyticsService } from '../firebase.js';
 
 class ImgurService {
   constructor() {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useRealTime, useRealTimeSubscription } from '../../contexts/RealTimeContext';
+import { useRealTime, useRealTimeSubscription } from '../../contexts/RealTimeContext.js';
 import { Users, Wifi, WifiOff, Clock, Activity, MessageSquare } from 'lucide-react';
 
 /**

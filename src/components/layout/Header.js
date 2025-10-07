@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ThemeToggleButton from '../common/ThemeToggleButton';
+import ThemeToggleButton from '../common/ThemeToggleButton.js';
 
 const Header = ({ title, subtitle, showThemeToggle = true }) => {
   return (

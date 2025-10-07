@@ -17,7 +17,7 @@ import {
   FileText,
   Database
 } from 'lucide-react';
-import { useValidationContext } from '../../contexts/ValidationContext';
+import { useValidationContext } from '../../contexts/ValidationContext.js';
 
 const ValidationDashboard = () => {
   const {

@@ -27,8 +27,8 @@ import {
   arrayUnion,
   arrayRemove
 } from 'firebase/firestore';
-import { db } from './config';
-import { firebaseAnalyticsService } from './analytics';
+import { db } from './config.js';
+import { firebaseAnalyticsService } from './analytics.js';
 
 // Free tier limits and thresholds
 const FREE_TIER_LIMITS = {
@@ -464,6 +464,87 @@ class HybridFirebaseStorage {
         success: false,
         error: error.message,
         code: error.code
+      };
+    }
+  }
+
+  async getRecipes(userId, options = {}) {
+    try {
+      if (!this.canPerformOperation('reads', 1)) {
+        throw new Error('Daily read limit exceeded. Please try again tomorrow.');
+      }
+
+      const userRef = doc(db, 'users', userId);
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
+        return {
+          success: false,
+          error: 'User not found',
+          recipes: []
+        };
+      }
+
+      const userData = userSnap.data();
+      const recipes = userData.recipes || {};
+
+      // Convert recipes object to array
+      const recipesArray = Object.values(recipes).map(recipe => ({
+        ...recipe,
+        createdAt: recipe.createdAt?.toDate?.() || new Date(),
+        updatedAt: recipe.updatedAt?.toDate?.() || new Date()
+      }));
+
+      // Apply filters if provided
+      let filteredRecipes = recipesArray;
+
+      if (options.category) {
+        filteredRecipes = filteredRecipes.filter(recipe =>
+          recipe.category === options.category
+        );
+      }
+
+      if (options.search) {
+        const searchTerm = options.search.toLowerCase();
+        filteredRecipes = filteredRecipes.filter(recipe =>
+          recipe.name?.toLowerCase().includes(searchTerm) ||
+          recipe.description?.toLowerCase().includes(searchTerm) ||
+          recipe.ingredients?.some(ingredient =>
+            ingredient.toLowerCase().includes(searchTerm)
+          )
+        );
+      }
+
+      // Sort recipes
+      if (options.sortBy) {
+        filteredRecipes.sort((a, b) => {
+          switch (options.sortBy) {
+            case 'name':
+              return a.name?.localeCompare(b.name) || 0;
+            case 'createdAt':
+              return new Date(b.createdAt) - new Date(a.createdAt);
+            case 'updatedAt':
+              return new Date(b.updatedAt) - new Date(a.updatedAt);
+            default:
+              return 0;
+          }
+        });
+      }
+
+      this.trackOperation('reads', 1);
+
+      return {
+        success: true,
+        recipes: filteredRecipes,
+        total: filteredRecipes.length,
+        message: 'Recipes retrieved successfully!'
+      };
+    } catch (error) {
+      console.error('Failed to get recipes:', error);
+      return {
+        success: false,
+        error: error.message,
+        recipes: []
       };
     }
   }

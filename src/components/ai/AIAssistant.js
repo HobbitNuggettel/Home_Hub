@@ -18,11 +18,11 @@ import {
   Loader
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import AIExpenseService from '../services/AIExpenseService';
-import AIInventoryService from '../services/AIInventoryService';
-import AIRecipeService from '../services/AIRecipeService';
-import { VoiceAI, VisionAI, AdvancedAIService } from '../services/AdvancedAIService';
-import { useDevTools } from '../contexts/DevToolsContext';
+import AIExpenseService from '../services/AIExpenseService.js';
+import AIInventoryService from '../services/AIInventoryService.js';
+import AIRecipeService from '../services/AIRecipeService.js';
+import { VoiceAI, VisionAI, AdvancedAIService } from '../services/AdvancedAIService.js';
+import { useDevTools } from '../contexts/DevToolsContext.js';
 
 export default function AIAssistant({ 
   inventory = [], 

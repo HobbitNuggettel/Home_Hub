@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Navigation from '../Navigation';
-import { renderWithProviders } from '../../utils/test-utils';
+import Navigation from '../Navigation.js';
+import { renderWithProviders } from '../../utils/test-utils.js';
 
 // Mock AuthContext
 jest.mock('../../contexts/AuthContext', () => ({

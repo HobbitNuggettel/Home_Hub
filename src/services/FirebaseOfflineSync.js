@@ -16,7 +16,7 @@ import {
   where,
   orderBy
 } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { db } from '../firebase/config.js';
 
 class FirebaseOfflineSyncService {
   constructor() {

@@ -16,7 +16,7 @@ import {
   Code,
   BookOpen
 } from 'lucide-react';
-import useApiVersioning from '../../hooks/useApiVersioning';
+import useApiVersioning from '../../hooks/useApiVersioning.js';
 
 const VersionManagement = () => {
   const {

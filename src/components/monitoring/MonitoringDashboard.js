@@ -22,8 +22,8 @@ import {
   HardDrive,
   Clock
 } from 'lucide-react';
-import { useMonitoring } from '../../contexts/MonitoringContext';
-import { useAuth } from '../../contexts/AuthContext';
+import { useMonitoring } from '../../contexts/MonitoringContext.js';
+import { useAuth } from '../../contexts/AuthContext.js';
 
 const MonitoringDashboard = () => {
   const { currentUser } = useAuth();

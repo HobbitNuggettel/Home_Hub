@@ -26,8 +26,8 @@ import {
   arrayRemove,
   increment
 } from 'firebase/firestore';
-import { db } from '../firebase/config';
-// import { firebaseAnalyticsService } from '../firebase';
+import { db } from '../firebase/config.js';
+// import { firebaseAnalyticsService } from '../firebase.js';
 
 class FirebaseChatService {
   constructor() {

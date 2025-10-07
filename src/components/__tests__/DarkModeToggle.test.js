@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import DarkModeToggle from '../DarkModeToggle';
-import { ThemeProvider } from '../../contexts/ThemeContext';
-import { renderWithProviders } from '../../utils/test-utils';
+import DarkModeToggle from '../DarkModeToggle.js';
+import { ThemeProvider } from '../../contexts/ThemeContext.js';
+import { renderWithProviders } from '../../utils/test-utils.js';
 
 // Mock the useTheme hook
 const mockUseTheme = {

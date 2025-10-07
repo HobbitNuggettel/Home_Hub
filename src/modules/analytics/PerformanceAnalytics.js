@@ -8,7 +8,7 @@ import {
   Activity, Database, Zap, TrendingUp, Cpu, MemoryStick, 
   HardDrive, Network, Clock, BarChart3, Gauge, AlertTriangle 
 } from 'lucide-react';
-import { performanceMonitor, memoryMonitor, cacheManager } from '../../utils/performance';
+import { performanceMonitor, memoryMonitor, cacheManager } from '../../utils/performance.js';
 
 const PerformanceAnalytics = () => {
   const [performanceData, setPerformanceData] = useState({

@@ -1,5 +1,5 @@
 // Advanced Caching Service with Redis-like Features
-import { cacheManager } from '../utils/performance';
+import { cacheManager } from '../utils/performance.js';
 
 class CacheService {
   constructor() {

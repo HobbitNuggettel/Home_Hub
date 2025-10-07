@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Sun, Moon } from 'lucide-react';
-import { useTheme } from '../../contexts/ThemeContext';
+import { useTheme } from '../../contexts/ThemeContext.js';
 
 const DarkModeToggle = ({ className = '', showLabel = false }) => {
   const { isDarkMode, toggleDarkMode, themeMode } = useTheme();

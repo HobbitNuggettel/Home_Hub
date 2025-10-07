@@ -21,12 +21,12 @@ import {
   Check,
   BarChart3
 } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
-import weatherService from '../services/WeatherService';
-import locationService from '../services/LocationService';
-import weatherStorageConfig from '../services/WeatherStorageConfig';
-import WeatherAnalytics from './WeatherAnalytics';
-import WeatherAPIComparisonComponent from './WeatherAPIComparison';
+import { useTheme } from '../contexts/ThemeContext.js';
+import weatherService from '../services/WeatherService.js';
+import locationService from '../services/LocationService.js';
+import weatherStorageConfig from '../services/WeatherStorageConfig.js';
+import WeatherAnalytics from './WeatherAnalytics.js';
+import WeatherAPIComparisonComponent from './WeatherAPIComparison.js';
 
 const WeatherDashboard = () => {
   const { colors, isDarkMode } = useTheme();

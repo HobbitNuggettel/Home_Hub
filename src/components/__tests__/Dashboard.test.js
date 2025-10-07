@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Dashboard from '../Dashboard';
-import { renderWithProviders, mockUser, mockInventoryItem } from '../../utils/test-utils';
+import Dashboard from '../Dashboard.js';
+import { renderWithProviders, mockUser, mockInventoryItem } from '../../utils/test-utils.js';
 
 // Mock AuthContext
 jest.mock('../../contexts/AuthContext', () => ({

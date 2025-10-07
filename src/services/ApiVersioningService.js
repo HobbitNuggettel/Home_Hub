@@ -3,7 +3,7 @@
  * Manages API versioning, backward compatibility, and migration strategies
  */
 
-import loggingService from './LoggingService';
+import loggingService from './LoggingService.js';
 
 class ApiVersioningService {
   constructor() {

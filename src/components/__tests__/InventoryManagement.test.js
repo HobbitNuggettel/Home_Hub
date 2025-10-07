@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from '../../contexts/AuthContext';
-import InventoryManagement from '../../modules/inventory/InventoryManagement';
+import { AuthProvider } from '../../contexts/AuthContext.js';
+import InventoryManagement from '../../modules/inventory/InventoryManagement.js';
 import {
   renderWithProviders,
   mockInventoryItem,
   useInventory,
   mockUseInventory,
   setMockInventoryData
-} from '../../utils/test-utils';
+} from '../../utils/test-utils.js';
 
 // Mock the useInventory hook
 jest.mock('../../hooks/useInventory', () => ({

@@ -1,6 +1,6 @@
 // Weather Storage Configuration Service
-import weatherDataStorage from './WeatherDataStorage';
-import firebaseWeatherStorage from './FirebaseWeatherStorage';
+import weatherDataStorage from './WeatherDataStorage.js';
+import firebaseWeatherStorage from './FirebaseWeatherStorage.js';
 
 class WeatherStorageConfig {
   constructor() {

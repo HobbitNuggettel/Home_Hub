@@ -4,7 +4,7 @@
  */
 
 import { useState, useCallback, useRef } from 'react';
-import securityService from '../services/SecurityService';
+import securityService from '../services/SecurityService.js';
 
 /**
  * Custom hook for form security validation

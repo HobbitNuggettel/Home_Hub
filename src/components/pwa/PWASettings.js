@@ -27,7 +27,7 @@ import {
   getCacheStatus,
   requestNotificationPermission,
   sendNotification
-} from '../../utils/serviceWorker';
+} from '../../utils/serviceWorker.js';
 
 const PWASettings = () => {
   const [isInstalled, setIsInstalled] = useState(false);

@@ -26,14 +26,14 @@ import {
   DollarSign
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import BarcodeScanner from '../../components/BarcodeScanner';
-import { useInventory } from '../../hooks/useInventory';
-import AIInventoryService from '../../services/AIInventoryService';
-import InventoryList from './InventoryList';
-import InventoryForm from './InventoryForm';
-import InventoryAnalytics from './InventoryAnalytics';
-import InventoryAlerts from './InventoryAlerts';
-import AIInsights from './AIInsights';
+import BarcodeScanner from '../../components/BarcodeScanner.js';
+import { useInventory } from '../../hooks/useInventory.js';
+import AIInventoryService from '../../services/AIInventoryService.js';
+import InventoryList from './InventoryList.js';
+import InventoryForm from './InventoryForm.js';
+import InventoryAnalytics from './InventoryAnalytics.js';
+import InventoryAlerts from './InventoryAlerts.js';
+import AIInsights from './AIInsights.js';
 
 // Mock inventory data
 const mockCategories = [

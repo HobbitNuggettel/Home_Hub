@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useAuth } from '../../contexts/AuthContext';
-import { useRealTime } from '../../contexts/RealTimeContext';
-import hybridStorage from '../../firebase/hybridStorage';
+import { useAuth } from '../../contexts/AuthContext.js';
+import { useRealTime } from '../../contexts/RealTimeContext.js';
+import hybridStorage from '../../firebase/hybridStorage.js';
 import { 
   BarChart, Bar, LineChart, Line, AreaChart, Area, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,

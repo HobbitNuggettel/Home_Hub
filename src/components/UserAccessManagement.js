@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { useRealTime } from '../contexts/RealTimeContext';
+import { useAuth } from '../contexts/AuthContext.js';
+import { useRealTime } from '../contexts/RealTimeContext.js';
 import { User, UserPlus, UserX, Shield, Users, Key, Check, X } from 'lucide-react';
 
 /**

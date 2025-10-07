@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
-import performanceService from '../services/PerformanceService';
+import performanceService from '../services/PerformanceService.js';
 
 /**
  * Hook for monitoring component performance

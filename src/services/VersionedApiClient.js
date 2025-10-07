@@ -3,8 +3,8 @@
  * Handles API versioning on the client side with automatic fallbacks
  */
 
-import apiVersioningService from './ApiVersioningService';
-import loggingService from './LoggingService';
+import apiVersioningService from './ApiVersioningService.js';
+import loggingService from './LoggingService.js';
 
 class VersionedApiClient {
   constructor() {

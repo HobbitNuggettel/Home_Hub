@@ -12,7 +12,7 @@ import {
   Calendar,
   MapPin
 } from 'lucide-react';
-import weatherDataStorage from '../services/WeatherDataStorage';
+import weatherDataStorage from '../services/WeatherDataStorage.js';
 
 const WeatherAnalytics = ({ location, onClose, temperatureUnit = 'celsius' }) => {
   const [analytics, setAnalytics] = useState(null);

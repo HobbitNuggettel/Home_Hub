@@ -4,8 +4,8 @@
  */
 
 import { useCallback, useEffect, useState } from 'react';
-import loggingService from '../services/LoggingService';
-import performanceMonitoringService from '../services/PerformanceMonitoringService';
+import loggingService from '../services/LoggingService.js';
+import performanceMonitoringService from '../services/PerformanceMonitoringService.js';
 
 const useMonitoring = () => {
   const [isMonitoring, setIsMonitoring] = useState(false);

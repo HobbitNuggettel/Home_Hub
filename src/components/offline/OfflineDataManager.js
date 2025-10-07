@@ -17,8 +17,8 @@ import {
   Wifi,
   WifiOff
 } from 'lucide-react';
-import { useOffline } from '../../contexts/OfflineContext';
-import { useAuth } from '../../contexts/AuthContext';
+import { useOffline } from '../../contexts/OfflineContext.js';
+import { useAuth } from '../../contexts/AuthContext.js';
 
 const OfflineDataManager = () => {
   const { currentUser } = useAuth();

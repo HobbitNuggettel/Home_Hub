@@ -15,11 +15,11 @@ import {
   Settings as SettingsIcon,
   Menu
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { useDevTools } from '../contexts/DevToolsContext';
+import { useAuth } from '../contexts/AuthContext.js';
+import { useDevTools } from '../contexts/DevToolsContext.js';
 import toast from 'react-hot-toast';
-import ThemeSettings from './ThemeSettings';
-import QuickImageTest from './QuickImageTest';
+import ThemeSettings from './ThemeSettings.js';
+import QuickImageTest from './QuickImageTest.js';
 
 export default function Settings() {
   const { currentUser, userProfile, updateUserProfile } = useAuth();

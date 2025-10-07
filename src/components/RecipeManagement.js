@@ -28,9 +28,9 @@ import {
   Target
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import AIRecipeService from '../services/AIRecipeService';
-import { useAuth } from '../contexts/AuthContext';
-import hybridStorage from '../firebase/hybridStorage';
+import AIRecipeService from '../services/AIRecipeService.js';
+import { useAuth } from '../contexts/AuthContext.js';
+import hybridStorage from '../firebase/hybridStorage.js';
 
 // Mock recipes data
 const mockRecipes = [

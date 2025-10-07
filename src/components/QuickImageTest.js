@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { imageManagementService } from '../services/ImageManagementService';
+import { imageManagementService } from '../services/ImageManagementService.js';
 
 const QuickImageTest = () => {
   const [file, setFile] = useState(null);

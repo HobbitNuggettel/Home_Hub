@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import InventoryForm from '../inventory/InventoryForm';
-import { renderWithProviders } from '../../utils/test-utils';
+import InventoryForm from '../inventory/InventoryForm.js';
+import { renderWithProviders } from '../../utils/test-utils.js';
 
 // Mock data for testing
 const mockItem = {

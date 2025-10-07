@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import About from '../About';
+import About from '../About.js';
 
 describe('About Component', () => {
   describe('Rendering & Structure', () => {

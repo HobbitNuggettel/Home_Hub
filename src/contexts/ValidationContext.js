@@ -5,8 +5,8 @@
 
 import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import validationService from '../services/ValidationService';
-import loggingService from '../services/LoggingService';
+import validationService from '../services/ValidationService.js';
+import loggingService from '../services/LoggingService.js';
 
 const ValidationContext = createContext();
 

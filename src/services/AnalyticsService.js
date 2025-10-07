@@ -4,7 +4,7 @@
  */
 
 import { getAnalytics, logEvent, setUserId, setUserProperties } from 'firebase/analytics';
-import loggingService from './LoggingService';
+import loggingService from './LoggingService.js';
 
 class AnalyticsService {
   constructor() {
@@ -280,6 +280,61 @@ class AnalyticsService {
       userProperties: this.userProperties,
       customDimensions: this.customDimensions
     };
+  }
+
+  /**
+   * Get spending analytics
+   */
+  async getSpendingAnalytics(userId, period = '30d') {
+    try {
+      // Mock spending analytics data
+      const mockData = {
+        totalSpending: 1250.50,
+        averageDaily: 41.68,
+        topCategories: [
+          { name: 'Groceries', amount: 450.00, percentage: 36.0 },
+          { name: 'Utilities', amount: 200.00, percentage: 16.0 },
+          { name: 'Entertainment', amount: 150.00, percentage: 12.0 }
+        ],
+        spendingTrend: 'increasing',
+        savingsRate: 15.2,
+        insights: [
+          'Your spending on groceries has increased by 12% this month',
+          'Consider setting a budget for entertainment expenses',
+          'Great job maintaining your savings rate above 15%'
+        ],
+        charts: {
+          spendingByCategory: [
+            { category: 'Groceries', amount: 450.00 },
+            { category: 'Utilities', amount: 200.00 },
+            { category: 'Entertainment', amount: 150.00 },
+            { category: 'Transportation', amount: 100.00 },
+            { category: 'Other', amount: 350.50 }
+          ],
+          monthlyTrend: [
+            { month: 'Jan', spending: 1200.00 },
+            { month: 'Feb', spending: 1100.00 },
+            { month: 'Mar', spending: 1300.00 },
+            { month: 'Apr', spending: 1250.50 }
+          ]
+        },
+        period,
+        userId,
+        generatedAt: new Date().toISOString()
+      };
+
+      return {
+        success: true,
+        data: mockData
+      };
+    } catch (error) {
+      console.error('Failed to get spending analytics:', error);
+      return {
+        success: false,
+        error: error.message,
+        data: null
+      };
+    }
   }
 
   /**

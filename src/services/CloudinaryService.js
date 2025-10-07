@@ -5,7 +5,7 @@
  * Advanced transformations and optimization
  */
 
-// import { firebaseAnalyticsService } from '../firebase';
+// import { firebaseAnalyticsService } from '../firebase.js';
 
 class CloudinaryService {
   constructor() {

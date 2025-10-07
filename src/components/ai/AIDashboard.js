@@ -25,10 +25,10 @@ import {
   Info
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import AIExpenseService from '../services/AIExpenseService';
-import AIInventoryService from '../services/AIInventoryService';
-import AIRecipeService from '../services/AIRecipeService';
-import { AdvancedAIService } from '../services/AdvancedAIService';
+import AIExpenseService from '../services/AIExpenseService.js';
+import AIInventoryService from '../services/AIInventoryService.js';
+import AIRecipeService from '../services/AIRecipeService.js';
+import { AdvancedAIService } from '../services/AdvancedAIService.js';
 
 export default function AIDashboard() {
   const [isLoading, setIsLoading] = useState(false);
