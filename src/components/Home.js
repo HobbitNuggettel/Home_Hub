@@ -26,7 +26,8 @@ import {
   Shield,
   Rocket,
   Heart,
-  Star
+  Star,
+  Info
 } from 'lucide-react';
 
 export default function Home() {
@@ -44,223 +45,63 @@ export default function Home() {
     users: 0
   });
   
-  // Comprehensive feature definitions with all capabilities
-  const features = [
+  // Core features - simplified and focused
+  const coreFeatures = [
     {
       icon: Package,
       title: 'Inventory Management',
-      description: 'Complete household inventory tracking with smart organization',
+      description: 'Track household items with barcode scanning and smart organization',
       href: '/inventory',
       color: 'from-blue-500 to-cyan-500',
-      iconBg: 'bg-blue-500',
-      capabilities: [
-        'Barcode scanning & SKU tracking',
-        'Category & location organization',
-        'Warranty & maintenance tracking',
-        'Low stock alerts',
-        'Value calculations',
-        'Bulk import/export (CSV)',
-        'Image attachments',
-        'Custom tags & notes'
-      ]
+      stats: realData?.inventory?.total || 0
     },
     {
       icon: DollarSign,
       title: 'Spending & Budgeting',
-      description: 'Smart financial management with AI-powered insights',
+      description: 'Manage finances with AI-powered insights and budget tracking',
       href: '/spending',
       color: 'from-green-500 to-emerald-500',
-      iconBg: 'bg-green-500',
-      capabilities: [
-        'Monthly budget tracking',
-        'Category-based expenses',
-        'Recurring payments',
-        'Spending analytics & trends',
-        'Budget alerts & notifications',
-        'Receipt attachments',
-        'Custom expense tags',
-        'Financial reports & exports'
-      ]
+      stats: `$${realData?.spending?.budget || 0}`
     },
     {
       icon: Utensils,
       title: 'Recipe Management',
-      description: 'Your personal digital cookbook with meal planning',
+      description: 'Store recipes and plan meals with smart suggestions',
       href: '/recipes',
       color: 'from-red-500 to-pink-500',
-      iconBg: 'bg-red-500',
-      capabilities: [
-        'Recipe storage & organization',
-        'Ingredient lists & portions',
-        'Step-by-step instructions',
-        'Nutrition information',
-        'Meal planning calendar',
-        'Shopping list generation',
-        'Dietary filters & tags',
-        'Recipe ratings & reviews'
-      ]
+      stats: realData?.recipes?.total || 0
     },
     {
       icon: ShoppingCart,
       title: 'Shopping Lists',
-      description: 'Collaborative shopping with smart recommendations',
-      href: '/shopping-lists',
+      description: 'Collaborative shopping with real-time updates',
+      href: '/shopping',
       color: 'from-orange-500 to-amber-500',
-      iconBg: 'bg-orange-500',
-      capabilities: [
-        'Multiple shopping lists',
-        'Real-time collaboration',
-        'Budget tracking per list',
-        'Store organization',
-        'Priority items',
-        'Quantity & unit tracking',
-        'Price estimates',
-        'Completed item history'
-      ]
+      stats: 'Live'
     },
     {
       icon: Users,
       title: 'Collaboration',
-      description: 'Family & household member management',
+      description: 'Manage household members and shared tasks',
       href: '/collaboration',
       color: 'from-purple-500 to-violet-500',
-      iconBg: 'bg-purple-500',
-      capabilities: [
-        'Household member management',
-        'Role-based permissions',
-        'Real-time updates',
-        'Activity tracking',
-        'Member invitations',
-        'Shared calendars',
-        'Task assignments',
-        'Family notifications'
-      ]
-    },
-    {
-      icon: Zap,
-      title: 'Smart Home & IoT',
-      description: 'Device management and home automation',
-      href: '/integrations',
-      color: 'from-indigo-500 to-blue-500',
-      iconBg: 'bg-indigo-500',
-      capabilities: [
-        'Smart device management',
-        'Automation rules & triggers',
-        'Energy usage tracking',
-        'Device status monitoring',
-        'Room-based organization',
-        'Schedule-based controls',
-        'Integration with major platforms',
-        'Custom automation workflows'
-      ]
+      stats: 'Active'
     },
     {
       icon: Brain,
       title: 'AI Assistant',
-      description: 'Intelligent suggestions and automated insights',
-      href: '/ai-assistant',
-      color: 'from-violet-500 to-purple-500',
-      iconBg: 'bg-violet-500',
-      capabilities: [
-        'Smart recommendations',
-        'Natural language queries',
-        'Recipe suggestions',
-        'Budget optimization tips',
-        'Predictive analytics',
-        'Pattern recognition',
-        'Automated insights',
-        'Context-aware assistance'
-      ]
-    },
-    {
-      icon: Image,
-      title: 'Image Management',
-      description: 'Smart image storage with AI-powered organization',
-      href: '/image-management',
-      color: 'from-pink-500 to-rose-500',
-      iconBg: 'bg-pink-500',
-      capabilities: [
-        'Cloudinary & Imgur integration',
-        'Automatic compression',
-        'AI image analysis',
-        'Tag generation',
-        'Gallery organization',
-        'OCR text extraction',
-        'Thumbnail generation',
-        'Multi-provider fallback'
-      ]
-    },
-    {
-      icon: BarChart3,
-      title: 'Advanced Analytics',
-      description: 'Comprehensive data visualization and insights',
-      href: '/advanced-analytics',
-      color: 'from-cyan-500 to-blue-500',
-      iconBg: 'bg-cyan-500',
-      capabilities: [
-        'Interactive dashboards',
-        'Spending trends & patterns',
-        'Inventory analytics',
-        'Custom reports',
-        'Real-time metrics',
-        'Predictive insights',
-        'Export capabilities',
-        'Historical comparisons'
-      ]
-    },
-    {
-      icon: Activity,
-      title: 'Data Alerts',
-      description: 'Smart notifications and monitoring',
-      href: '/data-alerts',
-      color: 'from-yellow-500 to-orange-500',
-      iconBg: 'bg-yellow-500',
-      capabilities: [
-        'Custom alert rules',
-        'Budget threshold alerts',
-        'Low stock notifications',
-        'Expiry date reminders',
-        'Spending pattern alerts',
-        'Device status notifications',
-        'Email & push notifications',
-        'Alert history & logs'
-      ]
-    },
-    {
-      icon: Wrench,
-      title: 'Maintenance Tracking',
-      description: 'Schedule and track home maintenance tasks',
-      href: '/maintenance',
-      color: 'from-gray-500 to-slate-500',
-      iconBg: 'bg-gray-500',
-      capabilities: [
-        'Maintenance schedules',
-        'Task assignments',
-        'Service history',
-        'Warranty tracking',
-        'Reminder notifications',
-        'Vendor management',
-        'Cost tracking',
-        'Documentation storage'
-      ]
-    },
-    {
-      icon: Sparkles,
-      title: 'AI Suggestions',
-      description: 'Proactive recommendations for home management',
+      description: 'Get smart recommendations and automated insights',
       href: '/ai-suggestions',
-      color: 'from-fuchsia-500 to-pink-500',
-      iconBg: 'bg-fuchsia-500',
-      capabilities: [
-        'Smart shopping suggestions',
-        'Recipe recommendations',
-        'Budget optimization',
-        'Energy saving tips',
-        'Maintenance reminders',
-        'Trend analysis',
-        'Priority insights',
-        'Personalized advice'
-      ]
+      color: 'from-violet-500 to-purple-500',
+      stats: 'Smart'
+    },
+    {
+      icon: Info,
+      title: 'About',
+      description: 'Learn about Home Hub features, roadmap, and information',
+      href: '/about',
+      color: 'from-indigo-500 to-blue-500',
+      stats: 'Info'
     }
   ];
 
@@ -269,7 +110,8 @@ export default function Home() {
     { label: 'Active Features', value: '12+', icon: Sparkles },
     { label: 'AI Integrations', value: '3', icon: Brain },
     { label: 'Data Sources', value: 'Firebase', icon: Shield },
-    { label: 'Real-time Sync', value: 'Live', icon: Zap }
+    { label: 'Real-time Sync', value: 'Live', icon: Zap },
+    { label: 'About', value: 'Info', icon: Info }
   ];
 
   // Key benefits
@@ -322,7 +164,7 @@ export default function Home() {
 
       try {
         setIsLoading(true);
-        const analyticsService = new AnalyticsService();
+        const analyticsService = AnalyticsService;
 
         const [inventoryResponse, recipesResponse, spendingAnalytics] = await Promise.all([
           hybridStorage.getInventoryItems(currentUser.uid),
@@ -468,34 +310,52 @@ export default function Home() {
               and automate your home—all powered by AI intelligence.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-fade-in-up animation-delay-300">
-              <button
-                onClick={() => navigate('/login')}
-                className="group px-8 py-4 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-                style={{
-                  background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`
-                }}
-                onMouseEnter={(e) => e.target.style.background = `linear-gradient(135deg, ${colors.primary}dd, ${colors.secondary}dd)`}
-                onMouseLeave={(e) => e.target.style.background = `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`}
-              >
-                <span className="flex items-center justify-center">
-                  Get Started
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </button>
-              <button
-                onClick={() => navigate('/about')}
-                className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-gray-200 dark:border-gray-700"
-              >
-                Learn More
-              </button>
-            </div>
+            {/* CTA Buttons - Only show for non-logged-in users */}
+            {!currentUser && (
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-fade-in-up animation-delay-300">
+                <button
+                  onClick={() => navigate('/login')}
+                  className="group px-8 py-4 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                  style={{
+                    background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`
+                  }}
+                  onMouseEnter={(e) => e.target.style.background = `linear-gradient(135deg, ${colors.primary}dd, ${colors.secondary}dd)`}
+                  onMouseLeave={(e) => e.target.style.background = `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`}
+                >
+                  <span className="flex items-center justify-center">
+                    Get Started
+                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </button>
+                <button
+                  onClick={() => navigate('/about')}
+                  className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-gray-200 dark:border-gray-700"
+                >
+                  Learn More
+                </button>
+              </div>
+            )}
 
             {/* Platform Stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto animate-fade-in-up animation-delay-400">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 max-w-5xl mx-auto animate-fade-in-up animation-delay-400">
               {platformStats.map((stat) => (
-                <div key={stat.label} className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 shadow-lg">
+                <div
+                  key={stat.label}
+                  className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 shadow-lg ${stat.label === 'About'
+                      ? 'cursor-pointer hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-indigo-500'
+                      : ''
+                    }`}
+                  onClick={stat.label === 'About' ? () => navigate('/about') : undefined}
+                  onKeyDown={stat.label === 'About' ? (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      navigate('/about');
+                    }
+                  } : undefined}
+                  role={stat.label === 'About' ? 'button' : undefined}
+                  tabIndex={stat.label === 'About' ? 0 : undefined}
+                  aria-label={stat.label === 'About' ? 'Navigate to About page' : undefined}
+                >
                   <stat.icon className="w-6 h-6 text-blue-600 dark:text-blue-400 mx-auto mb-2" />
                   <div className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</div>
@@ -636,19 +496,19 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Features Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Powerful Features for Modern Living
+      {/* Quick Actions */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            Quick Actions
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Everything you need to manage your home efficiently, all in one place
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            Access your most used features instantly
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {coreFeatures.map((feature) => (
             <div
               key={feature.title}
               role="button"
@@ -660,139 +520,91 @@ export default function Home() {
                   navigate(feature.href);
                 }
               }}
-              className="group cursor-pointer bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl p-8 transform hover:scale-105 transition-all duration-300 border-2 border-gray-100 dark:border-gray-700 hover:border-transparent relative overflow-hidden"
+              className="group cursor-pointer bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl p-6 transform hover:scale-105 transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-transparent relative overflow-hidden"
               aria-label={`Navigate to ${feature.title}`}
             >
-              {/* Gradient Overlay on Hover */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity rounded-2xl`}></div>
-
-              <div className="relative">
-                {/* Icon */}
-                <div className={`inline-flex p-4 rounded-xl bg-gradient-to-br ${feature.color} text-white mb-6 shadow-lg group-hover:scale-110 transition-transform`}>
-                  <feature.icon className="w-8 h-8" />
+              <div className="flex items-center justify-between mb-4">
+                <div className={`p-3 rounded-lg bg-gradient-to-r ${feature.color} text-white`}>
+                  <feature.icon className="w-6 h-6" />
                 </div>
-
-                {/* Title */}
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all">
-                  {feature.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  {feature.description}
-                </p>
-
-                {/* Capabilities */}
-                <div className="space-y-2">
-                  <p className="text-xs font-semibold text-gray-500 dark:text-gray-500 uppercase mb-3">Key Features:</p>
-                  <ul className="space-y-2">
-                    {feature.capabilities.slice(0, 4).map((capability) => (
-                      <li key={capability} className="flex items-start text-sm text-gray-600 dark:text-gray-400">
-                        <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                        <span>{capability}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  {feature.capabilities.length > 4 && (
-                    <p className="text-xs text-gray-500 dark:text-gray-500 italic mt-2">
-                      +{feature.capabilities.length - 4} more features...
-                    </p>
-                  )}
-                </div>
-
-                {/* Arrow Icon */}
-                <div className="mt-6 flex items-center text-blue-600 dark:text-blue-400 font-semibold group-hover:translate-x-2 transition-transform">
-                  <span>Explore</span>
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white">{feature.stats}</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">Current</div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Benefits Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Why Choose Home Hub?
-          </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
-            Built with modern technology and best practices
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {benefits.map((benefit) => (
-            <div key={benefit.title} className="text-center">
-              <div className="inline-flex p-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white mb-4">
-                <benefit.icon className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                {benefit.title}
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                {feature.title}
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                {benefit.description}
+
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                {feature.description}
               </p>
+
+              <div className="flex items-center text-blue-600 dark:text-blue-400 font-medium text-sm group-hover:translate-x-1 transition-transform">
+                <span>Open</span>
+                <ArrowRight className="ml-1 w-4 h-4" />
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Technology Stack */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800/50 dark:to-gray-800/50 rounded-3xl">
+      {/* Recent Activity */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Powered by Modern Technology
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            Recent Activity
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            Built with industry-leading tools and frameworks
+            Your latest updates and insights
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
-          {['React 18', 'Firebase', 'Tailwind CSS', 'Hugging Face AI', 'Gemini AI', 'Node.js'].map((tech) => (
-            <div key={tech} className="bg-white dark:bg-gray-800 rounded-xl p-6 text-center shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
-              <div className="text-lg font-semibold text-gray-900 dark:text-white">{tech}</div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+            <div className="flex items-center mb-4">
+              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                <Package className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white ml-3">Inventory</h3>
             </div>
-          ))}
-        </div>
-
-        <div className="mt-12 text-center">
-          <div className="inline-flex items-center px-6 py-3 bg-green-100 dark:bg-green-900/30 rounded-full">
-            <Star className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
-            <span className="text-green-800 dark:text-green-300 font-semibold">
-              Production Ready • 73% Test Coverage • Zero Errors
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-3xl shadow-2xl p-12 text-center text-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-black opacity-10"></div>
-          <div className="relative">
-            <h2 className="text-4xl font-bold mb-4">
-              Ready to Get Organized?
-            </h2>
-            <p className="text-xl mb-8 text-blue-100">
-              Start managing your home smarter, not harder
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              {realData?.inventory?.lowStock > 0
+                ? `${realData.inventory.lowStock} items need restocking`
+                : 'All items are well stocked'
+              }
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={() => navigate('/inventory')}
-                className="px-8 py-4 bg-white text-purple-600 rounded-xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-              >
-                Start Your Journey
-              </button>
-              <button
-                onClick={() => navigate('/about')}
-                className="px-8 py-4 bg-purple-700 hover:bg-purple-800 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-              >
-                View Documentation
-              </button>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+            <div className="flex items-center mb-4">
+              <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900/30">
+                <DollarSign className="w-5 h-5 text-green-600 dark:text-green-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white ml-3">Budget</h3>
             </div>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              {realData?.spending?.remaining > 0
+                ? `$${realData.spending.remaining.toFixed(2)} remaining this month`
+                : 'Budget exceeded this month'
+              }
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+            <div className="flex items-center mb-4">
+              <div className="p-2 rounded-lg bg-red-100 dark:bg-red-900/30">
+                <Utensils className="w-5 h-5 text-red-600 dark:text-red-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white ml-3">Recipes</h3>
+            </div>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              {realData?.recipes?.total > 0
+                ? `${realData.recipes.total} recipes saved`
+                : 'No recipes saved yet'
+              }
+            </p>
           </div>
         </div>
       </div>

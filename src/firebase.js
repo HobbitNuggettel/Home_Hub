@@ -29,11 +29,60 @@ export default app;
 
 // Firebase Auth Service
 export const firebaseAuthService = {
-  signIn: (email, password) => auth.signInWithEmailAndPassword(email, password),
-  signUp: (email, password) => auth.createUserWithEmailAndPassword(email, password),
-  signOut: () => auth.signOut(),
-  onAuthStateChange: (callback) => auth.onAuthStateChanged(callback),
-  getCurrentUser: () => auth.currentUser,
-  sendPasswordResetEmail: (email) => auth.sendPasswordResetEmail(email),
-  updatePassword: (newPassword) => auth.currentUser?.updatePassword(newPassword)
+  signIn: (email, password) => {
+    try {
+      return auth.signInWithEmailAndPassword(email, password);
+    } catch (error) {
+      console.log('Firebase auth not available:', error.message);
+      throw new Error('Firebase authentication not available');
+    }
+  },
+  signUp: (email, password) => {
+    try {
+      return auth.createUserWithEmailAndPassword(email, password);
+    } catch (error) {
+      console.log('Firebase auth not available:', error.message);
+      throw new Error('Firebase authentication not available');
+    }
+  },
+  signOut: () => {
+    try {
+      return auth.signOut();
+    } catch (error) {
+      console.log('Firebase auth not available:', error.message);
+      throw new Error('Firebase authentication not available');
+    }
+  },
+  onAuthStateChange: (callback) => {
+    try {
+      return auth.onAuthStateChanged(callback);
+    } catch (error) {
+      console.log('Firebase auth not available:', error.message);
+      throw new Error('Firebase authentication not available');
+    }
+  },
+  getCurrentUser: () => {
+    try {
+      return auth.currentUser;
+    } catch (error) {
+      console.log('Firebase auth not available:', error.message);
+      return null;
+    }
+  },
+  sendPasswordResetEmail: (email) => {
+    try {
+      return auth.sendPasswordResetEmail(email);
+    } catch (error) {
+      console.log('Firebase auth not available:', error.message);
+      throw new Error('Firebase authentication not available');
+    }
+  },
+  updatePassword: (newPassword) => {
+    try {
+      return auth.currentUser?.updatePassword(newPassword);
+    } catch (error) {
+      console.log('Firebase auth not available:', error.message);
+      throw new Error('Firebase authentication not available');
+    }
+  }
 };

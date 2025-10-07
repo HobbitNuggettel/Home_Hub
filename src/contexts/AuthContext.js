@@ -16,6 +16,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState(null);
 
+
   // Sign up with email and password
   async function signup(email, password, displayName) {
     try {
@@ -141,22 +142,28 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    const unsubscribe = firebaseAuthService.onAuthStateChange(async (user) => {
-      setCurrentUser(user);
-      
-      if (user) {
-        // Fetch user profile from Firestore - temporarily disabled
-        // const profile = await fetchUserProfile(user.uid);
-        // setUserProfile(profile);
-        setUserProfile({ displayName: user.displayName, email: user.email });
-      } else {
-        setUserProfile(null);
-      }
-      
-      setLoading(false);
-    });
+    // Always use mock user for testing - Firebase is not configured
+    console.log('Using mock user for testing');
+    const mockUser = {
+      uid: 'test-user-123',
+      email: 'test@example.com',
+      displayName: 'Test User',
+      emailVerified: true
+    };
 
-    return unsubscribe;
+    const mockProfile = {
+      displayName: 'Test User',
+      email: 'test@example.com',
+      role: 'user',
+      preferences: {
+        theme: 'light',
+        notifications: true
+      }
+    };
+
+    setCurrentUser(mockUser);
+    setUserProfile(mockProfile);
+    setLoading(false);
   }, []);
 
   const value = {

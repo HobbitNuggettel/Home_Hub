@@ -61,43 +61,87 @@ export default function About() {
     },
     {
       icon: Zap,
-      title: 'Integrations & Automation',
-      description: 'Smart home integration, automation rules, and AI-powered suggestions for optimization.',
+      title: 'Smart Home Integration',
+      description: 'Smart home device management, automation rules, and AI-powered suggestions for optimization.',
       status: 'Completed'
     },
     {
       icon: Activity,
-      title: 'Data & Alerts',
-      description: 'Data visualization, alerts management, system monitoring, and comprehensive analytics.',
+      title: 'Weather Dashboard',
+      description: 'Real-time weather data, forecasts, alerts, and analytics with multiple API providers.',
+      status: 'Completed'
+    },
+    {
+      icon: BarChart3,
+      title: 'Advanced Analytics',
+      description: 'Comprehensive analytics, performance monitoring, and data visualization dashboards.',
+      status: 'Completed'
+    },
+    {
+      icon: Brain,
+      title: 'AI Smart Suggestions',
+      description: 'AI-powered recommendations for inventory, spending, recipes, and household optimization.',
+      status: 'Completed'
+    },
+    {
+      icon: Shield,
+      title: 'Enterprise Features',
+      description: 'RBAC, audit logging, compliance, SSO, and enterprise-grade security features.',
+      status: 'Completed'
+    },
+    {
+      icon: Settings,
+      title: 'System Administration',
+      description: 'User access management, data validation, API versioning, and system monitoring.',
+      status: 'Completed'
+    },
+    {
+      icon: Smartphone,
+      title: 'PWA & Mobile Support',
+      description: 'Progressive Web App capabilities, offline support, and mobile-optimized interface.',
       status: 'Completed'
     }
   ];
 
   const technologies = [
     { name: 'React 18', description: 'Modern React with hooks and concurrent features' },
+    { name: 'Express.js', description: 'Fast, unopinionated web framework for Node.js' },
     { name: 'Tailwind CSS', description: 'Utility-first CSS framework for rapid UI development' },
     { name: 'React Router', description: 'Declarative routing for React applications' },
     { name: 'Lucide React', description: 'Beautiful & consistent icon toolkit' },
-    { name: 'React Hot Toast', description: 'Elegant notifications for React' },
-    { name: 'LocalStorage', description: 'Client-side data persistence' },
+    { name: 'Firebase', description: 'Backend-as-a-Service for authentication and data storage' },
+    { name: 'JWT Authentication', description: 'Secure token-based authentication system' },
+    { name: 'Swagger/OpenAPI', description: 'API documentation and testing interface' },
+    { name: 'Jest Testing', description: 'Comprehensive testing framework for reliability' },
     { name: 'PWA Support', description: 'Progressive Web App capabilities' },
-    { name: 'Responsive Design', description: 'Mobile-first, cross-device compatibility' }
+    { name: 'Responsive Design', description: 'Mobile-first, cross-device compatibility' },
+    { name: 'AI Integration', description: 'Hugging Face, Gemini, and custom AI services' }
   ];
 
   const roadmap = [
     {
       phase: 'Phase 1 - Core Features',
-      items: ['Inventory Management', 'Spending Tracker', 'User Authentication'],
+      items: ['Inventory Management', 'Spending Tracker', 'User Authentication', 'Basic Analytics'],
       status: 'Completed'
     },
     {
-      phase: 'Phase 2 - Collaboration',
-      items: ['Household Management', 'User Roles & Permissions', 'Shopping Lists'],
+      phase: 'Phase 2 - Collaboration & Smart Features',
+      items: ['Household Management', 'User Roles & Permissions', 'Shopping Lists', 'Recipe Management', 'Weather Integration'],
       status: 'Completed'
     },
     {
       phase: 'Phase 3 - Advanced Features',
-      items: ['Recipe Management', 'Integrations & Automation', 'Data & Alerts'],
+      items: ['AI Smart Suggestions', 'Smart Home Integration', 'Advanced Analytics', 'Enterprise Features'],
+      status: 'Completed'
+    },
+    {
+      phase: 'Phase 4 - API & Backend',
+      items: ['Complete API Backend', 'Swagger Documentation', 'Performance Optimization', 'Comprehensive Testing'],
+      status: 'Completed'
+    },
+    {
+      phase: 'Phase 5 - Production Ready',
+      items: ['Zero ESLint Warnings', 'Sidebar Organization', 'Home Page Optimization', 'Production Deployment'],
       status: 'Completed'
     }
   ];
@@ -113,8 +157,8 @@ export default function About() {
             </div>
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Home Hub</h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              A comprehensive home management platform that brings together inventory tracking, 
-              spending management, collaboration tools, and smart automation in one unified interface.
+              A comprehensive home management platform with 12 core features, 14 API categories,
+              AI-powered suggestions, enterprise-grade security, and production-ready deployment.
             </p>
             <div className="mt-8 flex items-center justify-center space-x-4">
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
@@ -323,20 +367,20 @@ export default function About() {
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="text-center">
-            <div className="text-4xl font-bold text-blue-600 mb-2">7</div>
+            <div className="text-4xl font-bold text-blue-600 mb-2">12</div>
             <p className="text-gray-600 dark:text-gray-300">Core Features</p>
           </div>
           <div className="text-center">
-            <div className="text-4xl font-bold text-green-600 mb-2">3</div>
+            <div className="text-4xl font-bold text-green-600 mb-2">5</div>
             <p className="text-gray-600 dark:text-gray-300">Development Phases</p>
           </div>
           <div className="text-center">
-            <div className="text-4xl font-bold text-purple-600 mb-2">8</div>
+            <div className="text-4xl font-bold text-purple-600 mb-2">12</div>
             <p className="text-gray-600 dark:text-gray-300">Technologies Used</p>
           </div>
           <div className="text-center">
-            <div className="text-4xl font-bold text-orange-600 mb-2">100%</div>
-            <p className="text-gray-600 dark:text-gray-300">Open Source</p>
+            <div className="text-4xl font-bold text-orange-600 mb-2">14</div>
+            <p className="text-gray-600 dark:text-gray-300">API Categories</p>
           </div>
         </div>
       </div>

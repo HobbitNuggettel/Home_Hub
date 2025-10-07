@@ -75,19 +75,6 @@ const AboutPage = () => {
       }
     },
     {
-      id: 'alerts',
-      name: 'Data & Alerts',
-      icon: Bell,
-      description: 'Export/import data, manage alerts, and track activities',
-      highlights: ['Data backup', 'Import/export', 'Alert system', 'Activity logging', 'Notification settings', 'Data analytics'],
-      sampleData: {
-        alerts: 4,
-        activities: 18,
-        dataSize: '2.3KB',
-        exports: 2
-      }
-    },
-    {
       id: 'shopping',
       name: 'Shopping Lists',
       icon: ShoppingCart,
@@ -114,42 +101,137 @@ const AboutPage = () => {
       }
     },
     {
-      id: 'integrations',
-      name: 'Integrations & Automation',
-      icon: Zap,
-      description: 'Connect smart home devices and create automation rules',
-      highlights: ['Smart home integration', 'Automation rules', 'AI suggestions', 'Device management', 'API connections', 'Real-time monitoring'],
+      id: 'weather',
+      name: 'Weather Dashboard',
+      icon: Thermometer,
+      description: 'Real-time weather data, forecasts, and analytics',
+      highlights: ['Current weather', 'Forecast data', 'Weather alerts', 'Temperature units', 'Location services', 'Weather analytics'],
       sampleData: {
-        integrations: 3,
+        locations: 2,
+        forecasts: 7,
+        alerts: 1,
+        temperature: '72°F'
+      }
+    },
+    {
+      id: 'ai',
+      name: 'AI Smart Suggestions',
+      icon: Brain,
+      description: 'AI-powered recommendations and intelligent automation',
+      highlights: ['Smart recommendations', 'Predictive analytics', 'Automated insights', 'Learning algorithms', 'Pattern recognition', 'Optimization suggestions'],
+      sampleData: {
+        suggestions: 8,
+        insights: 12,
+        predictions: 5,
+        accuracy: '94%'
+      }
+    },
+    {
+      id: 'analytics',
+      name: 'Advanced Analytics',
+      icon: BarChart3,
+      description: 'Comprehensive analytics and performance monitoring',
+      highlights: ['Data visualization', 'Performance metrics', 'Trend analysis', 'Custom reports', 'Real-time monitoring', 'Export capabilities'],
+      sampleData: {
+        reports: 6,
+        metrics: 15,
+        visualizations: 8,
+        dataPoints: '2.4K'
+      }
+    },
+    {
+      id: 'smart-home',
+      name: 'Smart Home Integration',
+      icon: Zap,
+      description: 'Connect and manage smart home devices',
+      highlights: ['Device management', 'Automation rules', 'Energy monitoring', 'Security integration', 'Voice control', 'Remote access'],
+      sampleData: {
         devices: 10,
-        rules: 3,
-        suggestions: 3
+        automations: 5,
+        energySaved: '15%',
+        securityLevel: 'High'
+      }
+    },
+    {
+      id: 'enterprise',
+      name: 'Enterprise Features',
+      icon: Shield,
+      description: 'Enterprise-grade security and administration',
+      highlights: ['RBAC system', 'Audit logging', 'SSO integration', 'Compliance tools', 'Security policies', 'Admin dashboard'],
+      sampleData: {
+        users: 25,
+        roles: 8,
+        policies: 12,
+        compliance: '100%'
+      }
+    },
+    {
+      id: 'maintenance',
+      name: 'Maintenance Tracking',
+      icon: Settings,
+      description: 'Track and schedule household maintenance tasks',
+      highlights: ['Task scheduling', 'Maintenance logs', 'Reminder system', 'Cost tracking', 'Service history', 'Warranty management'],
+      sampleData: {
+        tasks: 8,
+        completed: 5,
+        upcoming: 3,
+        totalCost: '$450'
+      }
+    },
+    {
+      id: 'alerts',
+      name: 'Data & Alerts',
+      icon: Bell,
+      description: 'Export/import data, manage alerts, and track activities',
+      highlights: ['Data backup', 'Import/export', 'Alert system', 'Activity logging', 'Notification settings', 'Data analytics'],
+      sampleData: {
+        alerts: 4,
+        activities: 18,
+        dataSize: '2.3KB',
+        exports: 2
+      }
+    },
+    {
+      id: 'color-picker',
+      name: 'Color Picker',
+      icon: Settings,
+      description: 'Customize app colors and themes with advanced color picker',
+      highlights: ['Color customization', 'Theme switching', 'Live preview', 'Color palettes', 'Accessibility options', 'Export themes'],
+      sampleData: {
+        themes: 8,
+        colors: 24,
+        customizations: 12,
+        accessibility: 'WCAG 2.1 AA'
       }
     }
   ];
 
   const techStack = [
     { name: 'React 18', description: 'Modern React with hooks and functional components', icon: '⚛️' },
+    { name: 'Express.js', description: 'Fast, unopinionated web framework for Node.js', icon: '🚀' },
     { name: 'Tailwind CSS', description: 'Utility-first CSS framework for rapid UI development', icon: '🎨' },
     { name: 'React Router', description: 'Declarative routing for React applications', icon: '🛣️' },
-    { name: 'React Hook Form', description: 'Performant forms with easy validation', icon: '📝' },
+    { name: 'Firebase', description: 'Backend-as-a-Service for authentication and data storage', icon: '🔥' },
+    { name: 'JWT Authentication', description: 'Secure token-based authentication system', icon: '🔐' },
+    { name: 'Swagger/OpenAPI', description: 'API documentation and testing interface', icon: '📚' },
+    { name: 'Jest Testing', description: 'Comprehensive testing framework for reliability', icon: '🧪' },
     { name: 'Lucide Icons', description: 'Beautiful & consistent icon toolkit', icon: '🎯' },
-    { name: 'React Hot Toast', description: 'Elegant notifications for React', icon: '🍞' },
-    { name: 'Local Storage', description: 'Client-side data persistence', icon: '💾' },
-    { name: 'Responsive Design', description: 'Mobile-first, cross-device compatibility', icon: '📱' }
+    { name: 'AI Integration', description: 'Hugging Face, Gemini, and custom AI services', icon: '🤖' },
+    { name: 'PWA Support', description: 'Progressive Web App capabilities', icon: '📱' },
+    { name: 'Responsive Design', description: 'Mobile-first, cross-device compatibility', icon: '💻' }
   ];
 
   const upcomingFeatures = [
-    'Real-time collaboration with WebSockets',
-    'Mobile PWA with offline support',
-    'Backend API with real database',
-    'User authentication and security',
-    'Real smart home API integrations',
-    'Advanced analytics and reporting',
+    'Enhanced mobile PWA with offline support',
+    'Advanced AI model integrations',
+    'Real-time collaboration improvements',
+    'Enhanced security features',
+    'Advanced automation workflows',
     'Multi-language support (i18n)',
     'Push notifications and alerts',
     'Data synchronization across devices',
-    'Advanced automation workflows'
+    'Advanced reporting dashboards',
+    'Third-party integrations'
   ];
 
   const TabContent = ({ tabId }) => {
@@ -158,10 +240,10 @@ const AboutPage = () => {
         return (
           <div className="space-y-8">
             <div className="text-center">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Welcome to Home Hub</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Welcome to Home Hub v2.0</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Your comprehensive home management solution that brings together inventory tracking, 
-                financial management, collaboration, and smart home automation in one powerful platform.
+                Your comprehensive home management solution with 12 core features, 14 API categories,
+                AI-powered suggestions, enterprise-grade security, and production-ready deployment.
               </p>
             </div>
 
